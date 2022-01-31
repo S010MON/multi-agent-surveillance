@@ -1,5 +1,5 @@
 # Style Guide
-This style guide is to help as a reference for code review (both for those making PRs and reviewing them) and to ensure consistency across the project code base. Is is based off the ![Google Style Guide](https://google.github.io/styleguide/javaguide.html) which is highly recommended reading, as it includes far more detail.  None of the style guide is set in stone, if disagree with the notes here, please suggest changes with a pull request from a new `style-guide` branch.
+This style guide is to help as a reference for code review (both for those making PRs and reviewing them) and to ensure consistency across the project code base. It is based off the ![Google Style Guide](https://google.github.io/styleguide/javaguide.html) which is highly recommended reading, as it includes far more detail.  None of the style guide is set in stone, if disagree with the notes here, please suggest changes with a pull request from a new `style-guide` branch.
 
 ## 0 Contents
 ##### ![1 - Source Code Structure](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#1-source-code-structure)
@@ -14,6 +14,10 @@ This style guide is to help as a reference for code review (both for those makin
 - ![2.3 - Indentation](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#23-indentation)
 - ![2.4 - Vertical Whitespace](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#24-vertical-whitespace)
 - ![2.5 - Horizontal Whitespace](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#25-horizontal-whitespace)
+##### ![3 - Functional Programming](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#3-functional-programming)
+- ![3.1 - Side Effects](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#31-side-effects)
+- ![3.2 - Parameters](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#32-parameters)
+
 
 ## 1 Source Code Structure
 A source file consists of, in order:
@@ -35,7 +39,7 @@ Should be replaced with this:
 import java.awt.Color;
 import java.awt.Font;
 ```
-As importing all of the awt package pollutes the namespace; imagine we designed our own Button class, this would now be in conflict with awt.Button without us even knowing!
+As importing all of the awt package pollutes the namespace; imagine we designed our own Button class, this would now be in conflict with `awt.Button` without us even knowing!
 
 ### 1.2 Ordering Imports
 1. All static imports in a single block.
@@ -64,10 +68,10 @@ import javafx.stage.Stage;
 ```
 
 ### 1.3 Class Declaration
-Each file should have *only one* top level class (or Interface/Enum) which should be the same name as the file.  If you design a sub class, it should be testable and reusable in the rest of the code base. Classes should be named in `UpperCamelCase`.
+Each file should have only *one* top level class (or Interface/Enum) which should be the same name as the file.  If you design a sub class, it should be testable and reusable in the rest of the code base. Classes should be named in `UpperCamelCase`.
 
 ### 1.4 Method Declaration
-Methods should be ordered in a sensible way, there is no hard and fast rule for this, however it is suggested that common sense is applied such that if asked, *some* sort of ordering can be explained.  A good guide can be found in the book Clean Code with a breif example below:
+Methods should be ordered in a sensible way, there is no hard and fast rule for this, however it is suggested that common sense is applied such that if asked, *some* sort of ordering can be explained.  A good guide can be found in the book Clean Code with a brief example below:
 ```java
 public class MyClass
 {
@@ -82,13 +86,15 @@ public class MyClass
         secondaryMethod()
     }
 
-    public void secondaryMethod() {...} // This is called above, so makes sense to have it right below where it is called
+    public void secondaryMethod() {...} // This is called above, so makes sense to have 
+                                        // it right below where it is called
 
     public int getAttribute(){...}  // All public getters and setters together
 
     public void setAttribute(int n){...}
 
-    private void doSomething(){...}  // Private methods are where we do internal implementation that users shouldn't worry about; thus last
+    private void doSomething(){...}  // Private methods are where we do internal implementation that 
+                                     // users shouldn't worry about; thus last
 }
 ```
 If your ordering method is chonological ( *i.e. "I just add it in at the bottom"* ) then go look in the mirror and think about what you have done ...
@@ -108,44 +114,43 @@ I don't want to start any wars, so formatting will not be used as a reason to st
 For an in depth view of the different indentation styles, see ![here](https://en.wikipedia.org/wiki/Indentation_style), I personally prefer the Allman style of braces as I believe that this is clearer to read:
 ```java
 while(x == y)
-        {
-        doSomething();
-        doSomethingElse();
-        }
+{
+    doSomething();
+    doSomethingElse();
+}
 ```
 This is due to the addition of multiple arguments:
 ```java
 void MyFunction(int parameterOne,
-        int parameterTwo) {     // This is not clearly a second argument
-        Class localOne = new Class();
-        Class localTwo = new Class();
-        }
+                int parameterTwo) {     // This is not clearly a second argument
+    Class localOne = new Class();
+    Class localTwo = new Class();
+}
 ```
-And the ease of identifying the contents of a block when nesting:
+And the ease of identifying the contents of a block when nesting as this:
 ```java
 if (you.hasAnswer())
-        {
-        if(x == y)
-        {
+{
+    if(x == y)
+    {
         you.postAnswer();
-        }
-        }
-        else
-        {
-        you.doSomething();
-        }
+    }
+}
+else
+{
+    you.doSomething();
+}
 ```
 Is far more readable than:
 ```java
 if (you.hasAnswer()) {
-        if(x == y){
+    if(x == y){
         you.postAnswer();
-        }
-        } else {
-        you.doSomething();
-        }
+    }
+} else {
+    you.doSomething();
+}
 ```
-
 
 ### 2.2 Empty Blocks
 Should be terminated on the same line.
@@ -157,79 +162,77 @@ private void doNothing(){}
 +4 spaces for each indented block, the level of indentation should be reduced as much as possible through the use of sub-methods so that the example below
 ```java
 public void doSomething(int n)
-        {
-        for(int i = 0; i < n; i++)
-        {
+{
+    for(int i = 0; i < n; i++)
+    {
         if(i % 2 == 0)
         {
-        try
-        {
-        doSomethingElse();
-        {
-        ..
+            try
+            {
+                doSomethingElse();
+                {
+                    ...
+                }
+            }
+            catch(Exception e)
+            {
+                ...
+            }
         }
-        }
-        catch(Exception e)
-        {
-        ...
-        }
-        }
-        }
-        }
+    }
+}
 ```
 should be refactored into seperate methods like this:
 ```java
 public void tryToDoSomthing(int n)
-        {
-        try
-        {
+{
+    try
+    {
         doSomething(int n);
-        }
-        catch(Exception e)
-        {
+    }
+    catch(Exception e)
+    {
         // handle exception
-        }
-        }
+    }
+}
 
 public void doSomething(int n) throws Exception
-        {
-        for(int i = 0; i < n; i++)
-        {
+{
+    for(int i = 0; i < n; i++)
+    {
         doSomethingIfEven(i);
-        }
-        }
+    }
+}
 
 private void doSomethingIfEven(int n)
-        {
-        if(i % 2 == 0)
-        {
+{
+    if(i % 2 == 0)
+    {
         doSomethingElse();
-        }
-        }
+    }
+}
 ```
-
 
 ### 2.4 Vertical Whitespace
 A single blank line should be left between the closing backets of a method and the opening declaration of a new method.
 Correct:
 ```java
 public void methodOne()
-        {
-        ...
-        }
+{
+    ...
+}
 
 public void methodTwo()
-        {
+{
 ```
 Incorrect:
 ```java
 public void methodOne()
-        {
-        ...
-        }
+{
+    ...
+}
 public void methodTwo() // WRONG!
-        {
-
+{
 ```
 A single blank line may also appear anywhere it improves readability, for example between statements to organize the code into logical subsections. A blank line before the first member or initializer, or after the last member or initializer of the class, is neither encouraged nor discouraged.
 
@@ -251,3 +254,48 @@ Beyond where required by the language or other style rules, and apart from liter
 
 This rule is never interpreted as requiring or forbidding additional space at the start or end of a line; it addresses only interior space.
 
+## 3 Functional Programming
+The intent of functional programming is that a function, given a certain input, will always output the same result.  This reduces the amount of 'state' knowledge that needs to be held and reduces the number of side effects of the code when you call it.
+
+### 3.1 Side Effects
+When calling a method, it should be either explicitly stated the one action that occurs, or even better should return a new value instead:
+```java
+// BAD!
+public int getNPlusOne()
+{
+    n++;                // Increments n, but doesn't tell the user that this happens!
+    return n;
+}
+
+// Better ... 
+public int incrementN()
+{
+    n++;                // Better naming; less suprises
+    return n;
+}
+
+// Best!
+public int nPlusOne()
+{
+    return n + 1;       // Doesn't modify the state, just returns a new local copy
+}
+```
+
+### 3.2 Parameters
+The number of parameters of a good function should be 0, this isn't always possible, but the ideal function gets called and always does the right thing regardless of state:
+```java
+public void toggle()
+{
+    if(b)
+        b = false;
+    b = true;
+}
+```
+Avoid having large numbers of parameters, condense them into an object or ask why the function needs to know so many things?  Is it becoming too big?
+```java
+public int startGame(int boardSize, int playerCount, Player[] players, Player startingPlayer, Color[] colours, JFrame view, JPanel Board) {...}
+```
+If we add all the settings into a `Settings` data class and allow the view to call the board, we reduce to wo parameters
+```java
+public  int startGame(Settings settings, JFrame view) {...}
+```
