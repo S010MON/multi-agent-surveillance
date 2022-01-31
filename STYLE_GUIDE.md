@@ -302,7 +302,7 @@ public int startGame(int boardSize,
                     JPanel Board)
 {...}
 ```
-If we add all the settings into a `Settings` data class and allow the view to call the board, we reduce to wo parameters
+If we add all the settings into a `Settings` data class and allow the view to call the board, we reduce to two parameters
 ```java
 public  int startGame(Settings settings, JFrame view) {...}
 ```
