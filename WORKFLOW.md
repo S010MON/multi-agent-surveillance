@@ -51,7 +51,7 @@ To make CI/CD work there is one rule: the master branch always runs! To ensure t
 
 a) **Running**.  It should go without saying ... checkout the branch, run the thing, test the feature/bug fix.  The code won't pass CI/CD if it doesn't complie, but GUI features certainly will misbehave after compilation.
 
-b) **Style**.  Follow the ![style guide]() and make sure it doesn't need a refactor.  Be harsh, if you can't read it now, then you certainly won't be able to understand it in a month when it's your problem!
+b) **Style**.  Follow the ![style guide](https://github.com/S010MON/project-2-2/blob/master/STYLE_GUIDE.md) and make sure it doesn't need a refactor.  Be harsh, if you can't read it now, then you certainly won't be able to understand it in a month when it's your problem!
 
 c) **Tests**.  Check out what the tests are actually doing something, even a broken clock is right twice a day, so make sure the tests are actually useful.
 
