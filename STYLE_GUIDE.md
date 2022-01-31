@@ -293,7 +293,14 @@ public void toggle()
 ```
 Avoid having large numbers of parameters, condense them into an object or ask why the function needs to know so many things?  Is it becoming too big?
 ```java
-public int startGame(int boardSize, int playerCount, Player[] players, Player startingPlayer, Color[] colours, JFrame view, JPanel Board) {...}
+public int startGame(int boardSize,
+                    int playerCount,
+                    Player[] players,
+                    Player startingPlayer,
+                    Color[] colours,
+                    JFrame view,
+                    JPanel Board)
+{...}
 ```
 If we add all the settings into a `Settings` data class and allow the view to call the board, we reduce to wo parameters
 ```java
