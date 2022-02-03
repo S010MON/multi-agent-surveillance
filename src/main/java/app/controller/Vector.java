@@ -41,4 +41,6 @@ public class Vector
     {
         return new Vector(this.getX() * scalar, this.getY() * scalar);
     }
+
+
 }

@@ -2,6 +2,7 @@ package jgfx.javagradlefx;
 
 import app.controller.Vector;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class VectorTest
@@ -54,5 +55,21 @@ public class VectorTest
         Vector t = v.sub(u);
         assertEquals(10.5d, t.getX());
         assertEquals(10.5d, t.getY());
+    }
+
+    @Test void scaleVectorPos()
+    {
+        Vector v = new Vector(10,10);
+        Vector t = v.scale(10);
+        assertEquals(100d, t.getX());
+        assertEquals(100d, t.getY());
+    }
+
+    @Test void scaleVectorNeg()
+    {
+        Vector v = new Vector(10,10);
+        Vector t = v.scale(-1);
+        assertEquals(-10d, t.getX());
+        assertEquals(-10d, t.getY());
     }
 }
