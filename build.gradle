@@ -8,7 +8,6 @@ plugins {
     id 'org.beryx.jlink' version '2.24.1'
 }
 
-group 'jgfx'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -37,7 +36,6 @@ javafx {
 }
 
 dependencies {
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
