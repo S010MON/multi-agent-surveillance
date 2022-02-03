@@ -24,7 +24,7 @@ public class Renderer extends Canvas
     {
         GraphicsContext gc = this.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
-        gc.fillRect(100,100,1,1);
+        gc.fillRect(400,250,1,1);
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
         for(Ray r: rays)
@@ -36,13 +36,13 @@ public class Renderer extends Canvas
     // Temp method to create a set of rays - GraphicsEngine should generate this
     private void createRays()
     {
-        Vector origin = new Vector(100,100);
-        Vector end = new Vector(200, 300);
+        Vector origin = new Vector(400,250);
+        Vector end = new Vector(0, 0);
         Ray ray = new Ray(origin, end);
         for(int i = 0; i < 100; i++)
         {
-            rays.add(ray);
-            ray = ray.rotate((i*0.01));
+            rays.add(ray.rotate(i * 5.0));
+
         }
     }
 }
