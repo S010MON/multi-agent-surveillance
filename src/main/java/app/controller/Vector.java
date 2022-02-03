@@ -42,5 +42,8 @@ public class Vector
         return new Vector(this.getX() * scalar, this.getY() * scalar);
     }
 
-
+    public Vector copy()
+    {
+        return new Vector(x, y);
+    }
 }
