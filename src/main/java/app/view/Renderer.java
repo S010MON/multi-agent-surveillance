@@ -24,7 +24,7 @@ public class Renderer extends Canvas
     {
         GraphicsContext gc = this.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
-        gc.fillRect(100,100,10,10);
+        gc.fillRect(100,100,1,1);
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
         for(Ray r: rays)
@@ -37,11 +37,12 @@ public class Renderer extends Canvas
     private void createRays()
     {
         Vector origin = new Vector(100,100);
-        rays.add(new Ray(origin, new Vector(210, 110)));
-        rays.add(new Ray(origin, new Vector(310, 210)));
-        rays.add(new Ray(origin, new Vector(410, 310)));
-        rays.add(new Ray(origin, new Vector(510, 410)));
-        rays.add(new Ray(origin, new Vector(610, 510)));
-        rays.add(new Ray(origin, new Vector(710, 610)));
+        Vector end = new Vector(200, 300);
+        Ray ray = new Ray(origin, end);
+        for(int i = 0; i < 100; i++)
+        {
+            rays.add(ray);
+            ray = ray.rotate((i*0.01));
+        }
     }
 }

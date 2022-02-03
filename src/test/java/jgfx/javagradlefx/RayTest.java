@@ -54,4 +54,40 @@ public class RayTest
         assertEquals(-10, s.getV().getX(), 0.001);
         assertEquals(0, s.getV().getY(), 0.001);
     }
+
+    @Test void rotate360Offset()
+    {
+        Vector u = new Vector(10,10);
+        Vector v = new Vector(10,20);
+        Ray r = new Ray(u, v);
+        Ray s = r.rotate(360);
+        assertEquals(10, s.getU().getX(), 0.001);
+        assertEquals(10, s.getU().getY(), 0.001);
+        assertEquals(10, s.getV().getX(), 0.001);
+        assertEquals(20, s.getV().getY(), 0.001);
+    }
+
+    @Test void rotate180Offset()
+    {
+        Vector u = new Vector(10,10);
+        Vector v = new Vector(10,20);
+        Ray r = new Ray(u, v);
+        Ray s = r.rotate(180);
+        assertEquals(10, s.getU().getX(), 0.001);
+        assertEquals(10, s.getU().getY(), 0.001);
+        assertEquals(10, s.getV().getX(), 0.001);
+        assertEquals(0, s.getV().getY(), 0.001);
+    }
+
+    @Test void rotate90Offset()
+    {
+        Vector u = new Vector(10,10);
+        Vector v = new Vector(10,20);
+        Ray r = new Ray(u, v);
+        Ray s = r.rotate(90);
+        assertEquals(10, s.getU().getX(), 0.001);
+        assertEquals(10, s.getU().getY(), 0.001);
+        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(10, s.getV().getY(), 0.001);
+    }
 }
