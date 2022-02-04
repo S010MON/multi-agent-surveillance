@@ -42,8 +42,26 @@ public class Vector
         return new Vector(this.getX() * scalar, this.getY() * scalar);
     }
 
+    public double dist(Vector vector)
+    {
+        double a = Math.pow((this.getX() - vector.getX()),2);
+        double b = Math.pow((this.getY() - vector.getY()),2);
+        return Math.sqrt(a + b);
+    }
+
     public Vector copy()
     {
         return new Vector(x, y);
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof Vector)
+        {
+            Vector v = (Vector) other;
+            return this.getX() == v.getX() && this.getY() == v.getY();
+        }
+        return false;
     }
 }

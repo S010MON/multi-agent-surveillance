@@ -21,13 +21,6 @@ public class Ray
         return v;
     }
 
-    public double length()
-    {
-        double a = Math.pow((u.getX() + v.getX()),2);
-        double b = Math.pow((u.getY() + v.getY()),2);
-        return Math.sqrt(a + b);
-    }
-
     // Needs work!
     public Ray rotate(double degrees)
     {

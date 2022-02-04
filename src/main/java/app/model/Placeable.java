@@ -9,5 +9,7 @@ public interface Placeable
 
     Color getColor();
 
-    boolean isHit();
+    boolean isHit(Vector v);
+
+    Vector intersection(Vector v);
 }
