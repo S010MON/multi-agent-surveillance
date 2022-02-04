@@ -45,7 +45,6 @@ public class Wall implements Placeable
         return 0 < t && t < 1 && u > 0;
     }
 
-
     @Override
     public Vector intersection(Ray ray)
     {
@@ -64,50 +63,4 @@ public class Wall implements Placeable
         double y = y_1 + (t * (y_2 - y_1));
         return new Vector(x, y);
     }
-
-//    @Override
-//    public boolean isHit(Vector v)
-//    {
-//        return  v.getX() >= rectangle.getX() &&
-//                v.getX() <= rectangle.getX() + rectangle.getWidth() &&
-//                v.getY() >= rectangle.getY() &&
-//                v.getY() <= rectangle.getY() + rectangle.getHeight();
-//    }
-
-//    @Override
-//    public Vector intersection(Vector v)
-//    {
-//        // Find the closest line
-//        Vector a = null;
-//        Vector b = null;
-//        double da = 1E11;
-//        double db = 1E11;
-//
-//        for(Vector c: corners)
-//        {
-//            double dist = c.dist(v);
-//
-//            if(dist < da)       // Check if first closest
-//            {
-//                a = c;
-//                da = dist;
-//            }
-//            else if (dist < db) // Check if second closest
-//            {
-//                b = c;
-//                db = dist;
-//            }
-//        }
-//        // Line x -> y
-//        Vector v_1 = new Vector().sub(a);
-//        Vector v_2 = b.sub(a);
-//        double dx = a.getX() - b.getX();
-//        double dy = a.getY() - b.getY();
-//        Vector v_3 = new Vector(dx, dy);
-//
-//        double pt_1 = v_2.cross(v_1) / v_2.dot(v_3);
-//        double pt_2 = v_1.dot(v_3)   / v_2.dot(v_3);
-//
-//        return new Vector(pt_1, pt_2);
-//    }
 }

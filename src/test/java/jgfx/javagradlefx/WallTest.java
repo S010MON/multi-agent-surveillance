@@ -12,11 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WallTest
 {
-    @Test void test()
-    {
-        assertTrue(true);
-    }
-
     @Test void testWallHit()
     {
         Vector a = new Vector(10,10);
@@ -43,7 +38,7 @@ public class WallTest
         assertFalse(wall.isHit(ray));
     }
 
-    @Test void testIntersection()
+    @Test void testIntersectionStraight()
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
