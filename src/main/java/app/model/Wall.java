@@ -38,7 +38,7 @@ public class Wall implements Placeable
     @Override
     public Vector intersection(Vector v)
     {
-        // Find closest line
+        // Find the closest line
         Vector a = null;
         Vector b = null;
         double da = 1E11;
@@ -59,7 +59,6 @@ public class Wall implements Placeable
                 db = dist;
             }
         }
-
         // Line x -> y
         Vector v_1 = new Vector().sub(a);
         Vector v_2 = b.sub(a);
@@ -67,10 +66,9 @@ public class Wall implements Placeable
         double dy = a.getY() - b.getY();
         Vector v_3 = new Vector(dx, dy);
 
+        double pt_1 = v_2.cross(v_1) / v_2.dot(v_3);
+        double pt_2 = v_1.dot(v_3)   / v_2.dot(v_3);
 
-        // Find intersection of line
-
-
-        return null;
+        return new Vector(pt_1, pt_2);
     }
 }

@@ -21,15 +21,11 @@ public class Ray
         return v;
     }
 
-    // Needs work!
     public Ray rotate(double degrees)
     {
         Vector unitVector = v.sub(u);
-        double cosA = Math.cos(Math.toRadians(degrees));
-        double sinA = Math.sin(Math.toRadians(degrees));
-        RotationMatrix M = new RotationMatrix(cosA, -sinA, sinA, cosA);
-        Vector rotatedVector = M.dot(unitVector);
-        Vector newV = u.add(rotatedVector);
-        return new Ray(u, newV);
+        Vector rotatedVector = unitVector.rotate(degrees);
+        Vector newVector = u.add(rotatedVector);
+        return new Ray(u, newVector);
     }
 }

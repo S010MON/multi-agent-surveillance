@@ -44,4 +44,10 @@ public class WallTest
         Vector shot = new Vector(15, -5);
         assertFalse(wall.isHit(shot));
     }
+
+    @Test void testIntersection()
+    {
+        Placeable wall = new Wall(10, 10, 30,30);
+        //Vector shot = new Vector(, -5);
+    }
 }

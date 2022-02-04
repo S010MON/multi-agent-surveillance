@@ -37,14 +37,16 @@ public class Vector
         return new Vector(this.x - other.getX(), this.y - other.getY());
     }
 
-    public Vector mul(Vector other)
+    public double cross(Vector other)
     {
-        return null;
+        double a = (this.getY() * other.getX());
+        double b = (this.getX() * other.getY());
+        return a - b;
     }
 
-    public Vector dot(Vector other)
+    public double dot(Vector other)
     {
-        return null;
+        return (this.getX() * other.getX()) + (this.getY() * other.getY());
     }
 
     public Vector scale(double scalar)
@@ -57,6 +59,14 @@ public class Vector
         double a = Math.pow((this.getX() - vector.getX()),2);
         double b = Math.pow((this.getY() - vector.getY()),2);
         return Math.sqrt(a + b);
+    }
+
+    public Vector rotate(double degrees)
+    {
+        double cosA = Math.cos(Math.toRadians(degrees));
+        double sinA = Math.sin(Math.toRadians(degrees));
+        RotationMatrix M = new RotationMatrix(cosA, -sinA, sinA, cosA);
+        return M.dot(this);
     }
 
     public Vector copy()
