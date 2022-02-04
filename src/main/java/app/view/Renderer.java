@@ -2,7 +2,9 @@ package app.view;
 
 import app.controller.Beam;
 import app.controller.Vector;
+import app.model.Agent;
 import app.model.MapTemp;
+import app.model.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -22,13 +24,24 @@ public class Renderer extends Canvas
     public void render()
     {
         GraphicsContext gc = this.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.fillRect(400,250,1,1);
-        gc.setLineWidth(1);
-        gc.setStroke(Color.BLACK);
-        for(Beam r: map.beams)
+
+        for(Beam r: map.getBeams())
         {
-            gc.strokeLine(r.getU().getX(), r.getU().getY(), r.getV().getX(), r.getV().getY());
+            r.draw(gc);
+        }
+
+        for(Placeable p: map.getObjects())
+        {
+            p.draw(gc);
+        }
+
+        for (Agent a: map.getAgents())
+        {
+            for(Beam r: a.getView())
+            {
+                r.draw(gc);
+            }
+            a.draw(gc);
         }
     }
 

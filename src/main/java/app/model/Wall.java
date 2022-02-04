@@ -2,8 +2,8 @@ package app.model;
 
 import app.controller.Ray;
 import app.controller.Vector;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class Wall implements Placeable
 {
@@ -16,9 +16,10 @@ public class Wall implements Placeable
     }
 
     @Override
-    public Color getColor()
+    public void draw(GraphicsContext gc)
     {
-        return Color.BLACK;
+        gc.setStroke(Color.BLACK);
+        gc.strokeLine(a.getX(), a.getY(), b.getX(), b.getY());
     }
 
     @Override

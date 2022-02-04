@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.model.Agent;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class AgentImp implements Agent
     @Override
     public ArrayList<Beam> getView()
     {
-        return null;
+        return new ArrayList<Beam>();
     }
 
     @Override
@@ -52,9 +53,10 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public Color getColor()
+    public void draw(GraphicsContext gc)
     {
-        return Color.BLACK;
+        gc.setFill(Color.BLACK);
+        gc.fillOval(position.getX()-(radius/2), position.getY()-(radius/2), radius, radius);
     }
 
     @Override

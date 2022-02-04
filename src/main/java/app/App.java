@@ -17,7 +17,7 @@ public class App extends Application
         this.stage = stage;
         Frame frame = new Frame(800, 500);
         Scene scene = new Scene(frame,800, 500);
-        stage.setTitle("Hello!");
+        stage.setTitle("Multi Agent Surveillance");
         stage.setScene(scene);
         stage.show();
     }

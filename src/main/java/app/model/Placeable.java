@@ -2,11 +2,11 @@ package app.model;
 
 import app.controller.Ray;
 import app.controller.Vector;
-import javafx.scene.paint.Color;
+import javafx.scene.canvas.GraphicsContext;
 
 public interface Placeable
 {
-    Color getColor();
+    void draw(GraphicsContext gc);
 
     boolean isHit(Ray ray);
 
