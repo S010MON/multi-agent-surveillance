@@ -2,30 +2,27 @@ package app.controller;
 
 public class Ray
 {
-    private Vector u;
-    private Vector v;
+    public Vector origin;
+    public Vector direction;
 
-    public Ray(Vector u, Vector v)
+    public Ray(Vector origin, Vector direction)
     {
-        this.u = u;
-        this.v = v;
+        this.origin = origin;
+        this.direction = direction;
     }
 
-    public Vector getU()
+    public Vector getDirection()
     {
-        return u;
+        return direction;
     }
 
-    public Vector getV()
+    public Vector getOrigin()
     {
-        return v;
+        return origin;
     }
 
     public Ray rotate(double degrees)
     {
-        Vector unitVector = v.sub(u);
-        Vector rotatedVector = unitVector.rotate(degrees);
-        Vector newVector = u.add(rotatedVector);
-        return new Ray(u, newVector);
+        return new Ray(this.direction.rotate(degrees), this.origin);
     }
 }

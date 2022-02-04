@@ -2,22 +2,30 @@ package app.controller;
 
 public class Beam
 {
-    private Vector position;
-    private Vector direction;
+    private Vector u;
+    private Vector v;
 
-    public Beam(Vector position, Vector direction)
+    public Beam(Vector u, Vector v)
     {
-        this.position = position;
-        this.direction = direction;
+        this.u = u;
+        this.v = v;
     }
 
-    public Vector getPosition()
+    public Vector getU()
     {
-        return position;
+        return u;
     }
 
-    public Vector getDirection()
+    public Vector getV()
     {
-        return direction;
+        return v;
+    }
+
+    public Beam rotate(double degrees)
+    {
+        Vector unitVector = v.sub(u);
+        Vector rotatedVector = unitVector.rotate(degrees);
+        Vector newVector = u.add(rotatedVector);
+        return new Beam(u, newVector);
     }
 }

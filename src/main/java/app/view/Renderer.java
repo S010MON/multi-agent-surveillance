@@ -1,6 +1,6 @@
 package app.view;
 
-import app.controller.Ray;
+import app.controller.Beam;
 import app.controller.Vector;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Renderer extends Canvas
 {
-    public ArrayList<Ray> rays = new ArrayList<>(); // This will be removed and replaced with the Map
+    public ArrayList<Beam> beams = new ArrayList<>(); // This will be removed and replaced with the Map
 
     public Renderer(int width, int height)
     {
@@ -26,7 +26,7 @@ public class Renderer extends Canvas
         gc.fillRect(400,250,1,1);
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
-        for(Ray r: rays)
+        for(Beam r: beams)
         {
             gc.strokeLine(r.getU().getX(), r.getU().getY(), r.getV().getX(), r.getV().getY());
         }
@@ -37,10 +37,10 @@ public class Renderer extends Canvas
     {
         Vector origin = new Vector(400,250);
         Vector end = new Vector(0, 0);
-        Ray ray = new Ray(origin, end);
+        Beam beam = new Beam(origin, end);
         for(int i = 0; i < 100; i++)
         {
-            rays.add(ray.rotate(i * 5.0));
+            beams.add(beam.rotate(i * 5.0));
 
         }
     }

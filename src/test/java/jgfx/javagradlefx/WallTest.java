@@ -1,5 +1,6 @@
 package jgfx.javagradlefx;
 
+import app.controller.Ray;
 import app.controller.Vector;
 import app.model.Placeable;
 import app.model.Wall;
@@ -7,47 +8,68 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WallTest
 {
+    @Test void test()
+    {
+        assertTrue(true);
+    }
+
     @Test void testWallHit()
     {
-        Placeable wall = new Wall(10, 10, 30,30);
-        Vector shot = new Vector(15, 15);
-        assertTrue(wall.isHit(shot));
+        Vector a = new Vector(10,10);
+        Vector b = new Vector(30,10);
+        Placeable wall = new Wall(a, b);
+
+        Vector origin = new Vector(20, 0);
+        Vector direction = new Vector(20, 1);
+        Ray ray = new Ray(origin, direction);
+
+        assertTrue(wall.isHit(ray));
     }
 
-    @Test void testWallMissWest()
+    @Test void testWallMiss()
     {
-        Placeable wall = new Wall(10, 10, 30,30);
-        Vector shot = new Vector(50, 15);
-        assertFalse(wall.isHit(shot));
-    }
+        Vector a = new Vector(10,10);
+        Vector b = new Vector(30,10);
+        Placeable wall = new Wall(a, b);
 
-    @Test void testWallMissEast()
-    {
-        Placeable wall = new Wall(10, 10, 30,30);
-        Vector shot = new Vector(-5, 15);
-        assertFalse(wall.isHit(shot));
-    }
+        Vector origin = new Vector(20, 20);
+        Vector direction = new Vector(20, 21);
+        Ray ray = new Ray(origin, direction);
 
-    @Test void testWallMissSouth()
-    {
-        Placeable wall = new Wall(10, 10, 30,30);
-        Vector shot = new Vector(15, 50);
-        assertFalse(wall.isHit(shot));
-    }
-
-    @Test void testWallMissNorth()
-    {
-        Placeable wall = new Wall(10, 10, 30,30);
-        Vector shot = new Vector(15, -5);
-        assertFalse(wall.isHit(shot));
+        assertFalse(wall.isHit(ray));
     }
 
     @Test void testIntersection()
     {
-        Placeable wall = new Wall(10, 10, 30,30);
-        //Vector shot = new Vector(, -5);
+        Vector a = new Vector(10,10);
+        Vector b = new Vector(30,10);
+        Placeable wall = new Wall(a, b);
+
+        Vector origin = new Vector(20, 0);
+        Vector direction = new Vector(20, 1);
+        Ray ray = new Ray(origin, direction);
+
+        Vector exp = new Vector(20, 10);
+        Vector act = wall.intersection(ray);
+        assertEquals(exp, act);
+    }
+
+    @Test void testIntersectionAngle()
+    {
+        Vector a = new Vector(10,10);
+        Vector b = new Vector(30,10);
+        Placeable wall = new Wall(a, b);
+
+        Vector origin = new Vector(0, 0);
+        Vector direction = new Vector(10, 5);
+        Ray ray = new Ray(origin, direction);
+
+        Vector exp = new Vector(20, 10);
+        Vector act = wall.intersection(ray);
+        assertEquals(exp, act);
     }
 }

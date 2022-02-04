@@ -34,7 +34,7 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public ArrayList<Ray> getView()
+    public ArrayList<Beam> getView()
     {
         return null;
     }
@@ -58,13 +58,13 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public boolean isHit(Vector v)
+    public boolean isHit(Ray ray)
     {
-        return position.dist(v) <= radius;
+        return false;
     }
 
     @Override
-    public Vector intersection(Vector v)
+    public Vector intersection(Ray ray)
     {
         return null;
     }
