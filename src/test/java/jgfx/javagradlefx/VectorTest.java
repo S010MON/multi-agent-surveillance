@@ -129,4 +129,12 @@ public class VectorTest
         assertEquals(v.getY(), 0, 0.001);
     }
 
+    @Test void rotateInSteps()
+    {
+        Vector u = new Vector(10,0);
+        u = u.rotate(9);
+        assertEquals(9.87, u.getX(), 0.01);
+        assertEquals(1.56, u.getY(), 0.01);
+    }
+
 }

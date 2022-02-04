@@ -90,4 +90,19 @@ public class BeamTest
         assertEquals(0, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
     }
+
+    @Test void rotateInSteps()
+    {
+        Vector u = new Vector(10,10);
+        Vector v = new Vector(10,20);
+        Beam s = new Beam(u, v);
+        for(int i = 0; i < 9; i++)
+        {
+            s = s.rotate(10);
+        }
+        assertEquals(10, s.getU().getX(), 0.001);
+        assertEquals(10, s.getU().getY(), 0.001);
+        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(10, s.getV().getY(), 0.001);
+    }
 }

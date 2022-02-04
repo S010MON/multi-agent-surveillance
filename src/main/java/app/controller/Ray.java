@@ -23,6 +23,9 @@ public class Ray
 
     public Ray rotate(double degrees)
     {
-        return new Ray(this.direction.rotate(degrees), this.origin);
+        Vector unitVector = direction.sub(origin);
+        Vector rotatedVector = unitVector.rotate(degrees);
+        Vector newVector = origin.add(rotatedVector);
+        return new Ray(this.origin, newVector);
     }
 }

@@ -22,8 +22,8 @@ public class RotationMatrix
 
     public Vector dot(Vector v)
     {
-        double x = a2 * v.getY() + a1 * v.getX();
-        double y = b2 * v.getY() + b2 * v.getX();
+        double x = (a2 * v.getY()) + (a1 * v.getX());
+        double y = (b2 * v.getY()) + (b1 * v.getX());
         return new Vector(x, y);
     }
 }

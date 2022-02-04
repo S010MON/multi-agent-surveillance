@@ -2,6 +2,7 @@ package app.model;
 
 import app.controller.AgentImp;
 import app.controller.Beam;
+import app.controller.GraphicsEngine;
 import app.controller.Vector;
 
 import java.util.ArrayList;
@@ -17,10 +18,11 @@ public class MapTemp
      */
     public MapTemp()
     {
-        beams = new ArrayList<>();
         objects = createObjects();
         agents = new ArrayList<Agent>();
-        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
+        agents.add(new AgentImp(new Vector(400, 250), new Vector(400,0), 10));
+        beams = GraphicsEngine.getInstance().compute(this, agents.get(0));
+        System.out.println("Drawn");
     }
 
     // Temp method to create a set of rays - GraphicsEngine should generate this
@@ -30,9 +32,9 @@ public class MapTemp
         Vector origin = new Vector(400,250);
         Vector end = new Vector(400, 0);
         Beam beam = new Beam(origin, end);
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 360; i++)
         {
-            beams.add(beam.rotate(i * 5.0));
+            beams.add(beam.rotate(i));
         }
         return beams;
     }
