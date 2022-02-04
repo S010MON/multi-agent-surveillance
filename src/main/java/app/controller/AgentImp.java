@@ -14,12 +14,14 @@ public class AgentImp implements Agent
     protected Vector position;
     protected Vector direction;
     protected double radius;
+    protected ArrayList<Beam> view;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
+        view = new ArrayList<>();
     }
 
     @Override
@@ -37,7 +39,13 @@ public class AgentImp implements Agent
     @Override
     public ArrayList<Beam> getView()
     {
-        return new ArrayList<Beam>();
+        return view;
+    }
+
+    @Override
+    public void updateView(ArrayList<Beam> view)
+    {
+        this.view = view;
     }
 
     @Override

@@ -14,5 +14,7 @@ public interface Agent extends Placeable
 
     ArrayList<Beam> getView();
 
+    void updateView(ArrayList<Beam> view);
+
     double getHearing();
 }
