@@ -5,8 +5,6 @@ import javafx.scene.paint.Color;
 
 public interface Placeable
 {
-    Vector getPosition();
-
     Color getColor();
 
     boolean isHit(Vector v);

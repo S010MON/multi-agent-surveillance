@@ -62,4 +62,10 @@ public class AgentImp implements Agent
     {
         return position.dist(v) <= radius;
     }
+
+    @Override
+    public Vector intersection(Vector v)
+    {
+        return null;
+    }
 }

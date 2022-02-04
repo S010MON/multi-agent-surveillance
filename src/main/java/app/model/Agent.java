@@ -8,6 +8,8 @@ public interface Agent extends Placeable
 {
     void move();
 
+    Vector getPosition();
+
     Vector getDirection();
 
     ArrayList<Ray> getView();
