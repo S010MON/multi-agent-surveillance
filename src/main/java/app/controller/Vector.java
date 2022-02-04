@@ -37,6 +37,16 @@ public class Vector
         return new Vector(this.x - other.getX(), this.y - other.getY());
     }
 
+    public Vector mul(Vector other)
+    {
+        return null;
+    }
+
+    public Vector dot(Vector other)
+    {
+        return null;
+    }
+
     public Vector scale(double scalar)
     {
         return new Vector(this.getX() * scalar, this.getY() * scalar);
