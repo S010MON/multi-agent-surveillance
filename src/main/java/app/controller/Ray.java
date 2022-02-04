@@ -2,41 +2,30 @@ package app.controller;
 
 public class Ray
 {
-    private Vector u;
-    private Vector v;
+    public Vector origin;
+    public Vector direction;
 
-    public Ray(Vector u, Vector v)
+    public Ray(Vector origin, Vector direction)
     {
-        this.u = u;
-        this.v = v;
+        this.origin = origin;
+        this.direction = direction;
     }
 
-    public Vector getU()
+    public Vector getDirection()
     {
-        return u;
+        return direction;
     }
 
-    public Vector getV()
+    public Vector getOrigin()
     {
-        return v;
+        return origin;
     }
 
-    public double length()
-    {
-        double a = Math.pow((u.getX() + v.getX()),2);
-        double b = Math.pow((u.getY() + v.getY()),2);
-        return Math.sqrt(a + b);
-    }
-
-    // Needs work!
     public Ray rotate(double degrees)
     {
-        Vector unitVector = v.sub(u);
-        double cosA = Math.cos(Math.toRadians(degrees));
-        double sinA = Math.sin(Math.toRadians(degrees));
-        RotationMatrix M = new RotationMatrix(cosA, -sinA, sinA, cosA);
-        Vector rotatedVector = M.dot(unitVector);
-        Vector newV = u.add(rotatedVector);
-        return new Ray(u, newV);
+        Vector unitVector = direction.sub(origin);
+        Vector rotatedVector = unitVector.rotate(degrees);
+        Vector newVector = origin.add(rotatedVector);
+        return new Ray(this.origin, newVector);
     }
 }

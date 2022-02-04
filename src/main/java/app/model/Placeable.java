@@ -1,13 +1,14 @@
 package app.model;
 
+import app.controller.Ray;
 import app.controller.Vector;
-import javafx.scene.paint.Color;
+import javafx.scene.canvas.GraphicsContext;
 
 public interface Placeable
 {
-    Vector getPosition();
+    void draw(GraphicsContext gc);
 
-    Color getColor();
+    boolean isHit(Ray ray);
 
-    boolean isHit();
+    Vector intersection(Ray ray);
 }
