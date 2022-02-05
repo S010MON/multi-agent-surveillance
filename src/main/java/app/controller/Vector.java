@@ -63,9 +63,7 @@ public class Vector
 
     public Vector rotate(double degrees)
     {
-        double cosA = Math.cos(Math.toRadians(degrees));
-        double sinA = Math.sin(Math.toRadians(degrees));
-        RotationMatrix M = new RotationMatrix(cosA, -sinA, sinA, cosA);
+        RotationMatrix M = new RotationMatrix(degrees);
         return M.dot(this);
     }
 

@@ -12,12 +12,14 @@ public class RotationMatrix
      * [ a1 a2 ]
      * [ b1 b2 ]
      */
-    public RotationMatrix(double a1, double a2, double b1, double b2)
+    public RotationMatrix(double theta)
     {
-        this.a1 = a1;
-        this.a2 = a2;
-        this.b1 = b1;
-        this.b2 = b2;
+        double cosA = Math.cos(Math.toRadians(theta));
+        double sinA = Math.sin(Math.toRadians(theta));
+        this.a1 = cosA;
+        this.a2 = -sinA;
+        this.b1 = sinA;
+        this.b2 = cosA;
     }
 
     public Vector dot(Vector v)
