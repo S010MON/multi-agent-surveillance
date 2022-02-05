@@ -1,6 +1,7 @@
 package app.controller;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public class Settings
 {
@@ -13,11 +14,11 @@ public class Settings
     private double sprintSpeed;
     private double timeStep;
     private double scaling;
-    private Rectangle2D[] walls;
-    private Rectangle2D[] shade;
-    private Rectangle2D[] towers;
-    private Rectangle2D[] portals; // Test map contains an extra x, y pair for the location you get teleported to and a double for orientation
-    private Rectangle2D[] textures; // Test map includes an int for texture type and a double for orientation
+    private ArrayList<Rectangle2D> walls;
+    private ArrayList<Rectangle2D> shade;
+    private ArrayList<Rectangle2D> towers;
+    private ArrayList<Rectangle2D> portals; // Test map contains an extra x, y pair for the location you get teleported to and a double for orientation
+    private ArrayList<Rectangle2D> textures; // Test map includes an int for texture type and a double for orientation
     private Rectangle2D.Double targetArea;
     private Rectangle2D.Double spawnAreaIntruders;
     private Rectangle2D.Double spawnAreaGuards;
@@ -88,29 +89,29 @@ public class Settings
         return this.scaling;
     }
 
-    public Rectangle2D[] getWalls()
+    public ArrayList<Rectangle2D> getWalls()
     {
-        return this.walls;
+        return (ArrayList<Rectangle2D>) this.walls.clone();
     }
 
-    public Rectangle2D[] getShade()
+    public ArrayList<Rectangle2D> getShade()
     {
-        return this.shade;
+        return (ArrayList<Rectangle2D>) this.shade.clone();
     }
 
-    public Rectangle2D[] getTowers()
+    public ArrayList<Rectangle2D> getTowers()
     {
-        return this.towers;
+        return (ArrayList<Rectangle2D>) this.towers.clone();
     }
 
-    public Rectangle2D[] getPortals()
+    public ArrayList<Rectangle2D> getPortals()
     {
-        return this.portals;
+        return (ArrayList<Rectangle2D>) this.portals.clone();
     }
 
-    public Rectangle2D[] getTextures()
+    public ArrayList<Rectangle2D> getTextures()
     {
-        return this.textures;
+        return (ArrayList<Rectangle2D>) this.textures.clone();
     }
 
     public Rectangle2D.Double getTargetArea()
