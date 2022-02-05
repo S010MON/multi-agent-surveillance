@@ -1,8 +1,10 @@
 package app.controller;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+// Orientation, which is double, only applies to teleporting and adding texture, not saved as a setting, can be if needed.
 public class Settings
 {
     private boolean unlocked = true;
@@ -20,8 +22,10 @@ public class Settings
     private ArrayList<Rectangle2D> walls;
     private ArrayList<Rectangle2D> shade;
     private ArrayList<Rectangle2D> towers;
-    private ArrayList<Rectangle2D> portals; // Test map contains an extra x, y pair for the location you get teleported to and a double for orientation
-    private ArrayList<Rectangle2D> textures; // Test map includes an int for texture type and a double for orientation
+    private ArrayList<Rectangle2D> portals;
+    private ArrayList<Point> teleportTo;
+    private ArrayList<Rectangle2D> textures;
+    private ArrayList<Integer> textureType;
     private Rectangle2D.Double targetArea;
     private Rectangle2D.Double spawnAreaIntruders;
     private Rectangle2D.Double spawnAreaGuards;
@@ -113,7 +117,7 @@ public class Settings
     public void addShade(Rectangle2D shade)
     {
         if(unlocked)
-            this.walls.add(shade);
+            this.shade.add(shade);
     }
 
     public void setTowers()
@@ -125,7 +129,7 @@ public class Settings
     public void addTower(Rectangle2D tower)
     {
         if(unlocked)
-            this.walls.add(tower);
+            this.towers.add(tower);
     }
 
     public void setPortals()
@@ -137,7 +141,31 @@ public class Settings
     public void addPortal(Rectangle2D portal)
     {
         if(unlocked)
-            this.walls.add(portal);
+            this.portals.add(portal);
+    }
+
+    public void setTeleportTo()
+    {
+        if(unlocked)
+            this.teleportTo = new ArrayList<>();
+    }
+
+    public void addTeleportTo(Point p)
+    {
+        if(unlocked)
+            this.teleportTo.add(p);
+    }
+
+    public void setTextureType()
+    {
+        if(unlocked)
+            this.textureType = new ArrayList<>();
+    }
+
+    public void addTextureType(int textureType)
+    {
+        if(unlocked)
+            this.textureType.add(textureType);
     }
 
     public void setTextures()
@@ -149,7 +177,7 @@ public class Settings
     public void addTexture(Rectangle2D texture)
     {
         if(unlocked)
-            this.walls.add(texture);
+            this.textures.add(texture);
     }
 
     public void setTargetArea(Rectangle2D.Double targetArea)
@@ -250,9 +278,19 @@ public class Settings
         return (ArrayList<Rectangle2D>) this.portals.clone();
     }
 
+    public ArrayList<Point> getTeleportTo()
+    {
+        return (ArrayList<Point>) this.teleportTo.clone();
+    }
+
     public ArrayList<Rectangle2D> getTextures()
     {
         return (ArrayList<Rectangle2D>) this.textures.clone();
+    }
+
+    public ArrayList<Integer> getTextureType()
+    {
+        return (ArrayList<Integer>) this.textureType.clone();
     }
 
     public Rectangle2D.Double getTargetArea()
