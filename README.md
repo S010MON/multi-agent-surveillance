@@ -8,4 +8,4 @@
 # Multi-Agent Surveillance
 A model using mutilple agents that sense using visual and audiable signals to detect within an unknown space.
 
-![UML](https://github.com/S010MON/multi-agent-surveillance/blob/master/sshots/UML_diagram.png)
+![UML](https://github.com/S010MON/multi-agent-surveillance/blob/master/sshots/UML.png)
