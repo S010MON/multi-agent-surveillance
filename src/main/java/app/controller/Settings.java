@@ -1,5 +1,6 @@
 package app.controller;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Settings
@@ -41,5 +42,90 @@ public class Settings
         this.targetArea=targetArea;
         this.spawnAreaIntruders=spawnAreaIntruders;
         this.spawnAreaGuards=spawnAreaGuards;
+    }
+
+    public int getGamemode()
+    {
+        return this.gamemode;
+    }
+
+    public int getHeight()
+    {
+        return this.height;
+    }
+
+    public int getWidth()
+    {
+        return this.width;
+    }
+
+    public int getNoOfGuards()
+    {
+        return this.noOfGuards;
+    }
+
+    public int getNoOfIntruders()
+    {
+        return this.noOfIntruders;
+    }
+
+    public double getWalkSpeed()
+    {
+        return this.walkSpeed;
+    }
+
+    public double getSprintSpeed()
+    {
+        return this.sprintSpeed;
+    }
+
+    public double getTimeStep()
+    {
+        return this.timeStep;
+    }
+
+    public double getScaling()
+    {
+        return this.scaling;
+    }
+
+    public Rectangle2D[] getWalls()
+    {
+        return this.walls;
+    }
+
+    public Rectangle2D[] getShade()
+    {
+        return this.shade;
+    }
+
+    public Rectangle2D[] getTowers()
+    {
+        return this.towers;
+    }
+
+    public Rectangle2D[] getPortals()
+    {
+        return this.portals;
+    }
+
+    public Rectangle2D[] getTextures()
+    {
+        return this.textures;
+    }
+
+    public Rectangle2D.Double getTargetArea()
+    {
+        return this.targetArea;
+    }
+
+    public Rectangle2D.Double getSpawnAreaIntruders()
+    {
+        return this.spawnAreaIntruders;
+    }
+
+    public Rectangle2D.Double getSpawnAreaGuards()
+    {
+        return this.spawnAreaGuards;
     }
 }
