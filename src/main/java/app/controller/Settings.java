@@ -156,18 +156,6 @@ public class Settings
             this.teleportTo.add(p);
     }
 
-    public void setTextureType()
-    {
-        if(unlocked)
-            this.textureType = new ArrayList<>();
-    }
-
-    public void addTextureType(int textureType)
-    {
-        if(unlocked)
-            this.textureType.add(textureType);
-    }
-
     public void setTextures()
     {
         if(unlocked)
@@ -178,6 +166,18 @@ public class Settings
     {
         if(unlocked)
             this.textures.add(texture);
+    }
+
+    public void setTextureType()
+    {
+        if(unlocked)
+            this.textureType = new ArrayList<>();
+    }
+
+    public void addTextureType(int textureType)
+    {
+        if(unlocked)
+            this.textureType.add(textureType);
     }
 
     public void setTargetArea(Rectangle2D.Double targetArea)
