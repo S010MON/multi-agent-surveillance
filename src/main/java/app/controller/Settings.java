@@ -24,23 +24,23 @@ public class Settings
 
     public Settings(int gamemode, int height, int width, int noOfGuards, int noOfIntruders, double walkSpeed, double sprintSpeed, double timeStep, double scaling, Rectangle2D[] walls, Rectangle2D[] shade, Rectangle2D[] towers, Rectangle2D[] portals, Rectangle2D[] textures, Rectangle2D.Double targetArea, Rectangle2D.Double spawnAreaIntruders, Rectangle2D.Double spawnAreaGuards)
     {
-        this.gamemode=gamemode;
-        this.height=height;
-        this.width=width;
-        this.noOfGuards=noOfGuards;
-        this.noOfIntruders=noOfIntruders;
-        this.walkSpeed=walkSpeed;
-        this.sprintSpeed=sprintSpeed;
-        this.timeStep=timeStep;
-        this.scaling=scaling;
-        this.walls=walls;
-        this.shade=shade;
-        this.towers=towers;
-        this.portals=portals;
-        this.textures=textures;
-        this.targetArea=targetArea;
-        this.spawnAreaIntruders=spawnAreaIntruders;
-        this.spawnAreaGuards=spawnAreaGuards;
+        this.gamemode = gamemode;
+        this.height = height;
+        this.width = width;
+        this.noOfGuards = noOfGuards;
+        this.noOfIntruders = noOfIntruders;
+        this.walkSpeed = walkSpeed;
+        this.sprintSpeed = sprintSpeed;
+        this.timeStep = timeStep;
+        this.scaling = scaling;
+        this.walls = walls;
+        this.shade = shade;
+        this.towers = towers;
+        this.portals = portals;
+        this.textures = textures;
+        this.targetArea = targetArea;
+        this.spawnAreaIntruders = spawnAreaIntruders;
+        this.spawnAreaGuards = spawnAreaGuards;
     }
 
     public int getGamemode()
