@@ -30,6 +30,17 @@ public class Settings
     private Rectangle2D.Double spawnAreaIntruders;
     private Rectangle2D.Double spawnAreaGuards;
 
+    public Settings()
+    {
+        walls = new ArrayList<>();
+        shade = new ArrayList<>();
+        towers = new ArrayList<>();
+        portals = new ArrayList<>();
+        teleportTo = new ArrayList<>();
+        textures = new ArrayList<>();
+        textureType = new ArrayList<>();
+    }
+
     public void setGamemode(int gamemode)
     {
         if(unlocked)
@@ -96,22 +107,10 @@ public class Settings
             this.scaling = scaling;
     }
 
-    public void setWalls()
-    {
-        if(unlocked)
-            this.walls = new ArrayList<>();
-    }
-
     public void addWall(Rectangle2D wall)
     {
         if(unlocked)
             this.walls.add(wall);
-    }
-
-    public void setShade()
-    {
-        if(unlocked)
-            this.shade = new ArrayList<>();
     }
 
     public void addShade(Rectangle2D shade)
@@ -120,22 +119,10 @@ public class Settings
             this.shade.add(shade);
     }
 
-    public void setTowers()
-    {
-        if(unlocked)
-            this.towers = new ArrayList<>();
-    }
-
     public void addTower(Rectangle2D tower)
     {
         if(unlocked)
             this.towers.add(tower);
-    }
-
-    public void setPortals()
-    {
-        if(unlocked)
-            this.portals = new ArrayList<>();
     }
 
     public void addPortal(Rectangle2D portal)
@@ -144,34 +131,16 @@ public class Settings
             this.portals.add(portal);
     }
 
-    public void setTeleportTo()
-    {
-        if(unlocked)
-            this.teleportTo = new ArrayList<>();
-    }
-
     public void addTeleportTo(Point p)
     {
         if(unlocked)
             this.teleportTo.add(p);
     }
 
-    public void setTextures()
-    {
-        if(unlocked)
-            this.textures = new ArrayList<>();
-    }
-
     public void addTexture(Rectangle2D texture)
     {
         if(unlocked)
             this.textures.add(texture);
-    }
-
-    public void setTextureType()
-    {
-        if(unlocked)
-            this.textureType = new ArrayList<>();
     }
 
     public void addTextureType(int textureType)
