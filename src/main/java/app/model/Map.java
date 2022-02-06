@@ -40,9 +40,9 @@ public class Map
         Vector p6 = new Vector(200,400);
         objects.add(new Wall(p1, p2));
         objects.add(new Wall(p2, p3));
-//        objects.add(new Wall(p3, p4));
-//        objects.add(new Wall(p5, p6));
-//        objects.add(new Wall(p6, p1));
+        objects.add(new Wall(p3, p4));
+        objects.add(new Wall(p5, p6));
+        objects.add(new Wall(p6, p1));
         return objects;
     }
 
