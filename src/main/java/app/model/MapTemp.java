@@ -24,10 +24,11 @@ public class MapTemp
     private ArrayList<Placeable> createObjects()
     {
         ArrayList<Placeable> objects = new ArrayList<>();
-        Vector b1 = new Vector(0,0);
-        Vector b2 = new Vector(800,0);
-        Vector b3 = new Vector(800,500);
-        Vector b4 = new Vector(0,500);
+//        Vector b1 = new Vector(0,0);
+//        Vector b2 = new Vector(800,0);
+//        Vector b3 = new Vector(800,500);
+//        Vector b4 = new Vector(0,500);
+
 //        objects.add(new Border(b1, b2));
 //        objects.add(new Border(b2, b3));
 //        objects.add(new Border(b3, b4));
