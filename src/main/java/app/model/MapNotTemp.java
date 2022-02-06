@@ -14,21 +14,22 @@ public class MapNotTemp
     private ArrayList<Agent> agents;
     private Settings setting;
 
-    private ArrayList<Rectangle2D> walls;
-//    private ArrayList<Rectangle2D> shade;
-//    private ArrayList<Rectangle2D> towers;
-//    private ArrayList<Rectangle2D> portals;
-//    private ArrayList<Point> teleportTo;
-//    private ArrayList<Rectangle2D> textures;
-//    private ArrayList<Integer> textureType;
-
     /**
-     * Temporary map for testing ray drawing, will be swapped out for proper one once made
+     * NOT Temporary map for testing ray drawing, will be swapped out for proper one once made
      */
     public MapNotTemp(Settings setting)
     {
         setting = setting;
+
+        //construct objects array
         objects = createObjects();
+        objects.addAll(rectangleDecomposer(setting.getWalls()));
+        objects.addAll(rectangleDecomposer(setting.getShade()));
+        objects.addAll(rectangleDecomposer(setting.getTowers()));
+        objects.addAll(rectangleDecomposer(setting.getPortals()));
+        objects.addAll(rectangleDecomposer(setting.getTextures()));
+
+        //agents
         agents = new ArrayList<>();
         agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
         agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
@@ -37,27 +38,22 @@ public class MapNotTemp
 
 
 
-    // make it ArrayList<Placeable> instead of void
-    private void mainDecomposer(){
+    private ArrayList<Placeable> rectangleDecomposer(ArrayList<Rectangle2D> rectangles){
+        ArrayList<Placeable> recWalls = new ArrayList<>();
 
-        if (setting.getWalls().size()!= 0){
-            rectangleDecomposer(setting.getWalls()); // decompose rectangle
-        }
-    }
-
-    private void rectangleDecomposer(ArrayList<Rectangle2D> walls){
-
-        for(Rectangle2D wall: walls){
+        for(Rectangle2D wall: rectangles){
             Vector tl = new Vector(wall.getMinX(),wall.getMinY());    // top left corner
             Vector tr = new Vector(wall.getMaxX(), wall.getMinY());    // top right corner
             Vector lr = new Vector(wall.getMaxX(),wall.getMaxY());     // lower right corner
             Vector ll = new Vector(wall.getMinX(),wall.getMaxY());     // lower left corner
 
-            objects.add(new Wall (tl,tr));
-            objects.add(new Wall (tr,lr));
-            objects.add(new Wall (lr,ll));
-            objects.add(new Wall (ll,tl));
+            recWalls.add(new Wall (tl,tr));
+            recWalls.add(new Wall (tr,lr));
+            recWalls.add(new Wall (lr,ll));
+            recWalls.add(new Wall (ll,tl));
         }
+
+        return recWalls;
     }
 
     private ArrayList<Placeable> createObjects()
