@@ -36,10 +36,18 @@ public class FileParser
                 String val=scan.next();
                 id = id.trim();
                 val = val.trim();
+                String[] coords = val.split(" ");
                 switch(id)
                 {
                     case "gameMode":
-
+                        map.setGamemode(Integer.parseInt(val));
+                        break;
+                    case "height":
+                        map.setHeight(Integer.parseInt(val));
+                        break;
+                    case "width":
+                        map.setWidth(Integer.parseInt(val));
+                        break;
                 }
             }
         }
