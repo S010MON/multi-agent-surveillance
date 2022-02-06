@@ -4,7 +4,7 @@ import app.controller.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Wall extends Border
+public class Wall extends Boundary
 {
 
     public Wall(Vector a, Vector b)

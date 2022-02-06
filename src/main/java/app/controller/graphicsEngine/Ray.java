@@ -1,4 +1,6 @@
-package app.controller;
+package app.controller.graphicsEngine;
+
+import app.controller.Vector;
 
 public class Ray
 {

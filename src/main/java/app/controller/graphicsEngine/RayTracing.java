@@ -1,7 +1,9 @@
-package app.controller;
+package app.controller.graphicsEngine;
 
-import app.model.Agent;
-import app.model.MapTemp;
+import app.controller.Beam;
+import app.controller.Vector;
+import app.model.agents.Agent;
+import app.model.Map;
 import app.model.Placeable;
 
 import java.util.ArrayList;
@@ -22,12 +24,11 @@ public class RayTracing implements GraphicsEngine
         return this.maxLoS;
     }
 
-    public ArrayList<Beam> compute(MapTemp map, Agent agent)
+    public ArrayList<Beam> compute(Map map, Agent agent)
     {
         ArrayList<Beam> beams = new ArrayList<>();
         ArrayList<Ray> rays = scatterRays(agent);
         Vector origin = agent.getPosition();
-
 
         for(Ray r: rays)
         {

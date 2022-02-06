@@ -1,39 +1,37 @@
 package app.model;
 
-import app.controller.AgentImp;
 import app.controller.Vector;
+import app.model.agents.Agent;
+import app.model.agents.Human;
 
 import java.util.ArrayList;
 
-public class MapTemp
+public class Map
 {
     private ArrayList<Placeable> objects;
     private ArrayList<Agent> agents;
+    private Human human;
 
     /**
      * Temporary map for testing ray drawing, will be swapped out for proper one once made
      */
-    public MapTemp()
+    public Map()
     {
         objects = createObjects();
         agents = new ArrayList<>();
-        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
-        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+        human = new Human(new Vector(400, 250), new Vector(1,0), 10);
+        agents.add(human);
+        //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+    }
+
+    public void moveHuman(Vector v)
+    {
+        human.setNextMove(v);
     }
 
     private ArrayList<Placeable> createObjects()
     {
         ArrayList<Placeable> objects = new ArrayList<>();
-//        Vector b1 = new Vector(0,0);
-//        Vector b2 = new Vector(800,0);
-//        Vector b3 = new Vector(800,500);
-//        Vector b4 = new Vector(0,500);
-
-//        objects.add(new Border(b1, b2));
-//        objects.add(new Border(b2, b3));
-//        objects.add(new Border(b3, b4));
-//        objects.add(new Border(b4, b1));
-
         Vector p1 = new Vector(200,100);
         Vector p2 = new Vector(600,100);
         Vector p3 = new Vector(600,400);
