@@ -1,22 +1,22 @@
 package jgfx.javagradlefx;
 
-import app.controller.Ray;
+import app.controller.graphicsEngine.Ray;
 import app.controller.Vector;
 import app.model.Placeable;
-import app.model.Border;
+import app.model.Boundary;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BorderTest
+public class BoundaryTest
 {
     @Test void testWallHit()
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Placeable wall = new Border(a, b);
+        Placeable wall = new Boundary(a, b);
 
         Vector origin = new Vector(20, 0);
         Vector direction = new Vector(20, 1);
@@ -29,7 +29,7 @@ public class BorderTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Placeable wall = new Border(a, b);
+        Placeable wall = new Boundary(a, b);
 
         Vector origin = new Vector(20, 20);
         Vector direction = new Vector(20, 21);
@@ -42,7 +42,7 @@ public class BorderTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Placeable wall = new Border(a, b);
+        Placeable wall = new Boundary(a, b);
 
         Vector origin = new Vector(20, 0);
         Vector direction = new Vector(20, 1);
@@ -57,7 +57,7 @@ public class BorderTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Placeable wall = new Border(a, b);
+        Placeable wall = new Boundary(a, b);
 
         Vector origin = new Vector(0, 0);
         Vector direction = new Vector(10, 5);

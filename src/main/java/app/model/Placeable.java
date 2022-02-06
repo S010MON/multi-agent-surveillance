@@ -1,6 +1,6 @@
 package app.model;
 
-import app.controller.Ray;
+import app.controller.graphicsEngine.Ray;
 import app.controller.Vector;
 import javafx.scene.canvas.GraphicsContext;
 

@@ -1,12 +1,12 @@
-package app.controller;
+package app.model.agents;
 
-import app.model.Agent;
+import app.controller.Beam;
+import app.controller.Vector;
+import app.controller.graphicsEngine.Ray;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public class AgentImp implements Agent
 {

@@ -1,12 +1,12 @@
 package app.model;
 
-import app.controller.AgentImp;
-import app.controller.Human;
 import app.controller.Vector;
+import app.model.agents.Agent;
+import app.model.agents.Human;
 
 import java.util.ArrayList;
 
-public class MapTemp
+public class Map
 {
     private ArrayList<Placeable> objects;
     private ArrayList<Agent> agents;
@@ -15,13 +15,13 @@ public class MapTemp
     /**
      * Temporary map for testing ray drawing, will be swapped out for proper one once made
      */
-    public MapTemp()
+    public Map()
     {
         objects = createObjects();
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
-        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+        //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
     public void moveHuman(Vector v)

@@ -1,8 +1,8 @@
 package app.view;
 
 import app.controller.Beam;
-import app.model.Agent;
-import app.model.MapTemp;
+import app.model.agents.Agent;
+import app.model.Map;
 import app.model.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 
 public class Renderer extends Canvas
 {
-    private MapTemp map;
-    public Renderer(MapTemp map, int width, int height)
+    private Map map;
+    public Renderer(Map map, int width, int height)
     {
         super(width, height);
         this.map = map;
