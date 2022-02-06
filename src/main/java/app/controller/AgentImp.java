@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class AgentImp implements Agent
 {
@@ -27,7 +29,14 @@ public class AgentImp implements Agent
     @Override
     public void move()
     {
-        // Null
+        double x = Math.random() * MAX_WALK;
+        if(Math.random() > 0.5)
+            x = x * -1;
+        double y = Math.random() * MAX_WALK;
+        if(Math.random() > 0.5)
+            y = y * -1;
+
+        position = position.add(new Vector(x, y));
     }
 
     @Override

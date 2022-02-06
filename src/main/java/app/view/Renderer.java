@@ -6,6 +6,7 @@ import app.model.MapTemp;
 import app.model.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Renderer extends Canvas
 {
@@ -20,6 +21,9 @@ public class Renderer extends Canvas
     public void render()
     {
         GraphicsContext gc = this.getGraphicsContext2D();
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0,0,getWidth(), getHeight());
 
         for(Placeable p: map.getObjects())
         {
