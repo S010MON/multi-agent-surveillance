@@ -16,7 +16,7 @@ public class MapTemp
     public MapTemp()
     {
         objects = createObjects();
-        agents = new ArrayList<Agent>();
+        agents = new ArrayList<>();
         agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
         agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
@@ -28,10 +28,10 @@ public class MapTemp
         Vector b2 = new Vector(800,0);
         Vector b3 = new Vector(800,500);
         Vector b4 = new Vector(0,500);
-        objects.add(new Border(b1, b2));
-        objects.add(new Border(b2, b3));
-        objects.add(new Border(b3, b4));
-        objects.add(new Border(b4, b1));
+//        objects.add(new Border(b1, b2));
+//        objects.add(new Border(b2, b3));
+//        objects.add(new Border(b3, b4));
+//        objects.add(new Border(b4, b1));
 
         Vector p1 = new Vector(200,100);
         Vector p2 = new Vector(600,100);
