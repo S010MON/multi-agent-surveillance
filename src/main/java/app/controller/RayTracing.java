@@ -10,7 +10,7 @@ public class RayTracing implements GraphicsEngine
 {
     private int noOfRays = 360;
     private double angle = 1;
-    private double maxLoS = 100;
+    private double maxLoS = 170;
 
     public void setMaxLoS(double maxLoS1)
     {
@@ -28,8 +28,15 @@ public class RayTracing implements GraphicsEngine
         ArrayList<Ray> rays = scatterRays(agent);
         Vector origin = agent.getPosition();
 
+
         for(Ray r: rays)
         {
+            if((r.getEndPoint().getX()<0 && r.getEndPoint().getY()<0))
+            {
+                System.out.println("neither x or y direction positive");
+                beams.add(new Beam(origin, r.getEndPoint()));
+            }
+
             Vector intersection = null;
             double closestDist = Double.MAX_VALUE;
             for (Placeable obj: map.getObjects())
@@ -44,8 +51,18 @@ public class RayTracing implements GraphicsEngine
                     }
                 }
             }
-            if(intersection != null)
+            if(intersection != null && origin.dist(intersection) < maxLoS)
+            {
                 beams.add(new Beam(origin, intersection));
+            }
+            else
+            {
+                Vector direction = r.getEndPoint().sub(origin);
+                double directionLength = direction.length();
+                Vector rayDirectionLength = direction.scale(maxLoS/directionLength);
+                Vector endPoint = origin.add(rayDirectionLength);
+                beams.add(new Beam(origin, endPoint));
+            }
         }
         return beams;
     }

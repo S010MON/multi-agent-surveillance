@@ -3,17 +3,17 @@ package app.controller;
 public class Ray
 {
     public Vector origin;
-    public Vector direction;
+    public Vector endPoint;
 
-    public Ray(Vector origin, Vector direction)
+    public Ray(Vector origin, Vector endPoint)
     {
         this.origin = origin;
-        this.direction = direction;
+        this.endPoint = endPoint;
     }
 
-    public Vector getDirection()
+    public Vector getEndPoint()
     {
-        return direction;
+        return endPoint;
     }
 
     public Vector getOrigin()
@@ -23,7 +23,7 @@ public class Ray
 
     public Ray rotate(double degrees)
     {
-        Vector unitVector = direction.sub(origin);
+        Vector unitVector = endPoint.sub(origin);
         Vector rotatedVector = unitVector.rotate(degrees);
         Vector newVector = origin.add(rotatedVector);
         return new Ray(this.origin, newVector);
