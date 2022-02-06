@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.model.Agent;
-import app.model.MapTemp;
+import app.model.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -11,11 +11,11 @@ import javafx.util.Duration;
 
 public class GameEngine
 {
-    private MapTemp map;
+    private Map map;
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
 
-    public GameEngine(MapTemp map, Renderer renderer)
+    public GameEngine(Map map, Renderer renderer)
     {
         this.map = map;
         this.renderer = renderer;

@@ -15,8 +15,8 @@ public class App extends Application
     public void start(Stage stage) throws IOException
     {
         this.stage = stage;
-        Frame frame = new Frame(800, 500);
-        Scene scene = new Scene(frame,800, 500);
+        Frame frame = new Frame(2048, 1024);
+        Scene scene = new Scene(frame,2048, 1024);
         scene.setOnKeyTyped(e -> frame.handleKey(e));
         stage.setTitle("Multi Agent Surveillance");
         stage.setScene(scene);

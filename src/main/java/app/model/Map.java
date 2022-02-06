@@ -6,7 +6,7 @@ import app.controller.Vector;
 
 import java.util.ArrayList;
 
-public class MapTemp
+public class Map
 {
     private ArrayList<Placeable> objects;
     private ArrayList<Agent> agents;
@@ -15,13 +15,13 @@ public class MapTemp
     /**
      * Temporary map for testing ray drawing, will be swapped out for proper one once made
      */
-    public MapTemp()
+    public Map()
     {
         objects = createObjects();
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
-        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+        //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
     public void moveHuman(Vector v)
@@ -40,9 +40,9 @@ public class MapTemp
         Vector p6 = new Vector(200,400);
         objects.add(new Wall(p1, p2));
         objects.add(new Wall(p2, p3));
-        objects.add(new Wall(p3, p4));
-        objects.add(new Wall(p5, p6));
-        objects.add(new Wall(p6, p1));
+//        objects.add(new Wall(p3, p4));
+//        objects.add(new Wall(p5, p6));
+//        objects.add(new Wall(p6, p1));
         return objects;
     }
 

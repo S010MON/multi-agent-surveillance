@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.model.Agent;
-import app.model.MapTemp;
+import app.model.Map;
 import app.model.Placeable;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class RayTracing implements GraphicsEngine
     private int noOfRays = 360;
     private double angle = 1;
 
-    public ArrayList<Beam> compute(MapTemp map, Agent agent)
+    public ArrayList<Beam> compute(Map map, Agent agent)
     {
         ArrayList<Beam> beams = new ArrayList<>();
         ArrayList<Ray> rays = scatterRays(agent);
@@ -26,14 +26,23 @@ public class RayTracing implements GraphicsEngine
                 if(obj.isHit(r))
                 {
                     Vector endPoint = obj.intersection(r);
-                    if(origin.dist(endPoint) < closestDist)
+                    double dist = origin.dist(endPoint);
+                    if(dist < closestDist)
+                    {
                         intersection = endPoint;
+                        closestDist = dist;
+                    }
                 }
             }
             if(intersection != null)
                 beams.add(new Beam(origin, intersection));
         }
         return beams;
+    }
+
+    public Beam traceRay(Ray ray, ArrayList<Placeable> objects)
+    {
+        return null;
     }
 
     private ArrayList<Ray> scatterRays(Agent agent)

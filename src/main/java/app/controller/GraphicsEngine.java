@@ -1,11 +1,11 @@
 package app.controller;
 
 import app.model.Agent;
-import app.model.MapTemp;
+import app.model.Map;
 
 import java.util.ArrayList;
 
 public interface GraphicsEngine
 {
-    ArrayList<Beam> compute(MapTemp map, Agent agent);
+    ArrayList<Beam> compute(Map map, Agent agent);
 }
