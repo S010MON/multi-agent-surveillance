@@ -1,7 +1,9 @@
-package app.model;
+package app.model.agents;
 
 import app.controller.Beam;
 import app.controller.Vector;
+import app.model.Placeable;
+
 import java.util.ArrayList;
 
 public interface Agent extends Placeable

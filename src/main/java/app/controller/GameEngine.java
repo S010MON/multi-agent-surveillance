@@ -1,6 +1,8 @@
 package app.controller;
 
-import app.model.Agent;
+import app.controller.graphicsEngine.GraphicsEngine;
+import app.controller.graphicsEngine.RayTracing;
+import app.model.agents.Agent;
 import app.model.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;

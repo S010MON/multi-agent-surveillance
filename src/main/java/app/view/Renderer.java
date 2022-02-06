@@ -1,7 +1,7 @@
 package app.view;
 
 import app.controller.Beam;
-import app.model.Agent;
+import app.model.agents.Agent;
 import app.model.Map;
 import app.model.Placeable;
 import javafx.scene.canvas.Canvas;

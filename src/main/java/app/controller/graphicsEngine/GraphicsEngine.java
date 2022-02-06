@@ -1,6 +1,7 @@
-package app.controller;
+package app.controller.graphicsEngine;
 
-import app.model.Agent;
+import app.controller.Beam;
+import app.model.agents.Agent;
 import app.model.Map;
 
 import java.util.ArrayList;

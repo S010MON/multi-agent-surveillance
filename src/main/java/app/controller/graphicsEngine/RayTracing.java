@@ -1,6 +1,8 @@
-package app.controller;
+package app.controller.graphicsEngine;
 
-import app.model.Agent;
+import app.controller.Beam;
+import app.controller.Vector;
+import app.model.agents.Agent;
 import app.model.Map;
 import app.model.Placeable;
 
@@ -38,11 +40,6 @@ public class RayTracing implements GraphicsEngine
                 beams.add(new Beam(origin, intersection));
         }
         return beams;
-    }
-
-    public Beam traceRay(Ray ray, ArrayList<Placeable> objects)
-    {
-        return null;
     }
 
     private ArrayList<Ray> scatterRays(Agent agent)

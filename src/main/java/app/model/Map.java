@@ -1,8 +1,8 @@
 package app.model;
 
-import app.controller.AgentImp;
-import app.controller.Human;
 import app.controller.Vector;
+import app.model.agents.Agent;
+import app.model.agents.Human;
 
 import java.util.ArrayList;
 
