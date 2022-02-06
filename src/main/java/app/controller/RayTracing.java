@@ -10,6 +10,17 @@ public class RayTracing implements GraphicsEngine
 {
     private int noOfRays = 360;
     private double angle = 1;
+    private double maxLoS = 100;
+
+    public void setMaxLoS(double maxLoS1)
+    {
+        this.maxLoS = maxLoS1;
+    }
+
+    public double getMaxLoS()
+    {
+        return this.maxLoS;
+    }
 
     public ArrayList<Beam> compute(MapTemp map, Agent agent)
     {
@@ -27,7 +38,10 @@ public class RayTracing implements GraphicsEngine
                 {
                     Vector endPoint = obj.intersection(r);
                     if(origin.dist(endPoint) < closestDist)
+                    {
                         intersection = endPoint;
+                        closestDist = Math.abs(endPoint.sub(origin).length());
+                    }
                 }
             }
             if(intersection != null)
