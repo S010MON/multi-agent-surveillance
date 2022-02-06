@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class RayTracing implements GraphicsEngine
 {
-    private int noOfRays = 360;
-    private double angle = 1;
+    private int noOfRays = 3600;
+    private double angle = 0.1;
 
     public ArrayList<Beam> compute(MapTemp map, Agent agent)
     {
