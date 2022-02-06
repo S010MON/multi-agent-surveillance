@@ -136,4 +136,16 @@ public class VectorTest
         assertEquals(9.87, u.getX(), 0.01);
         assertEquals(1.56, u.getY(), 0.01);
     }
+
+    @Test void testLength()
+    {
+        Vector u = new Vector(1, -2);
+        Vector v = new Vector(0,0);
+        Vector w = new Vector(3,0);
+        Vector z = new Vector(2, -6.5);
+        assertEquals(2.236, u.length(), 0.01);
+        assertEquals(0, v.length(), 0.01);
+        assertEquals(3, w.length(), 0.01);
+        assertEquals(6.801, z.length(), 0.01);
+    }
 }

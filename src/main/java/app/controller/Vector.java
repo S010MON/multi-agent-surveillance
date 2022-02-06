@@ -37,6 +37,8 @@ public class Vector
         return new Vector(this.x - other.getX(), this.y - other.getY());
     }
 
+    public double length() { return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2)); }
+
     public double cross(Vector other)
     {
         double a = (this.getY() * other.getX());
