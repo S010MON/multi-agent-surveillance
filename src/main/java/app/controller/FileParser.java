@@ -1,6 +1,6 @@
 package app.controller;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.Scanner;
 
@@ -24,6 +24,7 @@ public class FileParser
         {
             System.out.println("Failed creating scanner object using path supplied.");
         }
+        map.lock(); //Settings object now immutable
         return map;
     }
 
