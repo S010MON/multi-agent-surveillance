@@ -14,7 +14,7 @@ public class FileParser
     {
         Path file = Paths.get(path);
         map = new Settings();
-        try(Scanner scan = new Scanner(path))
+        try(Scanner scan = new Scanner(file))
         {
             int countLines=1;
             while(scan.hasNextLine())
