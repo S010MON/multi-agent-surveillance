@@ -67,6 +67,38 @@ public class Vector
         return M.dot(this);
     }
 
+
+    /** Returns the clockwise angle from [0,1] direction */
+    public double getAngle()
+    {
+        double abs_y = Math.abs(y);
+        double abs_x = Math.abs(x);
+        double a = 0;
+
+        // Q1
+        if(x >= 0 && y >= 0 && abs_y >= abs_x)
+            a = Math.toDegrees(Math.atan(abs_x / abs_y));
+        else if(x >= 0 && y >= 0 && abs_y < abs_x)
+            a = 90 - Math.toDegrees(Math.atan(abs_y / abs_x));
+        // Q2
+        else if(x >= 0 && y < 0 && abs_y >= abs_x)
+            a = 90 + Math.toDegrees(Math.atan(abs_y / abs_x));
+        else if(x >= 0 && y < 0 && abs_y < abs_x)
+            a = 180 - Math.toDegrees(Math.atan(abs_x / abs_y));
+        // Q3
+        else if(x < 0 && y < 0 && abs_y >= abs_x)
+            a = 180 + Math.toDegrees(Math.atan(abs_x / abs_y));
+        else if(x < 0 && y < 0 && abs_y < abs_x)
+            a = 270 - Math.toDegrees(Math.atan(abs_y / abs_x));
+        // Q4
+        else if(x < 0 && y >= 0 && abs_x >= abs_y)
+            a = 270 + Math.toDegrees(Math.atan(abs_y / abs_x));
+        else if(x < 0 && y >= 0 && abs_y < abs_x)
+            a = 180 - Math.toDegrees(Math.atan(abs_x / abs_y));
+
+        return a;
+    }
+
     public Vector copy()
     {
         return new Vector(x, y);
