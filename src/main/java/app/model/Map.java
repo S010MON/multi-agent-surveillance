@@ -26,9 +26,14 @@ public class Map
         //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
-    public void moveHuman(Vector v)
+    public void walk(Vector v)
     {
-        human.setNextMove(v);
+        human.walk(v);
+    }
+
+    public void run(Vector v)
+    {
+        human.run(v);
     }
 
     private ArrayList<Placeable> createObjects()
