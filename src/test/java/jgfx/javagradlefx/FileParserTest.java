@@ -10,7 +10,7 @@ public class FileParserTest
 {
     @Test void testCreationOfSettings()
     {
-        Settings s = FileParser.readGameFile("src\\test\\java\\jgfx\\javagradlefx\\mytest.txt");
+        Settings s = FileParser.readGameFile("src/test/java/jgfx/javagradlefx/mytest.txt");
 
         // Gamemode
         assertEquals(44, s.getGamemode());
