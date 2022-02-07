@@ -24,6 +24,18 @@ public class MapTemp
         agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
+    /**
+     * Temporary constructor to aid in VisionToGraph for ACO Agent
+     */
+    public MapTemp(Agent staticAgent, Wall obstacle)
+    {
+        objects = createObjects();
+        agents = new ArrayList<>();
+        agents.add(staticAgent);
+        ArrayList<Placeable> objects = new ArrayList<>();
+        objects.add(obstacle);
+    }
+
     public void moveHuman(Vector v)
     {
         human.setNextMove(v);
