@@ -1,6 +1,6 @@
 package app.model;
 
-import app.controller.AgentImp;
+//import app.controller.AgentImp;
 import app.controller.Settings;
 import app.controller.Vector;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MapNotTemp
 {
     private ArrayList<Placeable> objects;
-    private ArrayList<Agent> agents;
+//    private ArrayList<Agent> agents;
     private Settings setting;
 
     /**
@@ -30,9 +30,9 @@ public class MapNotTemp
         objects.addAll(rectangleDecomposer(setting.getTextures()));
 
         //agents
-        agents = new ArrayList<>();
-        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
-        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+//        agents = new ArrayList<>();
+//        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
+//        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
 
@@ -87,8 +87,8 @@ public class MapNotTemp
         return objects;
     }
 
-    public ArrayList<Agent> getAgents()
-    {
-        return agents;
-    }
+//    public ArrayList<Agent> getAgents()
+//    {
+//        return agents;
+//    }
 }
