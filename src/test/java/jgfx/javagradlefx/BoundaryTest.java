@@ -1,9 +1,9 @@
 package jgfx.javagradlefx;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.Vector;
-import app.model.Placeable;
-import app.model.Boundary;
+import app.controller.linAlg.Vector;
+import app.model.objects.Placeable;
+import app.model.objects.Boundary;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

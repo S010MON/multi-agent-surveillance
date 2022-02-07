@@ -1,6 +1,6 @@
 package app.model.agents;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 
 public class Human extends AgentImp
 {

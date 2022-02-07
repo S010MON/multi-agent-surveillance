@@ -1,6 +1,6 @@
 package app.model.agents;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

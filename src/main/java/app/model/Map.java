@@ -1,8 +1,10 @@
 package app.model;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
+import app.model.objects.Placeable;
+import app.model.objects.Wall;
 
 import java.util.ArrayList;
 
