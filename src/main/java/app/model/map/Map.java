@@ -1,4 +1,4 @@
-package app.model;
+package app.model.map;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;

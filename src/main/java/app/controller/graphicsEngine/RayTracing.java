@@ -2,7 +2,7 @@ package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
-import app.model.Map;
+import app.model.map.Map;
 import app.model.objects.Placeable;
 import java.util.ArrayList;
 

@@ -2,7 +2,7 @@ package app.view;
 
 import app.controller.graphicsEngine.Ray;
 import app.model.agents.Agent;
-import app.model.Map;
+import app.model.map.Map;
 import app.model.objects.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

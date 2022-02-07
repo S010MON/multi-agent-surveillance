@@ -1,10 +1,12 @@
-package app.model;
+package app.model.map;
 
 //import app.controller.AgentImp;
 import app.controller.Settings;
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.objects.Placeable;
+import app.model.objects.Wall;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -21,7 +23,7 @@ public class MapNotTemp
      */
     public MapNotTemp(Settings setting)
     {
-        setting = setting;
+        this.setting = setting;
 
         //construct objects array
         objects = createObjects();
@@ -85,4 +87,6 @@ public class MapNotTemp
     {
         return agents;
     }
+
+    public Settings getSetting() { return setting; }
 }
