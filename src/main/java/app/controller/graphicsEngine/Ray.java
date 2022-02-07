@@ -35,6 +35,13 @@ public class Ray
         return new Ray(this.u, newVector);
     }
 
+    public double rayLength()
+    {
+        double yValue = u.getY() - v.getY();
+        double xValue = u.getX() - v.getX();
+        return Math.sqrt(Math.pow(yValue, 2) + Math.pow(xValue, 2));
+    }
+
     public void draw(GraphicsContext gc)
     {
         gc.setStroke(colour);

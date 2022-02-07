@@ -105,4 +105,15 @@ public class RayTest
         assertEquals(0, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
     }
+
+    @Test void testRayLength()
+    {
+        Vector u = new Vector(5, 7);
+        Vector v = new Vector(11, 15);
+
+        Ray s = new Ray(u, v);
+        double rayLength = s.rayLength();
+
+        assertEquals(rayLength, 10);
+    }
 }
