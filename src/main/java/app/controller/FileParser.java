@@ -2,6 +2,8 @@ package app.controller;
 
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileParser
@@ -10,6 +12,7 @@ public class FileParser
 
     public static Settings readGameFile(String path)
     {
+        Path file = Paths.get(path);
         map = new Settings();
         try(Scanner scan = new Scanner(path))
         {
@@ -22,9 +25,10 @@ public class FileParser
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             System.out.println("Failed creating scanner object using path supplied.");
         }
-        map.lock(); //Settings object now immutable
+        map.lock(); // Settings object now immutable
         return map;
     }
 
