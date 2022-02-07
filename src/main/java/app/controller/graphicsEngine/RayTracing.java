@@ -1,11 +1,9 @@
 package app.controller.graphicsEngine;
 
-import app.controller.Beam;
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
-import app.model.Placeable;
-
+import app.model.objects.Placeable;
 import java.util.ArrayList;
 
 public class RayTracing implements GraphicsEngine
@@ -13,9 +11,9 @@ public class RayTracing implements GraphicsEngine
     private int noOfRays = 360;
     private double angle = 1;
 
-    public ArrayList<Beam> compute(Map map, Agent agent)
+    public ArrayList<Ray> compute(Map map, Agent agent)
     {
-        ArrayList<Beam> beams = new ArrayList<>();
+        ArrayList<Ray> output = new ArrayList<>();
         ArrayList<Ray> rays = scatterRays(agent);
         Vector origin = agent.getPosition();
 
@@ -37,9 +35,9 @@ public class RayTracing implements GraphicsEngine
                 }
             }
             if(intersection != null)
-                beams.add(new Beam(origin, intersection));
+                output.add(new Ray(origin, intersection));
         }
-        return beams;
+        return output;
     }
 
     private ArrayList<Ray> scatterRays(Agent agent)

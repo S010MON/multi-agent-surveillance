@@ -1,7 +1,7 @@
-package app.model;
+package app.model.objects;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
 public interface Placeable

@@ -1,8 +1,10 @@
 package app.model;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
+import app.model.objects.Placeable;
+import app.model.objects.Wall;
 
 import java.util.ArrayList;
 
@@ -24,9 +26,14 @@ public class Map
         //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
-    public void moveHuman(Vector v)
+    public void walk(Vector v)
     {
-        human.setNextMove(v);
+        human.walk(v);
+    }
+
+    public void run(Vector v)
+    {
+        human.run(v);
     }
 
     private ArrayList<Placeable> createObjects()

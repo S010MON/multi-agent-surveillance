@@ -1,4 +1,4 @@
-package app.controller;
+package app.controller.linAlg;
 
 public class Vector
 {

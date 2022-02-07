@@ -1,33 +1,44 @@
 package app.controller.graphicsEngine;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Ray
 {
-    public Vector origin;
-    public Vector direction;
+    public Vector u;
+    public Vector v;
+    private Color colour = Color.RED;
+    private final double LINE_WIDTH = 1;
 
-    public Ray(Vector origin, Vector direction)
+    public Ray(Vector u, Vector direction)
     {
-        this.origin = origin;
-        this.direction = direction;
+        this.u = u;
+        this.v = direction;
     }
 
-    public Vector getDirection()
+    public Vector getV()
     {
-        return direction;
+        return v;
     }
 
-    public Vector getOrigin()
+    public Vector getU()
     {
-        return origin;
+        return u;
     }
 
     public Ray rotate(double degrees)
     {
-        Vector unitVector = direction.sub(origin);
+        Vector unitVector = v.sub(u);
         Vector rotatedVector = unitVector.rotate(degrees);
-        Vector newVector = origin.add(rotatedVector);
-        return new Ray(this.origin, newVector);
+        Vector newVector = u.add(rotatedVector);
+        return new Ray(this.u, newVector);
+    }
+
+    public void draw(GraphicsContext gc)
+    {
+        gc.setStroke(colour);
+        gc.setLineWidth(LINE_WIDTH);
+        gc.strokeLine(getU().getX(), getU().getY(), getV().getX(), getV().getY());
     }
 }

@@ -1,9 +1,8 @@
 package app.model.agents;
 
-import app.controller.Beam;
-import app.controller.Vector;
-import app.model.Placeable;
-
+import app.controller.linAlg.Vector;
+import app.controller.graphicsEngine.Ray;
+import app.model.objects.Placeable;
 import java.util.ArrayList;
 
 public interface Agent extends Placeable
@@ -14,9 +13,9 @@ public interface Agent extends Placeable
 
     Vector getDirection();
 
-    ArrayList<Beam> getView();
+    ArrayList<Ray> getView();
 
-    void updateView(ArrayList<Beam> view);
+    void updateView(ArrayList<Ray> view);
 
     double getHearing();
 }

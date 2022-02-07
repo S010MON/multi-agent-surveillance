@@ -1,6 +1,6 @@
-package app.model;
+package app.model.objects;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

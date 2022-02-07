@@ -2,6 +2,7 @@ package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
+import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
 import app.view.Renderer;
@@ -22,23 +23,9 @@ public class GameEngine
         this.map = map;
         this.renderer = renderer;
         this.graphicsEngine = new RayTracing();
-        Timeline timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
+        Timeline timeline = new Timeline(new KeyFrame( Duration.millis(10),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-    }
-
-    public void handleKey(KeyEvent e)
-    {
-        System.out.println(e.getCharacter());
-        switch (e.getCharacter())
-        {
-            case "w" -> map.moveHuman(new Vector(0,-10));
-            case "s" -> map.moveHuman(new Vector(0,10));
-            case "a" -> map.moveHuman(new Vector(-10,0));
-            case "d" -> map.moveHuman(new Vector(10,0));
-
-        }
-
     }
 
     public void tick()
@@ -49,5 +36,20 @@ public class GameEngine
             a.updateView(graphicsEngine.compute(map, a));
         }
         renderer.render();
+    }
+
+    public void handleKey(KeyEvent e)
+    {
+        switch (e.getCharacter())
+        {
+            case "W" -> map.run(new Vector(0, -1));
+            case "S" -> map.run(new Vector(0, 1));
+            case "A" -> map.run(new Vector(-1, 0));
+            case "D" -> map.run(new Vector(1, 0));
+            case "w" -> map.walk(new Vector(0, -1));
+            case "s" -> map.walk(new Vector(0, 1));
+            case "a" -> map.walk(new Vector(-1, 0));
+            case "d" -> map.walk(new Vector(1, 0));
+        }
     }
 }

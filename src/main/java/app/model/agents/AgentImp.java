@@ -1,22 +1,20 @@
 package app.model.agents;
 
-import app.controller.Beam;
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
 public class AgentImp implements Agent
 {
-    protected final double MAX_WALK = 10;
-    protected final double MAX_RUN = 20;
+    protected final double MAX_WALK = 5;
+    protected final double MAX_RUN = 10;
 
     protected Vector position;
     protected Vector direction;
     protected double radius;
-    protected ArrayList<Beam> view;
+    protected ArrayList<Ray> view;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
@@ -46,13 +44,13 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public ArrayList<Beam> getView()
+    public ArrayList<Ray> getView()
     {
         return view;
     }
 
     @Override
-    public void updateView(ArrayList<Beam> view)
+    public void updateView(ArrayList<Ray> view)
     {
         this.view = view;
     }

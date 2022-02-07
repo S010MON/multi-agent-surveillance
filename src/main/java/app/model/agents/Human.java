@@ -1,6 +1,6 @@
 package app.model.agents;
 
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 
 public class Human extends AgentImp
 {
@@ -19,8 +19,13 @@ public class Human extends AgentImp
         nextMove = new Vector();
     }
 
-    public void setNextMove(Vector nextMove)
+    public void walk(Vector nextMove)
     {
-        this.nextMove = nextMove;
+        this.nextMove = nextMove.scale(MAX_WALK);
+    }
+
+    public void run(Vector nextMove)
+    {
+        this.nextMove = nextMove.scale(MAX_RUN);
     }
 }

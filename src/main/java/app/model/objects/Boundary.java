@@ -1,7 +1,7 @@
-package app.model;
+package app.model.objects;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.Vector;
+import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Boundary implements Placeable
@@ -28,10 +28,10 @@ public class Boundary implements Placeable
         double y_1 = a.getY();
         double x_2 = b.getX();
         double y_2 = b.getY();
-        double x_3 = ray.getOrigin().getX();
-        double y_3 = ray.getOrigin().getY();
-        double x_4 = ray.getDirection().getX();
-        double y_4 = ray.getDirection().getY();
+        double x_3 = ray.getU().getX();
+        double y_3 = ray.getU().getY();
+        double x_4 = ray.getV().getX();
+        double y_4 = ray.getV().getY();
 
         // Source: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
         double denominator = (x_1 - x_2)*(y_3 - y_4) - (y_1 - y_2)*(x_3 - x_4);
@@ -52,10 +52,10 @@ public class Boundary implements Placeable
         double y_1 = a.getY();
         double x_2 = b.getX();
         double y_2 = b.getY();
-        double x_3 = ray.getOrigin().getX();
-        double y_3 = ray.getOrigin().getY();
-        double x_4 = ray.getDirection().getX();
-        double y_4 = ray.getDirection().getY();
+        double x_3 = ray.getU().getX();
+        double y_3 = ray.getU().getY();
+        double x_4 = ray.getV().getX();
+        double y_4 = ray.getV().getY();
 
         double denominator = (x_1 - x_2)*(y_3 - y_4) - (y_1 - y_2)*(x_3 - x_4);
         double t = ((x_1 - x_3)*(y_3 - y_4) - (y_1 - y_3)*(x_3 - x_4)) / denominator;
