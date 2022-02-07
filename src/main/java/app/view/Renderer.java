@@ -1,6 +1,6 @@
 package app.view;
 
-import app.controller.Beam;
+import app.controller.graphicsEngine.Ray;
 import app.model.agents.Agent;
 import app.model.Map;
 import app.model.Placeable;
@@ -32,7 +32,7 @@ public class Renderer extends Canvas
 
         for (Agent a: map.getAgents())
         {
-            for(Beam r: a.getView())
+            for(Ray r: a.getView())
             {
                 r.draw(gc);
             }
