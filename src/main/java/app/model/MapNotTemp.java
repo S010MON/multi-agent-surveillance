@@ -3,6 +3,8 @@ package app.model;
 //import app.controller.AgentImp;
 import app.controller.Settings;
 import app.controller.Vector;
+import app.model.agents.Agent;
+import app.model.agents.AgentImp;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public class MapNotTemp
 {
     private ArrayList<Placeable> objects;
-//    private ArrayList<Agent> agents;
+    private ArrayList<Agent> agents;
     private Settings setting;
 
     /**
@@ -30,9 +32,9 @@ public class MapNotTemp
         objects.addAll(rectangleDecomposer(setting.getTextures()));
 
         //agents
-//        agents = new ArrayList<>();
-//        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
-//        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+        agents = new ArrayList<>();
+        agents.add(new AgentImp(new Vector(400, 250), new Vector(1,0), 10));
+        agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
     }
 
 
@@ -59,14 +61,6 @@ public class MapNotTemp
     private ArrayList<Placeable> createObjects()
     {
         ArrayList<Placeable> objects = new ArrayList<>();
-        Vector b1 = new Vector(0,0);
-        Vector b2 = new Vector(800,0);
-        Vector b3 = new Vector(800,500);
-        Vector b4 = new Vector(0,500);
-//        objects.add(new Border(b1, b2));
-//        objects.add(new Border(b2, b3));
-//        objects.add(new Border(b3, b4));
-//        objects.add(new Border(b4, b1));
 
         Vector p1 = new Vector(200,100);
         Vector p2 = new Vector(600,100);
@@ -87,8 +81,8 @@ public class MapNotTemp
         return objects;
     }
 
-//    public ArrayList<Agent> getAgents()
-//    {
-//        return agents;
-//    }
+    public ArrayList<Agent> getAgents()
+    {
+        return agents;
+    }
 }
