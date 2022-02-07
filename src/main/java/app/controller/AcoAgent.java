@@ -7,14 +7,20 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 public class AcoAgent extends AgentImp
 {
     private Graph<Vertice, DefaultWeightedEdge> world = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private double visualDistance = 50.0;
 
     public AcoAgent(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
     }
 
-    private Graph accessAgentWorld()
+    public Graph accessAgentWorld()
     {
         return world;
+    }
+
+    public double accessAgentVisualDistance()
+    {
+        return visualDistance;
     }
 }
