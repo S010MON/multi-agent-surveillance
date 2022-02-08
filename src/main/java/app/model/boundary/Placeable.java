@@ -1,4 +1,4 @@
-package app.model.objects;
+package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;

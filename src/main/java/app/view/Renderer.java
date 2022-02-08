@@ -3,10 +3,12 @@ package app.view;
 import app.controller.graphicsEngine.Ray;
 import app.model.agents.Agent;
 import app.model.Map;
-import app.model.objects.Placeable;
+import app.model.boundary.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 
 public class Renderer extends Canvas
 {
@@ -25,19 +27,27 @@ public class Renderer extends Canvas
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,getWidth(), getHeight());
 
-        for(Placeable p: map.getObjects())
-        {
-            p.draw(gc);
-        }
+        map.getTextures()
+                .stream()
+                .forEach(e -> e.draw(gc));
 
-        for (Agent a: map.getAgents())
-        {
-            for(Ray r: a.getView())
-            {
-                r.draw(gc);
-            }
-            a.draw(gc);
-        }
+        map.getObjects()
+                .stream()
+                .forEach(e -> e.draw(gc));
+
+        map.getAgents()
+                .stream()
+                .forEach(e -> drawRays(gc, e.getView()));
+
+        map.getAgents()
+                .stream()
+                .forEach(e -> e.draw(gc));
+    }
+
+    private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
+    {
+        rays.stream()
+                .forEach(e -> e.draw(gc));
     }
 
 
