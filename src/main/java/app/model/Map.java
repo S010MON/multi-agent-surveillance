@@ -30,7 +30,6 @@ public class Map
 
     public Map(Settings settings)
     {
-        objects = createObjects();
 
     }
 
