@@ -1,11 +1,12 @@
-package app.model.furniture;
+package app.model.boundary;
 
 import app.controller.linAlg.Vector;
+import app.model.Furniture;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
-public abstract class FurnitureFactory
+public abstract class BoundaryFactory
 {
     public static ArrayList<Placeable> make(Furniture f, Rectangle rectangle)
     {

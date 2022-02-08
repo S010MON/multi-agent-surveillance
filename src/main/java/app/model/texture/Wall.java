@@ -4,15 +4,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Shade implements Texture
+public class Wall implements Texture
 {
     private Rectangle rectangle;
     private Color color;
 
-    public Shade(Rectangle rectangle)
+    public Wall(Rectangle rectangle)
     {
         this.rectangle = rectangle;
-        this.color = Color.LIGHTGRAY;
+        this.color = Color.BLACK;
     }
 
     public void draw(GraphicsContext gc)

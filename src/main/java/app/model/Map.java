@@ -1,18 +1,19 @@
 package app.model;
 
-import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
-import app.model.furniture.Furniture;
-import app.model.furniture.FurnitureFactory;
-import app.model.furniture.Placeable;
+import app.model.boundary.BoundaryFactory;
+import app.model.boundary.Placeable;
+import app.model.texture.Texture;
+import app.model.texture.TextureFactory;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class Map
 {
     private ArrayList<Placeable> objects;
+    private ArrayList<Texture> textures;
     private ArrayList<Agent> agents;
     private Human human;
 
@@ -22,6 +23,7 @@ public class Map
     public Map()
     {
         objects = createObjects();
+        textures = createTextures();
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
@@ -60,11 +62,22 @@ public class Map
         Rectangle r1 = new Rectangle(100, 100, 200, 100);
         Rectangle r2 = new Rectangle(600, 100, 200, 100);
         Rectangle r3 = new Rectangle(500, 500, 100, 100);
-        objects.addAll(FurnitureFactory.make(Furniture.WALL, r1));
-        objects.addAll(FurnitureFactory.make(Furniture.WALL, r2));
-        objects.addAll(FurnitureFactory.make(Furniture.WALL, r3));
-
+        objects.addAll(BoundaryFactory.make(Furniture.WALL, r1));
+        objects.addAll(BoundaryFactory.make(Furniture.SHADE, r2));
+        objects.addAll(BoundaryFactory.make(Furniture.WALL, r3));
         return objects;
+    }
+
+    private ArrayList<Texture> createTextures()
+    {
+        ArrayList<Texture> textures = new ArrayList<>();
+        Rectangle r1 = new Rectangle(100, 100, 200, 100);
+        Rectangle r2 = new Rectangle(600, 100, 200, 100);
+        Rectangle r3 = new Rectangle(500, 500, 100, 100);
+        textures.add(TextureFactory.make(Furniture.WALL, r1));
+        textures.add(TextureFactory.make(Furniture.SHADE, r2));
+
+        return textures;
     }
 
     public ArrayList<Placeable> getObjects()

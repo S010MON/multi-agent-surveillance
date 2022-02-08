@@ -1,6 +1,11 @@
 package app.model.texture;
 
-public class Texture
-{
+import javafx.scene.canvas.GraphicsContext;
 
+public interface Texture
+{
+    default void draw(GraphicsContext gc)
+    {
+        // Do nothing
+    }
 }

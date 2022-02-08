@@ -1,4 +1,4 @@
-package app.model.furniture;
+package app.model;
 
 public enum Furniture
 {

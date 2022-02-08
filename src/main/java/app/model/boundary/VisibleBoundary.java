@@ -1,4 +1,4 @@
-package app.model.furniture;
+package app.model.boundary;
 
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;

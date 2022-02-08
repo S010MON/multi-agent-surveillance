@@ -3,7 +3,7 @@ package app.controller.graphicsEngine;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
-import app.model.furniture.Placeable;
+import app.model.boundary.Placeable;
 import java.util.ArrayList;
 
 public class RayTracing implements GraphicsEngine

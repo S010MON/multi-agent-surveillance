@@ -1,14 +1,17 @@
 package app.model.texture;
 
-import app.model.furniture.Furniture;
+import app.model.Furniture;
 import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
 
 public class TextureFactory
 {
-    public static ArrayList<Texture> make(Furniture f, Rectangle shape)
+    public static Texture make(Furniture f, Rectangle rectangle)
     {
-        return null;
+        switch (f)
+        {
+            case SHADE -> {return new Shade(rectangle);}
+            case WALL -> {return new Wall(rectangle);}
+        }
+        return null; // Redundant by design
     }
 }
