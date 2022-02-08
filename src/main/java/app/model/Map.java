@@ -18,7 +18,6 @@ public class Map
     private ArrayList<Agent> agents;
     private Human human;
 
-    /** To be replaced once settings uses javafx.Rectangle */
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
@@ -28,8 +27,6 @@ public class Map
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
-
-
 
         settings.getWalls()
                 .stream()
