@@ -31,11 +31,7 @@ public class Map
     public Map(Settings settings)
     {
         objects = createObjects();
-        objects.addAll(rectangleDecomposer(settings.getWalls()));
-        objects.addAll(rectangleDecomposer(settings.getShade()));
-        objects.addAll(rectangleDecomposer(settings.getTowers()));
-        objects.addAll(rectangleDecomposer(settings.getPortals()));
-        objects.addAll(rectangleDecomposer(settings.getTextures()));
+
     }
 
     private ArrayList<Placeable> rectangleDecomposer(ArrayList<Rectangle2D> rectangles)
