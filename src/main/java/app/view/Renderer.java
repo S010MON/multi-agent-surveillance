@@ -8,6 +8,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Renderer extends Canvas
 {
     private Map map;
@@ -33,14 +35,19 @@ public class Renderer extends Canvas
                 .stream()
                 .forEach(e -> e.draw(gc));
 
-        for (Agent a: map.getAgents())
-        {
-            for(Ray r: a.getView())
-            {
-                r.draw(gc);
-            }
-            a.draw(gc);
-        }
+        map.getAgents()
+                .stream()
+                .forEach(e -> drawRays(gc, e.getView()));
+
+        map.getAgents()
+                .stream()
+                .forEach(e -> e.draw(gc));
+    }
+
+    private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
+    {
+        rays.stream()
+                .forEach(e -> e.draw(gc));
     }
 
 
