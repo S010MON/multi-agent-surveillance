@@ -1,7 +1,8 @@
-package app.model;
+package app.model.map;
 
 import app.controller.Settings;
 import app.controller.linAlg.Vector;
+import app.model.Furniture;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.boundary.BoundaryFactory;
@@ -17,6 +18,8 @@ public class Map
     private ArrayList<Texture> textures;
     private ArrayList<Agent> agents;
     private Human human;
+
+    private Settings setting;
 
     public Map(Settings settings)
     {
@@ -36,6 +39,8 @@ public class Map
                 .stream()
                 .forEach(e -> addFurniture(Furniture.SHADE, e));
 
+        this.setting = settings;
+
         System.out.println("done.");
     }
 
@@ -48,6 +53,8 @@ public class Map
     {
         human.run(v);
     }
+
+    public Settings getSetting(){return setting;}
 
     public ArrayList<Placeable> getObjects()
     {

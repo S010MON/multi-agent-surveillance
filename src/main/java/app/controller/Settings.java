@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Settings
 {
     private boolean unlocked = true;
+    private String name;
     private int gamemode;
     private int height;
     private int width;
@@ -39,6 +40,12 @@ public class Settings
         teleportTo = new ArrayList<>();
         textures = new ArrayList<>();
         textureType = new ArrayList<>();
+    }
+
+    public void setName(String name)
+    {
+        if(unlocked)
+            this.name=name;
     }
 
     public void setGamemode(int gamemode)
@@ -170,6 +177,11 @@ public class Settings
     public void lock()
     {
         this.unlocked = false;
+    }
+
+    public String getName()
+    {
+        return this.name;
     }
 
     public int getGamemode()
