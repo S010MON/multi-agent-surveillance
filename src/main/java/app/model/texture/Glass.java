@@ -4,18 +4,18 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-
-public class Wall implements Texture
+public class Glass implements Texture
 {
     private Rectangle2D rectangle;
     private Color color;
 
-    public Wall(Rectangle2D rectangle)
+    public Glass(Rectangle2D rectangle)
     {
         this.rectangle = rectangle;
-        this.color = Color.SANDYBROWN;
+        this.color = Color.LIGHTBLUE;
     }
 
+    @Override
     public void draw(GraphicsContext gc)
     {
         gc.setFill(color);

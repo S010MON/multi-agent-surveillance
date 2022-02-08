@@ -1,7 +1,7 @@
 package app.model.boundary;
 
 import app.controller.linAlg.Vector;
-import app.model.FurnitureType;
+import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public abstract class BoundaryFactory
         {
             case WALL -> { return new VisibleBoundary(a, b);}
             case SHADE -> { return new InvisibleBoundary(a, b);}
+            case GLASS -> { return  new TransparentBoundary();}
         }
         return null; // Redundant by design
     }
