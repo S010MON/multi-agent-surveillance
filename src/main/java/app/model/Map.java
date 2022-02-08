@@ -28,6 +28,10 @@ public class Map
         settings.getWalls().forEach(e -> addFurniture(FurnitureType.WALL, e));
         settings.getShade().forEach(e -> addFurniture(FurnitureType.SHADE, e));
 
+        // Temp test of glass
+        Rectangle2D window = new Rectangle2D(300,150, 50,50);
+        furniture.add(FurnitureFactory.make(FurnitureType.GLASS, window));
+
         System.out.println("done.");
     }
 
