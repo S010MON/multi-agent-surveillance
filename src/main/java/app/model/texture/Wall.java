@@ -1,15 +1,16 @@
 package app.model.texture;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+
 
 public class Wall implements Texture
 {
-    private Rectangle rectangle;
+    private Rectangle2D rectangle;
     private Color color;
 
-    public Wall(Rectangle rectangle)
+    public Wall(Rectangle2D rectangle)
     {
         this.rectangle = rectangle;
         this.color = Color.BLACK;
@@ -18,8 +19,8 @@ public class Wall implements Texture
     public void draw(GraphicsContext gc)
     {
         gc.setFill(color);
-        gc.fillRect(rectangle.getX(),
-                rectangle.getY(),
+        gc.fillRect(rectangle.getMinX(),
+                rectangle.getMinY(),
                 rectangle.getWidth(),
                 rectangle.getHeight());
     }
