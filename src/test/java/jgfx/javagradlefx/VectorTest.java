@@ -136,4 +136,40 @@ public class VectorTest
         assertEquals(9.87, u.getX(), 0.01);
         assertEquals(1.56, u.getY(), 0.01);
     }
+
+    @Test void getAngle0_PosPos()
+    {
+        Vector v = new Vector(0, 4);
+        assertEquals(0, v.getAngle());
+    }
+
+    @Test void getAngle90_PosPos()
+    {
+        Vector v = new Vector(4, 0);
+        assertEquals(90, v.getAngle());
+    }
+
+    @Test void getAngle45_PosPos()
+    {
+        Vector v = new Vector(4, 4);
+        assertEquals(45, v.getAngle());
+    }
+
+    @Test void getAngle45_PosNeg()
+    {
+        Vector v = new Vector(4, -4);
+        assertEquals(135, v.getAngle());
+    }
+
+    @Test void getAngle45_NegNeg()
+    {
+        Vector v = new Vector(-4, -4);
+        assertEquals(225, v.getAngle());
+    }
+
+    @Test void getAngle45_NegPos()
+    {
+        Vector v = new Vector(-4, 4);
+        assertEquals(315, v.getAngle());
+    }
 }

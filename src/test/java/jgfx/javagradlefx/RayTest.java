@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RayTest
 {
-    @Test void createBeam()
+    @Test void createRay()
     {
         Vector start = new Vector();
         Vector end = new Vector(10,10);
@@ -104,5 +104,21 @@ public class RayTest
         assertEquals(10, s.getU().getY(), 0.001);
         assertEquals(0, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
+    }
+
+    @Test void angle()
+    {
+        Vector u = new Vector(0, 0);
+        Vector v = new Vector(10, 10);
+        Ray r = new Ray(u, v);
+        assertEquals(45, r.angle(), 0.0001);
+    }
+
+    @Test void angle_offset()
+    {
+        Vector u = new Vector(10, 10);
+        Vector v = new Vector(20, 20);
+        Ray r = new Ray(u, v);
+        assertEquals(45, r.angle(), 0.0001);
     }
 }
