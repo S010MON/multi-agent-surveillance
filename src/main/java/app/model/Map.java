@@ -18,26 +18,28 @@ public class Map
     private ArrayList<Agent> agents;
     private Human human;
 
-    /**
-     * Temporary map for testing ray drawing, will be swapped out for proper one once made
-     */
-    public Map()
-    {
-        objects = createObjects();
-        textures = createTextures();
-        agents = new ArrayList<>();
-        human = new Human(new Vector(400, 250), new Vector(1,0), 10);
-        agents.add(human);
-        //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
-    }
-
     /** To be replaced once settings uses javafx.Rectangle */
     public Map(Settings settings)
     {
+        System.out.print("Loading settings ... ");
+
+        objects = new ArrayList<>();
+        textures = new ArrayList<>();
+        agents = new ArrayList<>();
+        human = new Human(new Vector(400, 250), new Vector(1,0), 10);
+        agents.add(human);
+
+
+
         settings.getWalls()
                 .stream()
                 .forEach(e -> addWall(e));
 
+        settings.getShade()
+                .stream()
+                .forEach(e -> addShade(e));
+
+        System.out.println("done.");
     }
 
     public void walk(Vector v)
@@ -71,27 +73,9 @@ public class Map
         textures.add(TextureFactory.make(Furniture.WALL, rectangle));
     }
 
-    private ArrayList<Placeable> createObjects()
+    public void addShade(Rectangle2D rectangle)
     {
-        ArrayList<Placeable> objects = new ArrayList<>();
-        Rectangle2D r1 = new Rectangle2D(100, 100, 200, 100);
-        Rectangle2D r2 = new Rectangle2D(600, 100, 200, 100);
-        Rectangle2D r3 = new Rectangle2D(500, 500, 100, 100);
-        objects.addAll(BoundaryFactory.make(Furniture.WALL, r1));
-        objects.addAll(BoundaryFactory.make(Furniture.SHADE, r2));
-        objects.addAll(BoundaryFactory.make(Furniture.WALL, r3));
-        return objects;
-    }
-
-    private ArrayList<Texture> createTextures()
-    {
-        ArrayList<Texture> textures = new ArrayList<>();
-        Rectangle2D r1 = new Rectangle2D(100, 100, 200, 100);
-        Rectangle2D r2 = new Rectangle2D(600, 100, 200, 100);
-        Rectangle2D r3 = new Rectangle2D(500, 500, 100, 100);
-        textures.add(TextureFactory.make(Furniture.WALL, r1));
-        textures.add(TextureFactory.make(Furniture.SHADE, r2));
-
-        return textures;
+        objects.addAll(BoundaryFactory.make(Furniture.SHADE, rectangle));
+        textures.add(TextureFactory.make(Furniture.SHADE, rectangle));
     }
 }
