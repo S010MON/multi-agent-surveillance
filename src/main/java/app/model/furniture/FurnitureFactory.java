@@ -25,7 +25,7 @@ public abstract class FurnitureFactory
             case WALL -> { return new VisibleBoundary(a, b);}
             case SHADE -> { return new Boundary(a, b);}
         }
-        return null; // Redundant
+        return null; // Redundant by design
     }
 
     private static Vector[] cornersOf(Rectangle r)
@@ -33,8 +33,8 @@ public abstract class FurnitureFactory
         Vector[] corners = new Vector[4];
         corners[0] = new Vector(r.getX(),r.getY());                                            // top left corner
         corners[1] = new Vector(r.getX() + r.getWidth(),r.getY());                          // top right corner
-        corners[2] = new Vector(r.getX(),r.getY() + r.getHeight());                         // lower right corner
-        corners[3] = new Vector(r.getX() + r.getWidth(), r.getY() + r.getHeight());      // lower left corner
+        corners[2] = new Vector(r.getX() + r.getWidth(), r.getY() + r.getHeight());      // lower right corner
+        corners[3] = new Vector(r.getX(),r.getY() + r.getHeight());                         // lower left corner
         return corners;
     }
 }

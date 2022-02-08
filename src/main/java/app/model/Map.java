@@ -7,7 +7,6 @@ import app.model.agents.Human;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.Placeable;
-import app.model.furniture.VisibleBoundary;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
