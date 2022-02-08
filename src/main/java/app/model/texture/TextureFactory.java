@@ -1,11 +1,11 @@
 package app.model.texture;
 
 import app.model.Furniture;
-import javafx.scene.shape.Rectangle;
+import javafx.geometry.Rectangle2D;
 
 public class TextureFactory
 {
-    public static Texture make(Furniture f, Rectangle rectangle)
+    public static Texture make(Furniture f, Rectangle2D rectangle)
     {
         switch (f)
         {

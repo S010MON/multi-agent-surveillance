@@ -2,13 +2,13 @@ package app.model.boundary;
 
 import app.controller.linAlg.Vector;
 import app.model.Furniture;
-import javafx.scene.shape.Rectangle;
+import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
 
 public abstract class BoundaryFactory
 {
-    public static ArrayList<Placeable> make(Furniture f, Rectangle rectangle)
+    public static ArrayList<Placeable> make(Furniture f, Rectangle2D rectangle)
     {
         ArrayList<Placeable> objects = new ArrayList<>();
         Vector[] corner = cornersOf(rectangle);
@@ -29,13 +29,13 @@ public abstract class BoundaryFactory
         return null; // Redundant by design
     }
 
-    private static Vector[] cornersOf(Rectangle r)
+    private static Vector[] cornersOf(Rectangle2D r)
     {
         Vector[] corners = new Vector[4];
-        corners[0] = new Vector(r.getX(),r.getY());                                            // top left corner
-        corners[1] = new Vector(r.getX() + r.getWidth(),r.getY());                          // top right corner
-        corners[2] = new Vector(r.getX() + r.getWidth(), r.getY() + r.getHeight());      // lower right corner
-        corners[3] = new Vector(r.getX(),r.getY() + r.getHeight());                         // lower left corner
+        corners[0] = new Vector(r.getMinX(), r.getMinY());      // top left corner
+        corners[1] = new Vector(r.getMaxX(), r.getMinY());      // top right corner
+        corners[2] = new Vector(r.getMaxX(), r.getMaxY());      // lower right corner
+        corners[3] = new Vector(r.getMinX(), r.getMaxY());      // lower left corner
         return corners;
     }
 }

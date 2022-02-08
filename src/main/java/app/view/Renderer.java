@@ -1,9 +1,7 @@
 package app.view;
 
 import app.controller.graphicsEngine.Ray;
-import app.model.agents.Agent;
 import app.model.Map;
-import app.model.boundary.Placeable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -13,19 +11,20 @@ import java.util.ArrayList;
 public class Renderer extends Canvas
 {
     private Map map;
+    private Color backgroundColour;
+
     public Renderer(Map map, int width, int height)
     {
         super(width, height);
         this.map = map;
+        backgroundColour = Color.WHITE;
         render();
     }
 
     public void render()
     {
         GraphicsContext gc = this.getGraphicsContext2D();
-
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,getWidth(), getHeight());
+        drawBackground(gc);
 
         map.getTextures()
                 .stream()
@@ -48,6 +47,12 @@ public class Renderer extends Canvas
     {
         rays.stream()
                 .forEach(e -> e.draw(gc));
+    }
+
+    private  void drawBackground(GraphicsContext gc)
+    {
+        gc.setFill(backgroundColour);
+        gc.fillRect(0,0,getWidth(), getHeight());
     }
 
 
