@@ -3,7 +3,7 @@ package app.controller.graphicsEngine;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
-import app.model.boundary.Placeable;
+import app.model.boundary.Boundary;
 import java.util.ArrayList;
 
 public class RayTracing implements GraphicsEngine
@@ -21,7 +21,7 @@ public class RayTracing implements GraphicsEngine
         {
             Vector intersection = null;
             double closestDist = Double.MAX_VALUE;
-            for (Placeable obj: map.getObjects())
+            for (Boundary obj: map.getObjects())
             {
                 if(obj.isHit(r))
                 {

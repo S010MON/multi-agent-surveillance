@@ -1,16 +1,16 @@
 package app.model.boundary;
 
 import app.controller.linAlg.Vector;
-import app.model.Furniture;
+import app.model.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
 
 public abstract class BoundaryFactory
 {
-    public static ArrayList<Placeable> make(Furniture f, Rectangle2D rectangle)
+    public static ArrayList<Boundary> make(FurnitureType f, Rectangle2D rectangle)
     {
-        ArrayList<Placeable> objects = new ArrayList<>();
+        ArrayList<Boundary> objects = new ArrayList<>();
         Vector[] corner = cornersOf(rectangle);
                 objects.add(create(f, corner[0], corner[1]));
         objects.add(create(f, corner[1], corner[2]));
@@ -19,12 +19,12 @@ public abstract class BoundaryFactory
         return objects;
     }
 
-    private static Placeable create(Furniture f, Vector a, Vector b)
+    private static Boundary create(FurnitureType f, Vector a, Vector b)
     {
         switch (f)
         {
             case WALL -> { return new VisibleBoundary(a, b);}
-            case SHADE -> { return new Boundary(a, b);}
+            case SHADE -> { return new InvisibleBoundary(a, b);}
         }
         return null; // Redundant by design
     }
