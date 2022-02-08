@@ -25,10 +25,13 @@ public class Renderer extends Canvas
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,getWidth(), getHeight());
 
-        for(Placeable p: map.getObjects())
-        {
-            p.draw(gc);
-        }
+        map.getTextures()
+                .stream()
+                .forEach(e -> e.draw(gc));
+
+        map.getObjects()
+                .stream()
+                .forEach(e -> e.draw(gc));
 
         for (Agent a: map.getAgents())
         {

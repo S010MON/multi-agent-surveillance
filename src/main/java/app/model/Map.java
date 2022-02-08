@@ -89,4 +89,9 @@ public class Map
     {
         return agents;
     }
+
+    public ArrayList<Texture> getTextures()
+    {
+        return textures;
+    }
 }
