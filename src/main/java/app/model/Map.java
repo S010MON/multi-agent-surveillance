@@ -30,11 +30,11 @@ public class Map
 
         settings.getWalls()
                 .stream()
-                .forEach(e -> addWall(e));
+                .forEach(e -> addFurniture(Furniture.WALL, e));
 
         settings.getShade()
                 .stream()
-                .forEach(e -> addShade(e));
+                .forEach(e -> addFurniture(Furniture.SHADE, e));
 
         System.out.println("done.");
     }
@@ -64,15 +64,9 @@ public class Map
         return textures;
     }
 
-    public void addWall(Rectangle2D rectangle)
+    public void addFurniture(Furniture furniture, Rectangle2D rectangle)
     {
-        objects.addAll(BoundaryFactory.make(Furniture.WALL, rectangle));
-        textures.add(TextureFactory.make(Furniture.WALL, rectangle));
-    }
-
-    public void addShade(Rectangle2D rectangle)
-    {
-        objects.addAll(BoundaryFactory.make(Furniture.SHADE, rectangle));
-        textures.add(TextureFactory.make(Furniture.SHADE, rectangle));
+        objects.addAll(BoundaryFactory.make(furniture, rectangle));
+        textures.add(TextureFactory.make(furniture, rectangle));
     }
 }
