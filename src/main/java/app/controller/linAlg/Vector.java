@@ -61,6 +61,19 @@ public class Vector
         return Math.sqrt(a + b);
     }
 
+    public Vector normalise()
+    {
+        Vector v = new Vector(x, y);
+        double length = v.length();
+        Vector normV = v.scale(1/length);
+        return normV;
+    }
+
+    public double length() 
+    {
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
     public Vector rotate(double degrees)
     {
         RotationMatrix M = new RotationMatrix(degrees);
