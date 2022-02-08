@@ -1,7 +1,7 @@
 package app.controller;
 
+import javafx.geometry.Rectangle2D;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -80,25 +80,25 @@ public class FileParser
                         map.setScaling(Double.parseDouble(val));
                         break;
                     case "wall":
-                        map.addWall(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.addWall(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "shaded":
-                        map.addShade(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.addShade(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "tower":
-                        map.addTower(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.addTower(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "teleport":
-                        map.addPortal(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.addPortal(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
@@ -107,7 +107,7 @@ public class FileParser
                         // Here coords[6] is the orientation, no element in settings for this, can be added if needed
                         break;
                     case "texture":
-                        map.addTexture(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.addTexture(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
@@ -115,19 +115,19 @@ public class FileParser
                         // Here coords[5] is the orientation, can also be added like above for portals
                         break;
                     case "targetArea":
-                        map.setTargetArea(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.setTargetArea(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "spawnAreaIntruders":
-                        map.setSpawnAreaIntruders(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.setSpawnAreaIntruders(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "spawnAreaGuards":
-                        map.setSpawnAreaGuards(new Rectangle2D.Double(Double.parseDouble(coords[0]),
+                        map.setSpawnAreaGuards(new Rectangle2D(Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));

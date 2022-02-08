@@ -1,5 +1,6 @@
 package app.model;
 
+import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 public class Map
 {
     private ArrayList<Placeable> objects;
-    private ArrayList<Rectangle> textures;
     private ArrayList<Agent> agents;
     private Human human;
 
