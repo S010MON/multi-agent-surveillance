@@ -1,13 +1,13 @@
-package app.model.objects;
+package app.model.furniture;
 
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Wall extends Boundary
+public class VisibleBoundary extends Boundary
 {
 
-    public Wall(Vector a, Vector b)
+    public VisibleBoundary(Vector a, Vector b)
     {
         super(a, b);
     }
