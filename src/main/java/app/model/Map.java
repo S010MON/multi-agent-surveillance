@@ -1,11 +1,13 @@
 package app.model;
 
+import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.objects.Placeable;
 import app.model.objects.Wall;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class Map
@@ -24,6 +26,35 @@ public class Map
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
         //agents.add(new AgentImp(new Vector(100, 100), new Vector(1,0), 10));
+    }
+
+    public Map(Settings settings)
+    {
+        objects = createObjects();
+        objects.addAll(rectangleDecomposer(settings.getWalls()));
+        objects.addAll(rectangleDecomposer(settings.getShade()));
+        objects.addAll(rectangleDecomposer(settings.getTowers()));
+        objects.addAll(rectangleDecomposer(settings.getPortals()));
+        objects.addAll(rectangleDecomposer(settings.getTextures()));
+    }
+
+    private ArrayList<Placeable> rectangleDecomposer(ArrayList<Rectangle2D> rectangles)
+    {
+        ArrayList<Placeable> recWalls = new ArrayList<>();
+
+        for(Rectangle2D wall: rectangles)
+        {
+            Vector tl = new Vector(wall.getMinX(),wall.getMinY());    // top left corner
+            Vector tr = new Vector(wall.getMaxX(), wall.getMinY());    // top right corner
+            Vector lr = new Vector(wall.getMaxX(),wall.getMaxY());     // lower right corner
+            Vector ll = new Vector(wall.getMinX(),wall.getMaxY());     // lower left corner
+
+            recWalls.add(new Wall (tl,tr));
+            recWalls.add(new Wall (tr,lr));
+            recWalls.add(new Wall (lr,ll));
+            recWalls.add(new Wall (ll,tl));
+        }
+        return recWalls;
     }
 
     public void walk(Vector v)
