@@ -46,6 +46,9 @@ public class FileParser
                 String[] coords = val.split(" ");
                 switch(id)
                 {
+                    case "name":
+                        map.setName((String) val);
+                        break;
                     case "gameMode":
                         map.setGamemode(Integer.parseInt(val));
                         break;
