@@ -2,10 +2,9 @@ package jgfx.javagradlefx;
 
 import app.controller.Settings;
 import app.model.map.MapNotTemp;
-import app.model.map.SafeMap;
+import app.model.map.SaveMap;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -14,7 +13,7 @@ import static java.nio.file.Files.deleteIfExists;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class SafeMapTest {
+public class SaveMapTest {
 
     @Test
     void CreateFile()
@@ -23,8 +22,8 @@ public class SafeMapTest {
         settings.setName("createFileTest");
         MapNotTemp map = new MapNotTemp(settings);
 
-        SafeMap safeMap = new SafeMap();
-        safeMap.safeMap(map);
+        SaveMap safeMap = new SaveMap();
+        safeMap.saveMap(map);
 
         String filePathName = "src/main/java/app/model/map/files/createFileTest.txt";
 
