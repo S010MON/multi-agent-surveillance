@@ -69,7 +69,8 @@ public class Vector
         return normV;
     }
 
-    public double length() {
+    public double length() 
+    {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
