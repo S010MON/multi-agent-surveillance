@@ -22,8 +22,8 @@ public abstract class FurnitureFactory
     {
         switch (f)
         {
-            case WALL -> new VisibleBoundary(a, b);
-            case SHADE -> new Boundary(a, b);
+            case WALL -> { return new VisibleBoundary(a, b);}
+            case SHADE -> { return new Boundary(a, b);}
         }
         return null; // Redundant
     }
