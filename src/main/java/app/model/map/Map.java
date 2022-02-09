@@ -15,10 +15,12 @@ public class Map
     private ArrayList<Furniture> furniture;
     private ArrayList<Agent> agents;
     private Human human;
+    private Settings settings;
 
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
+        this.settings = settings;
 
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
@@ -44,6 +46,7 @@ public class Map
     {
         human.run(v);
     }
+    public Settings getSetting(){return setting;}
 
     public ArrayList<Agent> getAgents()
     {

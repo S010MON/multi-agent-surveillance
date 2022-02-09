@@ -3,7 +3,7 @@ package app.view;
 import app.controller.FileParser;
 import app.controller.GameEngine;
 import app.controller.Settings;
-import app.model.Map;
+import app.model.map.Map;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
