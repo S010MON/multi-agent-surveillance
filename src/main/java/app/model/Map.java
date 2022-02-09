@@ -4,17 +4,15 @@ import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
-import app.model.boundary.BoundaryFactory;
-import app.model.boundary.Placeable;
-import app.model.texture.Texture;
-import app.model.texture.TextureFactory;
+import app.model.furniture.Furniture;
+import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
 
 public class Map
 {
-    private ArrayList<Placeable> objects;
-    private ArrayList<Texture> textures;
+    private ArrayList<Furniture> furniture;
     private ArrayList<Agent> agents;
     private Human human;
 
@@ -22,19 +20,17 @@ public class Map
     {
         System.out.print("Loading settings ... ");
 
-        objects = new ArrayList<>();
-        textures = new ArrayList<>();
         agents = new ArrayList<>();
         human = new Human(new Vector(400, 250), new Vector(1,0), 10);
         agents.add(human);
 
-        settings.getWalls()
-                .stream()
-                .forEach(e -> addFurniture(Furniture.WALL, e));
+        furniture = new ArrayList<>();
+        settings.getWalls().forEach(e -> addFurniture(FurnitureType.WALL, e));
+        settings.getShade().forEach(e -> addFurniture(FurnitureType.SHADE, e));
 
-        settings.getShade()
-                .stream()
-                .forEach(e -> addFurniture(Furniture.SHADE, e));
+        // Temp test of glass
+        Rectangle2D window = new Rectangle2D(300,150, 50,50);
+        furniture.add(FurnitureFactory.make(FurnitureType.GLASS, window));
 
         System.out.println("done.");
     }
@@ -49,24 +45,18 @@ public class Map
         human.run(v);
     }
 
-    public ArrayList<Placeable> getObjects()
-    {
-        return objects;
-    }
-
     public ArrayList<Agent> getAgents()
     {
         return agents;
     }
 
-    public ArrayList<Texture> getTextures()
+    public void addFurniture(FurnitureType type, Rectangle2D rectangle)
     {
-        return textures;
+        this.furniture.add(FurnitureFactory.make(type, rectangle));
     }
 
-    public void addFurniture(Furniture furniture, Rectangle2D rectangle)
+    public ArrayList<Furniture> getFurniture()
     {
-        objects.addAll(BoundaryFactory.make(furniture, rectangle));
-        textures.add(TextureFactory.make(furniture, rectangle));
+        return furniture;
     }
 }

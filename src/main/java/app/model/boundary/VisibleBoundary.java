@@ -4,7 +4,7 @@ import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class VisibleBoundary extends Boundary
+public class VisibleBoundary extends InvisibleBoundary
 {
 
     public VisibleBoundary(Vector a, Vector b)

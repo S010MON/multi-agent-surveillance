@@ -26,11 +26,7 @@ public class Renderer extends Canvas
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
 
-        map.getTextures()
-                .stream()
-                .forEach(e -> e.draw(gc));
-
-        map.getObjects()
+        map.getFurniture()
                 .stream()
                 .forEach(e -> e.draw(gc));
 
