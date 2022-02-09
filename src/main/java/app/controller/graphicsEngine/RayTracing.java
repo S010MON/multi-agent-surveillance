@@ -2,9 +2,8 @@ package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
-import app.model.Map;
+import app.model.map.Map;
 import app.model.boundary.Boundary;
-import app.model.furniture.Furniture;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package app.model;
+package app.model.map;
 
 import app.controller.Settings;
 import app.controller.linAlg.Vector;
@@ -46,7 +46,8 @@ public class Map
     {
         human.run(v);
     }
-    public Settings getSetting(){return setting;}
+
+    public Settings getSetting(){return settings;}
 
     public ArrayList<Agent> getAgents()
     {
