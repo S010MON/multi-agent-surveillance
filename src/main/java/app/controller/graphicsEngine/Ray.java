@@ -11,10 +11,10 @@ public class Ray
     private Color colour = Color.RED;
     private final double LINE_WIDTH = 1;
 
-    public Ray(Vector u, Vector direction)
+    public Ray(Vector u, Vector v)
     {
         this.u = u;
-        this.v = direction;
+        this.v = v;
     }
 
     public Vector getV()
@@ -25,6 +25,11 @@ public class Ray
     public Vector getU()
     {
         return u;
+    }
+
+    public double angle()
+    {
+        return v.sub(u).getAngle();
     }
 
     public Ray rotate(double degrees)

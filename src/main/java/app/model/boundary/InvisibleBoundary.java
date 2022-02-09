@@ -1,15 +1,15 @@
-package app.model.objects;
+package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Boundary implements Placeable
+public class InvisibleBoundary implements Boundary
 {
     protected Vector a;
     protected Vector b;
 
-    public Boundary(Vector a, Vector b)
+    public InvisibleBoundary(Vector a, Vector b)
     {
         this.a = a;
         this.b = b;

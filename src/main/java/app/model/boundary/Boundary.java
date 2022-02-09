@@ -1,10 +1,10 @@
-package app.model.objects;
+package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
-public interface Placeable
+public interface Boundary
 {
     void draw(GraphicsContext gc);
 

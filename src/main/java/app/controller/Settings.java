@@ -1,13 +1,14 @@
 package app.controller;
 
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import javafx.geometry.Rectangle2D;
+import java.awt.Point;
 import java.util.ArrayList;
 
 // Orientation, which is double, only applies to teleporting and adding texture, not saved as a setting, can be if needed.
 public class Settings
 {
     private boolean unlocked = true;
+    private String name;
     private int gamemode;
     private int height;
     private int width;
@@ -26,9 +27,9 @@ public class Settings
     private ArrayList<Point> teleportTo;
     private ArrayList<Rectangle2D> textures;
     private ArrayList<Integer> textureType;
-    private Rectangle2D.Double targetArea;
-    private Rectangle2D.Double spawnAreaIntruders;
-    private Rectangle2D.Double spawnAreaGuards;
+    private Rectangle2D targetArea;
+    private Rectangle2D spawnAreaIntruders;
+    private Rectangle2D spawnAreaGuards;
 
     public Settings()
     {
@@ -39,6 +40,12 @@ public class Settings
         teleportTo = new ArrayList<>();
         textures = new ArrayList<>();
         textureType = new ArrayList<>();
+    }
+
+    public void setName(String name)
+    {
+        if(unlocked)
+            this.name=name;
     }
 
     public void setGamemode(int gamemode)
@@ -149,19 +156,19 @@ public class Settings
             this.textureType.add(textureType);
     }
 
-    public void setTargetArea(Rectangle2D.Double targetArea)
+    public void setTargetArea(Rectangle2D targetArea)
     {
         if(unlocked)
             this.targetArea = targetArea;
     }
 
-    public void setSpawnAreaIntruders(Rectangle2D.Double spawnAreaIntruders)
+    public void setSpawnAreaIntruders(Rectangle2D spawnAreaIntruders)
     {
         if(unlocked)
             this.spawnAreaIntruders = spawnAreaIntruders;
     }
 
-    public void setSpawnAreaGuards(Rectangle2D.Double spawnAreaGuards)
+    public void setSpawnAreaGuards(Rectangle2D spawnAreaGuards)
     {
         if(unlocked)
             this.spawnAreaGuards = spawnAreaGuards;
@@ -170,6 +177,11 @@ public class Settings
     public void lock()
     {
         this.unlocked = false;
+    }
+
+    public String getName()
+    {
+        return this.name;
     }
 
     public int getGamemode()
@@ -262,17 +274,17 @@ public class Settings
         return (ArrayList<Integer>) this.textureType.clone();
     }
 
-    public Rectangle2D.Double getTargetArea()
+    public Rectangle2D getTargetArea()
     {
         return this.targetArea;
     }
 
-    public Rectangle2D.Double getSpawnAreaIntruders()
+    public Rectangle2D getSpawnAreaIntruders()
     {
         return this.spawnAreaIntruders;
     }
 
-    public Rectangle2D.Double getSpawnAreaGuards()
+    public Rectangle2D getSpawnAreaGuards()
     {
         return this.spawnAreaGuards;
     }

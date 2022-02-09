@@ -4,7 +4,7 @@ package jgfx.javagradlefx;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
-import app.model.Map;
+import app.model.map.Map;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import org.junit.jupiter.api.Test;

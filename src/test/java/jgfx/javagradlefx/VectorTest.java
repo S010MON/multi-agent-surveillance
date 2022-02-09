@@ -136,4 +136,67 @@ public class VectorTest
         assertEquals(9.87, u.getX(), 0.01);
         assertEquals(1.56, u.getY(), 0.01);
     }
+
+    @Test void getAngle0_PosPos()
+    {
+        Vector v = new Vector(0, 4);
+        assertEquals(0, v.getAngle());
+    }
+
+    @Test void getAngle90_PosPos()
+    {
+        Vector v = new Vector(4, 0);
+        assertEquals(90, v.getAngle());
+    }
+
+    @Test void getAngle45_PosPos()
+    {
+        Vector v = new Vector(4, 4);
+        assertEquals(45, v.getAngle());
+    }
+
+    @Test void getAngle45_PosNeg()
+    {
+        Vector v = new Vector(4, -4);
+        assertEquals(135, v.getAngle());
+    }
+
+    @Test void getAngle45_NegNeg()
+    {
+        Vector v = new Vector(-4, -4);
+        assertEquals(225, v.getAngle());
+    }
+
+    @Test void getAngle45_NegPos()
+    {
+        Vector v = new Vector(-4, 4);
+        assertEquals(315, v.getAngle());
+    }
+
+    @Test void testLength()
+    {
+        Vector u = new Vector(1, -2);
+        Vector v = new Vector(0,0);
+        Vector w = new Vector(3,0);
+        Vector z = new Vector(2, -6.5);
+        assertEquals(2.236, u.length(), 0.01);
+        assertEquals(0, v.length(), 0.01);
+        assertEquals(3, w.length(), 0.01);
+        assertEquals(6.801, z.length(), 0.01);
+    }
+
+    @Test void normaliseTest()
+    {
+        Vector u = new Vector(437, 24);
+        Vector normU = u.normalise();
+        Vector v = new Vector(-256, 152);
+        Vector normV = v.normalise();
+
+        assertEquals(1, normU.length(), 0.01);
+        assertEquals(1, normV.length(), 0.01);
+
+        //check that same still direction
+        assertEquals(u.getX()/u.getY(), normU.getX()/normU.getY(), 0.01);
+        assertEquals(v.getX()/v.getY(), normV.getX()/normV.getY(), 0.01);
+    }
 }
