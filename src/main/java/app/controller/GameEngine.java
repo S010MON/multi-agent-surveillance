@@ -12,6 +12,9 @@ import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
+import java.time.Instant;
+import java.time.LocalTime;
+
 public class GameEngine
 {
     private Map map;
@@ -30,11 +33,9 @@ public class GameEngine
 
     public void tick()
     {
-        for(Agent a: map.getAgents())
-        {
-            a.move();
-            a.updateView(graphicsEngine.compute(map, a));
-        }
+        map.getAgents().forEach(a -> a.move());
+        map.getAgents().stream()
+                        .forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         renderer.render();
     }
 

@@ -4,13 +4,14 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.map.Map;
 import app.model.boundary.Boundary;
-
 import java.util.ArrayList;
+
 
 public class RayTracing implements GraphicsEngine
 {
     private int noOfRays = 360;
     private double angle = 1;
+
 
     public ArrayList<Ray> compute(Map map, Agent agent)
     {
@@ -21,25 +22,31 @@ public class RayTracing implements GraphicsEngine
 
         for(Ray r: rays)
         {
-            Vector intersection = null;
-            double closestDist = Double.MAX_VALUE;
-            for (Boundary obj: boundaries)
-            {
-                    if(obj.isHit(r))
-                    {
-                        Vector endPoint = obj.intersection(r);
-                        double dist = origin.dist(endPoint);
-                        if(dist < closestDist)
-                        {
-                            intersection = endPoint;
-                            closestDist = dist;
-                        }
-                    }
-            }
+            Vector intersection = getIntersection(r, boundaries);
             if(intersection != null)
                 output.add(new Ray(origin, intersection));
         }
         return output;
+    }
+
+    private Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
+    {
+        Vector intersection = null;
+        double closestDist = Double.MAX_VALUE;
+        for (Boundary obj: boundaries)
+        {
+            if(obj.isHit(r))
+            {
+                Vector currentV = obj.intersection(r);
+                double dist = r.getU().dist(currentV);
+                if(dist < closestDist)
+                {
+                    intersection = currentV;
+                    closestDist = dist;
+                }
+            }
+        }
+        return intersection;
     }
 
     private ArrayList<Ray> scatterRays(Agent agent)
