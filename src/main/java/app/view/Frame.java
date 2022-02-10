@@ -15,9 +15,11 @@ public class Frame extends BorderPane
     {
         Settings settings = FileParser.readGameFile("src/main/resources/map_1.txt");
         Map map = new Map(settings);
+        FileMenuBar menuBar = new FileMenuBar();
         Renderer renderer = new Renderer(map, width, height);
         gameEngine = new GameEngine(map, renderer);
         this.setCenter(renderer);
+        this.setTop(menuBar);
     }
 
     public void handleKey(KeyEvent e)
