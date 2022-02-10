@@ -19,8 +19,7 @@ public abstract class SaveMap {
                 fileName = "Save_Map_" + String.valueOf(Math.round(Math.random() * 100000) + ".txt");
             else
                 fileName = "Save_" + fileName + ".txt";
-            String filePath = PathCreater.getPathMap(fileName);
-            System.out.println(filePath);
+            String filePath = FilePath.getFilePath(fileName);
 
             File mapFile = new File(filePath);
             FileWriter writer = new FileWriter(mapFile);
