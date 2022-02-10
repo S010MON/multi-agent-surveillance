@@ -1,7 +1,6 @@
-package app.model.map;
+package app.controller;
 
-import app.controller.FileParser;
-import app.controller.Settings;
+import app.model.map.Map;
 import javafx.geometry.Rectangle2D;
 import java.awt.Point;
 
@@ -11,8 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SaveMap {
-
-    private final String FILE_PATH = "src/main/resources/saveMap/";
 
     public static void main(String[] args) {
         SaveMap saveMap = new SaveMap();
@@ -24,23 +21,25 @@ public class SaveMap {
     public void saveMap(Map map){
         try
         {
+            String filePath = PathCreater.getPathMap();
+
             Settings setting = map.getSetting();
             String fileName = setting.getName();
             if (fileName == null)
                 fileName = "Map_" + String.valueOf(Math.round(Math.random() * 100000) + ".txt");
             else
                 fileName = fileName + ".txt";
-            System.out.println(FILE_PATH + fileName);
+            String pathFile = filePath + fileName;
+                    System.out.println(pathFile);
 
 
-            File mapFile = new File(FILE_PATH + fileName);
-            //File file = new File(getClass().getResource(fileName).getPath());
+            File mapFile = new File(pathFile);
 
-            FileWriter writer = new FileWriter(fileName);
+            FileWriter writer = new FileWriter(pathFile);
 
 
             writeLine(writer, "name", setting.getName());
-            writeLine(writer, "gameFile", FILE_PATH + fileName);
+            writeLine(writer, "gameFile", filePath + fileName);
             writeLine(writer, "gameMode", Integer.toString(setting.getGamemode()));
             writeLine(writer, "height", Integer.toString(setting.getHeight()));
             writeLine(writer, "width", Integer.toString(setting.getWidth()));
