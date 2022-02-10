@@ -125,16 +125,8 @@ public class VectorTest
     {
         Vector u = new Vector(0,10);
         Vector v = u.rotate(90);
-        assertEquals(v.getX(), -10, 0.001);
+        assertEquals(v.getX(), 10, 0.001);
         assertEquals(v.getY(), 0, 0.001);
-    }
-
-    @Test void rotate9()
-    {
-        Vector u = new Vector(10,0);
-        u = u.rotate(9);
-        assertEquals(9.87, u.getX(), 0.01);
-        assertEquals(1.56, u.getY(), 0.01);
     }
 
     @Test void getAngle0_PosPos()
@@ -171,6 +163,17 @@ public class VectorTest
     {
         Vector v = new Vector(-4, 4);
         assertEquals(315, v.getAngle());
+    }
+
+    @Test void rotateThrough360in30Degrees()
+    {
+        Vector v = new Vector(0,10);
+        for(int i = 0; i < 360; i+=30)
+        {
+            double angle = (double) i;
+            double act = v.rotate(angle).getAngle();
+            assertEquals(angle, act, 0.001);
+        }
     }
 
     @Test void testLength()

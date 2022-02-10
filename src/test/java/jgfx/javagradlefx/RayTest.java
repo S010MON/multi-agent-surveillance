@@ -51,7 +51,7 @@ public class RayTest
         Ray s = r.rotate(90);
         assertEquals(0, s.getU().getX(), 0.001);
         assertEquals(0, s.getU().getY(), 0.001);
-        assertEquals(-10, s.getV().getX(), 0.001);
+        assertEquals(10, s.getV().getX(), 0.001);
         assertEquals(0, s.getV().getY(), 0.001);
     }
 
@@ -87,8 +87,28 @@ public class RayTest
         Ray s = r.rotate(90);
         assertEquals(10, s.getU().getX(), 0.001);
         assertEquals(10, s.getU().getY(), 0.001);
-        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(20, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
+    }
+
+    @Test void rotateOneDeg()
+    {
+        Vector u = new Vector(10,10);
+        Vector v = new Vector(10,20);
+        Ray s = new Ray(u, v);
+        assertEquals(0, s.angle(), 0.001);
+        s = s.rotate(1);
+        assertEquals(1, s.angle(), 0.001);
+    }
+
+    @Test void rotateOneDeg90()
+    {
+        Vector u = new Vector(0,0);
+        Vector v = new Vector(-10,0);
+        Ray s = new Ray(u, v);
+        assertEquals(270, s.angle(), 0.001);
+        s = s.rotate(1);
+        assertEquals(271, s.angle(), 0.001);
     }
 
     @Test void rotateInSteps()
@@ -96,13 +116,13 @@ public class RayTest
         Vector u = new Vector(10,10);
         Vector v = new Vector(10,20);
         Ray s = new Ray(u, v);
-        for(int i = 0; i < 9; i++)
+        for(int i = 0; i < 90; i++)
         {
-            s = s.rotate(10);
+            s = s.rotate(1);
         }
         assertEquals(10, s.getU().getX(), 0.001);
         assertEquals(10, s.getU().getY(), 0.001);
-        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(20, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
     }
 
