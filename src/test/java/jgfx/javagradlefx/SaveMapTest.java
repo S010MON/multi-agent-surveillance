@@ -26,14 +26,11 @@ public class SaveMapTest {
     //@Test
     File createMapFile()
     {
-
-        SaveMap saveMap = new SaveMap();
         Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
         testSetting.setName("createFileTest");
-        Map testMap = new Map(testSetting);
-        saveMap.saveMap(testMap);
+        SaveMap.saveMap(testSetting);
 
-        String filePathNameTest = PathCreater.getPathMap() + "createFileTest.txt";
+        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
 
         try
         {
@@ -58,7 +55,7 @@ public class SaveMapTest {
     @Test
     void compareFiles()
     {
-        String filePathNameTest = PathCreater.getPathMap() + "createFileTest.txt";
+        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
         String filePathNameMap = "src/main/resources/map_1.txt";
         try
         {
@@ -106,7 +103,7 @@ public class SaveMapTest {
     //@Test
     void deleteMapFile()
     {
-        String filePathNameTest = PathCreater.getPathMap() + "createFileTest.txt";
+        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
 
         try
         {
@@ -118,6 +115,29 @@ public class SaveMapTest {
             fail("an exception occured why trying to delete the file");
             e.printStackTrace();
         }
+    }
+
+
+    @BeforeAll void setup()
+    {
+        // Build environment including any files
+        // testMap.txt
+    }
+
+    @Test void test()
+    {
+        // Make assertions
+    }
+
+    @Test void test2()
+    {
+        // Make assertions
+    }
+
+    @AfterAll void breakdown()
+    {
+       //Destroy all files
+        // testMap.txt
     }
 }
 

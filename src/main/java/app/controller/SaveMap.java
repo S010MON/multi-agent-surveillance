@@ -9,37 +9,31 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SaveMap {
+public abstract class SaveMap {
 
-    public static void main(String[] args) {
-        SaveMap saveMap = new SaveMap();
-        Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
-        Map testMap = new Map(testSetting);
-        saveMap.saveMap(testMap);
-    }
+//    public static void main(String[] args) {
+//        SaveMap saveMap = new SaveMap();
+//        Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
+//        Map testMap = new Map(testSetting);
+//        saveMap.saveMap(testMap);
+//    }
 
-    public void saveMap(Map map){
+    public static void saveMap( Settings setting){
         try
         {
-            String filePath = PathCreater.getPathMap();
-
-            Settings setting = map.getSetting();
             String fileName = setting.getName();
             if (fileName == null)
                 fileName = "Map_" + String.valueOf(Math.round(Math.random() * 100000) + ".txt");
             else
                 fileName = fileName + ".txt";
-            String pathFile = filePath + fileName;
-                    System.out.println(pathFile);
+            String filePath = PathCreater.getPathMap(fileName);
+            System.out.println(filePath);
 
-
-            File mapFile = new File(pathFile);
-
-            FileWriter writer = new FileWriter(pathFile);
-
+            File mapFile = new File(filePath);
+            FileWriter writer = new FileWriter(mapFile);
 
             writeLine(writer, "name", setting.getName());
-            writeLine(writer, "gameFile", filePath + fileName);
+            writeLine(writer, "gameFile", filePath);
             writeLine(writer, "gameMode", Integer.toString(setting.getGamemode()));
             writeLine(writer, "height", Integer.toString(setting.getHeight()));
             writeLine(writer, "width", Integer.toString(setting.getWidth()));
@@ -102,7 +96,7 @@ public class SaveMap {
 
     }
 
-    private void writeLineTexture(FileWriter writer, Rectangle2D rectangle, int textureType, int orientation) throws IOException
+    private static void writeLineTexture(FileWriter writer, Rectangle2D rectangle, int textureType, int orientation) throws IOException
     {
         String rectangleString = Integer.toString((int)rectangle.getMinX()) + " "
                 + Integer.toString((int)rectangle.getMinY()) + " "
@@ -112,7 +106,7 @@ public class SaveMap {
         writer.write("texture = " + rectangleString + " " + typeAndOrientation + System.getProperty( "line.separator" ));
     }
 
-    private void writeLineTeleport(FileWriter writer, Rectangle2D rectangle, Point point, double orientation) throws IOException
+    private static void writeLineTeleport(FileWriter writer, Rectangle2D rectangle, Point point, double orientation) throws IOException
     {
         String portal = Integer.toString((int)rectangle.getMinX()) + " "
                 + Integer.toString((int)rectangle.getMinY()) + " "
@@ -123,7 +117,7 @@ public class SaveMap {
         writer.write("teleport = " + portal + " " + pointString + " " + orient + System.getProperty( "line.separator" ));
     }
 
-    private void writeLine(FileWriter writer, String variable, Rectangle2D rectangle) throws IOException
+    private static void writeLine(FileWriter writer, String variable, Rectangle2D rectangle) throws IOException
     {
         String value = Integer.toString((int)rectangle.getMinX()) + " "
                 + Integer.toString((int)rectangle.getMinY()) + " "
@@ -132,7 +126,7 @@ public class SaveMap {
         writer.write(variable + " = " + value + System.getProperty( "line.separator" ));
     }
 
-    private void writeLine(FileWriter writer, String variable, String value) throws IOException
+    private static void writeLine(FileWriter writer, String variable, String value) throws IOException
     {
         writer.write(variable + " = " + value + System.getProperty( "line.separator" ));
     }

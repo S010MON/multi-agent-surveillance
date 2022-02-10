@@ -1,5 +1,5 @@
 name = map_1
-gameFile = //
+gameFile = src/main/resources/map_1.txt
 gameMode = 44
 height = 95
 width = 144

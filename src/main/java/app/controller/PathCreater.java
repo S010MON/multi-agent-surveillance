@@ -1,8 +1,9 @@
 package app.controller;
 
-public class PathCreater {
+public abstract class PathCreater {
 
-    public static String getPathMap() {
-        return "src/main/resources/maps/";
+    public static String getPathMap(String name)
+    {
+        return "src/main/resources/" + name;
     }
 }
