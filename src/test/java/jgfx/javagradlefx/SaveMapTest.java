@@ -21,48 +21,52 @@ import static java.nio.file.Files.deleteIfExists;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SaveMapTest {
 
-    //@Test
-    File createMapFile()
+    @BeforeAll
+    void createMapFile()
     {
+        System.out.println("call to createMapFile");
+
         Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
-        testSetting.setName("createFileTest");
         SaveMap.saveMap(testSetting);
 
-        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
+        String filePathNameTest = PathCreater.getPathMap("Save_map_1.txt");
+                //PathCreater.getPathMap("Save_map_1.txt");
 
         try
         {
             Scanner testScanner = new Scanner(filePathNameTest);
+            testScanner.close();
 
-            File mapFile = new File(filePathNameTest);
+            File mapFile = new File(PathCreater.getPathMap("Save_map_1.txt"));
 
-            System.out.println(mapFile.exists());
-            System.out.println(mapFile.canRead());
+            System.out.println("create map, file exist: " + mapFile.exists());
+            System.out.println("create map, file can be read: " + mapFile.canRead());
 
             System.out.println("Succesfully created file");
-            return mapFile;
         }
         catch(Exception e)
         {
             e.printStackTrace();
             fail("an exception occured why trying to create/access/delete the file");
         }
-        return null;
+        System.out.println();
     }
 
     @Test
     void compareFiles()
     {
-        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
+        String filePathNameTest = PathCreater.getPathMap("Save_map_1.txt");
         String filePathNameMap = "src/main/resources/map_1.txt";
         try
         {
-            File testFile = createMapFile();
+            File testFile = new File(filePathNameTest);
             File mapFile = new File(filePathNameMap);
-            System.out.println(testFile.exists());
-            System.out.println(testFile.canRead());
+
+            System.out.println("create map, file exist: " + testFile.exists());
+            System.out.println("create map, file can be read: " + testFile.canRead());
 
             System.out.println("try to create scanner for testFile");
             Scanner testScanner = new Scanner(testFile);
@@ -71,26 +75,28 @@ public class SaveMapTest {
 
 
             // read in the first 2 lines of each, as they will be different
-            /**
             testScanner.nextLine();
             testScanner.nextLine();
             mapScanner.nextLine();
             mapScanner.nextLine();
 
-            String testLine = testScanner.nextLine();
-            String mapLine = mapScanner.nextLine();
+            String testLine;
+            String mapLine;
 
-            while (testLine!=null || mapLine!=null)
+            while (testScanner.hasNext() || mapScanner.hasNext())
             {
-                if(testLine==null || mapLine==null)
+                if(!testScanner.hasNext() || !mapScanner.hasNext())
                 {
                     fail("files don't have the same number of lines.");
                 }
+                testLine = testScanner.nextLine();
+                mapLine = mapScanner.nextLine();
                 assertEquals(testLine, mapLine);
             }
-             */
 
-            deleteMapFile();
+            testScanner.close();
+            mapScanner.close();
+
 
         }
         catch(Exception e)
@@ -98,46 +104,27 @@ public class SaveMapTest {
             e.printStackTrace();
             fail("error occured while reading files");
         }
+        System.out.println();
     }
 
-    //@Test
+    @AfterAll
     void deleteMapFile()
     {
-        String filePathNameTest = PathCreater.getPathMap("createFileTest.txt");
+        System.out.println("call to deleteMapFile");
+        String filePathNameTest = PathCreater.getPathMap("Save_map_1.txt");
 
         try
         {
-            Path path = Paths.get(filePathNameTest);
-            deleteIfExists(path);
+            File testFile = new File(filePathNameTest);
+            if(!testFile.delete())
+                fail("Failed to delete file");
         }
         catch(Exception e)
         {
             fail("an exception occured why trying to delete the file");
             e.printStackTrace();
         }
-    }
-
-
-    @BeforeAll void setup()
-    {
-        // Build environment including any files
-        // testMap.txt
-    }
-
-    @Test void test()
-    {
-        // Make assertions
-    }
-
-    @Test void test2()
-    {
-        // Make assertions
-    }
-
-    @AfterAll void breakdown()
-    {
-       //Destroy all files
-        // testMap.txt
+        System.out.println();
     }
 }
 

@@ -11,21 +11,14 @@ import java.util.ArrayList;
 
 public abstract class SaveMap {
 
-//    public static void main(String[] args) {
-//        SaveMap saveMap = new SaveMap();
-//        Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
-//        Map testMap = new Map(testSetting);
-//        saveMap.saveMap(testMap);
-//    }
-
     public static void saveMap( Settings setting){
         try
         {
             String fileName = setting.getName();
             if (fileName == null)
-                fileName = "Map_" + String.valueOf(Math.round(Math.random() * 100000) + ".txt");
+                fileName = "Save_Map_" + String.valueOf(Math.round(Math.random() * 100000) + ".txt");
             else
-                fileName = fileName + ".txt";
+                fileName = "Save_" + fileName + ".txt";
             String filePath = PathCreater.getPathMap(fileName);
             System.out.println(filePath);
 
