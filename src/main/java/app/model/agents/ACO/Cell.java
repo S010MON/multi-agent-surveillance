@@ -4,8 +4,28 @@ import app.model.agents.Agent;
 
 public class Cell
 {
-    private Agent agent;
+    private AcoAgent agent;
     private double pheramone;
 
+    public Cell(AcoAgent agent)
+    {
+        this.agent = agent;
+        this.pheramone = 0.0;
+    }
 
+    public Cell()
+    {
+        this.agent = null;
+        this.pheramone = 0.0;
+    }
+
+    public void addAgent(AcoAgent agent)
+    {
+        this.agent = agent;
+    }
+
+    public void removeAgent()
+    {
+        this.agent = null;
+    }
 }

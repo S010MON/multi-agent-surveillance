@@ -36,19 +36,23 @@ public class MapOverlay
 
     public int getCellRow(Vector position)
     {
-        return (int)(position.getX() / rowSize);
+        return (int)(position.getY() / rowSize);
     }
 
     public int getCellCol(Vector position)
     {
-        int col = (int)(position.getY() / colSize);
+        return (int)(position.getX() / colSize);
     }
 
     public void updateAgent(Vector movement, AcoAgent agent)
     {
-        int x_pos = getCellCol(agent.getPosition());
-        int y_pos = getCellRow(agent.getPosition());
+        int row = getCellRow(agent.getPosition());
+        int col = getCellCol(agent.getPosition());
+        grid[row][col].removeAgent();
 
-        int new_x = x_pos + (int)movement.getX();
+
+        int updatedRow = row + (int)movement.getY();
+        int updatedCol = col + (int)movement.getX();
+        grid[updatedRow][updatedCol].addAgent(agent);
     }
 }
