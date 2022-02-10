@@ -4,6 +4,8 @@ import app.controller.linAlg.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class VectorTest
 {
@@ -201,5 +203,31 @@ public class VectorTest
         //check that same still direction
         assertEquals(u.getX()/u.getY(), normU.getX()/normU.getY(), 0.01);
         assertEquals(v.getX()/v.getY(), normV.getX()/normV.getY(), 0.01);
+    }
+    @Test void vectorEquals()
+    {
+        Vector u = new Vector(345, 200);
+        Vector v = new Vector(345, 200);
+
+        assertTrue(u.equals(v));
+    }
+
+    @Test void vectorNotEquals()
+    {
+        Vector u = new Vector(345, 201);
+        Vector v = new Vector(345, 200);
+
+        assertFalse(u.equals(v));
+    }
+
+    @Test void testHashCodeDeterministic()
+    {
+        Vector u = new Vector(345, 201);
+        Integer u_hashCode = u.vectorHashCode();
+
+        Vector u_copy = new Vector(345, 201);
+        Integer uCopy_hashCode = u.vectorHashCode();
+
+        assertEquals(u_hashCode, uCopy_hashCode);
     }
 }

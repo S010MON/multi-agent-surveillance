@@ -103,4 +103,9 @@ public class Vector
         }
         return false;
     }
+
+    public Integer vectorHashCode()
+    {
+        return this.hashCode();
+    }
 }
