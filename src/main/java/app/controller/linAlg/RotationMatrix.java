@@ -14,6 +14,7 @@ public class RotationMatrix
      */
     public RotationMatrix(double theta)
     {
+        theta = -theta;
         double cosA = Math.cos(Math.toRadians(theta));
         double sinA = Math.sin(Math.toRadians(theta));
         this.a1 = cosA;

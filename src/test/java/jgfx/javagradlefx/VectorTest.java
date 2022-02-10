@@ -173,6 +173,17 @@ public class VectorTest
         assertEquals(315, v.getAngle());
     }
 
+    @Test void rotateThrough360in30Degrees()
+    {
+        Vector v = new Vector(0,10);
+        for(int i = 0; i < 360; i+=30)
+        {
+            double angle = (double) i;
+            double act = v.rotate(angle).getAngle();
+            assertEquals(angle, act, 0.001);
+        }
+    }
+
     @Test void testLength()
     {
         Vector u = new Vector(1, -2);

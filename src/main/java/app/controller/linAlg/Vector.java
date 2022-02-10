@@ -106,8 +106,8 @@ public class Vector
         // Q4
         else if(x < 0 && y >= 0 && abs_x >= abs_y)
             a = 270 + Math.toDegrees(Math.atan(abs_y / abs_x));
-        else if(x < 0 && y >= 0 && abs_y < abs_x)
-            a = 180 - Math.toDegrees(Math.atan(abs_x / abs_y));
+        else if(x < 0 && y >= 0 && abs_x < abs_y)
+            a = 360 - Math.toDegrees(Math.atan(abs_x / abs_y));
 
         return a;
     }
