@@ -62,8 +62,8 @@ public class InvisibleBoundary implements Boundary {
     }
 
     @Override
-    public boolean validMove(Vector startPoint, Vector endPoint) {
-
+    public boolean validMove(Vector startPoint, Vector endPoint)
+    {
         Vector q1 = startPoint;
         Vector p1 = endPoint;
         Vector p2 = a;
@@ -101,7 +101,7 @@ public class InvisibleBoundary implements Boundary {
 
     // Given three collinear points p, q, r, the function checks if
     // point q lies on line segment 'pr'
-    static boolean onSegment(Vector p, Vector q, Vector r) {
+    private  static boolean onSegment(Vector p, Vector q, Vector r) {
         if (q.getX() <= Math.max(p.getX(), r.getX()) && q.getX() >= Math.min(p.getX(), r.getX()) &&
                 q.getY() <= Math.max(p.getY(), r.getY()) && q.getY() >= Math.min(p.getY(), r.getY()))
             return true;
@@ -114,7 +114,7 @@ public class InvisibleBoundary implements Boundary {
     // 0 --> p, q and r are collinear
     // 1 --> Clockwise
     // 2 --> Counterclockwise
-    static int orientation(Vector p, Vector q, Vector r) {
+    private int orientation(Vector p, Vector q, Vector r) {
         // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
         // for details of below formula.
         double val = (q.getY() - p.getY()) * (r.getX() - q.getX()) -

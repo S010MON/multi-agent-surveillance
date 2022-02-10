@@ -16,6 +16,7 @@ import javafx.util.Duration;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameEngine
@@ -36,12 +37,18 @@ public class GameEngine
 
     public void tick()
     {
+        for (Agent a :map.getAgents())
+        {
+            Vector startPoint = a.getPosition();
+            Vector endPoint = a.move(); // This must return
 
-        map.getAgents().forEach(a -> a.move());
+            if (legalMove(startPoint, endPoint))
+                a.updateLocation(endPoint);
+        }
 
         map.getAgents().stream()
                         .forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        test(map);
+
         renderer.render();
     }
 
@@ -61,14 +68,13 @@ public class GameEngine
     }
 
 
-    public void test(Map map){
-//        map.getFurniture().forEach(obstacle -> Arrays.toString(obstacle.getBoundaries().toArray()));
-
-        map.getFurniture().forEach(obstacle -> obstacle.getBoundaries());
-        for (Furniture obs : map.getFurniture()) {
-            System.out.println(obs.getBoundaries());
+    private boolean legalMove(Vector start, Vector end)
+    {
+        for (Boundary bdy : map.getBoundaries())
+        {
+            if(!bdy.validMove(start, end))
+                return false;
         }
-
-        System.out.println(map.getFurniture());
+        return true;
     }
 }

@@ -25,7 +25,13 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public void move()
+    public void updateLocation(Vector endPoint)
+    {
+        position = endPoint;
+    }
+
+    @Override
+    public Vector move()
     {
         double x = Math.random() * MAX_WALK;
         if(Math.random() > 0.5)
@@ -34,7 +40,7 @@ public class AgentImp implements Agent
         if(Math.random() > 0.5)
             y = y * -1;
 
-        position = position.add(new Vector(x, y));
+        return new Vector(x, y);
     }
 
     @Override
@@ -84,5 +90,10 @@ public class AgentImp implements Agent
     public Vector intersection(Ray ray)
     {
         return null;
+    }
+
+    @Override
+    public boolean validMove(Vector startPoint, Vector endPoint) {
+        return false;
     }
 }

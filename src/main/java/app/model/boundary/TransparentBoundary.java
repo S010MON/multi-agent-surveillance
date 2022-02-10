@@ -20,4 +20,9 @@ public class TransparentBoundary implements Boundary
     {
         return null;
     }
+
+    @Override
+    public boolean validMove(Vector startPoint, Vector endPoint) {
+        return false;
+    }
 }

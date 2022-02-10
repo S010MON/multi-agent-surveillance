@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 public interface Agent extends Boundary
 {
-    void move();
+    void updateLocation(Vector endPoint);
+
+    Vector move();
 
     Vector getPosition();
 

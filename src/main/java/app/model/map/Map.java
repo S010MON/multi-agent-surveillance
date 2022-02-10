@@ -4,6 +4,7 @@ import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
+import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
@@ -23,7 +24,7 @@ public class Map
         this.settings = settings;
 
         agents = new ArrayList<>();
-        human = new Human(new Vector(400, 250), new Vector(1,0), 10);
+        human = new Human(new Vector(380, 250), new Vector(1,0), 10);
         agents.add(human);
 
         furniture = new ArrayList<>();
@@ -31,7 +32,7 @@ public class Map
         settings.getShade().forEach(e -> addFurniture(FurnitureType.SHADE, e));
 
         // Temp test of glass
-        Rectangle2D window = new Rectangle2D(300,150, 50,50);
+        Rectangle2D window = new Rectangle2D(200,150, 50,50);
         furniture.add(FurnitureFactory.make(FurnitureType.GLASS, window));
 
         System.out.println("done.");
@@ -62,5 +63,12 @@ public class Map
     public ArrayList<Furniture> getFurniture()
     {
         return furniture;
+    }
+
+    public ArrayList<Boundary> getBoundaries()
+    {
+        ArrayList<Boundary> boundaries = new ArrayList<>();
+        furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
+        return boundaries;
     }
 }
