@@ -23,7 +23,7 @@ public class RayScatterTest
 
         for(int i = 0; i < act.size(); i++)
         {
-            assertEquals(exp.get(i), act.get(i).angle());
+            assertEquals(exp.get(i), act.get(i).angle(), 0.001);
         }
     }
 }
