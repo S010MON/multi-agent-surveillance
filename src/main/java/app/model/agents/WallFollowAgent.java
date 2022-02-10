@@ -9,14 +9,16 @@ import java.util.Arrays;
 public class WallFollowAgent extends AgentImp
 {
 
-    private enum TurnType
+    public enum TurnType
     {
         LEFT,
         RIGHT,
         NO_TURN,
     }
+    private boolean movedForwardLast = false; // false if position didn't change and/or if only direction changed
     private TurnType lastTurn = TurnType.NO_TURN;
-    private final double MOVE_LENGTH = 1;  // equal to obstacleDetectionDistance as only care about walls within move range
+    private double moveLength = 1;  // equal to obstacleDetectionDistance as only care about walls within move range
+    private boolean DEBUG = false;
 
     public WallFollowAgent(Vector position, Vector direction, double radius)
     {
@@ -42,29 +44,39 @@ public class WallFollowAgent extends AgentImp
         Vector newMove = new Vector(0,0);
         if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
         {
-            newMove = new Vector(MOVE_LENGTH * direction.getX(), MOVE_LENGTH * direction.getY());
+            if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
+            newMove = new Vector(moveLength * direction.getX(), moveLength * (-direction.getY()));
+            movedForwardLast = true;
+            lastTurn = TurnType.NO_TURN;
         }
         else if (noWallDetected(getAngleOfLeftRay()))
         {
+            if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             direction = rotateAgentLeft(true);
+            movedForwardLast = false;
         }
         else if (noWallDetected(direction.getAngle()))
         {
-            newMove = new Vector(MOVE_LENGTH * direction.getX(), MOVE_LENGTH * direction.getY());
+            if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
+            newMove = new Vector(moveLength * direction.getX(), moveLength * (-direction.getY()));
+            movedForwardLast = true;
+            lastTurn = TurnType.NO_TURN;
         }
         else
         {
+            if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
             rotateAgentLeft(false);
+            movedForwardLast = false;
         }
         position = position.add(newMove);
     }
 
-    private boolean noWallDetected(double rayAngle)
+    public boolean noWallDetected(double rayAngle)
     {
-        // if the ray with given rayAngle detects an obstacle -> return false
+        // if the ray with given rayAngle (+-5 degrees) detects an obstacle -> return false
         for (Ray r : view)
         {
-            if (r.angle() == rayAngle && r.rayLength() < MOVE_LENGTH) {
+            if ((r.angle() <= rayAngle + 5.0 || r.angle() >= rayAngle - 5.0) && r.rayLength() < moveLength) {
                 return false;
             }
         }
@@ -108,7 +120,7 @@ public class WallFollowAgent extends AgentImp
         return direction;
     }
 
-    private double getAngleOfLeftRay()
+    public double getAngleOfLeftRay()
     {
         double currentAngle = direction.getAngle();
         if (currentAngle >= 90)
@@ -119,6 +131,35 @@ public class WallFollowAgent extends AgentImp
         {
             return 360 + (currentAngle - 90);
         }
+    }
+
+    public void setMoveLength(double moveLength)
+    {
+        this.moveLength = moveLength;
+    }
+
+    public void setLastTurn(TurnType turn)
+    {
+        lastTurn = turn;
+    }
+
+    public void setMovedForwardLast(boolean movedForward)
+    {
+        movedForwardLast = movedForward;
+    }
+
+    public TurnType getLastTurn()
+    {
+        return lastTurn;
+    }
+
+    public boolean isMovedForwardLast()
+    {
+        return movedForwardLast;
+    }
+
+    public void setDEBUG(boolean debug) {
+        this.DEBUG = debug;
     }
 
 }
