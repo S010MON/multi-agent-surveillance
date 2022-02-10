@@ -125,16 +125,8 @@ public class VectorTest
     {
         Vector u = new Vector(0,10);
         Vector v = u.rotate(90);
-        assertEquals(v.getX(), -10, 0.001);
+        assertEquals(v.getX(), 10, 0.001);
         assertEquals(v.getY(), 0, 0.001);
-    }
-
-    @Test void rotate9()
-    {
-        Vector u = new Vector(10,0);
-        u = u.rotate(9);
-        assertEquals(9.87, u.getX(), 0.01);
-        assertEquals(1.56, u.getY(), 0.01);
     }
 
     @Test void getAngle0_PosPos()

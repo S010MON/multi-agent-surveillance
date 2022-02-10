@@ -51,7 +51,7 @@ public class RayTest
         Ray s = r.rotate(90);
         assertEquals(0, s.getU().getX(), 0.001);
         assertEquals(0, s.getU().getY(), 0.001);
-        assertEquals(-10, s.getV().getX(), 0.001);
+        assertEquals(10, s.getV().getX(), 0.001);
         assertEquals(0, s.getV().getY(), 0.001);
     }
 
@@ -87,7 +87,7 @@ public class RayTest
         Ray s = r.rotate(90);
         assertEquals(10, s.getU().getX(), 0.001);
         assertEquals(10, s.getU().getY(), 0.001);
-        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(20, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
     }
 
@@ -122,7 +122,7 @@ public class RayTest
         }
         assertEquals(10, s.getU().getX(), 0.001);
         assertEquals(10, s.getU().getY(), 0.001);
-        assertEquals(0, s.getV().getX(), 0.001);
+        assertEquals(20, s.getV().getX(), 0.001);
         assertEquals(10, s.getV().getY(), 0.001);
     }
 
