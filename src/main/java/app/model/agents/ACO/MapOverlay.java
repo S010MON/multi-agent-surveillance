@@ -44,15 +44,30 @@ public class MapOverlay
         return (int)(position.getX() / colSize);
     }
 
-    public void updateAgent(Vector movement, AcoAgent agent)
+
+    public void removeAgent(AcoAgent agent)
     {
         int row = getCellRow(agent.getPosition());
         int col = getCellCol(agent.getPosition());
         grid[row][col].removeAgent();
+    }
 
+    public void placeAgent(Vector movement, AcoAgent agent)
+    {
+        int row = getCellRow(agent.getPosition());
+        int col = getCellCol(agent.getPosition());
 
         int updatedRow = row + (int)movement.getY();
         int updatedCol = col + (int)movement.getX();
-        grid[updatedRow][updatedCol].addAgent(agent);
+
+        Cell cell = grid[updatedRow][updatedCol];
+        cell.addAgent(agent);
+        cell.pheramonePlacement();
+    }
+
+    public void updateAgent(Vector movement, AcoAgent agent)
+    {
+        removeAgent(agent);
+        placeAgent(movement, agent);
     }
 }

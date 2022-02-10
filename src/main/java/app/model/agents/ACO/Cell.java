@@ -1,7 +1,5 @@
 package app.model.agents.ACO;
 
-import app.model.agents.Agent;
-
 public class Cell
 {
     private AcoAgent agent;
@@ -27,5 +25,14 @@ public class Cell
     public void removeAgent()
     {
         this.agent = null;
+    }
+
+    public void pheramonePlacement()
+    {
+        if(this.agent != null)
+        {
+            this.agent.releasePheramone();
+        }
+        throw new RuntimeException("No agent present within this cell");
     }
 }

@@ -12,4 +12,9 @@ public class AcoAgent extends AgentImp
     {
         super(position, direction, radius);
     }
+
+    public double releasePheramone()
+    {
+        return maxPheramone;
+    }
 }
