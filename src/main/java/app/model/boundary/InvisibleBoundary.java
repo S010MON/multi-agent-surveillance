@@ -44,7 +44,8 @@ public class InvisibleBoundary implements Boundary {
     }
 
     @Override
-    public Vector intersection(Ray ray) {
+    public Vector intersection(Ray ray)
+    {
         double x_1 = a.getX();
         double y_1 = a.getY();
         double x_2 = b.getX();
