@@ -1,6 +1,5 @@
 package app.controller;
 
-import app.model.map.Map;
 import javafx.geometry.Rectangle2D;
 import java.awt.Point;
 
