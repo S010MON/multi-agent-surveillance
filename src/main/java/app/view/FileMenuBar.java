@@ -6,7 +6,7 @@ import javafx.scene.control.MenuItem;
 
 public class FileMenuBar extends MenuBar
 {
-    public FileMenuBar()
+    public FileMenuBar(Frame frame)
     {
         // File menu
         Menu fileMenu = new Menu("File");
@@ -22,7 +22,11 @@ public class FileMenuBar extends MenuBar
         Menu mapBuildMenu = new Menu("Map Builder");
         // Map Builder item
         MenuItem mapBuilder = new MenuItem("Map Builder");
-        mapBuilder.setOnAction(e -> Frame.setCenter(new MapBuilder(2048, 1024)));
+        mapBuilder.setOnAction(e ->
+        {
+            frame.setCenter(new MapBuilder(1350, 800));
+            frame.setLeft(new SideMenu(250, 800));
+        });
         mapBuildMenu.getItems().add(mapBuilder);
 
         // Add to the Menu Bar object

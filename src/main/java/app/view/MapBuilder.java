@@ -1,6 +1,7 @@
 package app.view;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class MapBuilder extends Canvas
@@ -11,12 +12,14 @@ public class MapBuilder extends Canvas
     {
         super(width, height);
         backgroundColour = Color.WHITE;
-        // Create Sidebar
-
+        // Background
+        GraphicsContext gc = this.getGraphicsContext2D();
+        drawBackground(gc);
     }
 
-    public void sideBar()
+    public void drawBackground(GraphicsContext gc)
     {
-
+        gc.setFill(backgroundColour);
+        gc.fillRect(0, 0, getWidth(), getHeight());
     }
 }
