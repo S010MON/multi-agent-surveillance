@@ -3,6 +3,7 @@ package app.view;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -21,11 +22,14 @@ public class SideMenu extends StackPane
     public void loadButtons(VBox vbox)
     {
         // Spawn areas
+        Label spawns = new Label("Spwan Areas:");
         Button aSpawn = new Button("Agent Spawn Area");
         Button iSpawn = new Button("Intruder Spawn Area");
-        vbox.getChildren().addAll(aSpawn, iSpawn);
+        vbox.getChildren().addAll(spawns, aSpawn, iSpawn);
 
         // Furniture type enums
+        Label furniture = new Label("Furniture Items:");
+        vbox.getChildren().add(furniture);
         for(FurnitureType ft : FurnitureType.values())
         {
             Button furnType = new Button(""+ft);
@@ -33,9 +37,10 @@ public class SideMenu extends StackPane
         }
 
         // Functionality buttons
+        Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         Button crOpen = new Button("Create & Open");
 
-        vbox.getChildren().addAll(create, crOpen);
+        vbox.getChildren().addAll(func, create, crOpen);
     }
 }
