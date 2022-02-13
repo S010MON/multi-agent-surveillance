@@ -8,6 +8,7 @@ public class Ray
 {
     public Vector u;
     public Vector v;
+    private double angle;
     private Color colour = Color.RED;
     private final double LINE_WIDTH = 1;
 
@@ -15,6 +16,7 @@ public class Ray
     {
         this.u = u;
         this.v = v;
+        this.angle = angle();
     }
 
     public Vector getV()
@@ -34,10 +36,10 @@ public class Ray
 
     public Ray rotate(double degrees)
     {
-        Vector unitVector = v.sub(u);
-        Vector rotatedVector = unitVector.rotate(degrees);
-        Vector newVector = u.add(rotatedVector);
-        return new Ray(this.u, newVector);
+        Vector a = v.sub(u);
+        Vector rotatedVector = a.rotate(degrees);
+        Vector b = u.add(rotatedVector);
+        return new Ray(this.u, b);
     }
 
     public void draw(GraphicsContext gc)

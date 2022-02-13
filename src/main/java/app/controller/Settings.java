@@ -25,8 +25,10 @@ public class Settings
     private ArrayList<Rectangle2D> towers;
     private ArrayList<Rectangle2D> portals;
     private ArrayList<Point> teleportTo;
+    private ArrayList<Double> teleportOrientations;
     private ArrayList<Rectangle2D> textures;
     private ArrayList<Integer> textureType;
+    private ArrayList<Integer> textureOrientations;
     private Rectangle2D targetArea;
     private Rectangle2D spawnAreaIntruders;
     private Rectangle2D spawnAreaGuards;
@@ -38,8 +40,10 @@ public class Settings
         towers = new ArrayList<>();
         portals = new ArrayList<>();
         teleportTo = new ArrayList<>();
+        teleportOrientations= new ArrayList<>();
         textures = new ArrayList<>();
         textureType = new ArrayList<>();
+        textureOrientations= new ArrayList<>();
     }
 
     public void setName(String name)
@@ -112,6 +116,17 @@ public class Settings
     {
         if(unlocked)
             this.scaling = scaling;
+    }
+
+    public void addTeleportOrientation(double teleportOrientation)
+    {
+        if(unlocked)
+            this.teleportOrientations.add(teleportOrientation);
+    }
+    public void addTextureOrientation(int textureOrientation)
+    {
+        if(unlocked)
+            this.textureOrientations.add(textureOrientation);
     }
 
     public void addWall(Rectangle2D wall)
@@ -237,6 +252,16 @@ public class Settings
     public double getScaling()
     {
         return this.scaling;
+    }
+
+    public ArrayList<Double> getTeleportOrientations()
+    {
+        return this.teleportOrientations;
+    }
+
+    public ArrayList<Integer> getTextureOrientations()
+    {
+        return this.textureOrientations;
     }
 
     public ArrayList<Rectangle2D> getWalls()

@@ -4,6 +4,8 @@ import app.controller.linAlg.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class VectorTest
 {
@@ -125,16 +127,8 @@ public class VectorTest
     {
         Vector u = new Vector(0,10);
         Vector v = u.rotate(90);
-        assertEquals(v.getX(), -10, 0.001);
+        assertEquals(v.getX(), 10, 0.001);
         assertEquals(v.getY(), 0, 0.001);
-    }
-
-    @Test void rotate9()
-    {
-        Vector u = new Vector(10,0);
-        u = u.rotate(9);
-        assertEquals(9.87, u.getX(), 0.01);
-        assertEquals(1.56, u.getY(), 0.01);
     }
 
     @Test void getAngle0_PosPos()
@@ -173,6 +167,17 @@ public class VectorTest
         assertEquals(315, v.getAngle());
     }
 
+    @Test void rotateThrough360in30Degrees()
+    {
+        Vector v = new Vector(0,10);
+        for(int i = 0; i < 360; i+=30)
+        {
+            double angle = (double) i;
+            double act = v.rotate(angle).getAngle();
+            assertEquals(angle, act, 0.001);
+        }
+    }
+
     @Test void testLength()
     {
         Vector u = new Vector(1, -2);
@@ -198,5 +203,31 @@ public class VectorTest
         //check that same still direction
         assertEquals(u.getX()/u.getY(), normU.getX()/normU.getY(), 0.01);
         assertEquals(v.getX()/v.getY(), normV.getX()/normV.getY(), 0.01);
+    }
+    @Test void vectorEquals()
+    {
+        Vector u = new Vector(345, 200);
+        Vector v = new Vector(345, 200);
+
+        assertTrue(u.equals(v));
+    }
+
+    @Test void vectorNotEquals()
+    {
+        Vector u = new Vector(345, 201);
+        Vector v = new Vector(345, 200);
+
+        assertFalse(u.equals(v));
+    }
+
+    @Test void testHashCodeDeterministic()
+    {
+        Vector u = new Vector(345, 201);
+        Integer u_hashCode = u.vectorHashCode();
+
+        Vector u_copy = new Vector(345, 201);
+        Integer uCopy_hashCode = u.vectorHashCode();
+
+        assertEquals(u_hashCode, uCopy_hashCode);
     }
 }

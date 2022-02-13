@@ -83,7 +83,8 @@ public class FileParser
                         map.setScaling(Double.parseDouble(val));
                         break;
                     case "wall":
-                        map.addWall(new Rectangle2D(Double.parseDouble(coords[0]),
+                        map.addWall(new Rectangle2D(
+                                Double.parseDouble(coords[0]),
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
@@ -107,7 +108,7 @@ public class FileParser
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         map.addTeleportTo(new Point(Integer.parseInt(coords[4]),
                                                     Integer.parseInt(coords[5])));
-                        // Here coords[6] is the orientation, no element in settings for this, can be added if needed
+                        map.addTeleportOrientation(Double.parseDouble(coords[6]));
                         break;
                     case "texture":
                         map.addTexture(new Rectangle2D(Double.parseDouble(coords[0]),
@@ -115,7 +116,7 @@ public class FileParser
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         map.addTextureType(Integer.parseInt(coords[4]));
-                        // Here coords[5] is the orientation, can also be added like above for portals
+                        map.addTextureOrientation(Integer.parseInt(coords[5]));
                         break;
                     case "targetArea":
                         map.setTargetArea(new Rectangle2D(Double.parseDouble(coords[0]),
