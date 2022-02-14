@@ -1,6 +1,6 @@
 # ignored files
 /shelf/
 /.idea/
-/.build/
+/build/
 # Project exclude paths
 /.gradle/
