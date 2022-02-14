@@ -1,6 +1,6 @@
 package jgfx.javagradlefx;
 
-import app.controller.linAlg.MultiVecOpra;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ public class MultiVectorTest {
         Vector p3 = new Vector(0, 3);
         Vector p4 = new Vector(3, 0);
 
-        MultiVecOpra multi = new MultiVecOpra(p1, p2, p3, p4);
+        Intersection multi = new Intersection(p1, p2, p3, p4);
         assertEquals(true, multi.findIntersection());
     }
 
@@ -27,7 +27,7 @@ public class MultiVectorTest {
         Vector p3 = new Vector(0, 1);
         Vector p4 = new Vector(1, 1);
 
-        MultiVecOpra multi = new MultiVecOpra(p1, p2, p3, p4);
+        Intersection multi = new Intersection(p1, p2, p3, p4);
         assertEquals(false, multi.findIntersection());
     }
 
@@ -39,7 +39,7 @@ public class MultiVectorTest {
         Vector p3 = new Vector(0, 2);
         Vector p4 = new Vector(0, 3);
 
-        MultiVecOpra multi = new MultiVecOpra(p1, p2, p3, p4);
+        Intersection multi = new Intersection(p1, p2, p3, p4);
         assertEquals(false, multi.findIntersection());
     }
 
@@ -50,7 +50,7 @@ public class MultiVectorTest {
         Vector p3 = new Vector(1, 0);
         Vector p4 = new Vector(6, 0);
 
-        MultiVecOpra multi = new MultiVecOpra(p1, p2, p3, p4);
+        Intersection multi = new Intersection(p1, p2, p3, p4);
         assertEquals(false, multi.findIntersection());
     }
 
@@ -61,7 +61,7 @@ public class MultiVectorTest {
         Vector p3 = new Vector(0, 4);
         Vector p4 = new Vector(3, 4);
 
-        MultiVecOpra multi = new MultiVecOpra(p1, p2, p3, p4);
+        Intersection multi = new Intersection(p1, p2, p3, p4);
         assertEquals(true, multi.findIntersection());
     }
 }

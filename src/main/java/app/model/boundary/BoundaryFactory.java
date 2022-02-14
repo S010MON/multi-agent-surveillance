@@ -26,7 +26,7 @@ public abstract class BoundaryFactory
         {
             case WALL -> { return new VisibleBoundary(a, b);}
             case SHADE -> { return new InvisibleBoundary(a, b);}
-            case GLASS -> { return  new TransparentBoundary();}
+            case GLASS -> { return  new TransparentBoundary(a, b);}
         }
         return null; // Redundant by design
     }

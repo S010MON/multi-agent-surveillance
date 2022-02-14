@@ -1,13 +1,12 @@
 package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.linAlg.MultiVecOpra;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
-
-public class InvisibleBoundary implements Boundary {
+public class InvisibleBoundary implements Boundary
+{
     protected Vector a;
     protected Vector b;
 
@@ -66,12 +65,6 @@ public class InvisibleBoundary implements Boundary {
     @Override
     public boolean validMove(Vector startPoint, Vector endPoint)
     {
-            MultiVecOpra checkIntersect = new MultiVecOpra(startPoint,endPoint,a,b);
-
-        if(checkIntersect.findIntersection()) {
-            return true;
-        }else{
-            return false;}
+        return Intersection.findIntersection(startPoint,endPoint,a,b);
     }
-
 }
