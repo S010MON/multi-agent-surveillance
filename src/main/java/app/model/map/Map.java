@@ -9,12 +9,17 @@ import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 public class Map
 {
     private ArrayList<Furniture> furniture;
     private ArrayList<Agent> agents;
+    private Rectangle2D guardSpawn;
+    private Rectangle2D intruderSpawn;
     private Human human;
     private Settings settings;
 
@@ -22,18 +27,34 @@ public class Map
     {
         System.out.print("Loading settings ... ");
         this.settings = settings;
+        this.guardSpawn = settings.getSpawnAreaGuards();
+        this.intruderSpawn = settings.getSpawnAreaIntruders();
 
-        agents = new ArrayList<>();
-        human = new Human(new Vector(380, 250), new Vector(1,0), 10);
-        agents.add(human);
-
+        /* Make furniture */
         furniture = new ArrayList<>();
         settings.getWalls().forEach(e -> addFurniture(FurnitureType.WALL, e));
         settings.getShade().forEach(e -> addFurniture(FurnitureType.SHADE, e));
+        settings.getGlass().forEach(e -> addFurniture(FurnitureType.GLASS, e));
 
-        // Temp test of glass
-        Rectangle2D window = new Rectangle2D(200,150, 50,50);
-        furniture.add(FurnitureFactory.make(FurnitureType.GLASS, window));
+        agents = new ArrayList<>();
+
+        // On creation add the right number of guards
+        for(int i = 0; i < settings.getNoOfGuards(); i++)
+        {
+            Vector guardStart = new Vector(randX(guardSpawn), randY(guardSpawn));
+            /* TODO Add guard agents here!!! */
+        }
+
+        // On creation add the right number of infiltrators
+        for(int i = 0; i < settings.getNoOfIntruders(); i++)
+        {
+            Vector intruderStart = new Vector(randX(intruderSpawn), randY(intruderSpawn));
+            /* TODO intruder agents here!!! */
+        }
+
+        Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
+        human = new Human(humanStart, new Vector(1,0), 10);
+        agents.add(human);
 
         System.out.println("done.");
     }
@@ -70,5 +91,33 @@ public class Map
         ArrayList<Boundary> boundaries = new ArrayList<>();
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
+    }
+
+    public void drawGuardSpawn(GraphicsContext gc)
+    {
+        gc.setStroke(Color.BLUE);
+        gc.strokeRect(guardSpawn.getMinX(),
+                      guardSpawn.getMinY(),
+                      guardSpawn.getHeight(),
+                      guardSpawn.getHeight());
+    }
+
+    public void drawIntruderSpawn(GraphicsContext gc)
+    {
+        gc.setStroke(Color.RED);
+        gc.strokeRect(intruderSpawn.getMinX(),
+                      intruderSpawn.getMinY(),
+                      intruderSpawn.getHeight(),
+                      intruderSpawn.getHeight());
+    }
+
+    private double randX(Rectangle2D r)
+    {
+        return r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+    }
+
+    private double randY(Rectangle2D r)
+    {
+        return r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
     }
 }

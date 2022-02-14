@@ -22,6 +22,7 @@ public class Settings
     private double scaling;
     private ArrayList<Rectangle2D> walls;
     private ArrayList<Rectangle2D> shade;
+    private ArrayList<Rectangle2D> glass;
     private ArrayList<Rectangle2D> towers;
     private ArrayList<Rectangle2D> portals;
     private ArrayList<Point> teleportTo;
@@ -37,6 +38,7 @@ public class Settings
     {
         walls = new ArrayList<>();
         shade = new ArrayList<>();
+        glass = new ArrayList<>();
         towers = new ArrayList<>();
         portals = new ArrayList<>();
         teleportTo = new ArrayList<>();
@@ -139,6 +141,12 @@ public class Settings
     {
         if(unlocked)
             this.shade.add(shade);
+    }
+
+    public void addGlass(Rectangle2D glass)
+    {
+        if(unlocked)
+            this.glass.add(glass);
     }
 
     public void addTower(Rectangle2D tower)
@@ -272,6 +280,11 @@ public class Settings
     public ArrayList<Rectangle2D> getShade()
     {
         return (ArrayList<Rectangle2D>) this.shade.clone();
+    }
+
+    public ArrayList<Rectangle2D> getGlass()
+    {
+        return (ArrayList<Rectangle2D>) this.glass.clone();
     }
 
     public ArrayList<Rectangle2D> getTowers()

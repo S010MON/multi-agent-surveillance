@@ -18,7 +18,7 @@ public class SaveMapTest {
     @BeforeAll
     void createMapFile()
     {
-        Settings testSetting = FileParser.readGameFile("src/main/resources/map_1.txt");
+        Settings testSetting = FileParser.readGameFile("src/main/resources/map_test.txt");
         SaveMap.saveMap(testSetting);
 
         String filePathNameTest = FilePath.getFilePath("Save_map_1.txt");
@@ -42,7 +42,7 @@ public class SaveMapTest {
     void compareFiles()
     {
         String filePathNameTest = FilePath.getFilePath("Save_map_1.txt");
-        String filePathNameMap = "src/main/resources/map_1.txt";
+        String filePathNameMap = "src/main/resources/map_test.txt";
         try
         {
             File testFile = new File(filePathNameTest);
