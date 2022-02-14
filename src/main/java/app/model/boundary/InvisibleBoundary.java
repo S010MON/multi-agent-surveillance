@@ -1,6 +1,7 @@
 package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.MultiVecOpra;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -65,11 +66,9 @@ public class InvisibleBoundary implements Boundary {
     @Override
     public boolean validMove(Vector startPoint, Vector endPoint)
     {
-        Vector q1 = startPoint;
-        Vector p1 = endPoint;
-        Vector p2 = a;
-        Vector q2 = b;
-        if(hasIntersect(p1, q1, p2, q2)) {
+        MultiVecOpra checkIntersect = new MultiVecOpra(startPoint,endPoint,a,b);
+
+        if(checkIntersect.findIntersection()) {
             return true;
         }else{
             return false;}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="jgfx.javagradlefx.MultiVectorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-14T00:27:37" hostname="mah" time="0.025">
+  <properties/>
+  <testcase name="findIntersectionTest_noIntersect()" classname="jgfx.javagradlefx.MultiVectorTest" time="0.016"/>
+  <testcase name="findIntersectionTest_boundaryCheck_onePointOnLine()" classname="jgfx.javagradlefx.MultiVectorTest" time="0.003"/>
+  <testcase name="findIntersectionTest_boundaryCheck_inOneLine()" classname="jgfx.javagradlefx.MultiVectorTest" time="0.001"/>
+  <testcase name="findIntersectionTest_withIntersect()" classname="jgfx.javagradlefx.MultiVectorTest" time="0.001"/>
+  <testcase name="findIntersectionTest_boundaryCheck_linearlyIntersect()" classname="jgfx.javagradlefx.MultiVectorTest" time="0.001"/>
+  <system-out><![CDATA[LALALALALALALALALALLAAL
+LALALALALALALALALALLAAL
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

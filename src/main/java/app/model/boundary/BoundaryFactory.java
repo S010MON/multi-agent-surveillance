@@ -19,6 +19,7 @@ public abstract class BoundaryFactory
         return objects;
     }
 
+
     private static Boundary create(FurnitureType f, Vector a, Vector b)
     {
         switch (f)
