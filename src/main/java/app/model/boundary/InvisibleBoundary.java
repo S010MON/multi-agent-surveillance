@@ -66,7 +66,7 @@ public class InvisibleBoundary implements Boundary {
     @Override
     public boolean validMove(Vector startPoint, Vector endPoint)
     {
-        MultiVecOpra checkIntersect = new MultiVecOpra(startPoint,endPoint,a,b);
+            MultiVecOpra checkIntersect = new MultiVecOpra(startPoint,endPoint,a,b);
 
         if(checkIntersect.findIntersection()) {
             return true;
