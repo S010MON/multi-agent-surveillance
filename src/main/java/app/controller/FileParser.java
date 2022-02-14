@@ -94,6 +94,11 @@ public class FileParser
                                 Double.parseDouble(coords[1]),
                                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
+                    case "glass":
+                        map.addGlass(new Rectangle2D(Double.parseDouble(coords[0]),
+                                Double.parseDouble(coords[1]),
+                                Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
+                                Integer.parseInt(coords[3]) - Integer.parseInt(coords[1])));
                         break;
                     case "tower":
                         map.addTower(new Rectangle2D(Double.parseDouble(coords[0]),
