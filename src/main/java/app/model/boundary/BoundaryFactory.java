@@ -19,13 +19,14 @@ public abstract class BoundaryFactory
         return objects;
     }
 
+
     private static Boundary create(FurnitureType f, Vector a, Vector b)
     {
         switch (f)
         {
             case WALL -> { return new VisibleBoundary(a, b);}
             case SHADE -> { return new InvisibleBoundary(a, b);}
-            case GLASS -> { return  new TransparentBoundary();}
+            case GLASS -> { return  new TransparentBoundary(a, b);}
         }
         return null; // Redundant by design
     }
