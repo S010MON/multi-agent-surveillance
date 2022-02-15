@@ -38,7 +38,7 @@ public class FieldOfView {
             for(Ray ray: rays)
             {
                 double rayAngle = ray.angle();
-                if(rayAngle>leftAngle && rayAngle<rightAngle)
+                if(rayAngle>=leftAngle && rayAngle<=rightAngle)
                     acceptedRays.add(ray);
             }
         }
@@ -47,12 +47,12 @@ public class FieldOfView {
             for(Ray ray: rays)
             {
                 double rayAngle = ray.angle();
-                if(rayAngle>leftAngle || rayAngle<rightAngle)
+                if(rayAngle>=leftAngle || rayAngle<=rightAngle)
                     acceptedRays.add(ray);
             }
         }
 
-        return rays;
+        return acceptedRays;
     }
 
 }
