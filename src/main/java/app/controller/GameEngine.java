@@ -4,6 +4,8 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
+import app.model.boundary.Boundary;
+import app.model.furniture.Furniture;
 import app.model.map.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;
@@ -14,6 +16,8 @@ import javafx.util.Duration;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameEngine
 {
@@ -33,9 +37,18 @@ public class GameEngine
 
     public void tick()
     {
-        map.getAgents().forEach(a -> a.move());
+        for (Agent a :map.getAgents())
+        {
+            Vector startPoint = a.getPosition();
+            Vector endPoint = a.move();
+
+            if (legalMove(startPoint, endPoint))
+                a.updateLocation(endPoint);
+        }
+
         map.getAgents().stream()
                         .forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+
         renderer.render();
     }
 
@@ -52,5 +65,16 @@ public class GameEngine
             case "a" -> map.walk(new Vector(-1, 0));
             case "d" -> map.walk(new Vector(1, 0));
         }
+    }
+
+
+    private boolean legalMove(Vector start, Vector end)
+    {
+        for (Boundary bdy : map.getBoundaries())
+        {
+            if(bdy.validMove(start, end))
+                return false;
+        }
+        return true;
     }
 }

@@ -4,5 +4,5 @@ public enum FurnitureType
 {
     WALL,
     SHADE,
-    GLASS
+    GLASS,
 }

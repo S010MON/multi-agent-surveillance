@@ -18,4 +18,6 @@ public class VisibleBoundary extends InvisibleBoundary
         gc.setStroke(Color.BLACK);
         gc.strokeLine(a.getX(), a.getY(), b.getX(), b.getY());
     }
+
+
 }

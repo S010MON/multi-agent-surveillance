@@ -84,32 +84,8 @@ public class Vector
     /** Returns the clockwise angle from [0,1] direction */
     public double getAngle()
     {
-        double abs_y = Math.abs(y);
-        double abs_x = Math.abs(x);
-        double a = 0;
-
-        // Q1
-        if(x >= 0 && y >= 0 && abs_y >= abs_x)
-            a = Math.toDegrees(Math.atan(abs_x / abs_y));
-        else if(x >= 0 && y >= 0 && abs_y < abs_x)
-            a = 90 - Math.toDegrees(Math.atan(abs_y / abs_x));
-        // Q2
-        else if(x >= 0 && y < 0 && abs_y >= abs_x)
-            a = 90 + Math.toDegrees(Math.atan(abs_y / abs_x));
-        else if(x >= 0 && y < 0 && abs_y < abs_x)
-            a = 180 - Math.toDegrees(Math.atan(abs_x / abs_y));
-        // Q3
-        else if(x < 0 && y < 0 && abs_y >= abs_x)
-            a = 180 + Math.toDegrees(Math.atan(abs_x / abs_y));
-        else if(x < 0 && y < 0 && abs_y < abs_x)
-            a = 270 - Math.toDegrees(Math.atan(abs_y / abs_x));
-        // Q4
-        else if(x < 0 && y >= 0 && abs_x >= abs_y)
-            a = 270 + Math.toDegrees(Math.atan(abs_y / abs_x));
-        else if(x < 0 && y >= 0 && abs_y < abs_x)
-            a = 180 - Math.toDegrees(Math.atan(abs_x / abs_y));
-
-        return a;
+        // + 90 to set the angle to north, negate angle to make it clockwise
+        return (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
     }
 
     public Vector copy()
@@ -126,5 +102,10 @@ public class Vector
             return this.getX() == v.getX() && this.getY() == v.getY();
         }
         return false;
+    }
+
+    public Integer vectorHashCode()
+    {
+        return this.hashCode();
     }
 }

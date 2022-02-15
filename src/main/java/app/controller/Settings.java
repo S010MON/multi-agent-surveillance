@@ -22,11 +22,14 @@ public class Settings
     private double scaling;
     private ArrayList<Rectangle2D> walls;
     private ArrayList<Rectangle2D> shade;
+    private ArrayList<Rectangle2D> glass;
     private ArrayList<Rectangle2D> towers;
     private ArrayList<Rectangle2D> portals;
     private ArrayList<Point> teleportTo;
+    private ArrayList<Double> teleportOrientations;
     private ArrayList<Rectangle2D> textures;
     private ArrayList<Integer> textureType;
+    private ArrayList<Integer> textureOrientations;
     private Rectangle2D targetArea;
     private Rectangle2D spawnAreaIntruders;
     private Rectangle2D spawnAreaGuards;
@@ -35,11 +38,14 @@ public class Settings
     {
         walls = new ArrayList<>();
         shade = new ArrayList<>();
+        glass = new ArrayList<>();
         towers = new ArrayList<>();
         portals = new ArrayList<>();
         teleportTo = new ArrayList<>();
+        teleportOrientations= new ArrayList<>();
         textures = new ArrayList<>();
         textureType = new ArrayList<>();
+        textureOrientations= new ArrayList<>();
     }
 
     public void setName(String name)
@@ -114,6 +120,17 @@ public class Settings
             this.scaling = scaling;
     }
 
+    public void addTeleportOrientation(double teleportOrientation)
+    {
+        if(unlocked)
+            this.teleportOrientations.add(teleportOrientation);
+    }
+    public void addTextureOrientation(int textureOrientation)
+    {
+        if(unlocked)
+            this.textureOrientations.add(textureOrientation);
+    }
+
     public void addWall(Rectangle2D wall)
     {
         if(unlocked)
@@ -124,6 +141,12 @@ public class Settings
     {
         if(unlocked)
             this.shade.add(shade);
+    }
+
+    public void addGlass(Rectangle2D glass)
+    {
+        if(unlocked)
+            this.glass.add(glass);
     }
 
     public void addTower(Rectangle2D tower)
@@ -239,6 +262,16 @@ public class Settings
         return this.scaling;
     }
 
+    public ArrayList<Double> getTeleportOrientations()
+    {
+        return this.teleportOrientations;
+    }
+
+    public ArrayList<Integer> getTextureOrientations()
+    {
+        return this.textureOrientations;
+    }
+
     public ArrayList<Rectangle2D> getWalls()
     {
         return (ArrayList<Rectangle2D>) this.walls.clone();
@@ -247,6 +280,11 @@ public class Settings
     public ArrayList<Rectangle2D> getShade()
     {
         return (ArrayList<Rectangle2D>) this.shade.clone();
+    }
+
+    public ArrayList<Rectangle2D> getGlass()
+    {
+        return (ArrayList<Rectangle2D>) this.glass.clone();
     }
 
     public ArrayList<Rectangle2D> getTowers()

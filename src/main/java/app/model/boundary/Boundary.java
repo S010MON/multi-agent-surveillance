@@ -11,4 +11,6 @@ public interface Boundary
     boolean isHit(Ray ray);
 
     Vector intersection(Ray ray);
+
+    boolean validMove(Vector startPoint,Vector endPoint );
 }

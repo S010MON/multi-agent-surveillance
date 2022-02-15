@@ -26,23 +26,16 @@ public class Renderer extends Canvas
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
 
-        map.getFurniture()
-                .stream()
-                .forEach(e -> e.draw(gc));
-
-        map.getAgents()
-                .stream()
-                .forEach(e -> drawRays(gc, e.getView()));
-
-        map.getAgents()
-                .stream()
-                .forEach(e -> e.draw(gc));
+        map.drawIntruderSpawn(gc);
+        map.drawGuardSpawn(gc);
+        map.getFurniture().forEach(e -> e.draw(gc));
+        map.getAgents().forEach(e -> drawRays(gc, e.getView()));
+        map.getAgents().forEach(e -> e.draw(gc));
     }
 
     private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
     {
-        rays.stream()
-                .forEach(e -> e.draw(gc));
+        rays.forEach(e -> e.draw(gc));
     }
 
     private  void drawBackground(GraphicsContext gc)
@@ -50,6 +43,4 @@ public class Renderer extends Canvas
         gc.setFill(backgroundColour);
         gc.fillRect(0,0,getWidth(), getHeight());
     }
-
-
 }

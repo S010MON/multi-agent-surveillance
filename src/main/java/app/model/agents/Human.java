@@ -13,10 +13,17 @@ public class Human extends AgentImp
     }
 
     @Override
-    public void move()
+    public void updateLocation(Vector endPoint)
     {
-        position = position.add(nextMove);
+        position = endPoint;
+    }
+
+    @Override
+    public Vector move()
+    {
+        Vector temp = position.add(nextMove);
         nextMove = new Vector();
+        return temp;
     }
 
     public void walk(Vector nextMove)
