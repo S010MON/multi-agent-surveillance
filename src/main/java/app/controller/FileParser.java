@@ -35,18 +35,21 @@ public class FileParser
 
             ArrayList<Rectangle2D> walls = map.getWalls();
             ArrayList<Rectangle2D> newWalls = new ArrayList<>();
-            System.out.println("number of walls: " + walls.size());
-            int count = 0;
             for(Rectangle2D rec: walls)
             {
-                System.out.println("count: " + count);
-                count++;
-                System.out.println(rec.getMinX());
                 Rectangle2D newRec = new Rectangle2D(rec.getMinX()*scale, rec.getMinY()*scale, rec.getWidth()*scale, rec.getHeight()*scale);
-                System.out.println(newRec.getMinX());
                 newWalls.add(newRec);
             }
             map.setWalls(newWalls);
+
+            ArrayList<Rectangle2D> shade = map.getShade();
+            ArrayList<Rectangle2D> newShade = new ArrayList<>();
+            for(Rectangle2D rec: shade)
+            {
+                Rectangle2D newRec = new Rectangle2D(rec.getMinX()*scale, rec.getMinY()*scale, rec.getWidth()*scale, rec.getHeight()*scale);
+                newShade.add(newRec);
+            }
+            map.setShade(newShade);
 
             ArrayList<Rectangle2D> glass = map.getGlass();
             ArrayList<Rectangle2D> newGlass = new ArrayList<>();

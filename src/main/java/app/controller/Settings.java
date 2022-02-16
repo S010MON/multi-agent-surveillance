@@ -186,10 +186,16 @@ public class Settings
             this.walls = newWalls;
     }
 
+    public void setShade(ArrayList<Rectangle2D> newShade)
+    {
+        if(unlocked)
+            this.shade = newShade;
+    }
+
     public void setGlass(ArrayList<Rectangle2D> newGlass)
     {
         if(unlocked)
-            this.walls = newGlass;
+            this.glass = newGlass;
     }
 
     public void setTowers(ArrayList<Rectangle2D> newTowers)
