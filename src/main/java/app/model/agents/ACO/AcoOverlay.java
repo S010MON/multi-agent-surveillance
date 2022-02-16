@@ -2,16 +2,12 @@ package app.model.agents.ACO;
 
 import app.controller.linAlg.Vector;
 
-import java.util.ArrayList;
-
 public class AcoOverlay
 {
     private int rowSize;
     private int colSize;
     private Cell[][] grid;
     private double cellSize = 1.0;
-
-    private ArrayList<AcoAgent> agents = new ArrayList<>();
 
     public AcoOverlay(double length, double width)
     {
@@ -32,16 +28,33 @@ public class AcoOverlay
         initializeAllCells();
     }
 
-    public void addAgent(AcoAgent agent)
+    public void initializeAllCells()
     {
-        agents.add(agent);
+        for(int i = 0; i< grid.length; i++)
+        {
+            for(int j = 0; j < grid[i].length; j++)
+            {
+                grid[i][j] = new Cell();
+            }
+        }
+    }
 
+    public void updateAgent(AcoAgent agent)
+    {
         int row = getCellRow(agent.getPosition());
         int col = getCellCol(agent.getPosition());
-        Cell currentCell = grid[row][col];
+        grid[row][col].updatePheramone(agent.releasePheramone());
+    }
 
-        currentCell.addAgent(agent);
-        currentCell.pheramonePlacement();
+    public void evaporationProcess()
+    {
+        for(int row = 0; row < grid.length; row ++)
+        {
+            for(int col = 0; col < grid[row].length; col ++)
+            {
+                grid[row][col].evaporation();
+            }
+        }
     }
 
     public Cell getCell(Vector position)
@@ -60,42 +73,6 @@ public class AcoOverlay
     public int getCellCol(Vector position)
     {
         return (int)(position.getX() / cellSize);
-    }
-
-    public void removeAgent(AcoAgent agent)
-    {
-        int row = getCellRow(agent.getPosition());
-        int col = getCellCol(agent.getPosition());
-        grid[row][col].removeAgent();
-    }
-
-    //TODO Adapt method to accomodate sprinting where movement greater than 1
-    public void placeAgent(AcoAgent agent)
-    {
-
-        int row = getCellRow(agent.getPosition());
-        int col = getCellCol(agent.getPosition());
-
-        Cell cell = grid[row][col];
-        cell.addAgent(agent);
-        cell.pheramonePlacement();
-    }
-
-    public void updateAgent(AcoAgent agent)
-    {
-        removeAgent(agent);
-        placeAgent(movement, agent);
-    }
-
-    public void initializeAllCells()
-    {
-        for(int i = 0; i< grid.length; i++)
-        {
-            for(int j = 0; j < grid[i].length; j++)
-            {
-                grid[i][j] = new Cell();
-            }
-        }
     }
 
     public int getRowDimension()

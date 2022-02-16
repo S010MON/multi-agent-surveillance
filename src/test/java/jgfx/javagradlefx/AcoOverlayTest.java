@@ -8,6 +8,7 @@ import app.model.agents.ACO.Cell;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AcoOverlayTest
 {
@@ -52,30 +53,30 @@ public class AcoOverlayTest
     }
 
     @Test
-    void testGetCell()
+    void testUpdateAgent()
     {
         Vector agentPosition = new Vector(10.2, 12.3);
         AcoOverlay grid = new AcoOverlay(50.3, 25.7, 1);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
 
-        grid.addAgent(agent);
+        grid.updateAgent(agent);
         Cell occupiedCell = grid.getCell(agentPosition);
 
-        assertEquals(occupiedCell.cellPheramoneValue(), agent.accessPheramoneQuantity());
+        assertEquals(occupiedCell.currentPheramoneValue(), agent.accessPheramoneQuantity());
     }
 
     @Test
-    void testUpdate()
+    void testEvaporationProcess()
     {
         Vector agentPosition = new Vector(10.2, 12.3);
-        Vector agentMovement = new Vector(1, 0);
         AcoOverlay grid = new AcoOverlay(50.3, 25.7, 1);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-
-        grid.addAgent(agent);
         grid.updateAgent(agent);
 
-        Cell newCell = grid.getCell(agent.getPosition());
-        assertEquals(newCell.cellPheramoneValue(), agent.accessPheramoneQuantity());
+        double currentPheramone = grid.getCell(agentPosition).currentPheramoneValue();
+        grid.evaporationProcess();
+        double pheramoneAfterEvaporation = grid.getCell(agentPosition).currentPheramoneValue();
+
+        assertTrue(currentPheramone > pheramoneAfterEvaporation);
     }
 }

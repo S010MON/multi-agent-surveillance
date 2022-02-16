@@ -2,43 +2,27 @@ package app.model.agents.ACO;
 
 public class Cell
 {
-    private AcoAgent agent;
     private double pheramone;
-
-    public Cell(AcoAgent agent)
-    {
-        this.agent = agent;
-        this.pheramone = 0.0;
-    }
+    private double evaporationConstant = 0.001;
 
     public Cell()
     {
-        this.agent = null;
         this.pheramone = 0.0;
     }
 
-    public double cellPheramoneValue()
+    public double currentPheramoneValue()
     {
         return pheramone;
     }
 
-    public void addAgent(AcoAgent agent)
+    public void updatePheramone(double maxPheramone)
     {
-        this.agent = agent;
+        pheramone += maxPheramone;
     }
 
-    public void removeAgent()
+    public void evaporation()
     {
-        agent = null;
+        pheramone = pheramone * (1 - evaporationConstant);
     }
 
-    //TODO Update with correct pheramone equation
-    public void pheramonePlacement()
-    {
-        if(agent == null)
-        {
-            throw new RuntimeException("No agent present within this cell");
-        }
-        pheramone = agent.releasePheramone();
-    }
 }
