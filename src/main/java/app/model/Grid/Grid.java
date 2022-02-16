@@ -1,4 +1,4 @@
-package app.model.agents;
+package app.model.Grid;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.*;

@@ -2,7 +2,7 @@ package jgfx.javagradlefx;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.ACO.AcoAgent;
-import app.model.agents.ACO.AcoGrid;
+import app.model.Grid.AcoGrid;
 import app.model.agents.Cells.PheramoneCell;
 import org.junit.jupiter.api.Test;
 

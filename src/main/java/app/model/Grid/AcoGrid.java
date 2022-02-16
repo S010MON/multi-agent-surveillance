@@ -1,8 +1,8 @@
-package app.model.agents.ACO;
+package app.model.Grid;
 
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheramoneCell;
-import app.model.agents.Grid;
 
 public class AcoGrid extends Grid
 {

@@ -1,8 +1,8 @@
 package jgfx.javagradlefx;
 
 import app.controller.linAlg.Vector;
-import app.model.agents.*;
-import app.model.agents.ACO.AcoGrid;
+import app.model.Grid.Grid;
+import app.model.Grid.AcoGrid;
 import app.model.agents.Cells.BooleanCell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheramoneCell;
