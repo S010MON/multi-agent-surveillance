@@ -63,4 +63,19 @@ public class AcoOverlayTest
 
         assertEquals(occupiedCell.cellPheramoneValue(), agent.accessPheramoneQuantity());
     }
+
+    @Test
+    void testUpdate()
+    {
+        Vector agentPosition = new Vector(10.2, 12.3);
+        Vector agentMovement = new Vector(1, 0);
+        AcoOverlay grid = new AcoOverlay(50.3, 25.7, 1);
+        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
+
+        grid.addAgent(agent);
+        grid.updateAgent(agent);
+
+        Cell newCell = grid.getCell(agent.getPosition());
+        assertEquals(newCell.cellPheramoneValue(), agent.accessPheramoneQuantity());
+    }
 }

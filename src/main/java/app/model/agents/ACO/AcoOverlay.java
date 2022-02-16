@@ -69,20 +69,19 @@ public class AcoOverlay
         grid[row][col].removeAgent();
     }
 
-    public void placeAgent(Vector movement, AcoAgent agent)
+    //TODO Adapt method to accomodate sprinting where movement greater than 1
+    public void placeAgent(AcoAgent agent)
     {
+
         int row = getCellRow(agent.getPosition());
         int col = getCellCol(agent.getPosition());
 
-        int updatedRow = row + (int)movement.getY();
-        int updatedCol = col + (int)movement.getX();
-
-        Cell cell = grid[updatedRow][updatedCol];
+        Cell cell = grid[row][col];
         cell.addAgent(agent);
         cell.pheramonePlacement();
     }
 
-    public void updateAgent(Vector movement, AcoAgent agent)
+    public void updateAgent(AcoAgent agent)
     {
         removeAgent(agent);
         placeAgent(movement, agent);
