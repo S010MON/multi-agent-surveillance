@@ -17,4 +17,9 @@ public class AcoAgent extends AgentImp
     {
         return maxPheramone;
     }
+
+    public double accessPheramoneQuantity()
+    {
+        return maxPheramone;
+    }
 }

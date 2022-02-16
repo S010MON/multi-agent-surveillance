@@ -19,6 +19,7 @@ public class AcoOverlay
         this.colSize = (int)(width / cellSize);
 
         grid = new Cell[rowSize][colSize];
+        initializeAllCells();
     }
 
     public AcoOverlay(double length, double width, double cellSize)
@@ -28,31 +29,38 @@ public class AcoOverlay
         this.colSize = (int)(width / cellSize);
 
         grid = new Cell[rowSize][colSize];
+        initializeAllCells();
     }
 
     public void addAgent(AcoAgent agent)
     {
         agents.add(agent);
+
+        int row = getCellRow(agent.getPosition());
+        int col = getCellCol(agent.getPosition());
+        Cell currentCell = grid[row][col];
+
+        currentCell.addAgent(agent);
+        currentCell.pheramonePlacement();
     }
 
     public Cell getCell(Vector position)
     {
-        int row = (int)(position.getX() / rowSize);
-        int col = (int)(position.getY() / colSize);
+        int row = (int)(position.getY() / cellSize);
+        int col = (int)(position.getX() / cellSize);
 
         return grid[row][col];
     }
 
     public int getCellRow(Vector position)
     {
-        return (int)(position.getY() / rowSize);
+        return (int)(position.getY() / cellSize);
     }
 
     public int getCellCol(Vector position)
     {
-        return (int)(position.getX() / colSize);
+        return (int)(position.getX() / cellSize);
     }
-
 
     public void removeAgent(AcoAgent agent)
     {
@@ -78,6 +86,17 @@ public class AcoOverlay
     {
         removeAgent(agent);
         placeAgent(movement, agent);
+    }
+
+    public void initializeAllCells()
+    {
+        for(int i = 0; i< grid.length; i++)
+        {
+            for(int j = 0; j < grid[i].length; j++)
+            {
+                grid[i][j] = new Cell();
+            }
+        }
     }
 
     public int getRowDimension()

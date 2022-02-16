@@ -17,6 +17,11 @@ public class Cell
         this.pheramone = 0.0;
     }
 
+    public double cellPheramoneValue()
+    {
+        return pheramone;
+    }
+
     public void addAgent(AcoAgent agent)
     {
         this.agent = agent;
@@ -24,15 +29,16 @@ public class Cell
 
     public void removeAgent()
     {
-        this.agent = null;
+        agent = null;
     }
 
+    //TODO Update with correct pheramone equation
     public void pheramonePlacement()
     {
-        if(this.agent != null)
+        if(agent == null)
         {
-            this.agent.releasePheramone();
+            throw new RuntimeException("No agent present within this cell");
         }
-        throw new RuntimeException("No agent present within this cell");
+        pheramone = agent.releasePheramone();
     }
 }
