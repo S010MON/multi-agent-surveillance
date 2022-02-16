@@ -4,7 +4,7 @@ import app.controller.linAlg.Vector;
 
 import java.util.ArrayList;
 
-public class MapOverlay
+public class AcoOverlay
 {
     private int rowSize;
     private int colSize;
@@ -13,7 +13,7 @@ public class MapOverlay
 
     private ArrayList<AcoAgent> agents = new ArrayList<>();
 
-    public MapOverlay(double length, double width)
+    public AcoOverlay(double length, double width)
     {
         this.rowSize = (int)(length / cellSize);
         this.colSize = (int)(width / cellSize);
