@@ -4,6 +4,7 @@ import app.controller.Settings;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
+import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -37,6 +38,11 @@ public class Map
         settings.getGlass().forEach(e -> addFurniture(FurnitureType.GLASS, e));
 
         agents = new ArrayList<>();
+
+        /* Adds temporary WallFollowAgent */
+        Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
+        Vector dir = new Vector(1,0);
+        agents.add(new WallFollowAgent(srt, dir, 10));
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)

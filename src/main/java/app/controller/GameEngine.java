@@ -30,7 +30,7 @@ public class GameEngine
         this.map = map;
         this.renderer = renderer;
         this.graphicsEngine = new RayTracing();
-        Timeline timeline = new Timeline(new KeyFrame( Duration.millis(10),  ae -> tick()));
+        Timeline timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
@@ -46,8 +46,7 @@ public class GameEngine
                 a.updateLocation(endPoint);
         }
 
-        map.getAgents().stream()
-                        .forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
 
         renderer.render();
     }
