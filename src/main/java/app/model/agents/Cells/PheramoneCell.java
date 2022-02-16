@@ -2,15 +2,26 @@ package app.model.agents.Cells;
 
 public class PheramoneCell implements Cell
 {
-    private double value;
+    private double pheramone;
+    private double evaporationConstant = 0.001;
 
-    public double getValue()
+    public PheramoneCell()
     {
-        return value;
+        this.pheramone = 0.0;
     }
 
-    public void updateValue(double newValue)
+    public double currentPheramoneValue()
     {
-        value = newValue;
+        return pheramone;
+    }
+
+    public void updatePheramone(double maxPheramone)
+    {
+        pheramone += maxPheramone;
+    }
+
+    public void evaporation()
+    {
+        pheramone = pheramone * (1 - evaporationConstant);
     }
 }

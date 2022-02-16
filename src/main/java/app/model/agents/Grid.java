@@ -1,5 +1,6 @@
 package app.model.agents;
 
+import app.controller.linAlg.Vector;
 import app.model.agents.Cells.*;
 
 public class Grid
@@ -34,11 +35,34 @@ public class Grid
 
     public Cell getCellAt(int row, int col)
     {
-        switch (type)
-        {
-            case BOOLEAN -> {return (BooleanCell)grid[row][col];}
-            case PHERAMONE -> {return (PheramoneCell)grid[row][col];}
-        }
-        return null;
+        return grid[row][col];
+    }
+
+    public Cell getCellAt(Vector position)
+    {
+        int row = getCellRow(position);
+        int col = getCellCol(position);
+
+        return grid[row][col];
+    }
+
+    public int getCellRow(Vector position)
+    {
+        return (int)(position.getY() / cellSize);
+    }
+
+    public int getCellCol(Vector position)
+    {
+        return (int)(position.getX() / cellSize);
+    }
+
+    public int getRowDimension()
+    {
+        return grid.length;
+    }
+
+    public int getColDimension()
+    {
+        return grid[0].length;
     }
 }
