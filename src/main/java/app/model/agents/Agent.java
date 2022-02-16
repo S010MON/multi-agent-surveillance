@@ -17,6 +17,14 @@ public interface Agent extends Boundary
 
     ArrayList<Ray> getView();
 
+    double getMaxWalk();
+
+    double getMaxSprint();
+
+    void setMaxWalk(double walkSpeed);
+
+    void setMaxSprint(double sprintSpeed);
+
     void updateView(ArrayList<Ray> view);
 
     double getHearing();

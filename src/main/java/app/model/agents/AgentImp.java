@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class AgentImp implements Agent
 {
-    protected final double MAX_WALK = 5;
-    protected final double MAX_RUN = 10;
+    protected double maxWalk = 5;
+    protected double maxSprint = 10;
 
     protected Vector position;
     protected Vector direction;
@@ -33,10 +33,10 @@ public class AgentImp implements Agent
     @Override
     public Vector move()
     {
-        double x = Math.random() * MAX_WALK;
+        double x = Math.random() * maxWalk;
         if(Math.random() > 0.5)
             x = x * -1;
-        double y = Math.random() * MAX_WALK;
+        double y = Math.random() * maxWalk;
         if(Math.random() > 0.5)
             y = y * -1;
 
@@ -72,6 +72,18 @@ public class AgentImp implements Agent
     {
         return position;
     }
+
+    @Override
+    public double getMaxWalk() { return maxWalk; }
+
+    @Override
+    public double getMaxSprint() { return maxSprint; }
+
+    @Override
+    public void setMaxWalk(double walkSpeed) { this.maxWalk = walkSpeed; }
+
+    @Override
+    public void setMaxSprint(double sprintSpeed) { this.maxSprint = sprintSpeed; }
 
     @Override
     public void draw(GraphicsContext gc)

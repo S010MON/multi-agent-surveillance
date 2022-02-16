@@ -5,7 +5,6 @@ import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
-import app.model.furniture.Furniture;
 import app.model.map.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;
@@ -13,11 +12,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
-
-import java.time.Instant;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameEngine
 {
@@ -55,10 +49,10 @@ public class GameEngine
     {
         switch (e.getCharacter())
         {
-            case "W" -> map.run(new Vector(0, -1));
-            case "S" -> map.run(new Vector(0, 1));
-            case "A" -> map.run(new Vector(-1, 0));
-            case "D" -> map.run(new Vector(1, 0));
+            case "W" -> map.sprint(new Vector(0, -1));
+            case "S" -> map.sprint(new Vector(0, 1));
+            case "A" -> map.sprint(new Vector(-1, 0));
+            case "D" -> map.sprint(new Vector(1, 0));
             case "w" -> map.walk(new Vector(0, -1));
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));
