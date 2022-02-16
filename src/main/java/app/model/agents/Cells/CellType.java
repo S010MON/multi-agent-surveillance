@@ -1,4 +1,4 @@
-package app.model.agents;
+package app.model.agents.Cells;
 
     public enum CellType
     {

@@ -1,15 +1,15 @@
 package app.model.agents;
 
+import app.model.agents.Cells.*;
+
 public class Grid
 {
     protected int rowSize;
     protected int colSize;
     protected Cell[][] grid;
-    protected int cellSize = 1;
+    protected double cellSize = 1.0;
     protected CellType type;
 
-    Boolean boolDefault = false;
-    Double doubleDefault = 0.0;
 
     public Grid(double length, double width, CellType type)
     {
@@ -18,10 +18,10 @@ public class Grid
         this.type = type;
 
         grid = new Cell[rowSize][colSize];
-        initializeAllCellsDefault();
+        initializeAllCells();
     }
 
-    public void initializeAllCellsDefault()
+    public void initializeAllCells()
     {
         for(int row = 0; row < rowSize; row++)
         {
@@ -34,13 +34,10 @@ public class Grid
 
     public Cell getCellAt(int row, int col)
     {
-        if(type == CellType.BOOLEAN)
+        switch (type)
         {
-            return (BooleanCell)grid[row][col];
-        }
-        if(type == CellType.PHERAMONE)
-        {
-            return (PheramoneCell)grid[row][col];
+            case BOOLEAN -> {return (BooleanCell)grid[row][col];}
+            case PHERAMONE -> {return (PheramoneCell)grid[row][col];}
         }
         return null;
     }
