@@ -24,5 +24,4 @@ public class Cell
     {
         pheramone = pheramone * (1 - evaporationConstant);
     }
-
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class AgentImp implements Agent
 {
     protected final double MAX_WALK = 1;
-    protected final double MAX_RUN = 10;
+    protected final double MAX_RUN = 2;
 
     protected Vector position;
     protected Vector direction;
