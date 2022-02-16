@@ -125,6 +125,7 @@ public class Settings
         if(unlocked)
             this.teleportOrientations.add(teleportOrientation);
     }
+
     public void addTextureOrientation(int textureOrientation)
     {
         if(unlocked)
@@ -177,6 +178,42 @@ public class Settings
     {
         if(unlocked)
             this.textureType.add(textureType);
+    }
+
+    public void setWalls(ArrayList<Rectangle2D> newWalls)
+    {
+        if(unlocked)
+            this.walls = newWalls;
+    }
+
+    public void setGlass(ArrayList<Rectangle2D> newGlass)
+    {
+        if(unlocked)
+            this.walls = newGlass;
+    }
+
+    public void setTowers(ArrayList<Rectangle2D> newTowers)
+    {
+        if(unlocked)
+            this.towers = newTowers;
+    }
+
+    public void setPortals(ArrayList<Rectangle2D> newPortals)
+    {
+        if(unlocked)
+            this.portals = newPortals;
+    }
+
+    public void setTeleportTo(ArrayList<Point> newTeleportTo)
+    {
+        if(unlocked)
+            this.teleportTo = newTeleportTo;
+    }
+
+    public void setTextures(ArrayList<Rectangle2D> newTextures)
+    {
+        if(unlocked)
+            this.textures = newTextures;
     }
 
     public void setTargetArea(Rectangle2D targetArea)
