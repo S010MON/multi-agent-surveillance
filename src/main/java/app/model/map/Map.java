@@ -59,6 +59,15 @@ public class Map
         System.out.println("done.");
     }
 
+    public Map(Agent agent, ArrayList<Furniture> obstacles)
+    {
+        agents = new ArrayList<>();
+        agents.add(agent);
+
+        furniture = new ArrayList<>();
+        furniture.addAll(obstacles);
+    }
+
     public void walk(Vector v)
     {
         human.walk(v);
