@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.linAlg.Vector;
 import org.junit.jupiter.api.Test;
