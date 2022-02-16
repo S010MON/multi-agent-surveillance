@@ -21,6 +21,15 @@ public class AcoOverlay
         grid = new Cell[rowSize][colSize];
     }
 
+    public AcoOverlay(double length, double width, double cellSize)
+    {
+        this.cellSize = cellSize;
+        this.rowSize = (int)(length / cellSize);
+        this.colSize = (int)(width / cellSize);
+
+        grid = new Cell[rowSize][colSize];
+    }
+
     public void addAgent(AcoAgent agent)
     {
         agents.add(agent);
@@ -69,5 +78,15 @@ public class AcoOverlay
     {
         removeAgent(agent);
         placeAgent(movement, agent);
+    }
+
+    public int getRowDimension()
+    {
+        return grid.length;
+    }
+
+    public int getColDimension()
+    {
+        return grid[0].length;
     }
 }
