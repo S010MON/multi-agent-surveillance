@@ -24,8 +24,10 @@ public class Map
     private Human human;
     private Settings settings;
 
-    private final double DEFAULT_MAX_WALK = 5;
-    private final double DEFAULT_MAX_SPRINT = 10;
+    private final double DEFAULT_MAX_WALK_GUARD = 5;
+    private final double DEFAULT_MAX_SPRINT_GUARD = 10;
+    private final double DEFAULT_MAX_WALK_INTRUDER = 5;
+    private final double DEFAULT_MAX_SPRINT_INTRUDER = 10;
 
     public Map(Settings settings)
     {
@@ -79,8 +81,8 @@ public class Map
     {
         agents = new ArrayList<>();
         // Can't get maxSpeed from settings, so use default speeds
-        agent.setMaxWalk(DEFAULT_MAX_WALK);
-        agent.setMaxSprint(DEFAULT_MAX_SPRINT);
+        agent.setMaxWalk(DEFAULT_MAX_WALK_GUARD);
+        agent.setMaxSprint(DEFAULT_MAX_SPRINT_GUARD);
         agents.add(agent);
 
         furniture = new ArrayList<>();
