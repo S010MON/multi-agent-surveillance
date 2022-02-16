@@ -5,7 +5,7 @@ import app.controller.linAlg.Vector;
 
 import java.util.ArrayList;
 
-public class FieldOfView {
+public abstract class FieldOfView {
 
     /**
      * computes which rays are between the left and right limit clockwise
