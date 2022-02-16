@@ -24,6 +24,9 @@ public class Map
     private Human human;
     private Settings settings;
 
+    private final double DEFAULT_MAX_WALK = 5;
+    private final double DEFAULT_MAX_SPRINT = 10;
+
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
@@ -75,8 +78,9 @@ public class Map
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
         agents = new ArrayList<>();
-        agent.setMaxWalk(settings.getWalkSpeedGuard());
-        agent.setMaxSprint(settings.getSprintSpeedGuard());
+        // Can't get maxSpeed from settings, so use default speeds
+        agent.setMaxWalk(DEFAULT_MAX_WALK);
+        agent.setMaxSprint(DEFAULT_MAX_SPRINT);
         agents.add(agent);
 
         furniture = new ArrayList<>();
