@@ -2,11 +2,13 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.10'
-    // Note: the java modularity plugin is added by default with javafx, this manual addition is to override the version
-    // more info here https://discuss.gradle.org/t/unable-to-build-project-with-gradle-7-3-1-on-java-17/41601
-    id 'org.javamodularity.moduleplugin' version '1.8.10'
     id 'org.beryx.jlink' version '2.24.1'
     id 'io.freefair.lombok' version '6.4.0'
+
+    // Note: the java modularity plugin is added by default with javafx, this manual addition is to override the version
+    // more info here https://discuss.gradle.org/t/unable-to-build-project-with-gradle-7-3-1-on-java-17/41601
+    // id 'org.javamodularity.moduleplugin' version '1.8.10'
+    // Removed 16 Feb - Seems to have had no effect
 }
 
 version '1.0-SNAPSHOT'
@@ -37,6 +39,8 @@ javafx {
 }
 
 dependencies {
+
+    implementation 'org.projectlombok:lombok:1.18.22'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
