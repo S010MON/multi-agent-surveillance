@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class WallFollowAgent extends AgentImp
 {
@@ -17,7 +18,7 @@ public class WallFollowAgent extends AgentImp
     }
     private boolean movedForwardLast = false; // false if position didn't change and/or if only direction changed
     private TurnType lastTurn = TurnType.NO_TURN;
-    private double moveLength = 1;  // equal to obstacleDetectionDistance as only care about walls within move range
+    private double moveLength = 3;  // equal to obstacleDetectionDistance as only care about walls within move range
     private boolean DEBUG = false;
 
     public WallFollowAgent(Vector position, Vector direction, double radius)
@@ -29,16 +30,21 @@ public class WallFollowAgent extends AgentImp
 
     public Vector move()
     {
-        // pseudocode from: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
-        // pseudocode for simple (left) wall following algorithm:
-//        if (turned left previously and forward no wall)
-//            go forward;
-//        else if (no wall at left)
-//            turn 90 deg left;
-//        else if (no wall forward)
-//            go forward;
-//        else
-//            turn 90 deg right;
+        /*
+        pseudocode from: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
+        pseudocode for simple (left) wall following algorithm:
+
+        if (turned left previously and forward no wall)
+            go forward;
+        else if (no wall at left)
+            turn 90 deg left;
+        else if (no wall forward)
+            go forward;
+        else
+            turn 90 deg right;
+
+        NB! Agent currently only does wall following, but does not cover unexplored areas in middle!
+        */
 
         // agent always faces in the direction of the last move, i.e. last move was left, agent direction is left
         // so "going forward" means going in the direction where agent is facing
@@ -99,8 +105,10 @@ public class WallFollowAgent extends AgentImp
     {
         // if rotateLeft is true, rotate agent 90 degrees left
         // if rotateLeft id false, rotate agent 90 degrees right
-        ArrayList<Vector> directions = new ArrayList<>(Arrays.asList(new Vector(0,1),
-                new Vector(1,0), new Vector(0,-1), new Vector(-1,0)));
+        List<Vector> directions = Arrays.asList(new Vector(0,1),
+                new Vector(1,0),
+                new Vector(0,-1),
+                new Vector(-1,0));
         for (int i=0; i<=directions.size(); i++)
         {
             if (direction.equals(directions.get(i)) && !rotateLeft)

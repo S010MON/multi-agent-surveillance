@@ -44,8 +44,6 @@ public class WallFollowAgentTest
     @Test
     void testAgentViewRays()
     {
-        //agent.setDEBUG(true);
-
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -60,19 +58,18 @@ public class WallFollowAgentTest
         for (Ray r : agent.getView())
         {
             if (!agent.noWallDetected(r.angle())) {
-                // System.out.println("Wall hit with ray of angle: " + r.angle());
                 hittingRayAngles.add(r.angle());
             }
         }
 
-        //System.out.println(hittingRayAngles);
+        System.out.println("The angles of rays that hit the wall:");
+        System.out.println(hittingRayAngles);
         assertTrue(agent.getView().size() > 0);
     }
 
     @Test
     void testNoWallDetectedInFront()
     {
-        //agent.setDEBUG(true);
         //Map
         ArrayList<Furniture> walls = new ArrayList<>();
         Map map = new Map(agent, walls);
@@ -107,7 +104,6 @@ public class WallFollowAgentTest
     @Test
     void testWallDetectedInFront()
     {
-        //agent.setDEBUG(true);
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -127,7 +123,6 @@ public class WallFollowAgentTest
     @Test
     void testWallDetectedOnLeft()
     {
-        //agent.setDEBUG(true);
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
@@ -147,8 +142,6 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedInFrontButDetectedOnLeft()
     {
-        //agent.setDEBUG(true);
-
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
@@ -170,8 +163,6 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedOnLeftButDetectedInFront()
     {
-        //agent.setDEBUG(true);
-
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -239,9 +230,8 @@ public class WallFollowAgentTest
     {
         // ALGORITHM CASE 1
         // if (turned left previously and forward no wall)
-        //      go forward;
+        //      go forward
 
-        //agent.setDEBUG(true);
         agent.setLastTurn(WallFollowAgent.TurnType.LEFT);
         agent.setMovedForwardLast(false);
         agent.updateLocation(initialPosition);
@@ -272,9 +262,8 @@ public class WallFollowAgentTest
         // ALGORITHM CASE 2.1
         // (case 1 condition violated as last turn was not LEFT (i.e. was NO_TURN or RIGHT)) ->
         // if (no wall at left)
-        //    turn 90 deg left;
+        //    turn 90 deg left
 
-        //agent.setDEBUG(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
         agent.setMovedForwardLast(false);
 
@@ -305,9 +294,7 @@ public class WallFollowAgentTest
         // ALGORITHM CASE 2.2
         // (case 1 condition violated as there is a wall in front) ->
         // if (no wall at left)
-        //    turn 90 deg left;
-
-        //agent.setDEBUG(true);
+        //    turn 90 deg left
 
         // Map
         FurnitureType obstacleType = FurnitureType.WALL;
@@ -340,9 +327,8 @@ public class WallFollowAgentTest
         // ALGORITHM CASE 3
         // (case 1 violated as last turn not left; case 2 violated as there is wall on left) ->
         // if (no wall forward)
-        //    go forward;
+        //    go forward
 
-        //agent.setDEBUG(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
 
         //Map
@@ -375,9 +361,7 @@ public class WallFollowAgentTest
     {
         // ALGORITHM CASE 4
         // (case 1, 2 nd 3 violated as walls in front and on left) ->
-        //    turn 90 deg right;
-
-        //agent.setDEBUG(true);
+        //    turn 90 deg right
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
