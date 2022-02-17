@@ -77,12 +77,14 @@ public class Map
         System.out.println("done.");
     }
 
+    /**
+     * Only for testing, delete later
+     * @param agent
+     * @param obstacles
+     */
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
         agents = new ArrayList<>();
-        // Can't get maxSpeed from settings, so use default speeds
-        agent.setMaxWalk(DEFAULT_MAX_WALK_GUARD);
-        agent.setMaxSprint(DEFAULT_MAX_SPRINT_GUARD);
         agents.add(agent);
 
         furniture = new ArrayList<>();

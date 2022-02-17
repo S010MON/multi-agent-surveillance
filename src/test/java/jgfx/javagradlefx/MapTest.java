@@ -29,22 +29,4 @@ public class MapTest {
             assertEquals(maxSprint, a.getMaxSprint());
         }
     }
-
-    @Test
-    void setSpeedsAgentsInConstructionWithAgent()
-    {
-        AgentImp agent = new AgentImp(new Vector(0,0), new Vector(0,1), 10);
-        agent.setMaxWalk(2);
-        agent.setMaxSprint(5);
-        Map map = new Map(agent, new ArrayList<Furniture>());
-        ArrayList<Agent> agents = map.getAgents();
-        double maxWalk = 5;
-        double maxSprint= 10;
-        for(Agent a: agents)
-        {
-            assertEquals(maxWalk, a.getMaxWalk());
-            assertEquals(maxSprint, a.getMaxSprint());
-        }
-    }
-
 }
