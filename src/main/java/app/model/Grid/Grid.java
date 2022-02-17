@@ -18,19 +18,21 @@ public class Grid
         colSize = (int)(width / cellSize);
         this.type = type;
 
-        grid = new Cell[rowSize][colSize];
-        initializeAllCells();
+        grid = initializeAllCells();
     }
 
-    public void initializeAllCells()
+    public Cell[][] initializeAllCells()
     {
+        Cell[][] gridInitialization = new Cell[rowSize][colSize];
+
         for(int row = 0; row < rowSize; row++)
         {
             for(int col = 0; col < colSize; col++)
             {
-                grid[row][col] = CellFactory.make(type);
+                gridInitialization[row][col] = CellFactory.make(type);
             }
         }
+        return gridInitialization;
     }
 
     public Cell getCellAt(int row, int col)
