@@ -34,6 +34,8 @@ public class Settings
     private Rectangle2D spawnAreaIntruders;
     private Rectangle2D spawnAreaGuards;
 
+    private boolean scalingOn = true;
+
     public Settings()
     {
         walls = new ArrayList<>();
@@ -240,6 +242,11 @@ public class Settings
             this.spawnAreaGuards = spawnAreaGuards;
     }
 
+    public void setScalingOn(boolean scale)
+    {
+        this.scalingOn = scale;
+    }
+
     public void lock()
     {
         this.unlocked = false;
@@ -257,11 +264,15 @@ public class Settings
 
     public int getHeight()
     {
+        if(scalingOn)
+            return scaleInt(this.height);
         return this.height;
     }
 
     public int getWidth()
     {
+        if(scalingOn)
+            return scaleInt(this.width);
         return this.width;
     }
 
@@ -270,28 +281,33 @@ public class Settings
         return this.noOfGuards;
     }
 
-    public int getNoOfIntruders()
-    {
-        return this.noOfIntruders;
-    }
+    public int getNoOfIntruders() { return this.noOfIntruders; }
 
     public double getWalkSpeedGuard()
     {
+        if(scalingOn)
+            return this.walkSpeedGuard*scaling;
         return this.walkSpeedGuard;
     }
 
     public double getSprintSpeedGuard()
     {
+        if(scalingOn)
+            return this.sprintSpeedGuard*scaling;
         return this.sprintSpeedGuard;
     }
 
     public double getWalkSpeedIntruder()
     {
+        if(scalingOn)
+            return this.walkSpeedIntruder*scaling;
         return this.walkSpeedIntruder;
     }
 
     public double getSprintSpeedIntruder()
     {
+        if(scalingOn)
+            return this.sprintSpeedIntruder*scaling;
         return this.sprintSpeedIntruder;
     }
 
@@ -317,36 +333,50 @@ public class Settings
 
     public ArrayList<Rectangle2D> getWalls()
     {
+        if(scalingOn)
+            return scaleRecList(this.walls);
         return (ArrayList<Rectangle2D>) this.walls.clone();
     }
 
     public ArrayList<Rectangle2D> getShade()
     {
+        if(scalingOn)
+            return scaleRecList(this.shade);
         return (ArrayList<Rectangle2D>) this.shade.clone();
     }
 
     public ArrayList<Rectangle2D> getGlass()
     {
+        if(scalingOn)
+            return scaleRecList(this.glass);
         return (ArrayList<Rectangle2D>) this.glass.clone();
     }
 
     public ArrayList<Rectangle2D> getTowers()
     {
+        if(scalingOn)
+            return scaleRecList(this.towers);
         return (ArrayList<Rectangle2D>) this.towers.clone();
     }
 
     public ArrayList<Rectangle2D> getPortals()
     {
+        if(scalingOn)
+            return scaleRecList(this.portals);
         return (ArrayList<Rectangle2D>) this.portals.clone();
     }
 
     public ArrayList<Point> getTeleportTo()
     {
+        if(scalingOn)
+            return scalePointList(this.teleportTo);
         return (ArrayList<Point>) this.teleportTo.clone();
     }
 
     public ArrayList<Rectangle2D> getTextures()
     {
+        if(scalingOn)
+            return scaleRecList(this.textures);
         return (ArrayList<Rectangle2D>) this.textures.clone();
     }
 
@@ -357,16 +387,53 @@ public class Settings
 
     public Rectangle2D getTargetArea()
     {
+        if(scalingOn)
+            return scaleRec(this.targetArea);
         return this.targetArea;
     }
 
     public Rectangle2D getSpawnAreaIntruders()
     {
+        if(scalingOn)
+            return scaleRec(this.spawnAreaIntruders);
         return this.spawnAreaIntruders;
     }
 
     public Rectangle2D getSpawnAreaGuards()
     {
+        if(scalingOn)
+            return scaleRec(this.spawnAreaGuards);
         return this.spawnAreaGuards;
+    }
+
+    private int scaleInt(int x)
+    {
+        return (int)(x*scaling);
+    }
+
+    private double scaleDouble(double x) { return x*scaling; }
+
+    private Rectangle2D scaleRec(Rectangle2D rec)
+    {
+        return new Rectangle2D(rec.getMinX() * scaling, rec.getMinY() * scaling, rec.getWidth() * scaling, rec.getHeight() * scaling);
+    }
+
+    private ArrayList<Rectangle2D> scaleRecList(ArrayList<Rectangle2D> recs)
+    {
+        ArrayList<Rectangle2D> newRecs = new ArrayList<>();
+        for (Rectangle2D rec : recs) {
+            Rectangle2D newRec = scaleRec(rec);
+            newRecs.add(newRec);
+        }
+        return newRecs;
+    }
+
+    private ArrayList<Point> scalePointList(ArrayList<Point> points) {
+        ArrayList<Point> newPoints = new ArrayList<>();
+        for (Point p : points) {
+            Point newP = new Point((int)(p.getX() * scaling), (int)(p.getY() * scaling));
+            newPoints.add(newP);
+        }
+        return newPoints;
     }
 }

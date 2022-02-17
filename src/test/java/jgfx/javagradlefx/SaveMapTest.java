@@ -20,7 +20,6 @@ public class SaveMapTest {
     {
         Settings testSetting = FileParser.readGameFile("src/main/resources/map_test.txt");
         SaveMap.saveMap(testSetting);
-
         String filePathNameTest = FilePath.getFilePath("Save_map_1.txt");
 
         try
