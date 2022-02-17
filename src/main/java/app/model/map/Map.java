@@ -24,11 +24,6 @@ public class Map
     private Human human;
     private Settings settings;
 
-    private final double DEFAULT_MAX_WALK_GUARD = 5;
-    private final double DEFAULT_MAX_SPRINT_GUARD = 10;
-    private final double DEFAULT_MAX_WALK_INTRUDER = 5;
-    private final double DEFAULT_MAX_SPRINT_INTRUDER = 10;
-
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
