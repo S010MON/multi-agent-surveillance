@@ -244,7 +244,7 @@ public class WallFollowAgentTest
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.setMoveLength(100);
-        Vector newPos = agent.move();
+        Vector newPos = agent.move().getDeltaPos();
         agent.updateLocation(newPos);
         Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
         Vector expectedDir = initialDirection;
@@ -275,7 +275,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.setMoveLength(100);  // move length in reality is way smaller
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move();
+        Vector newPos = agent.move().getDeltaPos();
         agent.updateLocation(newPos);
         Vector expectedPos = initialPosition;
         Vector expectedDir = new Vector(1,0);
@@ -307,7 +307,7 @@ public class WallFollowAgentTest
         agent.setMoveLength(100);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move();
+        Vector newPos = agent.move().getDeltaPos();
         agent.updateLocation(newPos);
         Vector expectedPos = initialPosition;
         Vector expectedDir = new Vector(1,0);
@@ -342,7 +342,7 @@ public class WallFollowAgentTest
         agent.setMoveLength(100);
         boolean noFrontWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move();
+        Vector newPos = agent.move().getDeltaPos();
         agent.updateLocation(newPos);
         Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
         Vector expectedDir = initialDirection;
@@ -378,7 +378,7 @@ public class WallFollowAgentTest
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
         Vector expectedPos = initialPosition;
         Vector expectedDir = agent.rotateAgentLeft(false);
-        Vector newPos = agent.move();
+        Vector newPos = agent.move().getDeltaPos();
         agent.updateLocation(newPos);
 
         // Check front and left wall detected, position, new direction, last turn type, if moved forward
