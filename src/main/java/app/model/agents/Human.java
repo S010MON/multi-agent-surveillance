@@ -22,7 +22,7 @@ public class Human extends AgentImp
     @Override
     public Move move()
     {
-        Vector temp = position.add(nextMove);
+        Vector temp = nextMove;
         nextMove = new Vector();
         return new Move(new Vector(), temp);
     }

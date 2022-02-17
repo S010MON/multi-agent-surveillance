@@ -40,9 +40,9 @@ public class Map
         agents = new ArrayList<>();
 
         /* Adds temporary WallFollowAgent */
-        Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-        Vector dir = new Vector(1,0);
-        agents.add(new WallFollowAgent(srt, dir, 10));
+//        Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
+//        Vector dir = new Vector(1,0);
+//        agents.add(new WallFollowAgent(srt, dir, 10));
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
