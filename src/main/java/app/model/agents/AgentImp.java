@@ -10,7 +10,6 @@ public class AgentImp implements Agent
 {
     protected double maxWalk = 5;
     protected double maxSprint = 10;
-
     protected Vector position;
     protected Vector direction;
     protected double radius;
