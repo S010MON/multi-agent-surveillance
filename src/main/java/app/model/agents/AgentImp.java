@@ -2,6 +2,7 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
+import app.model.map.Move;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public Vector move()
+    public Move move()
     {
         double x = Math.random() * MAX_WALK;
         if(Math.random() > 0.5)
@@ -40,7 +41,7 @@ public class AgentImp implements Agent
         if(Math.random() > 0.5)
             y = y * -1;
 
-        return new Vector(x, y);
+        return new Move(new Vector(), new Vector(x, y));
     }
 
     @Override

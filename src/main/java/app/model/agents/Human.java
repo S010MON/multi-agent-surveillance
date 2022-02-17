@@ -1,6 +1,7 @@
 package app.model.agents;
 
 import app.controller.linAlg.Vector;
+import app.model.map.Move;
 
 public class Human extends AgentImp
 {
@@ -19,11 +20,11 @@ public class Human extends AgentImp
     }
 
     @Override
-    public Vector move()
+    public Move move()
     {
         Vector temp = position.add(nextMove);
         nextMove = new Vector();
-        return temp;
+        return new Move(new Vector(), temp);
     }
 
     public void walk(Vector nextMove)
