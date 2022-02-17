@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import org.junit.jupiter.api.Test;
 

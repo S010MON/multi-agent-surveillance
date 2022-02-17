@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.graphicsEngine.RayScatter;

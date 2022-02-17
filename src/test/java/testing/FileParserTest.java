@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.FileParser;
 import app.controller.Settings;
@@ -10,7 +10,7 @@ public class FileParserTest
 {
     @Test void testCreationOfSettings()
     {
-        Settings s = FileParser.readGameFile("src/test/java/jgfx/javagradlefx/mytest.txt");
+        Settings s = FileParser.readGameFile("src/test/java/testing/mytest.txt");
 
         // Gamemode
         assertEquals(44, s.getGamemode());

@@ -1,31 +1,17 @@
 package app.controller.linAlg;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vector
 {
-    private double x;
-    private double y;
-
-    public Vector()
-    {
-        this.x = 0d;
-        this.y = 0d;
-    }
-
-    public Vector(double x, double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    public double getX()
-    {
-        return x;
-    }
-
-    public double getY()
-    {
-        return y;
-    }
+    @Getter private double x = 0d;
+    @Getter private double y = 0d;
 
     public Vector add(Vector other)
     {
@@ -64,9 +50,7 @@ public class Vector
     public Vector normalise()
     {
         Vector v = new Vector(x, y);
-        double length = v.length();
-        Vector normV = v.scale(1/length);
-        return normV;
+        return v.scale(1 / v.length());
     }
 
     public double length() 
@@ -79,7 +63,6 @@ public class Vector
         RotationMatrix M = new RotationMatrix(degrees);
         return M.dot(this);
     }
-
 
     /** Returns the clockwise angle from [0,1] direction */
     public double getAngle()
@@ -96,9 +79,8 @@ public class Vector
     @Override
     public boolean equals(Object other)
     {
-        if(other instanceof Vector)
+        if(other instanceof Vector v)
         {
-            Vector v = (Vector) other;
             return this.getX() == v.getX() && this.getY() == v.getY();
         }
         return false;

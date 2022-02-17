@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;

@@ -17,7 +17,9 @@ This style guide is to help as a reference for code review (both for those makin
 ##### ![3 - Functional Programming](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#3-functional-programming)
 - ![3.1 - Side Effects](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#31-side-effects)
 - ![3.2 - Parameters](https://github.com/S010MON/temp/blob/main/STYLE_GUIDE.md#32-parameters)
-
+##### ![4 - Lombok and Annotations]()
+- ![4.1 - Lombok]()
+- ![4.2 - Annotations]()
 
 ## 1 Source Code Structure
 A source file consists of, in order:
@@ -306,3 +308,45 @@ If we add all the settings into a `Settings` data class and allow the view to ca
 ```java
 public  int startGame(Settings settings, JFrame view) {...}
 ```
+
+## 4 Lombok and Annotations
+Lombok allows you to reduce the Boilerplate code you write and makes classes cleaner
+
+#### 4.1 Lombok Features
+The intent is that only useful code is shown to the end user of the class.  For example, creating an immutable Vector class can be done as follows:
+
+![Screenshot from 2022-02-16 09-36-42](https://user-images.githubusercontent.com/10490509/154226684-fcf55ed9-8a81-4ef5-bfef-11c4d79a21ad.png)
+
+Where default constructor, all args constructor and to string method are all wrapped in 6 lines of code.  Contrast this with the original:
+
+![Screenshot from 2022-02-16 09-39-33](https://user-images.githubusercontent.com/10490509/154226970-f9b2a803-139d-400e-8170-5b48cd011935.png)
+
+It must be remembered that Lombok is there to reduce boilerplate code that is required but completely self explainatory.  If any changes to the default implementation are made, this should be done without using the Lombok annotations
+
+#### 4.2 Lombok Annotations
+Class annotations should be listed with each on a new line:
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class DataClass
+{
+   ...
+}
+```
+
+For field variables, in line definitions are preferred:
+```java
+@Getter private String thisIsOkay;
+@Getter @Setter private thisIsAlsoOkay;
+```
+However for more than two annotations, a new line should be used:
+```java
+@Getter @Setter @NotNull
+private int number;
+```
+Class definitions can be used to cover all filed variables, however consider the impact of refactoring in the case of future users if the class may be partially developed
+

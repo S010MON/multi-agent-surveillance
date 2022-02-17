@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.*;
 import org.junit.jupiter.api.AfterAll;
