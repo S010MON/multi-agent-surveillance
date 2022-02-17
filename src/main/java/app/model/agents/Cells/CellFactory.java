@@ -11,7 +11,7 @@ public abstract class CellFactory
     {
         switch(type)
         {
-            case PHERAMONE -> {return new PheramoneCell();}
+            case PHEROMONE -> {return new PheromoneCell();}
             case BOOLEAN -> {return new BooleanCell();}
         }
         return null;

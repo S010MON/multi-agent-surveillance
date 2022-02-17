@@ -2,28 +2,30 @@ package app.model.Grid;
 
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.CellType;
-import app.model.agents.Cells.PheramoneCell;
+import app.model.agents.Cells.PheromoneCell;
 
+//TODO Use singleton pattern to insist on only one world
 public class AcoGrid extends Grid
 {
     public AcoGrid(double length, double width)
     {
-        super(length, width, CellType.PHERAMONE);
+        super(length, width, CellType.PHEROMONE);
     }
 
     public AcoGrid(double length, double width, double cellSize)
     {
-        super(length, width, CellType.PHERAMONE);
+        super(length, width, CellType.PHEROMONE);
         super.cellSize = cellSize;
     }
 
+    //TODO Evaporation needs to be changed into group system, not individual
     public void updateAgent(AcoAgent agent)
     {
         int row = getCellRow(agent.getPosition());
         int col = getCellCol(agent.getPosition());
 
-        PheramoneCell cell = (PheramoneCell) super.getCellAt(row, col);
-        cell.updatePheramone(agent.releaseMaxPheramone());
+        PheromoneCell cell = (PheromoneCell) super.getCellAt(row, col);
+        cell.updatePheromone(agent.releaseMaxPheramone());
     }
 
     public void evaporationProcess()
@@ -32,7 +34,7 @@ public class AcoGrid extends Grid
         {
             for(int col = 0; col < grid[row].length; col ++)
             {
-                PheramoneCell cell = (PheramoneCell) super.getCellAt(row, col);
+                PheromoneCell cell = (PheromoneCell) super.getCellAt(row, col);
                 cell.evaporation();
             }
         }

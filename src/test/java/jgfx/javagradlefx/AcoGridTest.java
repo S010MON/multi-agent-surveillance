@@ -3,7 +3,7 @@ package jgfx.javagradlefx;
 import app.controller.linAlg.Vector;
 import app.model.agents.ACO.AcoAgent;
 import app.model.Grid.AcoGrid;
-import app.model.agents.Cells.PheramoneCell;
+import app.model.agents.Cells.PheromoneCell;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,9 +20,9 @@ public class AcoGridTest
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
 
         grid.updateAgent(agent);
-        PheramoneCell occupiedCell = (PheramoneCell)grid.getCellAt(agentPosition);
+        PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
 
-        assertEquals(occupiedCell.currentPheramoneValue(), agent.releaseMaxPheramone());
+        assertEquals(occupiedCell.currentPheromoneValue(), agent.releaseMaxPheramone());
     }
 
     @Test
@@ -33,12 +33,12 @@ public class AcoGridTest
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
         grid.updateAgent(agent);
 
-        PheramoneCell cell = (PheramoneCell) grid.getCellAt(agentPosition);
-        double currentPheramone = cell.currentPheramoneValue();
+        PheromoneCell cell = (PheromoneCell) grid.getCellAt(agentPosition);
+        double currentPheromone = cell.currentPheromoneValue();
 
         grid.evaporationProcess();
-        double pheramoneAfterEvaporation = cell.currentPheramoneValue();
+        double pheromoneAfterEvaporation = cell.currentPheromoneValue();
 
-        assertTrue(currentPheramone > pheramoneAfterEvaporation);
+        assertTrue(currentPheromone > pheromoneAfterEvaporation);
     }
 }

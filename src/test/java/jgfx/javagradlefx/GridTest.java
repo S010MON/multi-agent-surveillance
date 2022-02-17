@@ -5,7 +5,7 @@ import app.model.Grid.Grid;
 import app.model.Grid.AcoGrid;
 import app.model.agents.Cells.BooleanCell;
 import app.model.agents.Cells.CellType;
-import app.model.agents.Cells.PheramoneCell;
+import app.model.agents.Cells.PheromoneCell;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,11 +34,11 @@ public class GridTest
     }
 
     @Test
-    void testPheramoneCell()
+    void testPheromoneCell()
     {
-        Grid grid = new Grid(100, 100, CellType.PHERAMONE);
-        PheramoneCell cell = (PheramoneCell)grid.getCellAt(10, 10);
-        double value = cell.currentPheramoneValue();
+        Grid grid = new Grid(100, 100, CellType.PHEROMONE);
+        PheromoneCell cell = (PheromoneCell)grid.getCellAt(10, 10);
+        double value = cell.currentPheromoneValue();
 
         assertEquals(value, 0.0);
     }
@@ -56,7 +56,7 @@ public class GridTest
     @Test
     void testCellRow()
     {
-        Grid grid = new Grid(50.3, 25.7, CellType.PHERAMONE);
+        Grid grid = new Grid(50.3, 25.7, CellType.PHEROMONE);
         int row = grid.getCellRow(new Vector(12.5, 5.9));
         assertEquals(row, 5);
     }
@@ -64,7 +64,7 @@ public class GridTest
     @Test
     void testCellCol()
     {
-        Grid grid = new Grid(50.3, 25.7, CellType.PHERAMONE);
+        Grid grid = new Grid(50.3, 25.7, CellType.PHEROMONE);
         int col = grid.getCellCol(new Vector(12.5, 5.9));
         assertEquals(col, 12);
     }

@@ -5,12 +5,12 @@ public class BooleanCell implements Cell
     private boolean explored;
     private boolean obstacle;
 
-    public void explored()
+    public void isExplored()
     {
         explored = true;
     }
 
-    public void obstacle()
+    public void isObstacle()
     {
         obstacle = true;
     }
