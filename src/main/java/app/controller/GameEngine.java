@@ -49,10 +49,10 @@ public class GameEngine
     {
         switch (e.getCharacter())
         {
-            case "W" -> map.run(new Vector(0, -1));
-            case "S" -> map.run(new Vector(0, 1));
-            case "A" -> map.run(new Vector(-1, 0));
-            case "D" -> map.run(new Vector(1, 0));
+            case "W" -> map.sprint(new Vector(0, -1));
+            case "S" -> map.sprint(new Vector(0, 1));
+            case "A" -> map.sprint(new Vector(-1, 0));
+            case "D" -> map.sprint(new Vector(1, 0));
             case "w" -> map.walk(new Vector(0, -1));
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));

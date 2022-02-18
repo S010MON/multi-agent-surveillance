@@ -39,7 +39,11 @@ public class Map
         /* Adds temporary WallFollowAgent */
         Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
         Vector dir = new Vector(1,0);
-        agents.add(new WallFollowAgent(srt, dir, 10));
+        WallFollowAgent wallAgent = new WallFollowAgent(srt, dir, 10);
+        //Assumes the wallFollowAgent is a guard
+        wallAgent.setMaxWalk(settings.getWalkSpeedGuard());
+        wallAgent.setMaxSprint(settings.getSprintSpeedGuard());
+        agents.add(wallAgent);
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
@@ -57,11 +61,19 @@ public class Map
 
         Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
         human = new Human(humanStart, new Vector(1,0), 10);
+        //Assumes the human is a guard
+        human.setMaxWalk(settings.getWalkSpeedGuard());
+        human.setMaxSprint(settings.getSprintSpeedGuard());
         agents.add(human);
 
         System.out.println("done.");
     }
 
+    /**
+     * Only for testing, delete later
+     * @param agent
+     * @param obstacles
+     */
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
         agents = new ArrayList<>();
@@ -76,9 +88,9 @@ public class Map
         human.walk(v);
     }
 
-    public void run(Vector v)
+    public void sprint(Vector v)
     {
-        human.run(v);
+        human.sprint(v);
     }
 
     public void addFurniture(SettingsObject obj)
