@@ -1,12 +1,9 @@
-package jgfx.javagradlefx;
+package testing;
 
-import app.controller.FileParser;
-import app.controller.Settings;
-import app.controller.linAlg.Vector;
+import app.controller.io.FileManager;
+import app.controller.settings.Settings;
+import app.model.Map;
 import app.model.agents.Agent;
-import app.model.agents.AgentImp;
-import app.model.furniture.Furniture;
-import app.model.map.Map;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ public class MapTest {
     @Test
     void setSpeedsAgentsInConstructionWithSettings()
     {
-        Settings s = FileParser.readGameFile("src/test/java/jgfx/javagradlefx/mytest.txt");
+        Settings s = FileManager.loadSettings("src/test/resources/mytest.txt");
         Map map = new Map(s);
         ArrayList<Agent> agents = map.getAgents();
         double maxWalk = s.getWalkSpeedGuard();

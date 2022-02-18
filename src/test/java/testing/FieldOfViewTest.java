@@ -1,6 +1,6 @@
 package testing;
 
-import app.controller.FieldOfView;
+import app.controller.graphicsEngine.FieldOfView;
 import app.controller.graphicsEngine.Ray;
 import app.controller.graphicsEngine.RayScatter;
 import app.controller.linAlg.Vector;

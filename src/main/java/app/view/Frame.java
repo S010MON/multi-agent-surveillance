@@ -1,9 +1,9 @@
 package app.view;
 
-import app.controller.FileParser;
+import app.controller.io.FileManager;
 import app.controller.GameEngine;
-import app.controller.Settings;
-import app.model.map.Map;
+import app.controller.settings.Settings;
+import app.model.Map;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -13,7 +13,7 @@ public class Frame extends BorderPane
 
     public Frame(int width, int height)
     {
-        Settings settings = FileParser.readGameFile("src/main/resources/map_1.txt");
+        Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
         Map map = new Map(settings);
         FileMenuBar menuBar = new FileMenuBar(this);
         Renderer renderer = new Renderer(map, width, height);

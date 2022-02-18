@@ -1,7 +1,7 @@
 package app.view;
 
 import app.controller.graphicsEngine.Ray;
-import app.model.map.Map;
+import app.model.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

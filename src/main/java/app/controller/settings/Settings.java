@@ -1,0 +1,39 @@
+package app.controller.settings;
+
+import app.controller.linAlg.Vector;
+import app.model.furniture.FurnitureType;
+import javafx.geometry.Rectangle2D;
+import java.util.ArrayList;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class Settings
+{
+    private String name;
+    private int gameMode;
+    private int height;
+    private int width;
+    private int noOfGuards;
+    private int noOfIntruders;
+    private double walkSpeedGuard;
+    private double sprintSpeedGuard;
+    private double walkSpeedIntruder;
+    private double sprintSpeedIntruder;
+    private double timeStep;
+    private double scaling;
+    private ArrayList<SettingsObject> furniture = new ArrayList<>();
+
+    public void addFurniture(Rectangle2D rectangle, FurnitureType type)
+    {
+        furniture.add(new SettingsObject(rectangle, type));
+    }
+
+    public void addTeleport(Rectangle2D rectangle, Vector vector)
+    {
+        furniture.add(new SettingsObject(rectangle, vector));
+    }
+}

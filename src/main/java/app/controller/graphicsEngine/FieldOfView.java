@@ -1,4 +1,4 @@
-package app.controller;
+package app.controller.graphicsEngine;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
@@ -12,7 +12,7 @@ public abstract class FieldOfView {
      * @param rays all rays to determine if between limits, all origins have to be the same!
      * @param leftLimit leftLimit of what the Rays can reach
      * @param rightlimit rightLimit of what the Rays can reach
-     * @return
+     * @return an arraylist of rays
      */
     public static ArrayList<Ray> limitView(ArrayList<Ray> rays, Vector leftLimit, Vector rightlimit)
     {

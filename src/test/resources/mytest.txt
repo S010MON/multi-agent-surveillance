@@ -1,5 +1,5 @@
 name = mytest
-gameFile = //
+gameFile = filePath
 gameMode = 44
 height = 95
 width = 144

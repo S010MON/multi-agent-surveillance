@@ -5,7 +5,7 @@ import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
-import app.model.map.Map;
+import app.model.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
