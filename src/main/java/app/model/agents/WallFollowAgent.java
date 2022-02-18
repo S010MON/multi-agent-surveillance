@@ -2,8 +2,8 @@ package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import app.model.map.Move;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,8 +27,7 @@ public class WallFollowAgent extends AgentImp
     }
 
     @Override
-
-    public Vector move()
+    public Move move()
     {
         /*
         pseudocode from: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
@@ -76,7 +75,8 @@ public class WallFollowAgent extends AgentImp
             movedForwardLast = false;
         }
         Vector newPosition = position.add(newMove);
-        return newPosition;
+        // TODO change to difference in position, rather than new position
+        return new Move(new Vector(), newPosition);
     }
 
     public boolean noWallDetected(double rayAngle)
