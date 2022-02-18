@@ -34,7 +34,7 @@ public class GameEngine
         for (Agent a :map.getAgents())
         {
             Vector startPoint = a.getPosition();
-            Vector endPoint = a.move();
+            Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
             if (legalMove(startPoint, endPoint))
                 a.updateLocation(endPoint);
