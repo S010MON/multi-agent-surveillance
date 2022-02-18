@@ -8,7 +8,7 @@ import app.model.agents.WallFollowAgent;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.map.Map;
+import app.model.Map;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 

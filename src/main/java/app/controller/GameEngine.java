@@ -5,19 +5,13 @@ import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
-import app.model.furniture.Furniture;
-import app.model.map.Map;
+import app.model.Map;
 import app.view.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
-
-import java.time.Instant;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameEngine
 {

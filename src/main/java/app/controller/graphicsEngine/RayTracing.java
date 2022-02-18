@@ -2,7 +2,7 @@ package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
-import app.model.map.Map;
+import app.model.Map;
 import app.model.boundary.Boundary;
 import java.util.ArrayList;
 
@@ -11,7 +11,6 @@ public class RayTracing implements GraphicsEngine
 {
     private int noOfRays = 360;
     private double angle = 1;
-
 
     public ArrayList<Ray> compute(Map map, Agent agent)
     {

@@ -1,4 +1,4 @@
-package app.model.map;
+package app.model;
 
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
