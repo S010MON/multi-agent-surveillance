@@ -1,7 +1,9 @@
-package app.model.map;
+package app.model;
 
-import app.controller.Settings;
+
 import app.controller.linAlg.Vector;
+import app.controller.settings.Settings;
+import app.controller.settings.SettingsObject;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;
