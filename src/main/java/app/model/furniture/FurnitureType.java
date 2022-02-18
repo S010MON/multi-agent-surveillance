@@ -2,12 +2,19 @@ package app.model.furniture;
 
 public enum FurnitureType
 {
-    WALL,
-    SHADE,
-    GLASS,
-    TOWER,
-    PORTAL,
-    GUARD_SPAWN,
-    INTRUDER_SPAWN,
-    TARGET
+    WALL("wall"),
+    SHADE("shade"),
+    GLASS("glass"),
+    TOWER("tower"),
+    PORTAL("teleport"),
+    GUARD_SPAWN("spawnAreaGuards"),
+    INTRUDER_SPAWN("spawnAreaIntruders"),
+    TARGET("targetArea");
+
+    public final String label;
+
+    FurnitureType(String label)
+    {
+        this.label = label;
+    }
 }

@@ -1,6 +1,7 @@
 package app.model.map;
 
 import app.controller.Settings;
+import app.controller.SettingsObject;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.Human;
@@ -12,30 +13,27 @@ import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
 public class Map
 {
-    private ArrayList<Furniture> furniture;
-    private ArrayList<Agent> agents;
+    @Getter private ArrayList<Furniture> furniture;
+    @Getter private ArrayList<Agent> agents;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
     private Human human;
-    private Settings settings;
+    @Getter private Settings settings;
 
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
         this.settings = settings;
-        this.guardSpawn = settings.getSpawnAreaGuards();
-        this.intruderSpawn = settings.getSpawnAreaIntruders();
 
         /* Make furniture */
         furniture = new ArrayList<>();
-        settings.getWalls().forEach(e -> addFurniture(FurnitureType.WALL, e));
-        settings.getShade().forEach(e -> addFurniture(FurnitureType.SHADE, e));
-        settings.getGlass().forEach(e -> addFurniture(FurnitureType.GLASS, e));
+        settings.getFurniture().forEach(e -> addFurniture(e));
 
         agents = new ArrayList<>();
 
@@ -84,21 +82,15 @@ public class Map
         human.run(v);
     }
 
-    public Settings getSetting(){return settings;}
-
-    public ArrayList<Agent> getAgents()
+    public void addFurniture(SettingsObject obj)
     {
-        return agents;
-    }
+        switch (obj.getType())
+        {
+            case GUARD_SPAWN -> guardSpawn = obj.getRect();
+            case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
+            default -> this.furniture.add(FurnitureFactory.make(obj.getType(), obj.getRect()));
+        }
 
-    public void addFurniture(FurnitureType type, Rectangle2D rectangle)
-    {
-        this.furniture.add(FurnitureFactory.make(type, rectangle));
-    }
-
-    public ArrayList<Furniture> getFurniture()
-    {
-        return furniture;
     }
 
     public ArrayList<Boundary> getBoundaries()

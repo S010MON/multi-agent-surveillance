@@ -1,10 +1,9 @@
 package app.controller.io;
 
 import app.controller.Settings;
+import app.model.furniture.FurnitureType;
+import app.controller.linAlg.Vector;
 import javafx.geometry.Rectangle2D;
-import java.awt.Point;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileParser
@@ -18,7 +17,6 @@ public class FileParser
             parseNextLine(settings, scanner.nextLine(), countLines);
             countLines++;
         }
-        settings.lock(); // Settings object now immutable
         return settings;
     }
 
@@ -37,7 +35,7 @@ public class FileParser
                 switch(id)
                 {
                     case "name" -> settings.setName(val);
-                    case "gameMode" -> settings.setGamemode(Integer.parseInt(val));
+                    case "gameMode" -> settings.setGameMode(Integer.parseInt(val));
                     case "height" -> settings.setHeight(Integer.parseInt(val));
                     case "width" -> settings.setWidth(Integer.parseInt(val));
                     case "numGuards" -> settings.setNoOfGuards(Integer.parseInt(val));
@@ -48,18 +46,17 @@ public class FileParser
                     case "sprintSpeedIntruder" -> settings.setSprintSpeedIntruder(Double.parseDouble(val));
                     case "timeStep" ->  settings.setTimeStep(Double.parseDouble(val));
                     case "scaling" -> settings.setScaling(Double.parseDouble(val));
-                    case "wall" -> settings.addWall(rectangleOf(coords));
-                    case "shaded" -> settings.addShade(rectangleOf(coords));
-                    case "glass" ->  settings.addGlass(rectangleOf(coords));
-                    case "tower" ->  settings.addTower(rectangleOf(coords));
-                    case "targetArea" -> settings.setTargetArea(rectangleOf(coords));
-                    case "spawnAreaIntruders" ->  settings.setSpawnAreaIntruders(rectangleOf(coords));
-                    case "spawnAreaGuards" -> settings.setSpawnAreaGuards(rectangleOf(coords));
+                    case "wall" -> settings.addFurniture(rectangleOf(coords), FurnitureType.WALL);
+                    case "shaded" -> settings.addFurniture(rectangleOf(coords), FurnitureType.SHADE);
+                    case "glass" ->  settings.addFurniture(rectangleOf(coords), FurnitureType.GLASS);
+                    case "tower" ->  settings.addFurniture(rectangleOf(coords), FurnitureType.TOWER);
+                    case "targetArea" -> settings.addFurniture(rectangleOf(coords), FurnitureType.TARGET);
+                    case "spawnAreaIntruders" ->  settings.addFurniture(rectangleOf(coords), FurnitureType.INTRUDER_SPAWN);
+                    case "spawnAreaGuards" -> settings.addFurniture(rectangleOf(coords), FurnitureType.GUARD_SPAWN);
                     case "teleport" -> {
-                        settings.addPortal(rectangleOf(coords));
-                        settings.addTeleportTo(new Point(Integer.parseInt(coords[4]),
-                                                    Integer.parseInt(coords[5])));
-                        settings.addTeleportOrientation(Double.parseDouble(coords[6]));}
+                        Vector teleportTo = new Vector(Integer.parseInt(coords[4]), Integer.parseInt(coords[5]));
+                        settings.addTeleport(rectangleOf(coords), teleportTo);
+                    }
                 }
             }
         }

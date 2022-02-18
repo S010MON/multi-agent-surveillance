@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.linAlg.Vector;
 import app.model.Grid.Grid;
@@ -8,6 +8,7 @@ import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class GridTest
 {
@@ -50,7 +51,7 @@ public class GridTest
         BooleanCell cell = (BooleanCell) grid.getCellAt(10, 10);
         boolean value = cell.getExploredState();
 
-        assertEquals(value, false);
+        assertFalse(value);
     }
 
     @Test

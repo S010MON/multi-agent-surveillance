@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,7 +48,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         //Detect surroundings
@@ -107,7 +108,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         //Detect surroundings
@@ -126,7 +127,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         //Detect surroundings
@@ -145,7 +146,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         //Detect surroundings
@@ -166,7 +167,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         //Detect surroundings
@@ -299,7 +300,7 @@ public class WallFollowAgentTest
         // Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         // Detect surroundings and turn
@@ -334,7 +335,7 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
-        ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obstacleType, obstacle)));
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
         Map map = new Map(agent, walls);
 
         // Detect surroundings and move
