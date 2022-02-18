@@ -1,4 +1,4 @@
-package jgfx.javagradlefx;
+package testing;
 
 import app.controller.FieldOfView;
 import app.controller.graphicsEngine.Ray;
@@ -99,7 +99,7 @@ public class FieldOfViewTest {
     @Test
     void leftBiggerThanRightLimit2()
     {
-        Vector origin = new Vector(-7, 38);;
+        Vector origin = new Vector(-7, 38);
         Vector lefLimit = new Vector(1, -1).add(origin);
         Vector rightLimit = new Vector(-1, -1).add(origin);
 
@@ -112,7 +112,7 @@ public class FieldOfViewTest {
         ArrayList<Ray> acceptedRays = FieldOfView.limitView(rays, lefLimit, rightLimit);
         assertEquals(1, acceptedRays.size());
         Ray acceptedRay = acceptedRays.get(0);
-        assertEquals(0-7, acceptedRay.getV().getX());
+        assertEquals(-7, acceptedRay.getV().getX());
         assertEquals(-1+38, acceptedRay.getV().getY());
     }
 
