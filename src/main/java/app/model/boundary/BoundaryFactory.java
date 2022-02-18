@@ -24,9 +24,9 @@ public abstract class BoundaryFactory
     {
         switch (f)
         {
-            case WALL -> { return new VisibleBoundary(a, b);}
-            case SHADE -> { return new InvisibleBoundary(a, b);}
-            case GLASS -> { return  new TransparentBoundary(a, b);}
+            case WALL, TOWER -> { return new VisibleBoundary(a, b);}
+            case GLASS, PORTAL -> { return  new TransparentBoundary(a, b);}
+            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new InvisibleBoundary(a, b);}
         }
         return null; // Redundant by design
     }
