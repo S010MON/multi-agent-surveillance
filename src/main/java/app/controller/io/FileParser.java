@@ -1,6 +1,6 @@
 package app.controller.io;
 
-import app.controller.Settings;
+import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
 import app.controller.linAlg.Vector;
 import javafx.geometry.Rectangle2D;

@@ -1,9 +1,8 @@
 package app.view;
 
 import app.controller.io.FileManager;
-import app.controller.io.FileParser;
 import app.controller.GameEngine;
-import app.controller.Settings;
+import app.controller.settings.Settings;
 import app.model.map.Map;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;

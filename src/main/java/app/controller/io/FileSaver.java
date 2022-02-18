@@ -1,6 +1,6 @@
 package app.controller.io;
 
-import app.controller.Settings;
+import app.controller.settings.Settings;
 import java.io.File;
 import java.io.FileWriter;
 

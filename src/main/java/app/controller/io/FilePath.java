@@ -2,7 +2,6 @@ package app.controller.io;
 
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.util.Locale;
 
 public abstract class FilePath
 {
@@ -13,7 +12,7 @@ public abstract class FilePath
     /**
      * Creates a file path to saved games with the correct file name appended
      */
-    public static String getFilePath(String fileName)
+    public static String get(String fileName)
     {
         FileSystem fileSystem = FileSystems.getDefault();
         String path = fileSystem.getPath("").toAbsolutePath().toString();

@@ -1,6 +1,6 @@
 package app.controller.io;
 
-import app.controller.Settings;
+import app.controller.settings.Settings;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -27,13 +27,12 @@ public class FileManager
 
     public static void saveSettings(Settings settings)
     {
-        String fileName = settings.getName();
-        if (fileName == null)
-            fileName = "Save_Map_" + LocalDateTime.now() + ".txt";
+        String filePath;
+        if (settings.getName() == null)
+            filePath = FilePath.get("Save_Map_" + LocalDateTime.now() + ".txt");
         else
-            fileName = "Save_" + fileName + ".txt";
+            filePath = FilePath.get("Save_" + settings.getName() + ".txt");
 
-        String filePath = FilePath.getFilePath(fileName);
         File file = new File(filePath);
         FileSaver.save(file, settings);
     }

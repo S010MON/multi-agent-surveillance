@@ -1,6 +1,6 @@
 package testing;
 
-import app.controller.SettingsGenerator;
+import app.controller.settings.SettingsGenerator;
 import app.controller.io.FileManager;
 import app.controller.io.FilePath;
 import org.junit.jupiter.api.AfterAll;
@@ -22,7 +22,7 @@ public class SaveSettingsTest
     /** Delete any exiting test files and create a new test file*/
     @BeforeAll void createMapFile()
     {
-        File oldFile = new File(FilePath.getFilePath("Save_map_test.txt"));
+        File oldFile = new File(FilePath.get("Save_map_test.txt"));
         if(oldFile.exists())
             oldFile.delete();
     }
@@ -30,7 +30,7 @@ public class SaveSettingsTest
     @Test
     void testSaveSettings()
     {
-        String filePath = FilePath.getFilePath("Save_map_test.txt");
+        String filePath = FilePath.get("Save_map_test.txt");
         FileManager.saveSettings(SettingsGenerator.saveSettingsTest());
         String[] exp = expected();
 
@@ -65,7 +65,7 @@ public class SaveSettingsTest
      /** Clean up */
     @AfterAll void deleteMapFile()
     {
-        File oldFile = new File(FilePath.getFilePath("Save_map_test.txt"));
+        File oldFile = new File(FilePath.get("Save_map_test.txt"));
         if(oldFile.exists())
             oldFile.delete();
     }

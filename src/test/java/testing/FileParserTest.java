@@ -1,7 +1,7 @@
 package testing;
 
 import app.controller.io.FileManager;
-import app.controller.Settings;
+import app.controller.settings.Settings;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +10,7 @@ public class FileParserTest
 {
     @Test void testCreationOfSettings()
     {
-        Settings s = FileManager.loadSettings("src/test/java/testing/mytest.txt");
+        Settings s = FileManager.loadSettings("src/test/resources/mytest.txt");
 
         // Gamemode
         assertEquals(44, s.getGameMode());

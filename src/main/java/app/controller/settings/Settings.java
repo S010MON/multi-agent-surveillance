@@ -1,4 +1,4 @@
-package app.controller;
+package app.controller.settings;
 
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;

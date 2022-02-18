@@ -1,4 +1,4 @@
-package app.controller;
+package app.controller.settings;
 
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
