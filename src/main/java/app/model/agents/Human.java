@@ -28,11 +28,11 @@ public class Human extends AgentImp
 
     public void walk(Vector nextMove)
     {
-        this.nextMove = nextMove.scale(MAX_WALK);
+        this.nextMove = nextMove.scale(maxWalk);
     }
 
-    public void run(Vector nextMove)
+    public void sprint(Vector nextMove)
     {
-        this.nextMove = nextMove.scale(MAX_RUN);
+        this.nextMove = nextMove.scale(maxSprint);
     }
 }
