@@ -1,5 +1,6 @@
-package app.controller;
+package app.controller.io;
 
+import app.controller.Settings;
 import javafx.geometry.Rectangle2D;
 import java.awt.Point;
 import java.nio.file.Path;
@@ -8,23 +9,14 @@ import java.util.Scanner;
 
 public class FileParser
 {
-    public static Settings readGameFile(String path)
+    public static Settings parse(Scanner scanner)
     {
-        Path file = Paths.get(path);
         Settings settings = new Settings();
-        try(Scanner scan = new Scanner(file))
+        int countLines=1;
+        while(scanner.hasNextLine())
         {
-            int countLines=1;
-            while(scan.hasNextLine())
-            {
-                parseNextLine(settings, scan.nextLine(), countLines);
-                countLines++;
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("Failed creating scanner object using path supplied.");
+            parseNextLine(settings, scanner.nextLine(), countLines);
+            countLines++;
         }
         settings.lock(); // Settings object now immutable
         return settings;
@@ -63,10 +55,6 @@ public class FileParser
                     case "targetArea" -> settings.setTargetArea(rectangleOf(coords));
                     case "spawnAreaIntruders" ->  settings.setSpawnAreaIntruders(rectangleOf(coords));
                     case "spawnAreaGuards" -> settings.setSpawnAreaGuards(rectangleOf(coords));
-                    case "texture" -> {
-                            settings.addTexture(rectangleOf(coords));
-                            settings.addTextureType(Integer.parseInt(coords[4]));
-                            settings.addTextureOrientation(Integer.parseInt(coords[5])); }
                     case "teleport" -> {
                         settings.addPortal(rectangleOf(coords));
                         settings.addTeleportTo(new Point(Integer.parseInt(coords[4]),

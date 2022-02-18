@@ -1,6 +1,7 @@
 package testing;
 
-import app.controller.FileParser;
+import app.controller.io.FileManager;
+import app.controller.io.FileParser;
 import app.controller.Settings;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ public class FileParserTest
 {
     @Test void testCreationOfSettings()
     {
-        Settings s = FileParser.readGameFile("src/test/java/testing/mytest.txt");
+        Settings s = FileManager.loadSettings("src/test/java/testing/mytest.txt");
 
         // Gamemode
         assertEquals(44, s.getGamemode());
@@ -57,13 +58,6 @@ public class FileParserTest
         // Teleport to point
         assertEquals(90.0, s.getTeleportTo().get(0).getX());
         assertEquals(50.0, s.getTeleportTo().get(0).getY());
-        // Texture
-        assertEquals(10.0, s.getTextures().get(0).getMinX());
-        assertEquals(20.0, s.getTextures().get(0).getMinY());
-        assertEquals(20.0, s.getTextures().get(0).getMaxX());
-        assertEquals(40.0, s.getTextures().get(0).getMaxY());
-        // Texture type
-        assertEquals(0, s.getTextureType().get(0));
         // Target area
         assertEquals(20.0, s.getTargetArea().getMinX());
         assertEquals(40.0, s.getTargetArea().getMinY());

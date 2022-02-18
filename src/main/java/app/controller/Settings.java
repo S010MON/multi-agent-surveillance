@@ -1,10 +1,13 @@
 package app.controller;
 
 import javafx.geometry.Rectangle2D;
+import lombok.Getter;
+
 import java.awt.Point;
 import java.util.ArrayList;
 
 // Orientation, which is double, only applies to teleporting and adding texture, not saved as a setting, can be if needed.
+@Getter
 public class Settings
 {
     private boolean unlocked = true;
@@ -27,9 +30,6 @@ public class Settings
     private ArrayList<Rectangle2D> portals;
     private ArrayList<Point> teleportTo;
     private ArrayList<Double> teleportOrientations;
-    private ArrayList<Rectangle2D> textures;
-    private ArrayList<Integer> textureType;
-    private ArrayList<Integer> textureOrientations;
     private Rectangle2D targetArea;
     private Rectangle2D spawnAreaIntruders;
     private Rectangle2D spawnAreaGuards;
@@ -43,9 +43,6 @@ public class Settings
         portals = new ArrayList<>();
         teleportTo = new ArrayList<>();
         teleportOrientations= new ArrayList<>();
-        textures = new ArrayList<>();
-        textureType = new ArrayList<>();
-        textureOrientations= new ArrayList<>();
     }
 
     public void setName(String name)
@@ -125,11 +122,6 @@ public class Settings
         if(unlocked)
             this.teleportOrientations.add(teleportOrientation);
     }
-    public void addTextureOrientation(int textureOrientation)
-    {
-        if(unlocked)
-            this.textureOrientations.add(textureOrientation);
-    }
 
     public void addWall(Rectangle2D wall)
     {
@@ -167,18 +159,6 @@ public class Settings
             this.teleportTo.add(p);
     }
 
-    public void addTexture(Rectangle2D texture)
-    {
-        if(unlocked)
-            this.textures.add(texture);
-    }
-
-    public void addTextureType(int textureType)
-    {
-        if(unlocked)
-            this.textureType.add(textureType);
-    }
-
     public void setTargetArea(Rectangle2D targetArea)
     {
         if(unlocked)
@@ -200,130 +180,5 @@ public class Settings
     public void lock()
     {
         this.unlocked = false;
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public int getGamemode()
-    {
-        return this.gamemode;
-    }
-
-    public int getHeight()
-    {
-        return this.height;
-    }
-
-    public int getWidth()
-    {
-        return this.width;
-    }
-
-    public int getNoOfGuards()
-    {
-        return this.noOfGuards;
-    }
-
-    public int getNoOfIntruders()
-    {
-        return this.noOfIntruders;
-    }
-
-    public double getWalkSpeedGuard()
-    {
-        return this.walkSpeedGuard;
-    }
-
-    public double getSprintSpeedGuard()
-    {
-        return this.sprintSpeedGuard;
-    }
-
-    public double getWalkSpeedIntruder()
-    {
-        return this.walkSpeedIntruder;
-    }
-
-    public double getSprintSpeedIntruder()
-    {
-        return this.sprintSpeedIntruder;
-    }
-
-    public double getTimeStep()
-    {
-        return this.timeStep;
-    }
-
-    public double getScaling()
-    {
-        return this.scaling;
-    }
-
-    public ArrayList<Double> getTeleportOrientations()
-    {
-        return this.teleportOrientations;
-    }
-
-    public ArrayList<Integer> getTextureOrientations()
-    {
-        return this.textureOrientations;
-    }
-
-    public ArrayList<Rectangle2D> getWalls()
-    {
-        return (ArrayList<Rectangle2D>) this.walls.clone();
-    }
-
-    public ArrayList<Rectangle2D> getShade()
-    {
-        return (ArrayList<Rectangle2D>) this.shade.clone();
-    }
-
-    public ArrayList<Rectangle2D> getGlass()
-    {
-        return (ArrayList<Rectangle2D>) this.glass.clone();
-    }
-
-    public ArrayList<Rectangle2D> getTowers()
-    {
-        return (ArrayList<Rectangle2D>) this.towers.clone();
-    }
-
-    public ArrayList<Rectangle2D> getPortals()
-    {
-        return (ArrayList<Rectangle2D>) this.portals.clone();
-    }
-
-    public ArrayList<Point> getTeleportTo()
-    {
-        return (ArrayList<Point>) this.teleportTo.clone();
-    }
-
-    public ArrayList<Rectangle2D> getTextures()
-    {
-        return (ArrayList<Rectangle2D>) this.textures.clone();
-    }
-
-    public ArrayList<Integer> getTextureType()
-    {
-        return (ArrayList<Integer>) this.textureType.clone();
-    }
-
-    public Rectangle2D getTargetArea()
-    {
-        return this.targetArea;
-    }
-
-    public Rectangle2D getSpawnAreaIntruders()
-    {
-        return this.spawnAreaIntruders;
-    }
-
-    public Rectangle2D getSpawnAreaGuards()
-    {
-        return this.spawnAreaGuards;
     }
 }

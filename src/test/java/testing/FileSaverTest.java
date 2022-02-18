@@ -1,6 +1,9 @@
 package testing;
 
 import app.controller.*;
+import app.controller.io.FileManager;
+import app.controller.io.FilePath;
+import app.controller.io.FileSaver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SaveMapTest {
+public class FileSaverTest {
 
     @BeforeAll
     void createMapFile()
     {
-        Settings testSetting = FileParser.readGameFile("src/main/resources/map_test.txt");
-        SaveMap.saveMap(testSetting);
+        Settings testSetting = FileManager.loadSettings("src/main/resources/map_test.txt");
+        FileManager.saveSettings(testSetting);
 
         String filePathNameTest = FilePath.getFilePath("Save_map_1.txt");
 
