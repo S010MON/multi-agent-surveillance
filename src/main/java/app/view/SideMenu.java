@@ -37,7 +37,54 @@ public class SideMenu extends StackPane
         {
             Button furnType = new Button(""+ft);
             furnType.setOnAction(e -> {
-                mb.run(new DrawRectangle(new Rectangle2D(rand.nextInt(300), rand.nextInt(300), 300+rand.nextInt(300), 300+rand.nextInt(300)), mb.gc, Color.GREEN, true));
+                DrawRectangle dr = new DrawRectangle();
+                dr.setRect(new Rectangle2D( rand.nextInt(300), rand.nextInt(300),
+                                    300+rand.nextInt(400), 300+rand.nextInt(400)));
+                dr.setGc(mb.gc);
+                switch(ft.label)
+                {
+                    case "wall" ->
+                            {
+                                dr.setColour(Color.SANDYBROWN);
+                                dr.setFill(true);
+                            }
+                    case "shade" ->
+                            {
+                                dr.setColour(Color.LIGHTGRAY);
+                                dr.setFill(true);
+                            }
+                    case "glass" ->
+                            {
+                                dr.setColour(Color.LIGHTBLUE);
+                                dr.setFill(true);
+                            }
+                    case "tower" ->
+                            {
+                                dr.setColour(Color.OLIVE);
+                                dr.setFill(true);
+                            }
+                    case "teleport" ->
+                            {
+                                dr.setColour(Color.OLIVEDRAB);
+                                dr.setFill(true);
+                            }
+                    case "spawnAreaGuards" ->
+                            {
+                                dr.setColour(Color.BLUE);
+                                dr.setFill(false);
+                            }
+                    case "spawnAreaIntruders" ->
+                            {
+                                dr.setColour(Color.RED);
+                                dr.setFill(false);
+                            }
+                    case "targetArea" ->
+                            {
+                                dr.setColour(Color.GOLD);
+                                dr.setFill(false);
+                            }
+                }
+                mb.run(dr);
             });
             vbox.getChildren().add(furnType);
         }

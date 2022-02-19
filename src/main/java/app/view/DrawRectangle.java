@@ -1,17 +1,21 @@
 package app.view;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 @AllArgsConstructor
+@Setter
 public class DrawRectangle implements UIRect
 {
     private Rectangle2D rect;
     private GraphicsContext gc;
     private Color colour;
     private boolean fill;
+
+    public DrawRectangle(){}
 
     @Override
     public void run()

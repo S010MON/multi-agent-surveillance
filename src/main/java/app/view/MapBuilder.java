@@ -10,6 +10,8 @@ public class MapBuilder extends Canvas
 {
     private Color backgroundColour;
     public GraphicsContext gc = this.getGraphicsContext2D();
+    public Color colour;
+    public boolean fill;
     private ArrayDeque<UIRect> history = new ArrayDeque<>();
 
     public MapBuilder(int width, int height)
