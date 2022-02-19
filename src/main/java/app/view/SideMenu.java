@@ -2,17 +2,24 @@ package app.view;
 
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+
+import java.util.Random;
 
 public class SideMenu extends StackPane
 {
-    public SideMenu(int width, int height)
+    private MapBuilder mb;
+
+    public SideMenu(int width, int height, MapBuilder mb)
     {
         this.setWidth(width);
         this.setHeight(height);
+        this.mb = mb;
         VBox vbox = new VBox(10);
         loadButtons(vbox);
         this.setMargin(vbox, new Insets(10, 10, 10, 10));
@@ -21,11 +28,7 @@ public class SideMenu extends StackPane
 
     public void loadButtons(VBox vbox)
     {
-        // Spawn areas
-        Label spawns = new Label("Spwan Areas:");
-        Button aSpawn = new Button("Agent Spawn Area");
-        Button iSpawn = new Button("Intruder Spawn Area");
-        vbox.getChildren().addAll(spawns, aSpawn, iSpawn);
+        Random rand = new Random();
 
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
@@ -33,6 +36,9 @@ public class SideMenu extends StackPane
         for(FurnitureType ft : FurnitureType.values())
         {
             Button furnType = new Button(""+ft);
+            furnType.setOnAction(e -> {
+                mb.run(new DrawRectangle(new Rectangle2D(rand.nextInt(300), rand.nextInt(300), 300+rand.nextInt(300), 300+rand.nextInt(300)), mb.gc, Color.GREEN, true));
+            });
             vbox.getChildren().add(furnType);
         }
 
@@ -42,5 +48,10 @@ public class SideMenu extends StackPane
         Button crOpen = new Button("Create & Open");
 
         vbox.getChildren().addAll(func, create, crOpen);
+
+        Button undo = new Button("Undo");
+        undo.setOnAction(e -> mb.undo());
+
+        vbox.getChildren().addAll(undo);
     }
 }
