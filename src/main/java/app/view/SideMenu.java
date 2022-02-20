@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,7 +29,14 @@ public class SideMenu extends StackPane
 
     public void loadButtons(VBox vbox)
     {
-        Random rand = new Random();
+        // User Rectangle Area
+        Label l = new Label("Enter MinX, MinY, width, height:");
+        TextField minX = new TextField();
+        TextField minY = new TextField();
+        TextField width = new TextField();
+        TextField height = new TextField();
+
+        vbox.getChildren().addAll(l, minX, minY, width, height);
 
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
@@ -38,8 +46,8 @@ public class SideMenu extends StackPane
             Button furnType = new Button(""+ft);
             furnType.setOnAction(e -> {
                 DrawRectangle dr = new DrawRectangle();
-                dr.setRect(new Rectangle2D( rand.nextInt(300), rand.nextInt(300),
-                                    300+rand.nextInt(400), 300+rand.nextInt(400)));
+                dr.setRect(new Rectangle2D( parseRect(minX), parseRect(minY), parseRect(width),
+                                            parseRect(height)));
                 dr.setGc(mb.gc);
                 switch(ft.label)
                 {
@@ -100,5 +108,22 @@ public class SideMenu extends StackPane
         undo.setOnAction(e -> mb.undo());
 
         vbox.getChildren().addAll(undo);
+    }
+
+    public int parseRect(TextField tf)
+    {
+        try
+        {
+         return Integer.parseInt(tf.getText());
+        }
+        catch(NumberFormatException e)
+        {
+            System.out.println("Input a number");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

@@ -1,17 +1,16 @@
 package app.view;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayDeque;
 
 public class MapBuilder extends Canvas
 {
     private Color backgroundColour;
     public GraphicsContext gc = this.getGraphicsContext2D();
-    public Color colour;
-    public boolean fill;
+    private Rectangle2D rect;
     private ArrayDeque<UIRect> history = new ArrayDeque<>();
 
     public MapBuilder(int width, int height)
@@ -24,6 +23,8 @@ public class MapBuilder extends Canvas
 
     public void run(UIRect ur)
     {
+        rect = new Rectangle2D(0, 0, 1, 1);
+
         history.addLast(ur);
         ur.run();
     }
