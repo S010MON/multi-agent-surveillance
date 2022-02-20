@@ -3,7 +3,7 @@ package app.model.furniture;
 public enum FurnitureType
 {
     WALL("wall"),
-    SHADE("shade"),
+    SHADE("shaded"),
     GLASS("glass"),
     TOWER("tower"),
     PORTAL("teleport"),

@@ -1,7 +1,9 @@
 package testing;
 
 import app.controller.io.FileManager;
+import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
+import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,43 +36,30 @@ public class FileParserTest
         assertEquals(0.5, s.getTimeStep());
         // Scaling
         assertEquals(0.2, s.getScaling());
-//        // Wall
-//        assertEquals(50.0, s.getWalls().get(0).getMinX());
-//        assertEquals(0.0, s.getWalls().get(0).getMinY());
-//        assertEquals(51.0, s.getWalls().get(0).getMaxX());
-//        assertEquals(20.0, s.getWalls().get(0).getMaxY());
-//        // Shade
-//        assertEquals(10.0, s.getShade().get(0).getMinX());
-//        assertEquals(20.0, s.getShade().get(0).getMinY());
-//        assertEquals(20.0, s.getShade().get(0).getMaxX());
-//        assertEquals(40.0, s.getShade().get(0).getMaxY());
-//        // Tower
-//        assertEquals(0.0, s.getTowers().get(0).getMinX());
-//        assertEquals(23.0, s.getTowers().get(0).getMinY());
-//        assertEquals(50.0, s.getTowers().get(0).getMaxX());
-//        assertEquals(63.0, s.getTowers().get(0).getMaxY());
-//        // Portal
-//        assertEquals(20.0, s.getPortals().get(0).getMinX());
-//        assertEquals(70.0, s.getPortals().get(0).getMinY());
-//        assertEquals(25.0, s.getPortals().get(0).getMaxX());
-//        assertEquals(75.0, s.getPortals().get(0).getMaxY());
-//        // Teleport to point
-//        assertEquals(90.0, s.getTeleportTo().get(0).getX());
-//        assertEquals(50.0, s.getTeleportTo().get(0).getY());
-//        // Target area
-//        assertEquals(20.0, s.getTargetArea().getMinX());
-//        assertEquals(40.0, s.getTargetArea().getMinY());
-//        assertEquals(25.0, s.getTargetArea().getMaxX());
-//        assertEquals(45.0, s.getTargetArea().getMaxY());
-//        // Spawn area intruders
-//        assertEquals(2.0, s.getSpawnAreaIntruders().getMinX());
-//        assertEquals(2.0, s.getSpawnAreaIntruders().getMinY());
-//        assertEquals(20.0, s.getSpawnAreaIntruders().getMaxX());
-//        assertEquals(10.0, s.getSpawnAreaIntruders().getMaxY());
-//        // Spawn area guards
-//        assertEquals(2.0, s.getSpawnAreaGuards().getMinX());
-//        assertEquals(2.0, s.getSpawnAreaGuards().getMinY());
-//        assertEquals(20.0, s.getSpawnAreaGuards().getMaxX());
-//        assertEquals(10.0, s.getSpawnAreaGuards().getMaxY());
+        // Target area
+        assertEquals(new Rectangle2D(20, 40, 5, 5), s.getFurniture().get(0).getRect());
+        assertEquals("targetArea", s.getFurniture().get(0).getType().label);
+        // Intruder spawn
+        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(1).getRect());
+        assertEquals("spawnAreaIntruders", s.getFurniture().get(1).getType().label);
+        // Guard spawn
+        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(2).getRect());
+        assertEquals("spawnAreaGuards", s.getFurniture().get(2).getType().label);
+        // Wall
+        assertEquals(new Rectangle2D(0, 79, 120, 1), s.getFurniture().get(5).getRect());
+        assertEquals("wall", s.getFurniture().get(5).getType().label);
+        // Tower
+        assertEquals(new Rectangle2D(12, 40, 8, 4), s.getFurniture().get(9).getRect());
+        assertEquals("tower", s.getFurniture().get(9).getType().label);
+        // Teleport
+        assertEquals(new Rectangle2D(20, 70, 5, 5), s.getFurniture().get(10).getRect());
+        assertEquals(new Vector(90, 50), s.getFurniture().get(10).getTeleportTo());
+        assertEquals("teleport", s.getFurniture().get(10).getType().label);
+        // Shade
+        assertEquals(new Rectangle2D(10, 20, 10, 20), s.getFurniture().get(11).getRect());
+        assertEquals("shaded", s.getFurniture().get(11).getType().label);
+        // Glass
+        assertEquals(new Rectangle2D(0, 0, 20, 20), s.getFurniture().get(12).getRect());
+        assertEquals("glass", s.getFurniture().get(12).getType().label);
     }
 }
