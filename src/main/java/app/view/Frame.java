@@ -11,12 +11,12 @@ public class Frame extends BorderPane
 {
     private GameEngine gameEngine;
 
-    public Frame(int width, int height)
+    public Frame()
     {
         Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
         Map map = new Map(settings);
         FileMenuBar menuBar = new FileMenuBar(this);
-        Renderer renderer = new Renderer(map, width, height);
+        Renderer renderer = new Renderer(map);
         gameEngine = new GameEngine(map, renderer);
         this.setCenter(renderer);
         this.setTop(menuBar);

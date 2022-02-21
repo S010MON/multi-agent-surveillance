@@ -13,9 +13,9 @@ public class Renderer extends Canvas
     private Map map;
     private Color backgroundColour;
 
-    public Renderer(Map map, int width, int height)
+    public Renderer(Map map)
     {
-        super(width, height);
+        super(ScreenSize.width, ScreenSize.height);
         this.map = map;
         backgroundColour = Color.WHITE;
         render();
