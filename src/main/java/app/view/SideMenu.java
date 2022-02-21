@@ -9,8 +9,11 @@ import javafx.scene.layout.VBox;
 
 public class SideMenu extends StackPane
 {
-    public SideMenu(int width, int height)
+    private StartMenu startMenu;
+
+    public SideMenu(StartMenu startMenu, int width, int height)
     {
+        this.startMenu = startMenu;
         this.setWidth(width);
         this.setHeight(height);
         VBox vbox = new VBox(10);
@@ -22,7 +25,7 @@ public class SideMenu extends StackPane
     public void loadButtons(VBox vbox)
     {
         // Spawn areas
-        Label spawns = new Label("Spwan Areas:");
+        Label spawns = new Label("Spawn Areas:");
         Button aSpawn = new Button("Agent Spawn Area");
         Button iSpawn = new Button("Intruder Spawn Area");
         vbox.getChildren().addAll(spawns, aSpawn, iSpawn);
@@ -39,6 +42,7 @@ public class SideMenu extends StackPane
         // Functionality buttons
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
+        create.setOnAction(e -> startMenu.getApp().gotoSimulation()); // TODO make this better
         Button crOpen = new Button("Create & Open");
 
         vbox.getChildren().addAll(func, create, crOpen);

@@ -8,7 +8,7 @@ public class MapBuilder extends Canvas
 {
     private Color backgroundColour;
 
-    public MapBuilder(int width, int height)
+    public MapBuilder(StartMenu startMenu, int width, int height)
     {
         super(width, height);
         backgroundColour = Color.WHITE;
