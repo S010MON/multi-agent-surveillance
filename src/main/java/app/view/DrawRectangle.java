@@ -1,7 +1,10 @@
 package app.view;
 
+import app.controller.linAlg.Vector;
+import app.model.furniture.FurnitureType;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
+import lombok.Getter;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -10,7 +13,9 @@ import javafx.scene.paint.Color;
 @Setter
 public class DrawRectangle implements UIRect
 {
-    private Rectangle2D rect;
+    @Getter private FurnitureType type;
+    @Getter private Vector vector;
+    @Getter private Rectangle2D rect;
     private GraphicsContext gc;
     private Color colour;
     private boolean fill;

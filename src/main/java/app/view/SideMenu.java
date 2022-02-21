@@ -1,5 +1,8 @@
 package app.view;
 
+import app.controller.linAlg.Vector;
+import app.controller.settings.Settings;
+import app.controller.settings.SettingsObject;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -9,8 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
-import java.util.Random;
 
 public class SideMenu extends StackPane
 {
@@ -38,6 +39,13 @@ public class SideMenu extends StackPane
 
         vbox.getChildren().addAll(l, minX, minY, width, height);
 
+        // Portal co-ordinates
+        Label teleport = new Label("Teleport to x and y:");
+        TextField x = new TextField();
+        TextField y = new TextField();
+
+        vbox.getChildren().addAll(teleport, x, y);
+
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
         vbox.getChildren().add(furniture);
@@ -46,6 +54,7 @@ public class SideMenu extends StackPane
             Button furnType = new Button(""+ft);
             furnType.setOnAction(e -> {
                 DrawRectangle dr = new DrawRectangle();
+                dr.setType(ft);
                 dr.setRect(new Rectangle2D( parseRect(minX), parseRect(minY), parseRect(width),
                                             parseRect(height)));
                 dr.setGc(mb.gc);
@@ -73,6 +82,7 @@ public class SideMenu extends StackPane
                             }
                     case "teleport" ->
                             {
+                                dr.setVector(new Vector(parseRect(x), parseRect(y)));
                                 dr.setColour(Color.OLIVEDRAB);
                                 dr.setFill(true);
                             }
@@ -100,7 +110,13 @@ public class SideMenu extends StackPane
         // Functionality buttons
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
-        Button crOpen = new Button("Create & Open");
+        create.setOnAction(e -> {
+            Settings s = saveMap();
+
+            // Write to file (Add number of guards etc.)
+        });
+
+        Button crOpen = new Button("Create & Open"); // Same as above but opens the map also.
 
         vbox.getChildren().addAll(func, create, crOpen);
 
@@ -125,5 +141,26 @@ public class SideMenu extends StackPane
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public Settings saveMap()
+    {
+        Settings s = new Settings();
+        s.setWidth(2048);
+        s.setHeight(1024);
+        for(UIRect object : mb.getHistory())
+        {
+            DrawRectangle rectObject = (DrawRectangle) object;
+            if(rectObject.getType().label.equals("teleport"))
+            {
+                s.addTeleport(rectObject.getRect(), rectObject.getVector());
+            }
+            else
+            {
+                s.addFurniture(rectObject.getRect(), rectObject.getType());
+            }
+        }
+
+        return s;
     }
 }

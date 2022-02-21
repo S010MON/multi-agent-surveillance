@@ -1,5 +1,6 @@
 package app.view;
 
+import lombok.Getter;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +12,7 @@ public class MapBuilder extends Canvas
     private Color backgroundColour;
     public GraphicsContext gc = this.getGraphicsContext2D();
     private Rectangle2D rect;
-    private ArrayDeque<UIRect> history = new ArrayDeque<>();
+    @Getter private ArrayDeque<UIRect> history = new ArrayDeque<>();
 
     public MapBuilder(int width, int height)
     {
