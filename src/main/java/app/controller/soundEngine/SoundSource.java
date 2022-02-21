@@ -1,7 +1,9 @@
 package app.controller.soundEngine;
 
-import app.model.Map;
+
+import app.controller.linAlg.Vector;
 
 public interface SoundSource {
-    void noise(Map map);
+    double soundLevelFrom(Vector position);
+    Vector getPosition();
 }
