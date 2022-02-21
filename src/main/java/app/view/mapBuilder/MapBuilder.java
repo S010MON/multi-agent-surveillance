@@ -1,4 +1,4 @@
-package app.view;
+package app.view.mapBuilder;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,9 +8,9 @@ public class MapBuilder extends Canvas
 {
     private Color backgroundColour;
 
-    public MapBuilder(StartMenu startMenu, int width, int height)
+    public MapBuilder(StartMenu startMenu)
     {
-        super(width, height);
+        super(1000, 1000);
         backgroundColour = Color.WHITE;
         // Background
         GraphicsContext gc = this.getGraphicsContext2D();

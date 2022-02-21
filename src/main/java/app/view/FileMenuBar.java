@@ -13,25 +13,32 @@ public class FileMenuBar extends MenuBar
     {
         this.app = app;
 
-        // File menu
-        Menu fileMenu = new Menu("File");
-        // File items
-        MenuItem newFile = new MenuItem("New");
-        MenuItem openFile = new MenuItem("Open");
-        newFile.setOnAction(e -> System.out.println("Test new..."));
-        openFile.setOnAction(e -> System.out.println("Test open..."));
-        fileMenu.getItems().add(newFile);
-        fileMenu.getItems().add(openFile);
+        /* View menu */
+        Menu file = new Menu("File");
 
-        // Map Builder menu
-        Menu mapBuildMenu = new Menu("Map Builder");
-        // Map Builder item
-        MenuItem mapBuilder = new MenuItem("Map Builder");
-        mapBuilder.setOnAction(e -> app.gotoStart());
-        mapBuildMenu.getItems().add(mapBuilder);
+        MenuItem newFile = new MenuItem("New");
+        newFile.setOnAction(e -> System.out.println("Test new..."));
+        file.getItems().add(newFile);
+
+        MenuItem openFile = new MenuItem("Open");
+        openFile.setOnAction(e -> System.out.println("Test open..."));
+        file.getItems().add(openFile);
+
+
+        /* View menu */
+        Menu view = new Menu("View");
+
+        MenuItem mapView = new MenuItem("Map Builder");
+        mapView.setOnAction(e -> app.gotoStart());
+        view.getItems().add(mapView);
+
+        MenuItem simView = new MenuItem("Simulation");
+        simView.setOnAction(e -> app.gotoSimulation());
+        view.getItems().add(simView);
+
 
         // Add to the Menu Bar object
-        this.getMenus().add(fileMenu);
-        this.getMenus().add(mapBuildMenu);
+        this.getMenus().add(file);
+        this.getMenus().add(view);
     }
 }

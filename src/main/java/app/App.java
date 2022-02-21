@@ -1,21 +1,16 @@
 package app;
 
 import app.view.FileMenuBar;
-import app.view.Simulation;
+import app.view.simulation.Simulation;
 import app.view.ScreenSize;
-import app.view.StartMenu;
+import app.view.mapBuilder.StartMenu;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
 
-
-import java.io.IOException;
-
 public class App extends Application
 {
-    private Stage stage;
     private Scene scene;
     @Getter private FileMenuBar fileMenuBar;
     private StartMenu startMenu;
@@ -24,7 +19,6 @@ public class App extends Application
     @Override
     public void start(Stage stage)
     {
-        this.stage = stage;
         this.fileMenuBar = new FileMenuBar(this);
         stage.setTitle("Multi Agent Surveillance");
 
@@ -42,14 +36,16 @@ public class App extends Application
 
     public void gotoSimulation()
     {
-        simulation = new Simulation(this);
-        scene.setOnKeyTyped(e -> simulation.handleKey(e));
+        if(simulation == null)
+        {
+            simulation = new Simulation(this);
+            scene.setOnKeyTyped(e -> simulation.handleKey(e));
+        }
         scene.setRoot(simulation);
     }
 
     public void gotoStart()
     {
-        System.out.println("Start");
         scene.setRoot(startMenu);
     }
 }

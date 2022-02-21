@@ -1,4 +1,4 @@
-package app.view;
+package app.view.mapBuilder;
 
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Insets;
@@ -7,15 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class SideMenu extends StackPane
+public class FurniturePane extends StackPane
 {
     private StartMenu startMenu;
 
-    public SideMenu(StartMenu startMenu, int width, int height)
+    public FurniturePane(StartMenu startMenu)
     {
         this.startMenu = startMenu;
-        this.setWidth(width);
-        this.setHeight(height);
         VBox vbox = new VBox(10);
         loadButtons(vbox);
         this.setMargin(vbox, new Insets(10, 10, 10, 10));

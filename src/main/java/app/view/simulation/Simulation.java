@@ -1,10 +1,11 @@
-package app.view;
+package app.view.simulation;
 
 import app.App;
 import app.controller.io.FileManager;
 import app.controller.GameEngine;
 import app.controller.settings.Settings;
 import app.model.Map;
+import app.view.FileMenuBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 

@@ -1,7 +1,8 @@
-package app.view;
+package app.view.simulation;
 
 import app.controller.graphicsEngine.Ray;
 import app.model.Map;
+import app.view.ScreenSize;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
