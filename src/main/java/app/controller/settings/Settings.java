@@ -1,6 +1,8 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundSource;
+import app.controller.soundEngine.SoundSourceBase;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Settings
     private double timeStep;
     private double scaling;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
+    private ArrayList<SoundSource> soundSources = new ArrayList<>();
 
     public void addFurniture(Rectangle2D rectangle, FurnitureType type)
     {
@@ -35,5 +38,9 @@ public class Settings
     public void addTeleport(Rectangle2D rectangle, Vector vector)
     {
         furniture.add(new SettingsObject(rectangle, vector));
+    }
+
+    public void addSoundSource(Vector position, double amplitude){
+        soundSources.add(new SoundSourceBase(position, amplitude));
     }
 }

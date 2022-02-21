@@ -4,6 +4,8 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
+import app.controller.soundEngine.SoundFurniture;
+import app.controller.soundEngine.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 public class Map
 {
     @Getter private ArrayList<Furniture> furniture;
+    @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
+    @Getter private ArrayList<SoundSource> soundSources;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
     private Human human;
@@ -35,6 +39,13 @@ public class Map
         /* Make furniture */
         furniture = new ArrayList<>();
         settings.getFurniture().forEach(e -> addFurniture(e));
+
+
+        /* Make sound furniture */
+        soundFurniture = new ArrayList<>();
+
+        /* Make some sound sources */
+        soundSources = settings.getSoundSources();
 
         agents = new ArrayList<>();
 
