@@ -22,6 +22,7 @@ public class AcoAgentTesting
     GraphicsEngine graphicsEngine = new RayTracing();
     Map map = new Map(settings);
 
+    //TODO Finish testing using either brute force or binary search
     @Test
     void testCardinalPointDetection()
     {
