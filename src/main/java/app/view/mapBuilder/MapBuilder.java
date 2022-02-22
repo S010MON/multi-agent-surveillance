@@ -1,4 +1,4 @@
-package app.view;
+package app.view.mapBuilder;
 
 import lombok.Getter;
 import javafx.geometry.Rectangle2D;
@@ -14,9 +14,9 @@ public class MapBuilder extends Canvas
     private Rectangle2D rect;
     @Getter private ArrayDeque<UIRect> history = new ArrayDeque<>();
 
-    public MapBuilder(int width, int height)
+    public MapBuilder(StartMenu startMenu)
     {
-        super(width, height);
+        super(1000, 1000);
         backgroundColour = Color.WHITE;
         // Background
         drawBackground(gc);

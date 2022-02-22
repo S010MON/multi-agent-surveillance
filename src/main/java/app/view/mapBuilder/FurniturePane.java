@@ -1,8 +1,12 @@
-package app.view;
+package app.view.mapBuilder;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
+import app.view.mapBuilder.DrawRectangle;
+import app.view.mapBuilder.MapBuilder;
+import app.view.mapBuilder.StartMenu;
+import app.view.mapBuilder.UIRect;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -13,7 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class SideMenu extends StackPane
+public class FurniturePane extends StackPane
 {
     private MapBuilder mb;
     private TextField minX;
@@ -22,12 +26,12 @@ public class SideMenu extends StackPane
     private TextField height;
     private TextField x;
     private TextField y;
+    private StartMenu startMenu;
 
-    public SideMenu(int width, int height, MapBuilder mb)
+    public FurniturePane(StartMenu startMenu, MapBuilder mb)
     {
-        this.setWidth(width);
-        this.setHeight(height);
         this.mb = mb;
+        this.startMenu = startMenu;
         VBox vbox = new VBox(10);
         loadButtons(vbox);
         this.setMargin(vbox, new Insets(10, 10, 10, 10));
@@ -42,7 +46,6 @@ public class SideMenu extends StackPane
         minY = new TextField();
         width = new TextField();
         height = new TextField();
-
         vbox.getChildren().addAll(l, minX, minY, width, height);
 
         // Portal co-ordinates
@@ -51,6 +54,12 @@ public class SideMenu extends StackPane
         y = new TextField();
 
         vbox.getChildren().addAll(teleport, x, y);
+
+        // Spawn areas
+        Label spawns = new Label("Spwan Areas:");
+        Button aSpawn = new Button("Agent Spawn Area");
+        Button iSpawn = new Button("Intruder Spawn Area");
+        vbox.getChildren().addAll(spawns, aSpawn, iSpawn);
 
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
@@ -71,7 +80,7 @@ public class SideMenu extends StackPane
             // Write to file (Add number of guards etc.)
         });
 
-        Button crOpen = new Button("Create & Open"); // Same as above but opens the map also.
+        Button crOpen = new Button("Create & Open");
 
         vbox.getChildren().addAll(func, create, crOpen);
 

@@ -1,37 +1,44 @@
 package app.view;
 
+import app.App;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
 public class FileMenuBar extends MenuBar
 {
-    public FileMenuBar(Frame frame)
-    {
-        // File menu
-        Menu fileMenu = new Menu("File");
-        // File items
-        MenuItem newFile = new MenuItem("New");
-        MenuItem openFile = new MenuItem("Open");
-        newFile.setOnAction(e -> System.out.println("Test new..."));
-        openFile.setOnAction(e -> System.out.println("Test open..."));
-        fileMenu.getItems().add(newFile);
-        fileMenu.getItems().add(openFile);
+    private App app;
 
-        // Map Builder menu
-        Menu mapBuildMenu = new Menu("Map Builder");
-        // Map Builder item
-        MenuItem mapBuilder = new MenuItem("Map Builder");
-        mapBuilder.setOnAction(e ->
-        {
-            MapBuilder mb = new MapBuilder(1350, 800);
-            frame.setCenter(mb);
-            frame.setLeft(new SideMenu(250, 800, mb));
-        });
-        mapBuildMenu.getItems().add(mapBuilder);
+    public FileMenuBar(App app)
+    {
+        this.app = app;
+
+        /* View menu */
+        Menu file = new Menu("File");
+
+        MenuItem newFile = new MenuItem("New");
+        newFile.setOnAction(e -> System.out.println("Test new..."));
+        file.getItems().add(newFile);
+
+        MenuItem openFile = new MenuItem("Open");
+        openFile.setOnAction(e -> System.out.println("Test open..."));
+        file.getItems().add(openFile);
+
+
+        /* View menu */
+        Menu view = new Menu("View");
+
+        MenuItem mapView = new MenuItem("Map Builder");
+        mapView.setOnAction(e -> app.gotoStart());
+        view.getItems().add(mapView);
+
+        MenuItem simView = new MenuItem("Simulation");
+        simView.setOnAction(e -> app.gotoSimulation());
+        view.getItems().add(simView);
+
 
         // Add to the Menu Bar object
-        this.getMenus().add(fileMenu);
-        this.getMenus().add(mapBuildMenu);
+        this.getMenus().add(file);
+        this.getMenus().add(view);
     }
 }
