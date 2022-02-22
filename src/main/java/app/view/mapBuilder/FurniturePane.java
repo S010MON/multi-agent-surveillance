@@ -1,15 +1,17 @@
-package app.view;
+package app.view.mapBuilder;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
-import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
+import app.view.mapBuilder.DrawRectangle;
+import app.view.mapBuilder.MapBuilder;
+import app.view.mapBuilder.StartMenu;
+import app.view.mapBuilder.UIRect;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,10 +28,8 @@ public class FurniturePane extends StackPane
     private TextField y;
     private StartMenu startMenu;
 
-    public FurniturePane(StartMenu startMenu, int width, int height, MapBuilder mb)
+    public FurniturePane(StartMenu startMenu, MapBuilder mb)
     {
-        this.setWidth(width);
-        this.setHeight(height);
         this.mb = mb;
         this.startMenu = startMenu;
         VBox vbox = new VBox(10);

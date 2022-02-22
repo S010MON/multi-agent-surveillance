@@ -1,4 +1,4 @@
-package app.view;
+package app.view.mapBuilder;
 
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;

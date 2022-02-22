@@ -1,4 +1,4 @@
-package app.view;
+package app.view.mapBuilder;
 
 public interface UIRect
 {
