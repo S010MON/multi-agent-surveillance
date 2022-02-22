@@ -2,8 +2,8 @@ package app.view;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
-import app.controller.settings.SettingsObject;
 import app.model.furniture.FurnitureType;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
@@ -16,6 +16,12 @@ import javafx.scene.paint.Color;
 public class SideMenu extends StackPane
 {
     private MapBuilder mb;
+    private TextField minX;
+    private TextField minY;
+    private TextField width;
+    private TextField height;
+    private TextField x;
+    private TextField y;
 
     public SideMenu(int width, int height, MapBuilder mb)
     {
@@ -32,17 +38,17 @@ public class SideMenu extends StackPane
     {
         // User Rectangle Area
         Label l = new Label("Enter MinX, MinY, width, height:");
-        TextField minX = new TextField();
-        TextField minY = new TextField();
-        TextField width = new TextField();
-        TextField height = new TextField();
+        minX = new TextField();
+        minY = new TextField();
+        width = new TextField();
+        height = new TextField();
 
         vbox.getChildren().addAll(l, minX, minY, width, height);
 
         // Portal co-ordinates
         Label teleport = new Label("Teleport to x and y:");
-        TextField x = new TextField();
-        TextField y = new TextField();
+        x = new TextField();
+        y = new TextField();
 
         vbox.getChildren().addAll(teleport, x, y);
 
@@ -52,58 +58,7 @@ public class SideMenu extends StackPane
         for(FurnitureType ft : FurnitureType.values())
         {
             Button furnType = new Button(""+ft);
-            furnType.setOnAction(e -> {
-                DrawRectangle dr = new DrawRectangle();
-                dr.setType(ft);
-                dr.setRect(new Rectangle2D( parseRect(minX), parseRect(minY), parseRect(width),
-                                            parseRect(height)));
-                dr.setGc(mb.gc);
-                switch(ft.label)
-                {
-                    case "wall" ->
-                            {
-                                dr.setColour(Color.SANDYBROWN);
-                                dr.setFill(true);
-                            }
-                    case "shade" ->
-                            {
-                                dr.setColour(Color.LIGHTGRAY);
-                                dr.setFill(true);
-                            }
-                    case "glass" ->
-                            {
-                                dr.setColour(Color.LIGHTBLUE);
-                                dr.setFill(true);
-                            }
-                    case "tower" ->
-                            {
-                                dr.setColour(Color.OLIVE);
-                                dr.setFill(true);
-                            }
-                    case "teleport" ->
-                            {
-                                dr.setVector(new Vector(parseRect(x), parseRect(y)));
-                                dr.setColour(Color.OLIVEDRAB);
-                                dr.setFill(true);
-                            }
-                    case "spawnAreaGuards" ->
-                            {
-                                dr.setColour(Color.BLUE);
-                                dr.setFill(false);
-                            }
-                    case "spawnAreaIntruders" ->
-                            {
-                                dr.setColour(Color.RED);
-                                dr.setFill(false);
-                            }
-                    case "targetArea" ->
-                            {
-                                dr.setColour(Color.GOLD);
-                                dr.setFill(false);
-                            }
-                }
-                mb.run(dr);
-            });
+            furnType.setOnAction(e -> handleActionEvent(e, ft));
             vbox.getChildren().add(furnType);
         }
 
@@ -124,6 +79,60 @@ public class SideMenu extends StackPane
         undo.setOnAction(e -> mb.undo());
 
         vbox.getChildren().addAll(undo);
+    }
+
+    private void handleActionEvent(ActionEvent e, FurnitureType ft)
+    {
+        DrawRectangle dr = new DrawRectangle();
+        dr.setType(ft);
+        dr.setRect(new Rectangle2D( parseRect(minX), parseRect(minY), parseRect(width),
+                parseRect(height)));
+        dr.setGc(mb.gc);
+        switch(ft.label)
+        {
+            case "wall" ->
+                    {
+                        dr.setColour(Color.SANDYBROWN);
+                        dr.setFill(true);
+                    }
+            case "shade" ->
+                    {
+                        dr.setColour(Color.LIGHTGRAY);
+                        dr.setFill(true);
+                    }
+            case "glass" ->
+                    {
+                        dr.setColour(Color.LIGHTBLUE);
+                        dr.setFill(true);
+                    }
+            case "tower" ->
+                    {
+                        dr.setColour(Color.OLIVE);
+                        dr.setFill(true);
+                    }
+            case "teleport" ->
+                    {
+                        dr.setVector(new Vector(parseRect(x), parseRect(y)));
+                        dr.setColour(Color.OLIVEDRAB);
+                        dr.setFill(true);
+                    }
+            case "spawnAreaGuards" ->
+                    {
+                        dr.setColour(Color.BLUE);
+                        dr.setFill(false);
+                    }
+            case "spawnAreaIntruders" ->
+                    {
+                        dr.setColour(Color.RED);
+                        dr.setFill(false);
+                    }
+            case "targetArea" ->
+                    {
+                        dr.setColour(Color.GOLD);
+                        dr.setFill(false);
+                    }
+        }
+        mb.run(dr);
     }
 
     public int parseRect(TextField tf)
