@@ -24,8 +24,9 @@ public class FileMenuBar extends MenuBar
         MenuItem mapBuilder = new MenuItem("Map Builder");
         mapBuilder.setOnAction(e ->
         {
-            frame.setCenter(new MapBuilder(1350, 800));
-            frame.setLeft(new SideMenu(250, 800));
+            MapBuilder mb = new MapBuilder(1350, 800);
+            frame.setCenter(mb);
+            frame.setLeft(new SideMenu(250, 800, mb));
         });
         mapBuildMenu.getItems().add(mapBuilder);
 
