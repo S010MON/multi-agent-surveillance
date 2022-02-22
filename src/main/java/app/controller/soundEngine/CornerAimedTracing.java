@@ -13,7 +13,16 @@ public class CornerAimedTracing implements SoundEngine{
         // Step 1: aim at all the soundsources
         // right now this means ignore obstactles and return the loudest audible sound from agent
 
-        return map.getSoundSources().stream().map(source -> source.soundLevelFrom(agent.getPosition())).max(Double::compare).get();
+        double maxSoundLevel = 0.0;
+
+        for (SoundSource soundSource: map.getSoundSources()) {
+            double currentSoundLevel = soundSource.soundLevelFrom(agent.getPosition());
+            if(currentSoundLevel > maxSoundLevel) {
+                maxSoundLevel = currentSoundLevel;
+            }
+        }
+
+        return maxSoundLevel;
 
         /*
         for (SoundSource soundSource: map.getSoundSources()){
