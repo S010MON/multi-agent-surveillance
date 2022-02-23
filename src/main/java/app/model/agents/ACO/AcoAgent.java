@@ -42,7 +42,7 @@ public class AcoAgent extends AgentImp
     {
         Ray[] cardinalRays = detectCardinalRays();
         ArrayList<Vector> possibleMovements = determineAvailableMovements(cardinalRays);
-        ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(cardinalRays, possibleMovements);
+        ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(possibleMovements);
 
         ArrayList<Vector> equivalentMinMoves = determineEquivalentMinMoves(cellPheromones, possibleMovements);
         Vector moveVector= selectRandomEquivalentMove(equivalentMinMoves);
@@ -83,7 +83,7 @@ public class AcoAgent extends AgentImp
         return equivalentMoves.get(randomGenerator.nextInt(equivalentMoves.size()));
     }
 
-    public ArrayList<Double> accessAvaliableCellPheromones(Ray[] cardinalRays, ArrayList<Vector> possibleMovements)
+    public ArrayList<Double> accessAvaliableCellPheromones(ArrayList<Vector> possibleMovements)
     {
 
         ArrayList<Double> cellPheromoneValues = new ArrayList<>();

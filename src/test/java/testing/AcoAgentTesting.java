@@ -44,7 +44,7 @@ public class AcoAgentTesting
         Ray[] cardinalRays = agent.detectCardinalRays();
         ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
 
-        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(cardinalRays, availableMovements);
+        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
         int indexOfLastValue = pheromoneValues.size() - 1;
         assertEquals(pheromoneValues.get(indexOfLastValue), agent.releaseMaxPheromone());
     }
@@ -59,7 +59,7 @@ public class AcoAgentTesting
         Ray[] cardinalRays = agent.detectCardinalRays();
         ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
 
-        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(cardinalRays, availableMovements);
+        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
         for(Double pheromoneValue : pheromoneValues)
         {
             assertEquals(pheromoneValue, 0);
