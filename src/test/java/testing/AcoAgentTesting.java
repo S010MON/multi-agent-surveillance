@@ -8,7 +8,6 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.ACO.AcoAgent;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
