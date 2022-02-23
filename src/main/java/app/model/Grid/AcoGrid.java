@@ -25,7 +25,7 @@ public class AcoGrid extends Grid
         int col = getCellCol(agent.getPosition());
 
         PheromoneCell cell = (PheromoneCell) super.getCellAt(row, col);
-        cell.updatePheromone(agent.releaseMaxPheramone());
+        cell.updatePheromone(agent.releaseMaxPheromone());
     }
 
     public void evaporationProcess()

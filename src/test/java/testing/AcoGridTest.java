@@ -22,7 +22,7 @@ public class AcoGridTest
 
         PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
 
-        assertEquals(occupiedCell.currentPheromoneValue(), agent.releaseMaxPheramone());
+        assertEquals(occupiedCell.currentPheromoneValue(), agent.releaseMaxPheromone());
     }
 
     @Test

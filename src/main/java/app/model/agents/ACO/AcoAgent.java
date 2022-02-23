@@ -10,6 +10,7 @@ import app.model.map.Move;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp
 {
     //TODO Place actual max pheramone value
@@ -38,6 +39,7 @@ public class AcoAgent extends AgentImp
     public Move move()
     {
         Ray[] cardinalRays = detectCardinalRays();
+        ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(cardinalRays);
         return null;
     }
 
@@ -46,6 +48,20 @@ public class AcoAgent extends AgentImp
     {
         position = endPoint;
         world.updateAgent(this);
+    }
+
+    public ArrayList<Double> accessAvaliableCellPheromones(Ray[] cardinalRays)
+    {
+        ArrayList<Vector> possibleMovements = determineAvaliableMovements(cardinalRays);
+        ArrayList<Double> cellPheromoneValues = new ArrayList<>();
+
+        for(Vector movement : possibleMovements)
+        {
+            Vector resultingPosition = position.add(movement);
+            PheromoneCell possibleCell = (PheromoneCell) world.getCellAt(resultingPosition);
+            cellPheromoneValues.add(possibleCell.currentPheromoneValue());
+        }
+        return cellPheromoneValues;
     }
 
     public ArrayList<Vector> determineAvaliableMovements(Ray[] cardinalRays)
@@ -67,13 +83,13 @@ public class AcoAgent extends AgentImp
         switch(angle)
         {
             case 0:
-                return new Vector(1, 0);
+                return new Vector(cellSize, 0);
             case 90:
-                return new Vector(0, 1);
+                return new Vector(0, cellSize);
             case 180:
-                return new Vector(-1, 0);
+                return new Vector(-cellSize, 0);
             case 270:
-                return new Vector(0, -1);
+                return new Vector(0, -cellSize);
             default:
                 return null;
         }
@@ -131,7 +147,7 @@ public class AcoAgent extends AgentImp
         return false;
     }
 
-    public double releaseMaxPheramone()
+    public double releaseMaxPheromone()
     {
         return maxPheramone;
     }
