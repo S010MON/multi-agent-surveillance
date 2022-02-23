@@ -7,6 +7,8 @@ import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,81 +52,10 @@ public class Settings
         soundSources.add(new SoundSourceBase(position, amplitude));
     }
 
-    public SettingsObject getTargetArea() {
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.TARGET)
-                return obj;
-        }
-        return null;
-    }
-
-    public SettingsObject getSpawnAreaIntruders() {
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.INTRUDER_SPAWN)
-                return obj;
-        }
-        return null;
-    }
-
-    public SettingsObject getSpawnAreaGuards() {
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.GUARD_SPAWN)
-                return obj;
-        }
-        return null;
-    }
-
-    public ArrayList<SettingsObject> getWalls() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.WALL)
-                objects.add(obj);
-        }
-        return objects;
-    }
-
-    public ArrayList<SettingsObject> getTowers() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.TOWER)
-                objects.add(obj);
-        }
-        return objects;
-    }
-
-    public ArrayList<SettingsObject> getPortals() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.PORTAL)
-                objects.add(obj);
-        }
-        return objects;
-    }
-
-    public ArrayList<SettingsObject> getShades() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.SHADE)
-                objects.add(obj);
-        }
-        return objects;
-    }
-
-    public ArrayList<SettingsObject> getTextures() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.TEXTURE)
-                objects.add(obj);
-        }
-        return objects;
-    }
-
-    public ArrayList<SettingsObject> getGlass() {
-        ArrayList<SettingsObject> objects = new ArrayList<>();
-        for(SettingsObject obj: furniture) {
-            if(obj.getType()==FurnitureType.GLASS)
-                objects.add(obj);
-        }
-        return objects;
+    public List<SettingsObject> getFurniture(FurnitureType type)
+    {
+        return furniture.stream()
+                .filter(obj -> obj.getType() == type)
+                .toList();
     }
 }
