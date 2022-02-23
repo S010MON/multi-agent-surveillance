@@ -67,4 +67,9 @@ public class Grid
     {
         return grid[0].length;
     }
+
+    public double getCellSize()
+    {
+        return cellSize;
+    }
 }
