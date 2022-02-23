@@ -70,7 +70,16 @@ public class AcoAgentTesting
     @Test
     void testAvaliableMovementsWithObstacle()
     {
+        position = new Vector(22.2, 39.7);
 
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        Ray[] cardinalRays = agent.detectCardinalRays();
+        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
+
+        //One dimension (North of agent) is blocked by a wall
+        assertEquals(availableMovements.size(), 3);
     }
 
     @Test
