@@ -10,6 +10,8 @@ import app.model.Map;
 import app.model.agents.ACO.AcoAgent;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AcoAgentTesting
@@ -21,6 +23,21 @@ public class AcoAgentTesting
     Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
     GraphicsEngine graphicsEngine = new RayTracing();
     Map map = new Map(settings);
+
+    @Test
+    void testAvaliableMovements()
+    {
+        AcoAgent.initializeWorld(50, 50);
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Ray[] cardinalRays = agent.detectCardinalRays();
+
+        ArrayList<Vector> avaliableMovements = agent.determineAvaliableMovements(cardinalRays);
+
+        //Wihtin the map there are 4 avaliable movements. Vector position link already tested
+        assertEquals(avaliableMovements.size(), cardinalRays.length);
+    }
 
     @Test
     void testAngleToMovementLink()
@@ -69,7 +86,7 @@ public class AcoAgentTesting
 
         agent.updateView(graphicsEngine.compute(map, agent));
 
-        Ray[] cardinalRays = agent.detectCardinalPoints();
+        Ray[] cardinalRays = agent.detectCardinalRays();
         int[] cardinalAngles = agent.getCardinalAngles();
 
         assertTrue(agent.approximateAngleRange(cardinalRays[0].angle(), cardinalAngles[0]));

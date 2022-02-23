@@ -37,7 +37,7 @@ public class AcoAgent extends AgentImp
     @Override
     public Move move()
     {
-        Ray[] cardinalRays = detectCardinalPoints();
+        Ray[] cardinalRays = detectCardinalRays();
         return null;
     }
 
@@ -59,7 +59,7 @@ public class AcoAgent extends AgentImp
                 possibleMovements.add(angleToGridMovementLink(cardinalAngles[i]));
             }
         }
-        return null;
+        return possibleMovements;
     }
 
     public Vector angleToGridMovementLink(int angle)
@@ -79,7 +79,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public Ray[] detectCardinalPoints()
+    public Ray[] detectCardinalRays()
     {
         Ray[] cardinalRays = new Ray[cardinalAngles.length];
 
