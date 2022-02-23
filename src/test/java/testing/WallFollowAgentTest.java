@@ -9,6 +9,7 @@ import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.model.Map;
+import app.model.map.Move;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
@@ -233,6 +234,7 @@ public class WallFollowAgentTest
         // if (turned left previously and forward no wall)
         //      go forward
 
+        agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.LEFT);
         agent.setMovedForwardLast(false);
         agent.updateLocation(initialPosition);
@@ -244,13 +246,20 @@ public class WallFollowAgentTest
 
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);
-        Vector newPos = agent.move().getDeltaPos();
-        agent.updateLocation(newPos);
+
+        double moveLength = 100;
+        agent.setMoveLength(moveLength);
+        Move newMove = agent.move();
+        agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
+        Vector expectedDeltaPos = new Vector(moveLength * initialDirection.getX(), moveLength * initialDirection.getY());
+
         Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
         Vector expectedDir = initialDirection;
 
         // Check position change, last turn type, direction and if moved forward
+        assertEquals(expectedDir,newMove.getEndDir());
+        assertEquals(expectedDeltaPos,newMove.getDeltaPos());
+
         assertEquals(expectedPos,agent.getPosition());
         assertEquals(WallFollowAgent.TurnType.NO_TURN, agent.getLastTurn());
         assertEquals(expectedDir,initialDirection);
@@ -265,6 +274,7 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
+        agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
         agent.setMovedForwardLast(false);
 
@@ -274,14 +284,18 @@ public class WallFollowAgentTest
 
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);  // move length in reality is way smaller
+        double moveLength = 100;  // move length in reality is way smaller
+        agent.setMoveLength(moveLength);
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move().getDeltaPos();
-        agent.updateLocation(newPos);
+        Move newMove = agent.move();
+        agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
+        Vector expectedDeltaPos = new Vector(0,0);
         Vector expectedPos = initialPosition;
         Vector expectedDir = new Vector(1,0);
 
         // Check position, last turn type, direction and if moved forward
+        assertEquals(expectedDir,newMove.getEndDir());
+        assertEquals(expectedDeltaPos,newMove.getDeltaPos());
         assertTrue(noLeftWallDetected);
         assertEquals(expectedPos,agent.getPosition());
         assertEquals(WallFollowAgent.TurnType.LEFT, agent.getLastTurn());
@@ -297,6 +311,7 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
+        agent.setWallEncountered(true);
         // Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -305,15 +320,19 @@ public class WallFollowAgentTest
 
         // Detect surroundings and turn
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);
+        double moveLength = 100;
+        agent.setMoveLength(moveLength);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move().getDeltaPos();
-        agent.updateLocation(newPos);
+        Move newMove = agent.move();
+        agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
+        Vector expectedDeltaPos = new Vector(0,0);
         Vector expectedPos = initialPosition;
         Vector expectedDir = new Vector(1,0);
 
         // Check wall in front detected, position, last turn type, direction and if moved forward
+        assertEquals(expectedDir,newMove.getEndDir());
+        assertEquals(expectedDeltaPos,newMove.getDeltaPos());
         assertFalse(noWallDetected);
         assertTrue(noLeftWallDetected);
         assertEquals(expectedPos,agent.getPosition());
@@ -330,6 +349,7 @@ public class WallFollowAgentTest
         // if (no wall forward)
         //    go forward
 
+        agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
 
         //Map
@@ -340,15 +360,19 @@ public class WallFollowAgentTest
 
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);
+        double moveLength = 100;
+        agent.setMoveLength(moveLength);
         boolean noFrontWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
-        Vector newPos = agent.move().getDeltaPos();
-        agent.updateLocation(newPos);
+        Move newMove = agent.move();
+        agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
+        Vector expectedDeltaPos = new Vector(moveLength * initialDirection.getX(), moveLength * initialDirection.getY());
         Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
         Vector expectedDir = initialDirection;
 
         // Check wall on left detected, no wall in front detected, new position, direction, last turn type, if moved forward
+        assertEquals(expectedDir,newMove.getEndDir());
+        assertEquals(expectedDeltaPos,newMove.getDeltaPos());
         assertFalse(noLeftWallDetected);
         assertTrue(noFrontWallDetected);
         assertEquals(expectedPos, agent.getPosition());
@@ -364,6 +388,7 @@ public class WallFollowAgentTest
         // (case 1, 2 nd 3 violated as walls in front and on left) ->
         //    turn 90 deg right
 
+        agent.setWallEncountered(true);
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacleLeft = new Rectangle2D(250, 50, 2, 100);
@@ -374,15 +399,19 @@ public class WallFollowAgentTest
 
         // Detect surroundings and turn
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);
+        double moveLength = 100;
+        agent.setMoveLength(moveLength);
         boolean noFrontWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
         Vector expectedPos = initialPosition;
         Vector expectedDir = agent.rotateAgentLeft(false);
-        Vector newPos = agent.move().getDeltaPos();
-        agent.updateLocation(newPos);
+        Move newMove = agent.move();
+        agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
+        Vector expectedDeltaPos = new Vector(0,0);
 
         // Check front and left wall detected, position, new direction, last turn type, if moved forward
+        assertEquals(expectedDir,newMove.getEndDir());
+        assertEquals(expectedDeltaPos,newMove.getDeltaPos());
         assertFalse(noFrontWallDetected);
         assertFalse(noLeftWallDetected);
         assertEquals(expectedPos, agent.getPosition());

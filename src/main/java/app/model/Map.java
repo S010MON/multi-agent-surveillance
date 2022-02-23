@@ -51,7 +51,7 @@ public class Map
 
         /* Adds temporary WallFollowAgent */
         Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-        Vector dir = new Vector(1,0);
+        Vector dir = new Vector(-1,0);
         WallFollowAgent wallAgent = new WallFollowAgent(srt, dir, 10);
         //Assumes the wallFollowAgent is a guard
         wallAgent.setMaxWalk(settings.getWalkSpeedGuard());
