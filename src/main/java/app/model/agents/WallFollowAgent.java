@@ -18,8 +18,9 @@ public class WallFollowAgent extends AgentImp
     }
     private boolean movedForwardLast = false; // false if position didn't change and/or if only direction changed
     private TurnType lastTurn = TurnType.NO_TURN;
-    private double moveLength = 3;  // equal to obstacleDetectionDistance as only care about walls within move range
+    private double moveLength = 5;  // equal to obstacleDetectionDistance as only care about walls within move range
     private boolean DEBUG = false;
+    private boolean wallEncountered = false;
 
     public WallFollowAgent(Vector position, Vector direction, double radius)
     {
@@ -33,7 +34,13 @@ public class WallFollowAgent extends AgentImp
         pseudocode from: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
         pseudocode for simple (left) wall following algorithm:
 
-        if (turned left previously and forward no wall)
+        CASE 0: if !wallEncountered
+            if (no wall forward)
+                go forward
+            else
+                turn 90 deg right
+                set wallEcountered = true
+        else if (turned left previously and forward no wall)
             go forward;
         else if (no wall at left)
             turn 90 deg left;
@@ -48,7 +55,25 @@ public class WallFollowAgent extends AgentImp
         // agent always faces in the direction of the last move, i.e. last move was left, agent direction is left
         // so "going forward" means going in the direction where agent is facing
         Vector newMove = new Vector(0,0);
-        if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
+        Vector newDirection = direction;
+        if (!wallEncountered)
+        {
+            if (noWallDetected(direction.getAngle()))
+            {
+                if (DEBUG) { System.out.println("ALGORITHM CASE 0: no wall encountered"); }
+                newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
+                movedForwardLast = true;
+                lastTurn = TurnType.NO_TURN;
+            }
+            else
+            {
+                if (DEBUG) { System.out.println("ALGORITHM CASE 0: wall encountered!"); }
+                newDirection = rotateAgentLeft(false);
+                movedForwardLast = false;
+                wallEncountered = true;
+            }
+        }
+        else if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
@@ -58,7 +83,7 @@ public class WallFollowAgent extends AgentImp
         else if (noWallDetected(getAngleOfLeftRay()))
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
-            direction = rotateAgentLeft(true);
+            newDirection = rotateAgentLeft(true);
             movedForwardLast = false;
         }
         else if (noWallDetected(direction.getAngle()))
@@ -71,12 +96,13 @@ public class WallFollowAgent extends AgentImp
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            direction = rotateAgentLeft(false);
+            newDirection = rotateAgentLeft(false);
             movedForwardLast = false;
         }
-        Vector newPosition = position.add(newMove);
-        // TODO change to difference in position, rather than new position
-        return new Move(new Vector(), newPosition);
+        // Vector newPosition = position.add(newMove);
+        direction = newDirection;
+        // TODO need to to update of direction somewhere else (in GameEngine tick)
+        return new Move(newDirection, newMove);
     }
 
     public boolean noWallDetected(double rayAngle)
@@ -187,4 +213,12 @@ public class WallFollowAgent extends AgentImp
         direction = dir;
     }
 
+    public void setWallEncountered(boolean wallEncountered)
+    {
+        this.wallEncountered = wallEncountered;
+    }
+
+    public boolean isWallEncountered() {
+        return wallEncountered;
+    }
 }
