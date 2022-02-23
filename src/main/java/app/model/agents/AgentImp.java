@@ -31,6 +31,9 @@ public class AgentImp implements Agent
     }
 
     @Override
+    public void updateDirection(Vector direction) { this.direction = direction; }
+
+    @Override
     public Move move()
     {
         double x = Math.random() * maxWalk;
