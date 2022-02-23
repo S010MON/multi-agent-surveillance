@@ -50,10 +50,10 @@ public class AcoGridTest
 
         Vector agentPosition = new Vector(10, 10);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-        AcoAgent.accessWorld().displayGridState();
+        AcoAgent.accessWorld().print();
 
         agent.updateLocation(new Vector(9, 9));
-        AcoAgent.accessWorld().displayGridState();
+        AcoAgent.accessWorld().print();
 
     }
 }

@@ -40,7 +40,8 @@ public class AcoGrid extends Grid
         }
     }
 
-    public void displayGridState()
+    //TODO Rewrite method to toString
+    public void print()
     {
         for(int i = 0; i < getRowDimension(); i++)
         {
