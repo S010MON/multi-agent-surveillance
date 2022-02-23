@@ -24,4 +24,9 @@ public class PheromoneCell implements Cell
     {
         pheramone = pheramone * (1 - evaporationConstant);
     }
+
+    public String toString()
+    {
+        return Double.toString(pheramone);
+    }
 }

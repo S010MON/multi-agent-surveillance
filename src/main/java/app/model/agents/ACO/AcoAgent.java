@@ -17,6 +17,7 @@ public class AcoAgent extends AgentImp
     public AcoAgent(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
+        world.updateAgent(this);
     }
 
     @Override
@@ -31,8 +32,12 @@ public class AcoAgent extends AgentImp
         return maxPheramone;
     }
 
-    public static void initializeWorld(int width, int height)
+    public static void initializeWorld(double width, double height)
     {
         world = new AcoGrid(height, width);
+    }
+    public static AcoGrid accessWorld()
+    {
+        return world;
     }
 }
