@@ -9,6 +9,8 @@ import app.model.map.Move;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 //TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp
@@ -32,15 +34,19 @@ public class AcoAgent extends AgentImp
     // 1. Agent looks around
     // 2. Determine cardinal rays
     // 3. Determine positions to move to that aren't blocked (Wall or agent)
-    // 4. Determine pheramone value at each position
+    // 4. Determine pheromone value at each position
     // 5. Determine best move and execute it.
     // 6. After all agents have gone, perform evaporation procedure
     @Override
     public Move move()
     {
         Ray[] cardinalRays = detectCardinalRays();
-        ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(cardinalRays);
-        return null;
+        ArrayList<Vector> possibleMovements = determineAvailableMovements(cardinalRays);
+        ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(cardinalRays, possibleMovements);
+
+        ArrayList<Vector> equivalentMinMoves = determineEquivalentMinMoves(cellPheromones, possibleMovements);
+        Vector moveVector= selectRandomEquivalentMove(equivalentMinMoves);
+        return new Move(position, moveVector);
     }
 
     @Override
@@ -50,9 +56,36 @@ public class AcoAgent extends AgentImp
         world.updateAgent(this);
     }
 
-    public ArrayList<Double> accessAvaliableCellPheromones(Ray[] cardinalRays)
+    //TODO Implement movement bias based on target direction
+    public ArrayList<Vector> determineEquivalentMinMoves(ArrayList<Double> cellPheromones, ArrayList<Vector> possibleMovements)
     {
-        ArrayList<Vector> possibleMovements = determineAvaliableMovements(cardinalRays);
+        double minValue = Double.MAX_VALUE;
+        ArrayList<Vector> equivalentMoves = new ArrayList<>();
+
+        for(int i = 0; i < cellPheromones.size(); i++)
+        {
+            if(cellPheromones.get(i) == minValue)
+            {
+                equivalentMoves.add(possibleMovements.get(i));
+            }
+            else if(cellPheromones.get(i) < minValue)
+            {
+                minValue = cellPheromones.get(i);
+                equivalentMoves.clear();
+            }
+        }
+        return equivalentMoves;
+    }
+
+    public Vector selectRandomEquivalentMove(ArrayList<Vector> equivalentMoves)
+    {
+        Random randomGenerator = new Random(1);
+        return equivalentMoves.get(randomGenerator.nextInt(equivalentMoves.size()));
+    }
+
+    public ArrayList<Double> accessAvaliableCellPheromones(Ray[] cardinalRays, ArrayList<Vector> possibleMovements)
+    {
+
         ArrayList<Double> cellPheromoneValues = new ArrayList<>();
 
         for(Vector movement : possibleMovements)
@@ -64,7 +97,7 @@ public class AcoAgent extends AgentImp
         return cellPheromoneValues;
     }
 
-    public ArrayList<Vector> determineAvaliableMovements(Ray[] cardinalRays)
+    public ArrayList<Vector> determineAvailableMovements(Ray[] cardinalRays)
     {
         ArrayList<Vector> possibleMovements = new ArrayList<>();
 
@@ -83,13 +116,13 @@ public class AcoAgent extends AgentImp
         switch(angle)
         {
             case 0:
-                return new Vector(cellSize, 0);
-            case 90:
                 return new Vector(0, cellSize);
+            case 90:
+                return new Vector(cellSize, 0);
             case 180:
-                return new Vector(-cellSize, 0);
-            case 270:
                 return new Vector(0, -cellSize);
+            case 270:
+                return new Vector(-cellSize, 0);
             default:
                 return null;
         }

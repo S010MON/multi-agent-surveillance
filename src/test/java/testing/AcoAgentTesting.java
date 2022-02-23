@@ -8,6 +8,8 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.ACO.AcoAgent;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,38 +26,82 @@ public class AcoAgentTesting
     GraphicsEngine graphicsEngine = new RayTracing();
     Map map = new Map(settings);
 
-    @Test
-    void testAvaliableMovements()
+    @BeforeEach
+    void init()
     {
-        AcoAgent.initializeWorld(50, 50);
+        AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
+    }
+
+    @Test
+    void testAvailablePheromoneValues()
+    {
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+
+        Vector nextPosition = new Vector(21.2, 20.1);
+        agent.updateLocation(nextPosition);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        Ray[] cardinalRays = agent.detectCardinalRays();
+        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
+
+        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(cardinalRays, availableMovements);
+        int indexOfLastValue = pheromoneValues.size() - 1;
+        assertEquals(pheromoneValues.get(indexOfLastValue), agent.releaseMaxPheromone());
+    }
+
+    @Test
+    void testAvailablePheromonesDefaultValues()
+    {
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        Ray[] cardinalRays = agent.detectCardinalRays();
+        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
+
+        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(cardinalRays, availableMovements);
+        for(Double pheromoneValue : pheromoneValues)
+        {
+            assertEquals(pheromoneValue, 0);
+        }
+    }
+
+    @Test
+    void testAvaliableMovementsWithObstacle()
+    {
+
+    }
+
+    @Test
+    void testAvailableMovements()
+    {
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         Ray[] cardinalRays = agent.detectCardinalRays();
 
-        ArrayList<Vector> avaliableMovements = agent.determineAvaliableMovements(cardinalRays);
+        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
 
-        //Wihtin the map there are 4 avaliable movements. Vector position link already tested
-        assertEquals(avaliableMovements.size(), cardinalRays.length);
+        //Within the map there are 4 available movements. Vector position link already tested
+        assertEquals(availableMovements.size(), cardinalRays.length);
     }
 
     @Test
     void testAngleToMovementLink()
     {
-        AcoAgent.initializeWorld(50, 50);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         Vector link_0 = agent.angleToGridMovementLink(0);
         Vector link_180 = agent.angleToGridMovementLink(180);
 
-        assertEquals(link_0, new Vector(1, 0));
-        assertEquals(link_180, new Vector(-1, 0));
+        assertEquals(link_0, new Vector(0, 1));
+        assertEquals(link_180, new Vector(0, -1));
     }
 
     @Test
     void testCardinalPointDetection()
     {
-        AcoAgent.initializeWorld(50, 50);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         double targetAngle =63;
@@ -68,7 +114,6 @@ public class AcoAgentTesting
     @Test
     void testCardinalPointNonDetection()
     {
-        AcoAgent.initializeWorld(50, 50);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         double targetAngle =-163;
@@ -81,7 +126,6 @@ public class AcoAgentTesting
     @Test
     void test4CardinalAngles()
     {
-        AcoAgent.initializeWorld(50, 50);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         agent.updateView(graphicsEngine.compute(map, agent));
