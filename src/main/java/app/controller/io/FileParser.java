@@ -55,7 +55,13 @@ public class FileParser
                     case "spawnAreaGuards" -> settings.addFurniture(rectangleOf(coords), FurnitureType.GUARD_SPAWN);
                     case "teleport" -> {
                         Vector teleportTo = new Vector(Integer.parseInt(coords[4]), Integer.parseInt(coords[5]));
-                        settings.addTeleport(rectangleOf(coords), teleportTo);
+                        Double telportRotation = Double.parseDouble(coords[6]);
+                        settings.addTeleport(rectangleOf(coords), teleportTo, telportRotation);
+                    }
+                    case "texture" -> {
+                        Integer textureType = Integer.parseInt(coords[4]);
+                        Integer textureOrientation = Integer.parseInt(coords[5]);
+                        settings.addTexture(rectangleOf(coords), textureType, textureOrientation);
                     }
                 }
             }
