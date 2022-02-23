@@ -16,7 +16,7 @@ import java.util.random.RandomGenerator;
 public class AcoAgent extends AgentImp
 {
     //TODO Place actual max pheramone value
-    private double maxPheramone = 10;
+    private double maxPheromone = 10;
     private static AcoGrid world;
     private double cellSize = world.getCellSize();
 
@@ -182,7 +182,7 @@ public class AcoAgent extends AgentImp
 
     public double releaseMaxPheromone()
     {
-        return maxPheramone;
+        return maxPheromone;
     }
 
     public static void initializeWorld(double width, double height)
