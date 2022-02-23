@@ -20,7 +20,7 @@ public abstract class FileSaver
             StringBuilder sb = new StringBuilder();
 
             sb.append(toLine("name", settings.getName()));
-            sb.append(toLine("gameFile", file.getPath()));
+            sb.append(toLine("gameFile", FilePath.get(file.getName())));
             sb.append(toLine("gameMode", settings.getGameMode()));
             sb.append(toLine("height", settings.getHeight()));
             sb.append(toLine("width", settings.getWidth()));

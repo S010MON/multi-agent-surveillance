@@ -99,7 +99,7 @@ public class SaveSettingsTest
         return new String[]
                 {
                         "name = map_saveSetting_test",
-                        "gameFile = D:\\multi-agent-surveillance\\src\\main\\resources\\Save_map_saveSetting_test.txt",
+                        "gameFile = " + FilePath.get("Save_map_saveSetting_test.txt"),
                         "gameMode = 1",
                         "height = 95",
                         "width = 144",
