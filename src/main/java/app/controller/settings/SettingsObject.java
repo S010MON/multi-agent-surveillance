@@ -45,7 +45,7 @@ public class SettingsObject extends Rectangle2D
                 rectangle.getMinY(),
                 rectangle.getWidth(),
                 rectangle.getHeight());
-        this.type = FurnitureType.PORTAL;
+        this.type = FurnitureType.TEXTURE;
         this.teleportTo = null;
         this.teleportRotation = null;
         this.textureType = textureType;
