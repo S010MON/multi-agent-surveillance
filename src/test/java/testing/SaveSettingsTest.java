@@ -1,8 +1,10 @@
 package testing;
 
+import app.controller.settings.Settings;
 import app.controller.settings.SettingsGenerator;
 import app.controller.io.FileManager;
 import app.controller.io.FilePath;
+import app.controller.settings.SettingsObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,16 +24,38 @@ public class SaveSettingsTest
     /** Delete any exiting test files and create a new test file*/
     @BeforeAll void createMapFile()
     {
-        File oldFile = new File(FilePath.get("Save_map_test.txt"));
+
+        File oldFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
         if(oldFile.exists())
             oldFile.delete();
+        Settings testSetting = FileManager.loadSettings("src/test/resources/map_saveSetting_test.txt");
+
+        FileManager.saveSettings(testSetting, "Save_map_saveSetting_test.txt");
+
+        String filePathNameTest = FilePath.get("Save_map_saveSetting_test.txt");
+
+
+        try
+        {
+            Scanner testScanner = new Scanner(filePathNameTest);
+            testScanner.close();
+
+            File mapFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            fail("an exception occured while trying to create/access/delete the file");
+        }
     }
 
     @Test
     void testSaveSettings()
     {
-        String filePath = FilePath.get("Save_map_test.txt");
-        FileManager.saveSettings(SettingsGenerator.saveSettingsTest());
+        String filePath = FilePath.get("Save_map_saveSetting_test.txt");
+
+        //FileManager.saveSettings(SettingsGenerator.saveSettingsTest());
         String[] exp = expected();
 
         ArrayList<String> act = new ArrayList<>();
@@ -58,14 +82,14 @@ public class SaveSettingsTest
         // Check each line content
         for(int i = 0; i < exp.length; i++)
         {
-//            assertEquals(exp[i], act.get(i));  // TODO Make these pass!
+            assertEquals(exp[i], act.get(i));
         }
     }
 
      /** Clean up */
     @AfterAll void deleteMapFile()
     {
-        File oldFile = new File(FilePath.get("Save_map_test.txt"));
+        File oldFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
         if(oldFile.exists())
             oldFile.delete();
     }
@@ -74,20 +98,30 @@ public class SaveSettingsTest
     {
         return new String[]
                 {
-                        "name = map_test",
-                        "gameFile = filePath",
+                        "name = map_saveSetting_test",
+                        "gameFile = D:\\multi-agent-surveillance\\src\\main\\resources\\Save_map_saveSetting_test.txt",
                         "gameMode = 1",
-                        "height = 2",
-                        "width = 3",
-                        "scaling = 4.0",
-                        "numGuards = 5",
-                        "numIntruders = 6",
-                        "baseSpeedIntruder = 7.0",
-                        "sprintSpeedIntruder = 8.0",
-                        "baseSpeedGuard = 9.0",
-                        "sprintSpeedGuard = 10.0",
-                        "timeStep = 11.0",
-                        "wall = 12 13 14 15"
+                        "height = 95",
+                        "width = 144",
+                        "scaling = 0.2",
+                        "numGuards = 7",
+                        "numIntruders = 4",
+                        "baseSpeedIntruder = 13.0",
+                        "sprintSpeedIntruder = 21.0",
+                        "baseSpeedGuard = 13.0",
+                        "sprintSpeedGuard = 21.0",
+                        "timeStep = 0.5",
+                        "targetArea = 20 40 25 45",
+                        "spawnAreaIntruders = 500 100 560 160",
+                        "spawnAreaGuards = 100 500 160 560",
+                        "wall = 10 10 110 110",
+                        "wall = 200 200 220 220",
+                        "wall = 400 100 440 420",
+                        "glass = 320 320 350 350",
+                        "tower = 0 23 50 63",
+                        "tower = 12 40 20 44",
+                        "teleport = 20 70 25 75 90 50 0.0",
+                        "shaded = 10 20 20 40"
                 };
     }
 }

@@ -70,8 +70,23 @@ public class SettingsObject extends Rectangle2D
         if(type == FurnitureType.PORTAL && teleportTo != null)
         {
             sb.append(" ");
-            sb.append(teleportTo.getX()).append(" ");
-            sb.append(teleportTo.getY());
+            sb.append((int) teleportTo.getX()).append(" ");
+            sb.append((int) teleportTo.getY());
+        }
+        if(type == FurnitureType.PORTAL && teleportRotation != null)
+        {
+            sb.append(" ");
+            sb.append(teleportRotation);
+        }
+        if(type == FurnitureType.TEXTURE && textureType != null)
+        {
+            sb.append(" ");
+            sb.append(textureType);
+        }
+        if(type == FurnitureType.TEXTURE && textureOrientation != null)
+        {
+            sb.append(" ");
+            sb.append(textureOrientation);
         }
         return sb.toString();
     }
