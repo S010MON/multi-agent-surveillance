@@ -11,4 +11,6 @@ public interface SoundFurniture {
     void setSoundBoundaries(ArrayList<SoundBoundary> soundBoundaries);
 
     ArrayList<SoundBoundary> getSoundBoundaries();
+
+    boolean intersectsAny(SoundRay soundRay);
 }
