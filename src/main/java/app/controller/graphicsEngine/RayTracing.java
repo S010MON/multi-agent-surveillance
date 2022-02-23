@@ -52,8 +52,8 @@ public class RayTracing implements GraphicsEngine
     {
         ArrayList<Ray> rays = new ArrayList<>();
         Vector origin = agent.getPosition();
-        Vector direction = agent.getDirection();
-        Ray ray = new Ray(origin, direction);
+        Vector nextPosition = origin.add(agent.getDirection());
+        Ray ray = new Ray(origin, nextPosition);
         double theta = 0;
         for(int i = 0; i < noOfRays; i++)
         {
