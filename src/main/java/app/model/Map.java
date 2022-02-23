@@ -4,6 +4,7 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;
@@ -38,14 +39,12 @@ public class Map
 
         agents = new ArrayList<>();
 
-        /* Adds temporary WallFollowAgent */
-        Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-        Vector dir = new Vector(1,0);
-        WallFollowAgent wallAgent = new WallFollowAgent(srt, dir, 10);
-        //Assumes the wallFollowAgent is a guard
-        wallAgent.setMaxWalk(settings.getWalkSpeedGuard());
-        wallAgent.setMaxSprint(settings.getSprintSpeedGuard());
-        agents.add(wallAgent);
+        /* Adds temporary AcoAgent */
+        Vector srt = new Vector(14, 12);
+        Vector dir = new Vector(0,1);
+        AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
+        AcoAgent agent = new AcoAgent(srt, dir, 10);
+        agents.add(agent);
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
@@ -60,14 +59,6 @@ public class Map
             Vector intruderStart = new Vector(randX(intruderSpawn), randY(intruderSpawn));
             /* TODO intruder agents here!!! */
         }
-
-        Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
-        human = new Human(humanStart, new Vector(1,0), 10);
-        //Assumes the human is a guard
-        human.setMaxWalk(settings.getWalkSpeedGuard());
-        human.setMaxSprint(settings.getSprintSpeedGuard());
-        agents.add(human);
-
         System.out.println("done.");
     }
 

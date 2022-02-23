@@ -15,14 +15,15 @@ import java.util.random.RandomGenerator;
 //TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp
 {
-    private double maxPheromone = 10;
+    private double maxPheromone = 1;
     private static AcoGrid world;
     private double cellSize = world.getCellSize();
+    Random randomGenerator = new Random(1);
 
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
 
     private int[] cardinalAngles = {0, 90, 180, 270};
-    private double epsilon = 0.5;
+    private double epsilon = 0.3;
 
     public AcoAgent(Vector position, Vector direction, double radius)
     {
@@ -53,6 +54,7 @@ public class AcoAgent extends AgentImp
     {
         position = endPoint;
         world.updateAgent(this);
+        System.out.println(position.toString());
     }
 
     //TODO Implement movement bias based on target direction
@@ -79,7 +81,6 @@ public class AcoAgent extends AgentImp
 
     public Vector selectRandomEquivalentMove(ArrayList<Vector> equivalentMoves)
     {
-        Random randomGenerator = new Random(1);
         return equivalentMoves.get(randomGenerator.nextInt(equivalentMoves.size()));
     }
 
@@ -103,7 +104,7 @@ public class AcoAgent extends AgentImp
 
         for(int i = 0; i < cardinalRays.length; i++)
         {
-            if(cardinalRays[i].rayLength() >= cellSize)
+            if(cardinalRays[i].rayLength() > cellSize + epsilon)
             {
                 possibleMovements.add(angleToGridMovementLink(cardinalAngles[i]));
             }
