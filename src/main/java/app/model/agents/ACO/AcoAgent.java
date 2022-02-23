@@ -15,7 +15,6 @@ import java.util.random.RandomGenerator;
 //TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp
 {
-    //TODO Place actual max pheramone value
     private double maxPheromone = 10;
     private static AcoGrid world;
     private double cellSize = world.getCellSize();
