@@ -33,4 +33,30 @@ public class SoundEngineTest {
 
         assertEquals(50,cornerAimedTracing.compute(new Map(settings),listener));
     }
+
+    @Test void blockedSoundTest(){
+        Settings settings = new Settings();
+        settings.setHeight(400);
+        settings.setWidth(300);
+        settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.INTRUDER_SPAWN);
+        settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.GUARD_SPAWN);
+        settings.addSoundSource(new Vector(0,0), 60);
+        settings.addSoundSource(new Vector(60,80), 70);
+
+        Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1);
+
+        SoundEngine cornerAimedTracing = new CornerAimedTracing();
+
+        double actualSoundLevelDirect = cornerAimedTracing.compute(new Map(settings),listener);
+
+        // we expect the stronger amplitude source to be heard without the obstacle
+        assertEquals(20, actualSoundLevelDirect);
+
+        settings.addSoundFurniture(new Rectangle2D(40, 40, 1, 20));
+
+        double actualSoundLevelBlocked = cornerAimedTracing.compute(new Map(settings),listener);
+
+        // we expect the weaker amplitude source to be heard because the other source should be blocked
+        assertEquals(10, actualSoundLevelBlocked);
+    }
 }

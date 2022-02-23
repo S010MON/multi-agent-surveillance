@@ -42,7 +42,7 @@ public class Map
 
 
         /* Make sound furniture */
-        soundFurniture = new ArrayList<>();
+        soundFurniture = settings.getSoundFurniture();
 
         /* Make some sound sources */
         soundSources = settings.getSoundSources();
