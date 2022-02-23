@@ -11,25 +11,21 @@ public class CornerAimedTracing implements SoundEngine{
         ArrayList<SoundRay> soundRays = new ArrayList<>();
 
         // Step 1: aim at all the soundsources
-        // right now this means ignore obstactles and return the loudest audible sound from agent
 
         double maxSoundLevel = 0.0;
 
         for (SoundSource soundSource: map.getSoundSources()) {
-            double currentSoundLevel = soundSource.soundLevelFrom(agent.getPosition());
-            if(currentSoundLevel > maxSoundLevel) {
-                maxSoundLevel = currentSoundLevel;
+            SoundRay rayToSource = new SoundRay(agent.getPosition(), soundSource.getPosition());
+
+            if(!intersectsAnySoundFurniture(map.getSoundFurniture(), rayToSource)){
+                double currentSoundLevel = soundSource.soundLevelFrom(agent.getPosition());
+                if(currentSoundLevel > maxSoundLevel) {
+                    maxSoundLevel = currentSoundLevel;
+                }
             }
         }
 
         return maxSoundLevel;
-
-        /*
-        for (SoundSource soundSource: map.getSoundSources()){
-            soundRays.add(new SoundRay(agent.getPosition(), soundSource.getPosition()));
-        }
-         */
-
 
         // Step 2: for diffraction aim at all the corners
         /*
@@ -41,5 +37,14 @@ public class CornerAimedTracing implements SoundEngine{
             }
         }
         */
+    }
+
+    private boolean intersectsAnySoundFurniture(ArrayList<SoundFurniture> soundFurniture, SoundRay soundRay){
+        for (SoundFurniture sf: soundFurniture) {
+            if(sf.intersectsAny(soundRay)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
