@@ -9,6 +9,9 @@ public class SettingsObject extends Rectangle2D
 {
     @Getter private FurnitureType type;
     @Getter private Vector teleportTo;
+    @Getter private Double teleportRotation;
+    @Getter private Integer textureType;
+    @Getter private Integer textureOrientation;
 
     public SettingsObject(Rectangle2D rectangle, FurnitureType type)
     {
@@ -18,9 +21,12 @@ public class SettingsObject extends Rectangle2D
                 rectangle.getHeight());
         this.type = type;
         this.teleportTo = null;
+        this.teleportRotation = null;
+        this.textureType = null;
+        this.textureOrientation = null;
     }
 
-    public SettingsObject(Rectangle2D rectangle, Vector teleportTo)
+    public SettingsObject(Rectangle2D rectangle, Vector teleportTo, double teleportRotation)
     {
         super(rectangle.getMinX(),
                 rectangle.getMinY(),
@@ -28,6 +34,22 @@ public class SettingsObject extends Rectangle2D
                 rectangle.getHeight());
         this.type = FurnitureType.PORTAL;
         this.teleportTo = teleportTo;
+        this.teleportRotation = teleportRotation;
+        this.textureType = null;
+        this.textureOrientation = null;
+    }
+
+    public SettingsObject(Rectangle2D rectangle, Integer textureType, Integer textureOrientation)
+    {
+        super(rectangle.getMinX(),
+                rectangle.getMinY(),
+                rectangle.getWidth(),
+                rectangle.getHeight());
+        this.type = FurnitureType.TEXTURE;
+        this.teleportTo = null;
+        this.teleportRotation = null;
+        this.textureType = textureType;
+        this.textureOrientation = textureOrientation;
     }
 
     public Rectangle2D getRect()

@@ -171,7 +171,7 @@ public class FurniturePane extends StackPane
             DrawRectangle rectObject = (DrawRectangle) object;
             if(rectObject.getType().label.equals("teleport"))
             {
-                s.addTeleport(rectObject.getRect(), rectObject.getVector());
+                s.addTeleport(rectObject.getRect(), rectObject.getVector(), rectObject.getRotation());
             }
             else
             {
