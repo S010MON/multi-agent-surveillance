@@ -228,6 +228,65 @@ public class WallFollowAgentTest
     }
 
     @Test
+    void testAlgorithmCase0()
+    {
+        /*
+        ALGORITHM CASE 0
+        if !wallEncountered
+            if (no wall forward)
+                go forward
+            else
+                turn 90 deg right
+                set wallEcountered = true
+         */
+
+        agent.updateLocation(initialPosition);
+        agent.setDirection(initialDirection);
+
+        //Map
+        FurnitureType obstacleType = FurnitureType.WALL;
+        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obstacleType, obstacle)));
+        Map map = new Map(agent, walls);
+
+        // Update surroundings and move 3 times
+        // Agent should move forward 2 times and third move should be turning right
+        double moveLength = 20;
+        agent.setMoveLength(moveLength);
+        // move 1
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move newMove1 = agent.move();
+        agent.updateLocation(initialPosition.add(newMove1.getDeltaPos()));
+        Vector expectedDeltaPos1 = new Vector(moveLength * initialDirection.getX(), moveLength * initialDirection.getY());
+        // move 2
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move newMove2 = agent.move();
+        agent.updateLocation(agent.getPosition().add(newMove2.getDeltaPos()));
+        Vector expectedDeltaPos2 = new Vector(moveLength * agent.getDirection().getX(), moveLength * agent.getDirection().getY());
+        // move 3
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move newMove3 = agent.move();
+        agent.updateLocation(agent.getPosition().add(newMove3.getDeltaPos()));
+        Vector expectedDeltaPos3 = new Vector(0,0);
+        Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+2*moveLength);
+        Vector expectedDir = new Vector(-1,0);
+
+        // Check moves and final position
+        assertEquals(initialDirection,newMove1.getEndDir());
+        assertEquals(expectedDeltaPos1,newMove1.getDeltaPos());
+        assertEquals(initialDirection,newMove2.getEndDir());
+        assertEquals(expectedDeltaPos2,newMove2.getDeltaPos());
+        assertEquals(expectedDir,newMove3.getEndDir());
+        assertEquals(expectedDeltaPos3,newMove3.getDeltaPos());
+
+        assertEquals(expectedPos,agent.getPosition());
+        assertEquals(WallFollowAgent.TurnType.RIGHT, agent.getLastTurn());
+        assertEquals(expectedDir,agent.getDirection());
+        assertFalse(agent.isMovedForwardLast());
+        assertTrue(agent.isWallEncountered());
+    }
+
+    @Test
     void testAlgorithmCase1()
     {
         // ALGORITHM CASE 1

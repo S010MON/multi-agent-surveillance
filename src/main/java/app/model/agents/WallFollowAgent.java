@@ -217,4 +217,8 @@ public class WallFollowAgent extends AgentImp
     {
         this.wallEncountered = wallEncountered;
     }
+
+    public boolean isWallEncountered() {
+        return wallEncountered;
+    }
 }
