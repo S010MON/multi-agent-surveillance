@@ -70,8 +70,9 @@ public class AcoAgent extends AgentImp
             }
             else if(cellPheromones.get(i) < minValue)
             {
-                minValue = cellPheromones.get(i);
                 equivalentMoves.clear();
+                minValue = cellPheromones.get(i);
+                equivalentMoves.add(possibleMovements.get(i));
             }
         }
         return equivalentMoves;
@@ -151,7 +152,6 @@ public class AcoAgent extends AgentImp
 
             if(approximateAngleRange(currentAngle, targetCardinalAngle))
             {
-                System.out.println("Approximate Ray found, angle: " + currentAngle);
                 return view.get(midPoint);
             }
             else if(currentAngle < targetCardinalAngle)

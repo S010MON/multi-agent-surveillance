@@ -7,6 +7,7 @@ import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
+import app.model.map.Move;
 import app.model.agents.ACO.AcoAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,45 @@ public class AcoAgentTesting
     void init()
     {
         AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
+    }
+
+    @Test
+    //TODO Finish Move testing
+    void testMove()
+    {
+        Vector position_2 = position.add(new Vector(1, 0));
+        Vector position_3 = position.add(new Vector(-1, 0));
+        Vector position_4 = position.add(new Vector(0, -1));
+
+        AcoAgent agent_1 = new AcoAgent(position, viewDirection, radius);
+        AcoAgent agent_2 = new AcoAgent(position_2, viewDirection, radius);
+        AcoAgent agent_3 = new AcoAgent(position_3, viewDirection, radius);
+        AcoAgent agent_4 = new AcoAgent(position_4, viewDirection, radius);
+
+        agent_1.updateView(graphicsEngine.compute(map, agent_1));
+        Move agentMove = agent_1.move();
+        assertEquals(agentMove.getDeltaPos(), new Vector(0, 1));
+    }
+
+    @Test
+    void testDetermineEquivalentMoves3D()
+    {
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        Vector nextPosition = new Vector(21.2, 20.1);
+        agent.updateLocation(nextPosition);
+
+        Ray[] cardinalRays = agent.detectCardinalRays();
+        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
+        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
+
+
+        ArrayList<Vector> equivalentMoves = agent.determineEquivalentMinMoves(pheromoneValues, availableMovements);
+
+        //Agent moves one cell from original position, therefore 3 x 0-values remain
+        int expectedEquivalentMoves = 3;
+        assertEquals(equivalentMoves.size(), expectedEquivalentMoves);
     }
 
     @Test
