@@ -16,7 +16,7 @@ public class AcoAgent extends AgentImp
 
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
 
-    private double epsilon = 1.0;
+    private double epsilon = 0.5;
 
     public AcoAgent(Vector position, Vector direction, double radius)
     {
@@ -48,14 +48,14 @@ public class AcoAgent extends AgentImp
             }
             else if(currentAngle < targetCardinalAngle)
             {
-                lowerBound = midPoint - 1;
+                lowerBound = midPoint + 1;
             }
             else if(currentAngle > targetCardinalAngle)
             {
                 upperBound = midPoint - 1;
             }
         }
-        throw new RuntimeException("Cardinal point not contained within visual field");
+        return null;
     }
 
     public int calculateMidPoint(int upperBound, int lowerBound)

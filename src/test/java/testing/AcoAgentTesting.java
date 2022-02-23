@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class AcoAgentTesting
 {
     private Vector position = new Vector(20, 20);
@@ -22,16 +25,29 @@ public class AcoAgentTesting
     GraphicsEngine graphicsEngine = new RayTracing();
     Map map = new Map(settings);
 
-    //TODO Finish testing using either brute force or binary search
     @Test
     void testCardinalPointDetection()
     {
         AcoAgent.initializeWorld(50, 50);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
-        double targetAngle = 90;
+        double targetAngle =63;
         agent.updateView(graphicsEngine.compute(map, agent));
 
-        agent.detectCardialPoint(targetAngle);
+        Ray cardinalRay = agent.detectCardialPoint(targetAngle);
+        assertTrue(agent.approximateAngleRange(cardinalRay.angle(), targetAngle));
+    }
+
+    @Test
+    void testCardinalPointNonDetection()
+    {
+        AcoAgent.initializeWorld(50, 50);
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+
+        double targetAngle =-163;
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        Ray cardinalRay = agent.detectCardialPoint(targetAngle);
+        assertNull(cardinalRay);
     }
 }
