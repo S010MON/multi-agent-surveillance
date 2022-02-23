@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AcoGridTest
 {
+    private final boolean display = false;
     @Test
     void testUpdateAgent()
     {
@@ -50,10 +51,20 @@ public class AcoGridTest
 
         Vector agentPosition = new Vector(10, 10);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-        AcoAgent.accessWorld().print();
+        if(display)
+        {
+            AcoAgent.accessWorld().print();
+        }
 
-        agent.updateLocation(new Vector(9, 9));
-        AcoAgent.accessWorld().print();
+        Vector newPosition = new Vector(9, 9);
+        agent.updateLocation(newPosition);
+        if(display)
+        {
+            AcoAgent.accessWorld().print();
+        }
+
+        PheromoneCell currentCell = (PheromoneCell) AcoAgent.accessWorld().getCellAt(newPosition);
+        assertEquals(currentCell.currentPheromoneValue(), agent.releaseMaxPheromone());
 
     }
 }
