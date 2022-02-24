@@ -69,7 +69,7 @@ public class FurniturePane extends StackPane
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setOnAction(e -> {
-            Settings s = saveMap();
+            startMenu.saveSettings();
 
             // Write to file (Add number of guards etc.)
         });
@@ -155,11 +155,8 @@ public class FurniturePane extends StackPane
         return -1;
     }
 
-    public Settings saveMap()
+    public void getSettings(Settings s)
     {
-        Settings s = new Settings();
-        s.setWidth(2048);
-        s.setHeight(1024);
         for(UIRect object : mb.getHistory())
         {
             DrawRectangle rectObject = (DrawRectangle) object;
@@ -172,7 +169,5 @@ public class FurniturePane extends StackPane
                 s.addFurniture(rectObject.getRect(), rectObject.getType());
             }
         }
-
-        return s;
     }
 }
