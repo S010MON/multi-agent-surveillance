@@ -10,7 +10,7 @@ public interface Furniture
 {
     void draw(GraphicsContext gc);
 
-    void setBoundaries(ArrayList<Boundary> boundaries);
+    void addBoundaries(ArrayList<Boundary> boundaries);
 
     ArrayList<Boundary> getBoundaries();
 
