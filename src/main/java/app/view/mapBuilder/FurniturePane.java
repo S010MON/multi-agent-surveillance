@@ -27,6 +27,7 @@ public class FurniturePane extends StackPane
     private TextField x;
     private TextField y;
     private StartMenu startMenu;
+    private final int BUTTON_WIDTH = 150;
 
     public FurniturePane(StartMenu startMenu, MapBuilder mb)
     {
@@ -62,25 +63,27 @@ public class FurniturePane extends StackPane
         {
             Button furnType = new Button(""+ft);
             furnType.setOnAction(e -> handleActionEvent(e, ft));
-            furnType.setPrefWidth(150);
+            furnType.setPrefWidth(BUTTON_WIDTH);
             vbox.getChildren().add(furnType);
         }
 
         // Functionality buttons
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
+        create.setPrefWidth(BUTTON_WIDTH);
         create.setOnAction(e -> {
             Settings s = saveMap();
-
             // Write to file (Add number of guards etc.)
         });
 
         Button crOpen = new Button("Create & Open");
+        crOpen.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(func, create, crOpen);
 
         Button undo = new Button("Undo");
         undo.setOnAction(e -> mb.undo());
+        undo.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(undo);
     }
