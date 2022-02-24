@@ -21,8 +21,6 @@ public class DrawRectangle implements UIRect
     private Color colour;
     private boolean fill;
 
-    public DrawRectangle(){}
-
     @Override
     public void run()
     {
