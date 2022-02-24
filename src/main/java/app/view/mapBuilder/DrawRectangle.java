@@ -3,6 +3,7 @@ package app.view.mapBuilder;
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
 import javafx.geometry.Rectangle2D;
@@ -10,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 public class DrawRectangle implements UIRect
 {
