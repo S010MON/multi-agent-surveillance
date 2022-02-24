@@ -1,6 +1,7 @@
 package app.view.mapBuilder;
 
 import app.App;
+import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsGenerator;
 import app.controller.settings.SettingsObject;
@@ -33,21 +34,6 @@ public class StartMenu extends BorderPane
     {
         fp.getSettings(settings);
         sp.getSettings();
-
-        // Test
-        System.out.println(settings.getName());
-        System.out.println(settings.getGameMode());
-        System.out.println(settings.getTimeStep());
-        System.out.println(settings.getScaling());
-        System.out.println(settings.getNoOfGuards());
-        System.out.println(settings.getNoOfIntruders());
-        System.out.println(settings.getWalkSpeedGuard());
-        System.out.println(settings.getWalkSpeedIntruder());
-        System.out.println(settings.getSprintSpeedGuard());
-        System.out.println(settings.getSprintSpeedGuard());
-        for(SettingsObject so : settings.getFurniture())
-        {
-            System.out.println(so.toString());
-        }
+        FileManager.saveSettings(settings);
     }
 }
