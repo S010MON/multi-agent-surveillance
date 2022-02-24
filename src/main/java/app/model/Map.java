@@ -24,10 +24,10 @@ public class Map
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
+    @Getter private Settings settings;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
     private Human human;
-    @Getter private Settings settings;
 
     public Map(Settings settings)
     {
@@ -109,7 +109,6 @@ public class Map
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj.getType(), obj.getRect()));
         }
-
     }
 
     public ArrayList<Boundary> getBoundaries()
