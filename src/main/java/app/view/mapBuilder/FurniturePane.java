@@ -1,12 +1,7 @@
 package app.view.mapBuilder;
 
-import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
-import app.view.mapBuilder.DrawRectangle;
-import app.view.mapBuilder.MapBuilder;
-import app.view.mapBuilder.StartMenu;
-import app.view.mapBuilder.UIRect;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -15,11 +10,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import lombok.Getter;
+
+import java.util.ArrayDeque;
 
 public class FurniturePane extends StackPane
 {
-    private MapBuilder mb;
     private TextField minX;
     private TextField minY;
     private TextField width;
@@ -28,10 +24,11 @@ public class FurniturePane extends StackPane
     private TextField y;
     private StartMenu startMenu;
     private final int BUTTON_WIDTH = 150;
+    @Getter
+    private ArrayDeque<MbObject> history = new ArrayDeque<>();
 
-    public FurniturePane(StartMenu startMenu, MapBuilder mb)
+    public FurniturePane(StartMenu startMenu)
     {
-        this.mb = mb;
         this.startMenu = startMenu;
         VBox vbox = new VBox(10);
         loadButtons(vbox);
@@ -82,64 +79,21 @@ public class FurniturePane extends StackPane
         vbox.getChildren().addAll(func, create, crOpen);
 
         Button undo = new Button("Undo");
-        undo.setOnAction(e -> mb.undo());
+        undo.setOnAction(e -> undo());
         undo.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(undo);
     }
 
-    private void handleActionEvent(ActionEvent e, FurnitureType ft)
+    private void handleActionEvent(ActionEvent e, FurnitureType type)
     {
-        DrawRectangle dr = new DrawRectangle();
-        dr.setType(ft);
-        dr.setRect(new Rectangle2D( parseRect(minX), parseRect(minY), parseRect(width),
-                parseRect(height)));
-        dr.setGc(mb.gc);
-        switch(ft.label)
-        {
-            case "wall" ->
-                    {
-                        dr.setColour(Color.SANDYBROWN);
-                        dr.setFill(true);
-                    }
-            case "shade" ->
-                    {
-                        dr.setColour(Color.LIGHTGRAY);
-                        dr.setFill(true);
-                    }
-            case "glass" ->
-                    {
-                        dr.setColour(Color.LIGHTBLUE);
-                        dr.setFill(true);
-                    }
-            case "tower" ->
-                    {
-                        dr.setColour(Color.OLIVE);
-                        dr.setFill(true);
-                    }
-            case "teleport" ->
-                    {
-                        dr.setVector(new Vector(parseRect(x), parseRect(y)));
-                        dr.setColour(Color.OLIVEDRAB);
-                        dr.setFill(true);
-                    }
-            case "spawnAreaGuards" ->
-                    {
-                        dr.setColour(Color.BLUE);
-                        dr.setFill(false);
-                    }
-            case "spawnAreaIntruders" ->
-                    {
-                        dr.setColour(Color.RED);
-                        dr.setFill(false);
-                    }
-            case "targetArea" ->
-                    {
-                        dr.setColour(Color.GOLD);
-                        dr.setFill(false);
-                    }
-        }
-        mb.run(dr);
+        Rectangle2D location = new Rectangle2D( parseRect(minX),
+                                                parseRect(minY),
+                                                parseRect(width),
+                                                parseRect(height));
+        MbObject object = new MbObject(location, type);
+        history.add(object);
+        startMenu.getDisplayPane().draw(history);
     }
 
     public int parseRect(TextField tf)
@@ -164,19 +118,24 @@ public class FurniturePane extends StackPane
         Settings s = new Settings();
         s.setWidth(2048);
         s.setHeight(1024);
-        for(UIRect object : mb.getHistory())
+        for(MbObject object : history)
         {
-            DrawRectangle rectObject = (DrawRectangle) object;
-            if(rectObject.getType().label.equals("teleport"))
+            if(object.getType().label.equals("teleport"))
             {
-                s.addTeleport(rectObject.getRect(), rectObject.getVector(), rectObject.getRotation());
+                s.addTeleport(object.getRect(), object.getVector(), object.getRotation());
             }
             else
             {
-                s.addFurniture(rectObject.getRect(), rectObject.getType());
+                s.addFurniture(object.getRect(), object.getType());
             }
         }
 
         return s;
+    }
+
+    private void undo()
+    {
+        history.removeLast();
+        startMenu.getDisplayPane().draw(history);
     }
 }

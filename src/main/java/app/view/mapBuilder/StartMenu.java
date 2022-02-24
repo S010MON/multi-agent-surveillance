@@ -9,14 +9,21 @@ import lombok.Getter;
 public class StartMenu extends BorderPane
 {
     @Getter private App app;
+    @Getter private FurniturePane furniturePane;
+    @Getter private DisplayPane displayPane;
+    @Getter private SettingsPane settingsPane;
 
     public StartMenu(App app)
     {
         this.app = app;
+
+        displayPane = new DisplayPane(this);
+        furniturePane = new FurniturePane(this);
+        settingsPane = new SettingsPane(this, SettingsGenerator.mockSettings());
+
         this.setTop(new FileMenuBar(app));
-        MapBuilder mb = new MapBuilder(this);
-        this.setLeft(new FurniturePane(this, mb));
-        this.setRight(new SettingsPane(this, SettingsGenerator.mockSettings()));
-        this.setCenter(mb);
+        this.setLeft(furniturePane);
+        this.setRight(settingsPane);
+        this.setCenter(displayPane);
     }
 }
