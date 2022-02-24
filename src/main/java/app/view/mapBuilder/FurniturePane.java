@@ -134,11 +134,6 @@ public class FurniturePane extends StackPane
                         dr.setColour(Color.GOLD);
                         dr.setFill(false);
                     }
-            case "texture" ->
-                    {
-                        dr.setColour(Color.YELLOW);
-                        dr.setFill(false);
-                    }
         }
         mb.run(dr);
     }
