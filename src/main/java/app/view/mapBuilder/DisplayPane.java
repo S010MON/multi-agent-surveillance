@@ -47,12 +47,6 @@ public class DisplayPane extends Canvas
         }
     }
 
-    public void addObject(MbObject object)
-    {
-        objects.add(object);
-        draw();
-    }
-
     public void undo()
     {
         objects.removeLast();
@@ -68,10 +62,26 @@ public class DisplayPane extends Canvas
     {
         if(click == null)
             return;
-        double dx = e.getX() - click.getX();
-        double dy = e.getY() - click.getY();
 
-        selection = new Rectangle2D(click.getX(), click.getY(), dx, dy);
+        double x, y, w, h;
+        x = click.getX();
+        y = click.getY();
+        w = e.getX() - x;
+        h = e.getY() - y;
+
+        if(w < 0)
+        {
+           x = x + w;
+           w = Math.abs(w);
+        }
+
+        if(h < 0)
+        {
+            y = y + h;
+            h = Math.abs(h);
+        }
+
+        selection = new Rectangle2D(x, y, w, h);
         draw();
     }
 
