@@ -34,6 +34,6 @@ public class StartMenu extends BorderPane
     {
         fp.getSettings(settings);
         sp.getSettings();
-        FileManager.saveSettings(settings);
+        FileManager.saveSettings(settings, settings.getName());
     }
 }
