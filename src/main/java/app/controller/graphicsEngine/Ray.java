@@ -4,12 +4,12 @@ import app.controller.linAlg.Vector;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 public class Ray
 {
-    public Vector u;
-    public Vector v;
-    private double angle;
+    @Getter private Vector u;
+    @Getter private Vector v;
     private Color colour = Color.RED;
     private final double LINE_WIDTH = 1;
 
@@ -17,17 +17,6 @@ public class Ray
     {
         this.u = u;
         this.v = v;
-        this.angle = angle();
-    }
-
-    public Vector getV()
-    {
-        return v;
-    }
-
-    public Vector getU()
-    {
-        return u;
     }
 
     public double angle()
