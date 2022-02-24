@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 
 public class VisibleBoundary extends InvisibleBoundary
 {
-
     public VisibleBoundary(Vector a, Vector b)
     {
         super(a, b);
@@ -22,6 +21,4 @@ public class VisibleBoundary extends InvisibleBoundary
                       b.getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
                       b.getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
     }
-
-
 }
