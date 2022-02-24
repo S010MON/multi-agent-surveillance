@@ -53,20 +53,7 @@ public class GameEngine
                 teleported = true;
                 Portal portal = portalsOnPath.get(0);
                 Vector intersection = getIntersectionPoint(portal, startPoint, endPoint);
-                if(legalMove(startPoint, intersection))
-                {
-                    a.updateLocation(portal.getTeleportTo());
-
-                    Vector direction = a.getDirection();
-                    Vector newDirection = direction.rotate(portal.getTeleportRotation());
-                    a.updateDirection(newDirection);
-
-                    // TODO: add left-over movement to agent after teleportation
-                    double leftOverDist = intersection.dist(endPoint);
-                    Vector directionDist = newDirection.normalise().scale(leftOverDist);
-                    a.updateLocation(a.getPosition().add(directionDist));
-
-                }
+                teleportAgent(a, portal, intersection, startPoint, endPoint);
             }
             if(portalsOnPath.size()>1)
             {
@@ -86,18 +73,7 @@ public class GameEngine
                     }
                 }
 
-                if(legalMove(startPoint, closestIntersection))
-                {
-                    a.updateLocation(closestPortal.getTeleportTo());
-
-                    Vector direction = a.getDirection();
-                    Vector newDirection = direction.rotate(closestPortal.getTeleportRotation());
-                    a.updateDirection(newDirection);
-
-                    double leftOverDist = closestIntersection.dist(endPoint);
-                    Vector directionDist = newDirection.normalise().scale(leftOverDist);
-                    a.updateLocation(a.getPosition().add(directionDist));
-                }
+                teleportAgent(a, closestPortal, closestIntersection, startPoint, endPoint);
             }
 
             if (!teleported && legalMove(startPoint, endPoint))
@@ -133,6 +109,22 @@ public class GameEngine
                 return false;
         }
         return true;
+    }
+
+    private void teleportAgent(Agent a, Portal portal, Vector intersection, Vector start, Vector end)
+    {
+        if(legalMove(start, intersection))
+        {
+            a.updateLocation(portal.getTeleportTo());
+
+            Vector direction = a.getDirection();
+            Vector newDirection = direction.rotate(portal.getTeleportRotation());
+            a.updateDirection(newDirection);
+
+            double leftOverDist = intersection.dist(end);
+            Vector directionDist = newDirection.normalise().scale(leftOverDist);
+            a.updateLocation(a.getPosition().add(directionDist));
+        }
     }
 
     private List<Portal> getPortalsOnPath(Vector start, Vector end)
