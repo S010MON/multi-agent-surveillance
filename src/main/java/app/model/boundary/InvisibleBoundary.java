@@ -65,6 +65,6 @@ public class InvisibleBoundary implements Boundary
     @Override
     public boolean validMove(Vector startPoint, Vector endPoint)
     {
-        return Intersection.findIntersection(startPoint,endPoint,a,b);
+        return Intersection.hasIntersection(startPoint,endPoint,a,b);
     }
 }
