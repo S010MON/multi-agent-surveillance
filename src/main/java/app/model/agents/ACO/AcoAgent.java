@@ -162,6 +162,7 @@ public class AcoAgent extends AgentImp
                 upperBound = midPoint - 1;
             }
         }
+        System.out.println("Cardinal Point not found");
         return null;
     }
 

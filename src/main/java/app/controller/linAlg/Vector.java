@@ -68,7 +68,10 @@ public class Vector
     public double getAngle()
     {
         // + 90 to set the angle to north, negate angle to make it clockwise
-        return (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
+        // Rounded to 1 decimal place
+        double angle = (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
+        double roundedAngle = (double) Math.round(angle * 10) / 10;
+        return roundedAngle;
     }
 
     public Vector copy()
