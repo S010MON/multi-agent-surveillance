@@ -29,9 +29,10 @@ public class MbObject
             gc.setFill(getTypeColour());
             gc.fillRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
         }
-        else
+
+        if(hasOutline())
         {
-            gc.setStroke(getTypeColour());
+            gc.setStroke(getTypeOutline());
             gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
         }
     }
@@ -52,12 +53,35 @@ public class MbObject
         return null;
     }
 
+    private Color getTypeOutline()
+    {
+        switch(type)
+        {
+            case WALL, SHADE, TOWER -> {return Color.BLACK;}
+            case PORTAL, GLASS -> {return Color.LIGHTGRAY;}
+            case GUARD_SPAWN -> {return Color.BLUE;}
+            case INTRUDER_SPAWN -> {return Color.RED;}
+            case TARGET -> {return Color.GOLD;}
+        }
+        return null;
+    }
+
     private boolean isFilled()
     {
         switch(type)
         {
             case WALL, SHADE, GLASS, TOWER, PORTAL -> {return true;}
             case GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> {return false;}
+        }
+        return false;
+    }
+
+    private boolean hasOutline()
+    {
+        switch(type)
+        {
+            case WALL, INTRUDER_SPAWN, TARGET, TOWER, PORTAL, GUARD_SPAWN -> {return true;}
+            case SHADE, GLASS -> {return false;}
         }
         return false;
     }

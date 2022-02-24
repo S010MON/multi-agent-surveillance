@@ -39,9 +39,12 @@ public class DisplayPane extends Canvas
 
         objects.forEach(e -> e.draw(gc));
 
-        gc.setFill(Color.PURPLE);
+
         if(selection != null)
+        {
+            gc.setFill(Color.rgb(109,29,190, 0.5));
             gc.fillRect(selection.getMinX(), selection.getMinY(), selection.getWidth(), selection.getHeight());
+        }
     }
 
     public void addObject(MbObject object)
