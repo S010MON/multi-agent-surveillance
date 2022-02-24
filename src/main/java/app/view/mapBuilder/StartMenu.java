@@ -4,7 +4,6 @@ import app.App;
 import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsGenerator;
-import app.controller.settings.SettingsObject;
 import app.view.FileMenuBar;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
@@ -12,28 +11,29 @@ import lombok.Getter;
 public class StartMenu extends BorderPane
 {
     @Getter private App app;
-    private MapBuilder mb;
-    private FurniturePane fp;
-    private SettingsPane sp;
+    @Getter private FurniturePane furniturePane;
+    @Getter private DisplayPane displayPane;
+    @Getter private SettingsPane settingsPane;
     private Settings settings;
 
     public StartMenu(App app)
     {
         this.app = app;
-        this.setTop(new FileMenuBar(app));
         settings = SettingsGenerator.mockSettings();
-        mb = new MapBuilder(this);
-        fp = new FurniturePane(this, mb);
-        sp = new SettingsPane(this, settings);
-        this.setLeft(fp);
-        this.setRight(sp);
-        this.setCenter(mb);
+        displayPane = new DisplayPane(this);
+        furniturePane = new FurniturePane(this, displayPane);
+        settingsPane = new SettingsPane(this, settings);
+
+        this.setTop(new FileMenuBar(app));
+        this.setLeft(furniturePane);
+        this.setRight(settingsPane);
+        this.setCenter(displayPane);
     }
 
     public void saveSettings()
     {
-        fp.getSettings(settings);
-        sp.getSettings();
+        furniturePane.getSettings(settings);
+        settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
     }
 }

@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class SettingsPane extends StackPane // Might need to change this to extend something else
+public class SettingsPane extends StackPane
 {
     private StartMenu startMenu;
     private Settings s;
