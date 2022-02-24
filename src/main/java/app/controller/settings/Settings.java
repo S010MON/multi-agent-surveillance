@@ -1,13 +1,14 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Vector;
-import app.controller.soundEngine.SoundBlockingBlock;
-import app.controller.soundEngine.SoundFurniture;
 import app.controller.soundEngine.SoundSource;
 import app.controller.soundEngine.SoundSourceBase;
+import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,23 +32,25 @@ public class Settings
     private double scaling;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
     private ArrayList<SoundSource> soundSources = new ArrayList<>();
-    private ArrayList<SoundFurniture> soundFurniture = new ArrayList<>();
 
     public void addFurniture(Rectangle2D rectangle, FurnitureType type)
     {
         furniture.add(new SettingsObject(rectangle, type));
     }
 
-    public void addTeleport(Rectangle2D rectangle, Vector vector)
+    public void addTeleport(Rectangle2D rectangle, Vector vector, double teleportRotation)
     {
-        furniture.add(new SettingsObject(rectangle, vector));
+        furniture.add(new SettingsObject(rectangle, vector, teleportRotation));
     }
 
     public void addSoundSource(Vector position, double amplitude){
         soundSources.add(new SoundSourceBase(position, amplitude));
     }
 
-    public void addSoundFurniture(Rectangle2D rectangle){
-        soundFurniture.add(new SoundBlockingBlock(rectangle));
+    public List<SettingsObject> getFurniture(FurnitureType type)
+    {
+        return furniture.stream()
+                .filter(obj -> obj.getType() == type)
+                .toList();
     }
 }

@@ -8,12 +8,16 @@ public abstract class SettingsGenerator
     public static Settings mockSettings()
     {
         Settings settings = new Settings();
-        settings.setHeight(400);
-        settings.setWidth(300);
-        settings.addFurniture(new Rectangle2D(10, 10, 10, 10), FurnitureType.WALL);
-        settings.addFurniture(new Rectangle2D(30, 10, 10, 10), FurnitureType.GLASS);
-        settings.addFurniture(new Rectangle2D(10, 30, 10, 10), FurnitureType.TARGET);
-        settings.addFurniture(new Rectangle2D(30, 30, 10, 10), FurnitureType.TOWER);
+        settings.setName("best_map");
+        settings.setGameMode(1);
+        settings.setTimeStep(0.5);
+        settings.setScaling(0.1);
+        settings.setNoOfGuards(3);
+        settings.setNoOfIntruders(5);
+        settings.setWalkSpeedGuard(13.5);
+        settings.setWalkSpeedIntruder(15.0);
+        settings.setSprintSpeedGuard(21.5);
+        settings.setSprintSpeedIntruder(23);
         return settings;
     }
 

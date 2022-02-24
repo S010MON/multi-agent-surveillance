@@ -55,12 +55,6 @@ public class FurniturePane extends StackPane
 
         vbox.getChildren().addAll(teleport, x, y);
 
-        // Spawn areas
-        Label spawns = new Label("Spwan Areas:");
-        Button aSpawn = new Button("Agent Spawn Area");
-        Button iSpawn = new Button("Intruder Spawn Area");
-        vbox.getChildren().addAll(spawns, aSpawn, iSpawn);
-
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
         vbox.getChildren().add(furniture);
@@ -171,7 +165,7 @@ public class FurniturePane extends StackPane
             DrawRectangle rectObject = (DrawRectangle) object;
             if(rectObject.getType().label.equals("teleport"))
             {
-                s.addTeleport(rectObject.getRect(), rectObject.getVector());
+                s.addTeleport(rectObject.getRect(), rectObject.getVector(), rectObject.getRotation());
             }
             else
             {

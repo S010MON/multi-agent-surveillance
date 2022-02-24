@@ -16,6 +16,7 @@ public class DrawRectangle implements UIRect
     @Getter private FurnitureType type;
     @Getter private Vector vector;
     @Getter private Rectangle2D rect;
+    @Getter private Double rotation;
     private GraphicsContext gc;
     private Color colour;
     private boolean fill;
