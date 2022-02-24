@@ -61,7 +61,6 @@ public class GameEngine
         }
     }
 
-
     private boolean legalMove(Vector start, Vector end)
     {
         for (Boundary bdy : map.getBoundaries())
