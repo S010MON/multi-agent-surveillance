@@ -19,5 +19,4 @@ public abstract class Intersection
 
         return (t <= 1 && t >= 0  && u <= 1 && u >= 0);
     }
-
 }

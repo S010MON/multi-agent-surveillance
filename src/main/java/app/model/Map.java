@@ -13,15 +13,18 @@ import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
+import app.model.furniture.Portal;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Map
 {
+    @Getter private ArrayList<Furniture> portals;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
@@ -112,9 +115,14 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
+            case PORTAL ->
+                {
+                    Furniture portal = FurnitureFactory.make(obj.getType(), obj.getRect(), obj.getTeleportTo(), obj.getTeleportRotation());
+                    portals.add(portal);
+                    furniture.add(portal);
+                }
             default -> this.furniture.add(FurnitureFactory.make(obj.getType(), obj.getRect()));
         }
-
     }
 
     public ArrayList<Boundary> getBoundaries()

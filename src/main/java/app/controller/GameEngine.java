@@ -8,7 +8,9 @@ import app.controller.settings.SettingsObject;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
+import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
+import app.model.furniture.Portal;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -44,20 +46,32 @@ public class GameEngine
 
             boolean teleported = false;
 
-            List<SettingsObject> portalsOnPath = portalsOnPath(startPoint, endPoint);
+
+            List<Portal> portalsOnPath = getPortalsOnPath(startPoint, endPoint);
             if(portalsOnPath.size()==1)
             {
+                // TODO: add check if no objects between agent and portal
+
+                //Vector intersection = Intersection.findIntersectionPoints()
                 teleported = true;
-                SettingsObject portal = portalsOnPath.get(0);
+
+                Portal portal = portalsOnPath.get(0);
                 a.updateLocation(portal.getTeleportTo());
 
                 Vector direction = a.getDirection().copy();
                 Vector newDirection = direction.rotate(portal.getTeleportRotation());
                 a.updateDirection(newDirection);
+
+                // TODO: add left-over movement to agent after teleportation
             }
-            // TODO: determine closest portal
-            // TODO: add check if no objects between agent and portal
-            // TODO: add left-over movement to agent after teleportation
+            if(portalsOnPath.size()>1)
+            {
+                // TODO: determine closest portal
+                // TODO: add check if no objects between agent and portal
+
+                // TODO: teleport agent
+                // TODO: add left-over movement to agent after teleportation
+            }
 
             if (!teleported && legalMove(startPoint, endPoint))
                 a.updateLocation(endPoint);
@@ -94,20 +108,20 @@ public class GameEngine
         return true;
     }
 
-    private List<SettingsObject> portalsOnPath(Vector start, Vector end)
+    private List<Portal> getPortalsOnPath(Vector start, Vector end)
     {
-        List<SettingsObject> portalsOnPath = new ArrayList<>();
-        List<SettingsObject> portals = map.getSettings().getFurniture(FurnitureType.PORTAL);
-        for(SettingsObject portal: portals)
+        List<Portal> portalsOnPath = new ArrayList<>();
+        List<Furniture> portals = map.getPortals();
+        for(Furniture portal: portals)
         {
-            if(!Intersection.findIntersection(start, end, new Vector(portal.getMinX(), portal.getMinY()), new Vector(portal.getMinX(), portal.getMaxY()))
-                    && Intersection.findIntersection(start, end, new Vector(portal.getMinX(), portal.getMinY()), new Vector(portal.getMaxX(), portal.getMinY()))
-                    && Intersection.findIntersection(start, end, new Vector(portal.getMaxX(), portal.getMaxY()),new Vector(portal.getMinX(), portal.getMaxY()))
-                    && Intersection.findIntersection(start, end, new Vector(portal.getMaxX(), portal.getMaxY()), new Vector(portal.getMaxX(), portal.getMinY())))
+            List<Boundary> bounds = portal.getBoundaries();
+            Boolean intersects = false;
+            for (Boundary bdy : bounds)
             {
-                portalsOnPath.add(portal);
+                if(!bdy.validMove(start, end))
+                    portalsOnPath.add((Portal) portal);
             }
         }
-        return portals;
+        return portalsOnPath;
     }
 }
