@@ -14,6 +14,16 @@ public class SettingsPane extends StackPane // Might need to change this to exte
 {
     private StartMenu startMenu;
     private Settings s;
+    private TextField name;
+    private TextField mode;
+    private TextField step;
+    private TextField scale;
+    private TextField noGuards;
+    private TextField noIntruders;
+    private TextField bGuard;
+    private TextField bIntruder;
+    private TextField sGuard;
+    private TextField sIntruder;
 
     public SettingsPane(StartMenu startMenu, Settings s)
     {
@@ -53,25 +63,25 @@ public class SettingsPane extends StackPane // Might need to change this to exte
         sprintIntruder.setFont(new Font(16));
 
         // Text Fields with current values editable.
-        TextField name = new TextField();
+        name = new TextField();
         name.setText(s.getName());
-        TextField mode = new TextField();
+        mode = new TextField();
         mode.setText(""+s.getGameMode());
-        TextField step = new TextField();
+        step = new TextField();
         step.setText(""+s.getTimeStep());
-        TextField scale = new TextField();
+        scale = new TextField();
         scale.setText(""+s.getScaling());
-        TextField noGuards = new TextField();
+        noGuards = new TextField();
         noGuards.setText(""+s.getNoOfGuards());
-        TextField noIntruders = new TextField();
+        noIntruders = new TextField();
         noIntruders.setText(""+s.getNoOfIntruders());
-        TextField bGuard = new TextField();
+        bGuard = new TextField();
         bGuard.setText(""+s.getWalkSpeedGuard());
-        TextField bIntruder = new TextField();
+        bIntruder = new TextField();
         bIntruder.setText(""+s.getWalkSpeedIntruder());
-        TextField sGuard = new TextField();
+        sGuard = new TextField();
         sGuard.setText(""+s.getSprintSpeedGuard());
-        TextField sIntruder = new TextField();
+        sIntruder = new TextField();
         sIntruder.setText(""+s.getSprintSpeedIntruder());
 
         // Add labels and fields to grid
@@ -99,5 +109,19 @@ public class SettingsPane extends StackPane // Might need to change this to exte
         vbox.getChildren().addAll(header, grid);
         this.setMargin(vbox, new Insets(10, 10, 10, 10));
         this.getChildren().addAll(vbox);
+    }
+
+    public void getSettings()
+    {
+        s.setName(name.getText());
+        s.setGameMode(Integer.parseInt(mode.getText()));
+        s.setTimeStep(Double.parseDouble(step.getText()));
+        s.setScaling(Double.parseDouble(scale.getText()));
+        s.setNoOfGuards(Integer.parseInt(noGuards.getText()));
+        s.setNoOfIntruders(Integer.parseInt(noIntruders.getText()));
+        s.setWalkSpeedGuard(Double.parseDouble(bGuard.getText()));
+        s.setWalkSpeedIntruder(Double.parseDouble(bIntruder.getText()));
+        s.setSprintSpeedGuard(Double.parseDouble(sGuard.getText()));
+        s.setWalkSpeedIntruder(Double.parseDouble(sIntruder.getText()));
     }
 }

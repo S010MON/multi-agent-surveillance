@@ -157,9 +157,9 @@ public class FurniturePane extends StackPane
 
     public Settings saveMap()
     {
+        // Call getSettings method in SettingsPane.
+        /*
         Settings s = new Settings();
-        s.setWidth(2048);
-        s.setHeight(1024);
         for(UIRect object : mb.getHistory())
         {
             DrawRectangle rectObject = (DrawRectangle) object;
@@ -174,5 +174,6 @@ public class FurniturePane extends StackPane
         }
 
         return s;
+         */
     }
 }
