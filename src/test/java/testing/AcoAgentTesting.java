@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AcoAgentTesting
 {
-    private Vector position = new Vector(20, 20);
+    private Vector position = new Vector(14, 12);
     private Vector viewDirection = new Vector(0, 1);
     private double radius = 10;
 
@@ -56,7 +56,7 @@ public class AcoAgentTesting
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
         agent.updateView(graphicsEngine.compute(map, agent));
 
-        Vector nextPosition = new Vector(21.2, 20.1);
+        Vector nextPosition = new Vector(14, 13);
         agent.updateLocation(nextPosition);
 
         Ray[] cardinalRays = agent.detectCardinalRays();
@@ -74,7 +74,6 @@ public class AcoAgentTesting
     @Test
     void testAvailablePheromoneValues()
     {
-        position = new Vector(14, 12);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
         Vector nextPosition = new Vector(15, 12);
@@ -110,7 +109,7 @@ public class AcoAgentTesting
     @Test
     void testAvaliableMovementsWithObstacle()
     {
-        position = new Vector(22.2, 39.7);
+        position = new Vector(20, 19);
 
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
         agent.updateView(graphicsEngine.compute(map, agent));
