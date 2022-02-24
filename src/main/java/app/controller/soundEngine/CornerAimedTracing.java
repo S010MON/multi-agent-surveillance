@@ -5,38 +5,57 @@ import app.model.Map;
 import app.model.agents.Agent;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class CornerAimedTracing implements SoundEngine{
     public double compute(Map map, Agent agent){
-        ArrayList<SoundRay> soundRays = new ArrayList<>();
+        PriorityQueue<VectorPQEntry> vectorPQ = new PriorityQueue<VectorPQEntry>(new VectorPQComparator());
 
-        // Step 1: aim at all the soundsources
+        ArrayList<SoundSource> hitSources = new ArrayList<>();
 
-        double maxSoundLevel = 0.0;
+        // for each sound source reachable from the current vector, add a child to the current node
+        // Step 2: for diffraction aim at all the corners
+
+        /*
+        for (int i = 0; i < 10; i++) {
+            
+        }
+        */
+        // first take the current node, then aim at all the soundsources
+
+
+        return 0.0;
+    }
+
+    private ArrayList<SoundSource> audibleFrom(Map map, Vector pos){
+        ArrayList<SoundSource> audible = new ArrayList<>();
 
         for (SoundSource soundSource: map.getSoundSources()) {
-            SoundRay rayToSource = new SoundRay(agent.getPosition(), soundSource.getPosition());
+            SoundRay rayToSource = new SoundRay(pos, soundSource.getPosition());
 
             if(!intersectsAnySoundFurniture(map.getSoundFurniture(), rayToSource)){
-                double currentSoundLevel = soundSource.soundLevelFrom(agent.getPosition());
-                if(currentSoundLevel > maxSoundLevel) {
-                    maxSoundLevel = currentSoundLevel;
-                }
+                audible.add(soundSource);
             }
         }
 
-        return maxSoundLevel;
+        return audible;
+    }
 
-        // Step 2: for diffraction aim at all the corners
-        /*
+    private ArrayList<Vector> findReachableCorners(Map map, Vector pos){
+        ArrayList<Vector> reachable = new ArrayList<>();
+
         for (SoundFurniture soundFurniture: map.getSoundFurniture()) {
             for (SoundBoundary soundBoundary: soundFurniture.getSoundBoundaries()) {
                 for (Vector corner: soundBoundary.getCorners()) {
-                    soundRays.add(new SoundRay(agent.getPosition(), corner));
+                    SoundRay rayToCorner = new SoundRay(pos, corner);
+                    if(!intersectsAnySoundFurniture(map.getSoundFurniture(), rayToCorner)) {
+                        reachable.add(corner);
+                    }
                 }
             }
         }
-        */
+
+        return reachable;
     }
 
     private boolean intersectsAnySoundFurniture(ArrayList<SoundFurniture> soundFurniture, SoundRay soundRay){
