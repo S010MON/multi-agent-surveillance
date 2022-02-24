@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
+import app.view.simulation.Info;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -57,6 +58,12 @@ public class GameEngine
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));
             case "d" -> map.walk(new Vector(1, 0));
+            case "l" -> Info.getInfo().moveX(10);
+            case "j" -> Info.getInfo().moveX(-10);
+            case "i" -> Info.getInfo().moveY(-10);
+            case "k" -> Info.getInfo().moveY(10);
+            case "v" -> Info.getInfo().setZoom(Info.getInfo().getZoom() + 0.1);
+            case "b" -> Info.getInfo().setZoom(Info.getInfo().getZoom() - 0.1);
         }
     }
 

@@ -1,6 +1,7 @@
 package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
+import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -53,6 +54,9 @@ public class Ray
     {
         gc.setStroke(colour);
         gc.setLineWidth(LINE_WIDTH);
-        gc.strokeLine(getU().getX(), getU().getY(), getV().getX(), getV().getY());
+        gc.strokeLine(getU().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      getU().getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                      getV().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      getV().getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
     }
 }

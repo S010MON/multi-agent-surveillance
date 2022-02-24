@@ -19,7 +19,7 @@ public class DisplayPane extends Canvas
 
     public DisplayPane(StartMenu startMenu)
     {
-        super(1000, 1000);
+        super(1100, 1000);
         this.startMenu = startMenu;
         objects = new ArrayDeque<>();
         click = null;

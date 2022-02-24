@@ -3,6 +3,7 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.model.map.Move;
+import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
@@ -89,7 +90,10 @@ public class AgentImp implements Agent
     public void draw(GraphicsContext gc)
     {
         gc.setFill(Color.BLACK);
-        gc.fillOval(position.getX()-(radius/2), position.getY()-(radius/2), radius, radius);
+        gc.fillOval((position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX,
+                    (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY,
+                       radius,
+                       radius);
     }
 
     @Override
