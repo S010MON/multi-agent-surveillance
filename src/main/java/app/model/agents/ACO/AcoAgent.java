@@ -10,7 +10,6 @@ import app.model.map.Move;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 //TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp

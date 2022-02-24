@@ -74,9 +74,10 @@ public class AcoAgentTesting
     @Test
     void testAvailablePheromoneValues()
     {
+        position = new Vector(14, 12);
         AcoAgent agent = new AcoAgent(position, viewDirection, radius);
 
-        Vector nextPosition = new Vector(21.2, 20.1);
+        Vector nextPosition = new Vector(15, 12);
         agent.updateLocation(nextPosition);
 
         agent.updateView(graphicsEngine.compute(map, agent));
