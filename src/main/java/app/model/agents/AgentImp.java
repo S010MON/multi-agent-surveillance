@@ -16,6 +16,8 @@ public class AgentImp implements Agent
     protected double radius;
     protected ArrayList<Ray> view;
 
+    // TODO getter for raduios
+
     public AgentImp(Vector position, Vector direction, double radius)
     {
         this.direction = direction;
