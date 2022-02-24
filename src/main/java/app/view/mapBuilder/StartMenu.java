@@ -26,4 +26,11 @@ public class StartMenu extends BorderPane
         this.setRight(settingsPane);
         this.setCenter(displayPane);
     }
+
+    public void saveSettings()
+    {
+        fp.getSettings(settings);
+        sp.getSettings();
+        FileManager.saveSettings(settings, settings.getName());
+    }
 }
