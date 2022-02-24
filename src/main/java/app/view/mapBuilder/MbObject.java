@@ -15,7 +15,6 @@ public class MbObject
     @Getter private Vector vector;
     @Getter private Rectangle2D rect;
     @Getter private Double rotation;
-    private GraphicsContext gc;
 
     public MbObject(Rectangle2D rect, FurnitureType type)
     {
@@ -23,7 +22,7 @@ public class MbObject
         this.rect = rect;
     }
 
-    public void draw()
+    public void draw(GraphicsContext gc)
     {
         if(isFilled())
         {

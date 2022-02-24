@@ -23,13 +23,13 @@ public class FurniturePane extends StackPane
     private TextField x;
     private TextField y;
     private StartMenu startMenu;
+    private DisplayPane displayPane;
     private final int BUTTON_WIDTH = 150;
-    @Getter
-    private ArrayDeque<MbObject> history = new ArrayDeque<>();
 
-    public FurniturePane(StartMenu startMenu)
+    public FurniturePane(StartMenu startMenu, DisplayPane displayPane)
     {
         this.startMenu = startMenu;
+        this.displayPane = displayPane;
         VBox vbox = new VBox(10);
         loadButtons(vbox);
         this.setMargin(vbox, new Insets(10, 10, 10, 10));
@@ -68,10 +68,7 @@ public class FurniturePane extends StackPane
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setPrefWidth(BUTTON_WIDTH);
-        create.setOnAction(e -> {
-            Settings s = saveMap();
-            // Write to file (Add number of guards etc.)
-        });
+        create.setOnAction(e -> e.consume()); // TODO add event handling
 
         Button crOpen = new Button("Create & Open");
         crOpen.setPrefWidth(BUTTON_WIDTH);
@@ -79,7 +76,7 @@ public class FurniturePane extends StackPane
         vbox.getChildren().addAll(func, create, crOpen);
 
         Button undo = new Button("Undo");
-        undo.setOnAction(e -> undo());
+        undo.setOnAction(e -> displayPane.undo());
         undo.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(undo);
@@ -92,8 +89,7 @@ public class FurniturePane extends StackPane
                                                 parseRect(width),
                                                 parseRect(height));
         MbObject object = new MbObject(location, type);
-        history.add(object);
-        startMenu.getDisplayPane().draw(history);
+        displayPane.addObject(object);
     }
 
     public int parseRect(TextField tf)
@@ -113,29 +109,14 @@ public class FurniturePane extends StackPane
         return -1;
     }
 
-    public Settings saveMap()
+    public void getSettings(Settings s)
     {
-        Settings s = new Settings();
-        s.setWidth(2048);
-        s.setHeight(1024);
-        for(MbObject object : history)
+        for(MbObject object : displayPane.getObjects())
         {
-            if(object.getType().label.equals("teleport"))
-            {
+            if(object.getType() == FurnitureType.PORTAL)
                 s.addTeleport(object.getRect(), object.getVector(), object.getRotation());
-            }
             else
-            {
                 s.addFurniture(object.getRect(), object.getType());
-            }
         }
-
-        return s;
-    }
-
-    private void undo()
-    {
-        history.removeLast();
-        startMenu.getDisplayPane().draw(history);
     }
 }
