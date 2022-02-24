@@ -40,7 +40,7 @@ public class InvisibleBoundary implements Boundary
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
-        return 0 < t && t < 1 && u > 0;
+        return 0 <= t && t <= 1 && u >= 0;
     }
 
     @Override
