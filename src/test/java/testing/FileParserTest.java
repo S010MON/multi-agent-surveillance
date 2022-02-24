@@ -59,13 +59,8 @@ public class FileParserTest
         // Shade
         assertEquals(new Rectangle2D(10, 20, 10, 20), s.getFurniture().get(11).getRect());
         assertEquals("shaded", s.getFurniture().get(11).getType().label);
-        // Texture
-        assertEquals(new Rectangle2D(10, 20, 10, 20), s.getFurniture().get(12).getRect());
-        assertEquals(0, s.getFurniture().get(12).getTextureType());
-        assertEquals(0, s.getFurniture().get(12).getTextureOrientation());
-        assertEquals("texture", s.getFurniture().get(12).getType().label);
         // Glass
-        assertEquals(new Rectangle2D(0, 0, 20, 20), s.getFurniture().get(13).getRect());
-        assertEquals("glass", s.getFurniture().get(13).getType().label);
+        assertEquals(new Rectangle2D(0, 0, 20, 20), s.getFurniture().get(12).getRect());
+        assertEquals("glass", s.getFurniture().get(12).getType().label);
     }
 }

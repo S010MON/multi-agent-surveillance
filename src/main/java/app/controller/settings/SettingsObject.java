@@ -10,8 +10,6 @@ public class SettingsObject extends Rectangle2D
     @Getter private FurnitureType type;
     @Getter private Vector teleportTo;
     @Getter private Double teleportRotation;
-    @Getter private Integer textureType;
-    @Getter private Integer textureOrientation;
 
     public SettingsObject(Rectangle2D rectangle, FurnitureType type)
     {
@@ -22,8 +20,6 @@ public class SettingsObject extends Rectangle2D
         this.type = type;
         this.teleportTo = null;
         this.teleportRotation = null;
-        this.textureType = null;
-        this.textureOrientation = null;
     }
 
     public SettingsObject(Rectangle2D rectangle, Vector teleportTo, double teleportRotation)
@@ -35,21 +31,6 @@ public class SettingsObject extends Rectangle2D
         this.type = FurnitureType.PORTAL;
         this.teleportTo = teleportTo;
         this.teleportRotation = teleportRotation;
-        this.textureType = null;
-        this.textureOrientation = null;
-    }
-
-    public SettingsObject(Rectangle2D rectangle, Integer textureType, Integer textureOrientation)
-    {
-        super(rectangle.getMinX(),
-                rectangle.getMinY(),
-                rectangle.getWidth(),
-                rectangle.getHeight());
-        this.type = FurnitureType.TEXTURE;
-        this.teleportTo = null;
-        this.teleportRotation = null;
-        this.textureType = textureType;
-        this.textureOrientation = textureOrientation;
     }
 
     public Rectangle2D getRect()
@@ -70,8 +51,13 @@ public class SettingsObject extends Rectangle2D
         if(type == FurnitureType.PORTAL && teleportTo != null)
         {
             sb.append(" ");
-            sb.append(teleportTo.getX()).append(" ");
-            sb.append(teleportTo.getY());
+            sb.append((int) teleportTo.getX()).append(" ");
+            sb.append((int) teleportTo.getY());
+        }
+        if(type == FurnitureType.PORTAL && teleportRotation != null)
+        {
+            sb.append(" ");
+            sb.append(teleportRotation);
         }
         return sb.toString();
     }

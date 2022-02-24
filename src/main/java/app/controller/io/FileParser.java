@@ -58,11 +58,6 @@ public class FileParser
                         Double telportRotation = Double.parseDouble(coords[6]);
                         settings.addTeleport(rectangleOf(coords), teleportTo, telportRotation);
                     }
-                    case "texture" -> {
-                        Integer textureType = Integer.parseInt(coords[4]);
-                        Integer textureOrientation = Integer.parseInt(coords[5]);
-                        settings.addTexture(rectangleOf(coords), textureType, textureOrientation);
-                    }
                 }
             }
         }

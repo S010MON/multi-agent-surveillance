@@ -25,13 +25,9 @@ public class FileManager
         return null;
     }
 
-    public static void saveSettings(Settings settings)
+    public static void saveSettings(Settings settings, String fileName)
     {
-        String filePath;
-        if (settings.getName() == null)
-            filePath = FilePath.get("Save_Map_" + LocalDateTime.now() + ".txt");
-        else
-            filePath = FilePath.get("Save_" + settings.getName() + ".txt");
+        String filePath = FilePath.get(fileName);
 
         File file = new File(filePath);
         FileSaver.save(file, settings);
