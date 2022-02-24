@@ -57,11 +57,15 @@ public class GameEngine
                 {
                     a.updateLocation(portal.getTeleportTo());
 
-                    Vector direction = a.getDirection().copy();
+                    Vector direction = a.getDirection();
                     Vector newDirection = direction.rotate(portal.getTeleportRotation());
                     a.updateDirection(newDirection);
 
                     // TODO: add left-over movement to agent after teleportation
+                    double leftOverDist = intersection.dist(endPoint);
+                    Vector directionDist = newDirection.normalise().scale(leftOverDist);
+                    a.updateLocation(a.getPosition().add(directionDist));
+
                 }
             }
             if(portalsOnPath.size()>1)
@@ -86,11 +90,13 @@ public class GameEngine
                 {
                     a.updateLocation(closestPortal.getTeleportTo());
 
-                    Vector direction = a.getDirection().copy();
+                    Vector direction = a.getDirection();
                     Vector newDirection = direction.rotate(closestPortal.getTeleportRotation());
                     a.updateDirection(newDirection);
 
-                    // TODO: add left-over movement to agent after teleportation
+                    double leftOverDist = closestIntersection.dist(endPoint);
+                    Vector directionDist = newDirection.normalise().scale(leftOverDist);
+                    a.updateLocation(a.getPosition().add(directionDist));
                 }
             }
 
