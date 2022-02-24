@@ -62,6 +62,7 @@ public class FurniturePane extends StackPane
         {
             Button furnType = new Button(""+ft);
             furnType.setOnAction(e -> handleActionEvent(e, ft));
+            furnType.setPrefWidth(150);
             vbox.getChildren().add(furnType);
         }
 
