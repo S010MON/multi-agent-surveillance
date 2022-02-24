@@ -29,7 +29,8 @@ public abstract class Intersection
         return new Vector(x, y);
     }
 
-    public static boolean hasIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4){
+    public static boolean hasIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
+    {
         return findIntersection(p_1, p_2, p_3, p_4) != null;
     }
 
