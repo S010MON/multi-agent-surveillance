@@ -40,5 +40,17 @@ public class AcoGrid extends Grid
         }
     }
 
+    public void displayGridState()
+    {
+        for(int i = 0; i < getRowDimension(); i++)
+        {
+            for(int j = 0; j < getColDimension(); j++)
+            {
+                System.out.print(grid[i][j].toString() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
 }
