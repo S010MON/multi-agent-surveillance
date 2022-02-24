@@ -18,7 +18,7 @@ public class RayTracingTest
         Boundary bdy = new InvisibleBoundary(a,b);
 
         Vector u = new Vector(15,0);
-        Vector v = new Vector(0,1);
+        Vector v = new Vector(15,16);
         Ray ray = new Ray(u, v);
 
         assertTrue(bdy.isHit(ray));
