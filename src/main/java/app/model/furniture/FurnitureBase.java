@@ -25,7 +25,7 @@ public class FurnitureBase implements Furniture
         boundaries.forEach(e -> e.draw(gc));
     }
 
-    public void setBoundaries(ArrayList<Boundary> boundaries)
+    public void addBoundaries(ArrayList<Boundary> boundaries)
     {
         this.boundaries.addAll(boundaries);
     }
