@@ -18,7 +18,7 @@ public class IntersectionTest
         Vector p3 = new Vector(0, 3);
         Vector p4 = new Vector(3, 0);
 
-        assertTrue(Intersection.findIntersection(p1, p2, p3, p4));
+        assertTrue(Intersection.hasIntersection(p1, p2, p3, p4));
     }
 
     @Test void findIntersectionTest_noIntersect()
@@ -28,7 +28,7 @@ public class IntersectionTest
         Vector p3 = new Vector(0, 1);
         Vector p4 = new Vector(1, 1);
 
-        assertFalse(Intersection.findIntersection(p1, p2, p3, p4));
+        assertFalse(Intersection.hasIntersection(p1, p2, p3, p4));
     }
 
 
@@ -39,7 +39,7 @@ public class IntersectionTest
         Vector p3 = new Vector(0, 2);
         Vector p4 = new Vector(0, 3);
 
-        assertFalse(Intersection.findIntersection(p1, p2, p3, p4));
+        assertFalse(Intersection.hasIntersection(p1, p2, p3, p4));
     }
 
     @Test void findIntersectionTest_boundaryCheck_linearlyIntersect()
@@ -49,7 +49,7 @@ public class IntersectionTest
         Vector p3 = new Vector(1, 0);
         Vector p4 = new Vector(6, 0);
 
-        assertFalse(Intersection.findIntersection(p1, p2, p3, p4));
+        assertFalse(Intersection.hasIntersection(p1, p2, p3, p4));
     }
 
     @Test void findIntersectionTest_boundaryCheck_onePointOnLine()
@@ -59,6 +59,6 @@ public class IntersectionTest
         Vector p3 = new Vector(0, 4);
         Vector p4 = new Vector(3, 4);
 
-        assertTrue(Intersection.findIntersection(p1, p2, p3, p4));
+        assertTrue(Intersection.hasIntersection(p1, p2, p3, p4));
     }
 }

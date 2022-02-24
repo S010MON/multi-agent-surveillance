@@ -43,11 +43,6 @@ public class Settings
         furniture.add(new SettingsObject(rectangle, vector, teleportRotation));
     }
 
-    public void addTexture(Rectangle2D rectangle, Integer textureType, Integer textureOrientation)
-    {
-        furniture.add(new SettingsObject(rectangle, textureType, textureOrientation));
-    }
-
     public void addSoundSource(Vector position, double amplitude){
         soundSources.add(new SoundSourceBase(position, amplitude));
     }
