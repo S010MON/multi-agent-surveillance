@@ -59,7 +59,7 @@ public class FurniturePane extends StackPane
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setPrefWidth(BUTTON_WIDTH);
-        create.setOnAction(e -> startMenu.saveSettings()); // TODO add event handling
+        create.setOnAction(e -> startMenu.saveSettings()); // TODO add event handling!
 
         Button crOpen = new Button("Create & Open");
         crOpen.setPrefWidth(BUTTON_WIDTH);
