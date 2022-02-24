@@ -108,6 +108,12 @@ public class AgentImp implements Agent
     }
 
     @Override
+    public Vector intersection(Vector c, Vector d)
+    {
+        return null;
+    }
+
+    @Override
     public boolean validMove(Vector startPoint, Vector endPoint) {
         return false;
     }
