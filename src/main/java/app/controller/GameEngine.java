@@ -50,27 +50,48 @@ public class GameEngine
             List<Portal> portalsOnPath = getPortalsOnPath(startPoint, endPoint);
             if(portalsOnPath.size()==1)
             {
-                // TODO: add check if no objects between agent and portal
-
-                //Vector intersection = Intersection.findIntersectionPoints()
                 teleported = true;
-
                 Portal portal = portalsOnPath.get(0);
-                a.updateLocation(portal.getTeleportTo());
+                Vector intersection = getIntersectionPoint(portal, startPoint, endPoint);
+                if(legalMove(startPoint, intersection))
+                {
+                    a.updateLocation(portal.getTeleportTo());
 
-                Vector direction = a.getDirection().copy();
-                Vector newDirection = direction.rotate(portal.getTeleportRotation());
-                a.updateDirection(newDirection);
+                    Vector direction = a.getDirection().copy();
+                    Vector newDirection = direction.rotate(portal.getTeleportRotation());
+                    a.updateDirection(newDirection);
 
-                // TODO: add left-over movement to agent after teleportation
+                    // TODO: add left-over movement to agent after teleportation
+                }
             }
             if(portalsOnPath.size()>1)
             {
-                // TODO: determine closest portal
-                // TODO: add check if no objects between agent and portal
+                teleported = true;
+                double minDistance = startPoint.dist(endPoint);
+                Vector closestIntersection = endPoint;
+                Portal closestPortal = portalsOnPath.get(0);
+                for(Portal portal: portalsOnPath)
+                {
+                    Vector newIntersection = getIntersectionPoint(portal, startPoint, endPoint);
+                    double newDistance = startPoint.dist(newIntersection);
+                    if(newDistance<minDistance)
+                    {
+                        minDistance = newDistance;
+                        closestIntersection = newIntersection;
+                        closestPortal = portal;
+                    }
+                }
 
-                // TODO: teleport agent
-                // TODO: add left-over movement to agent after teleportation
+                if(legalMove(startPoint, closestIntersection))
+                {
+                    a.updateLocation(closestPortal.getTeleportTo());
+
+                    Vector direction = a.getDirection().copy();
+                    Vector newDirection = direction.rotate(closestPortal.getTeleportRotation());
+                    a.updateDirection(newDirection);
+
+                    // TODO: add left-over movement to agent after teleportation
+                }
             }
 
             if (!teleported && legalMove(startPoint, endPoint))
@@ -123,5 +144,19 @@ public class GameEngine
             }
         }
         return portalsOnPath;
+    }
+
+    private Vector getIntersectionPoint(Portal portal, Vector start, Vector end)
+    {
+        List<Boundary> bounds = portal.getBoundaries();
+        Vector intersection = end;
+        for (Boundary bdy : bounds)
+        {
+            Vector newIntersection = bdy.intersection(start, end);
+            if(newIntersection!=null)
+                if(start.dist(newIntersection)<start.dist(intersection))
+                    intersection = newIntersection;
+        }
+        return intersection;
     }
 }

@@ -12,5 +12,7 @@ public interface Boundary
 
     Vector intersection(Ray ray);
 
-    boolean validMove(Vector startPoint,Vector endPoint );
+    Vector intersection(Vector c, Vector d);
+
+    boolean validMove(Vector startPoint,Vector endPoint);
 }
