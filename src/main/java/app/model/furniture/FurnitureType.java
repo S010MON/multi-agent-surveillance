@@ -9,8 +9,7 @@ public enum FurnitureType
     PORTAL("teleport"),
     GUARD_SPAWN("spawnAreaGuards"),
     INTRUDER_SPAWN("spawnAreaIntruders"),
-    TARGET("targetArea"),
-    TEXTURE("texture");
+    TARGET("targetArea");
 
     public final String label;
 
