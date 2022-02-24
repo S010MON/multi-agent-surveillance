@@ -71,6 +71,11 @@ public class Vector
         // Rounded to 1 decimal place
         double angle = (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
         double roundedAngle = (double) Math.round(angle * 10) / 10;
+
+        if(roundedAngle == 360.0)
+        {
+            roundedAngle = 0.0;
+        }
         return roundedAngle;
     }
 
