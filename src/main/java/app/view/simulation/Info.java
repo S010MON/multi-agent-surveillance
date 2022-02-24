@@ -5,7 +5,6 @@ import lombok.Setter;
 
 public class Info
 {
-
     private static Info instance;
     @Getter @Setter public double offsetX;
     @Getter @Setter public double offsetY;
