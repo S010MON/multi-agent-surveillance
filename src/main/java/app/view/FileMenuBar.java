@@ -1,6 +1,7 @@
 package app.view;
 
 import app.App;
+import app.view.mapBuilder.DisplayPane;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -13,7 +14,7 @@ public class FileMenuBar extends MenuBar
     {
         this.app = app;
 
-        /* View menu */
+        /* File menu */
         Menu file = new Menu("File");
 
         MenuItem newFile = new MenuItem("New");
@@ -23,6 +24,10 @@ public class FileMenuBar extends MenuBar
         MenuItem openFile = new MenuItem("Open");
         openFile.setOnAction(e -> System.out.println("Test open..."));
         file.getItems().add(openFile);
+
+        MenuItem undoFile = new MenuItem("Undo");
+        undoFile.setOnAction(e -> app.getStartMenu().getDisplayPane().undo());
+        file.getItems().add(undoFile);
 
 
         /* View menu */

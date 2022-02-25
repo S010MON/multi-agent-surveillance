@@ -6,14 +6,17 @@ import app.view.ScreenSize;
 import app.view.mapBuilder.StartMenu;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import lombok.Getter;
 
 public class App extends Application
 {
-    private Scene scene;
+    @Getter private Scene scene;
     @Getter private FileMenuBar fileMenuBar;
-    private StartMenu startMenu;
+    @Getter private StartMenu startMenu;
     private Simulation simulation;
 
     @Override
@@ -24,6 +27,11 @@ public class App extends Application
 
         startMenu = new StartMenu(this);
         scene = new Scene(startMenu, ScreenSize.width, ScreenSize.height);
+
+        // Shortcuts
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+        Runnable r = () -> startMenu.getDisplayPane().undo();
+        scene.getAccelerators().put(ctrlZ, r);
 
         stage.setScene(scene);
         stage.show();
