@@ -22,6 +22,8 @@ public interface Agent extends Boundary
 
     double getMaxSprint();
 
+    double getRadius();
+
     void setMaxWalk(double walkSpeed);
 
     void setMaxSprint(double sprintSpeed);

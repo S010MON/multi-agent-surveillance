@@ -82,6 +82,9 @@ public class AgentImp implements Agent
     public double getMaxSprint() { return maxSprint; }
 
     @Override
+    public double getRadius() { return radius; }
+
+    @Override
     public void setMaxWalk(double walkSpeed) { this.maxWalk = walkSpeed; }
 
     @Override
