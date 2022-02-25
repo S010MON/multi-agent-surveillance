@@ -30,10 +30,14 @@ public class StartMenu extends BorderPane
         this.setCenter(displayPane);
     }
 
-    public void saveSettings()
+    public void saveSettings(boolean open)
     {
         furniturePane.getSettings(settings);
         settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
+        if(open)
+        {
+            
+        }
     }
 }
