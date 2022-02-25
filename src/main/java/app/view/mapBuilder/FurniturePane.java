@@ -65,12 +65,6 @@ public class FurniturePane extends StackPane
         crOpen.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(func, create, crOpen);
-
-        Button undo = new Button("Undo");
-        undo.setOnAction(e -> displayPane.undo());
-        undo.setPrefWidth(BUTTON_WIDTH);
-
-        vbox.getChildren().addAll(undo);
     }
 
     private void handleActionEvent(ActionEvent e, FurnitureType type)
