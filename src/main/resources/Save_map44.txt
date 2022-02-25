@@ -1,0 +1,16 @@
+name = map44
+gameFile = filePath
+gameMode = 12
+height = 0
+width = 0
+scaling = 0.1
+numGuards = 7
+numIntruders = 7
+baseSpeedIntruder = 23.0
+sprintSpeedIntruder = 23.0
+baseSpeedGuard = 13.5
+sprintSpeedGuard = 21.5
+timeStep = 0.5
+spawnAreaGuards = 20 20 120 120
+wall = 200 200 290 260
+glass = 500 500 510 510
