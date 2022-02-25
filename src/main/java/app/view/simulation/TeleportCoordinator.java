@@ -45,7 +45,7 @@ public abstract class TeleportCoordinator {
         return move;
     }
 
-    private static boolean legalMove(Map map, Vector start, Vector end)
+    public static boolean legalMove(Map map, Vector start, Vector end)
     {
         for (Boundary bdy : map.getBoundaries())
         {
@@ -55,7 +55,7 @@ public abstract class TeleportCoordinator {
         return true;
     }
 
-    private static Move getTeleportMove(Map map, Agent a, Portal portal, Vector intersection, Vector start, Vector end)
+    public static Move getTeleportMove(Map map, Agent a, Portal portal, Vector intersection, Vector start, Vector end)
     {
         Move move = null;
         if(legalMove(map, start, intersection))
@@ -76,24 +76,28 @@ public abstract class TeleportCoordinator {
         return move;
     }
 
-    private static List<Portal> getPortalsOnPath(Map map, Vector start, Vector end)
+    public static List<Portal> getPortalsOnPath(Map map, Vector start, Vector end)
     {
         List<Portal> portalsOnPath = new ArrayList<>();
         List<Furniture> portals = map.getPortals();
         for(Furniture portal: portals)
         {
+            boolean added = false;
             List<Boundary> bounds = portal.getBoundaries();
             Boolean intersects = false;
             for (Boundary bdy : bounds)
             {
-                if(!bdy.validMove(start, end))
+                if(!added & !bdy.validMove(start, end))
+                {
                     portalsOnPath.add((Portal) portal);
+                    added = true;
+                }
             }
         }
         return portalsOnPath;
     }
 
-    private static Vector getIntersectionPoint(Portal portal, Vector start, Vector end)
+    public static Vector getIntersectionPoint(Portal portal, Vector start, Vector end)
     {
         List<Boundary> bounds = portal.getBoundaries();
         Vector intersection = end;
