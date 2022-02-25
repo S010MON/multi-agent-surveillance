@@ -3,7 +3,7 @@ package testing;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.boundary.Boundary;
-import app.model.boundary.InvisibleBoundary;
+import app.model.boundary.BoundaryImp;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ public class RayTracingTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new InvisibleBoundary(a,b);
+        Boundary bdy = new BoundaryImp(a,b);
 
         Vector u = new Vector(15,0);
         Vector v = new Vector(15,16);
@@ -33,7 +33,7 @@ public class RayTracingTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new InvisibleBoundary(a,b);
+        Boundary bdy = new BoundaryImp(a,b);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);
