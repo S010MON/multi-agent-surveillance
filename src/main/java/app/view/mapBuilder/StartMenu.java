@@ -37,7 +37,8 @@ public class StartMenu extends BorderPane
         FileManager.saveSettings(settings, settings.getName());
         if(open)
         {
-            
+            String fileName = settings.getName() + ".txt";
+            app.gotoSimulation(fileName);
         }
     }
 }
