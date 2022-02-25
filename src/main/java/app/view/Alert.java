@@ -9,9 +9,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class Alert {
-
-    public static void displayAlert(String title, String message){
+public class Alert
+{
+    public static void displayAlert(String title, String message)
+    {
         Stage window=new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
@@ -32,6 +33,4 @@ public class Alert {
         window.setScene(sc);
         window.showAndWait();
     }
-
-    // TODO could add a method where a text field is also supplied for the user to interact with
 }
