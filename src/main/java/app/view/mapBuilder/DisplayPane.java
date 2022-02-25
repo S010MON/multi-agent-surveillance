@@ -3,6 +3,7 @@ package app.view.mapBuilder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+import app.view.ScreenSize;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
@@ -26,7 +27,7 @@ public class DisplayPane extends Canvas
 
     public DisplayPane(StartMenu startMenu)
     {
-        super(1100, 1000);
+        super(ScreenSize.width - 450 ,ScreenSize.height);
         this.startMenu = startMenu;
         objects = new ArrayDeque<>();
         click = null;

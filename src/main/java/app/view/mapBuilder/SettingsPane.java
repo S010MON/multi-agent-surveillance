@@ -29,6 +29,7 @@ public class SettingsPane extends StackPane
     {
         this.startMenu = startMenu;
         this.s = s;
+        this.setPrefWidth(300);
 
         // Labels displaying current settings information.
         VBox vbox = new VBox(10);
@@ -68,24 +69,34 @@ public class SettingsPane extends StackPane
 
         // Text Fields with current values editable.
         name = new TextField();
+        name.setMaxWidth(100);
         name.setText(s.getName());
         mode = new TextField();
+        mode.setMaxWidth(100);
         mode.setText(""+s.getGameMode());
         w = new TextField();
+        w.setMaxWidth(100);
         w.setText(""+s.getWidth());
         h = new TextField();
+        h.setMaxWidth(100);
         h.setText(""+s.getHeight());
         noGuards = new TextField();
+        noGuards.setMaxWidth(100);
         noGuards.setText(""+s.getNoOfGuards());
         noIntruders = new TextField();
+        noIntruders.setMaxWidth(100);
         noIntruders.setText(""+s.getNoOfIntruders());
         bGuard = new TextField();
+        bGuard.setMaxWidth(100);
         bGuard.setText(""+s.getWalkSpeedGuard());
         bIntruder = new TextField();
+        bIntruder.setMaxWidth(100);
         bIntruder.setText(""+s.getWalkSpeedIntruder());
         sGuard = new TextField();
+        sGuard.setMaxWidth(100);
         sGuard.setText(""+s.getSprintSpeedGuard());
         sIntruder = new TextField();
+        sIntruder.setMaxWidth(100);
         sIntruder.setText(""+s.getSprintSpeedIntruder());
 
         // Add labels and fields to grid
