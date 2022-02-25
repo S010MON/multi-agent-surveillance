@@ -41,8 +41,8 @@ public class Map
 
         /* Make furniture */
         furniture = new ArrayList<>();
+        this.portals = new ArrayList<>();
         settings.getFurniture().forEach(e -> addFurniture(e));
-
 
         /* Make sound furniture */
         soundFurniture = new ArrayList<>();
@@ -97,6 +97,7 @@ public class Map
 
         furniture = new ArrayList<>();
         furniture.addAll(obstacles);
+        portals = new ArrayList<>();
     }
 
     public void walk(Vector v)

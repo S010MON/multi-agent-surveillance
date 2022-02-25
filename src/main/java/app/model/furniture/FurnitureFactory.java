@@ -18,7 +18,7 @@ public abstract class FurnitureFactory
     public static Furniture make(FurnitureType type, Rectangle2D rectangle, Vector teleportTo, double teleportRotation)
     {
         Portal furniture = new Portal();
-        furniture.setBoundaries(BoundaryFactory.make(type, rectangle));
+        furniture.addBoundaries(BoundaryFactory.make(type, rectangle));
         furniture.setTexture(TextureFactory.make(type, rectangle));
         furniture.setTeleportTo(teleportTo);
         furniture.setTeleportRotation(teleportRotation);
