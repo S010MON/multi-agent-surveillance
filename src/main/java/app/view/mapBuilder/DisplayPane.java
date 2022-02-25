@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +35,7 @@ public class DisplayPane extends Canvas
         vLines = createVLines();
         hLines = createHLines();
 
+        setCursor(Cursor.CROSSHAIR);
         setOnMousePressed(this::mousePressed);
         setOnMouseDragged(this::mouseDragged);
         setOnMouseReleased(this::mouseReleased);
