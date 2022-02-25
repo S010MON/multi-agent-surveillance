@@ -14,7 +14,7 @@ import lombok.Getter;
 
 public class App extends Application
 {
-    @Getter private Scene scene;
+    private Scene scene;
     @Getter private FileMenuBar fileMenuBar;
     @Getter private StartMenu startMenu;
     private Simulation simulation;
