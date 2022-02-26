@@ -40,7 +40,7 @@ public class StartMenu extends BorderPane
         // TODO Display success if it was actually successful, and failure if not
         if(open)
         {
-            String fileName = settings.getName() + ".txt";
+            String fileName = settings.getName();
             app.gotoSimulation(fileName);
         }
     }
