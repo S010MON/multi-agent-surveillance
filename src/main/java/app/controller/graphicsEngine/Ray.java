@@ -10,7 +10,7 @@ public class Ray
 {
     @Getter private Vector u;
     @Getter private Vector v;
-    private Color colour = Color.RED;
+    private Color colour = Color.rgb(255,191,0, 0.5);
     private final double LINE_WIDTH = 1;
 
     public Ray(Vector u, Vector v)
