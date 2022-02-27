@@ -1,11 +1,9 @@
 package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
-import javafx.scene.canvas.GraphicsContext;
 
-public class TransparentBoundary extends InvisibleBoundary
+public class TransparentBoundary extends BoundaryImp
 {
     public TransparentBoundary(Vector a, Vector b)
     {

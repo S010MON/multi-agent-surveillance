@@ -80,7 +80,7 @@ public class GameEngine
     {
         for (Boundary bdy : map.getBoundaries())
         {
-            if(bdy.validMove(start, end))
+            if(!bdy.validMove(start, end))
                 return false;
         }
         return true;
