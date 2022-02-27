@@ -49,7 +49,7 @@ public abstract class TeleportCoordinator {
     {
         for (Boundary bdy : map.getBoundaries())
         {
-            if(bdy.validMove(start, end))
+            if(!bdy.validMove(start, end))
                 return false;
         }
         return true;
@@ -58,7 +58,10 @@ public abstract class TeleportCoordinator {
     public static Move getTeleportMove(Map map, Agent a, Portal portal, Vector intersection, Vector start, Vector end)
     {
         Move move = null;
-        if(legalMove(map, start, intersection))
+        Vector errorVector = new Vector(0.000001, 0.000001);
+        Vector intersectionPlus = intersection.add(errorVector);
+        Vector intersectionMin = intersection.sub(errorVector);
+        if(legalMove(map, start, intersectionPlus) || legalMove(map, start, intersectionMin))
         {
             //a.updateLocation(portal.getTeleportTo());
 

@@ -54,6 +54,129 @@ public class TeleportCoordinatorTest {
         assertEquals(0, portalsOnPath.size());
     }
 
+    @Test void testGetIntersectionPointVertical()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Vector a = new Vector(15, 5);
+        Vector b = new Vector(15, 25);
+
+        Vector intersection1 = TeleportCoordinator.getIntersectionPoint(portal, a, b);
+        Vector intersection2 = TeleportCoordinator.getIntersectionPoint(portal, b, a);
+
+        assertEquals(15, intersection1.getX());
+        assertEquals(10, intersection1.getY());
+        assertEquals(15, intersection2.getX());
+        assertEquals(20, intersection2.getY());
+    }
+
+    @Test void testGetIntersectionPointHorizontal()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Vector c = new Vector(5, 15);
+        Vector d = new Vector(25, 15);
+
+        Vector intersection3 = TeleportCoordinator.getIntersectionPoint(portal, c, d);
+        Vector intersection4 = TeleportCoordinator.getIntersectionPoint(portal, d, c);
+
+        assertEquals(10, intersection3.getX());
+        assertEquals(15, intersection3.getY());
+        assertEquals(20, intersection4.getX());
+        assertEquals(15, intersection4.getY());
+    }
+
+    @Test void testGetIntersectionPointDiagonal()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Vector e = new Vector(9, 16);
+        Vector f = new Vector(16, 9);
+
+        Vector intersection5 = TeleportCoordinator.getIntersectionPoint(portal, e, f);
+        Vector intersection6 = TeleportCoordinator.getIntersectionPoint(portal, f, e);
+
+        assertEquals(10, intersection5.getX());
+        assertEquals(15, intersection5.getY());
+        assertEquals(15, intersection6.getX());
+        assertEquals(10, intersection6.getY());
+    }
+
+    @Test void testGetTeleportMoveVertical()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Agent a = map.getAgents().get(0);
+
+        a.updateLocation(new Vector(15, 5));
+        a.updateDirection(new Vector(0, 1));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(15, 20);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.getTeleportMove(map, a, portal, intersection, start, end);
+
+
+        Vector expectedEndPosition = new Vector(60, 50);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        double error = 0.0000001;
+        assertEquals(1, move.getEndDir().getX(), error);
+        assertEquals(0, move.getEndDir().getY(), error);
+        assertEquals(expectedDeltaPos.getX(), move.getDeltaPos().getX(), error);
+        assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
+    }
+
+    @Test void testGetTeleportMoveHorizontal()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Agent a = map.getAgents().get(0);
+
+        a.updateLocation(new Vector(5, 15));
+        a.updateDirection(new Vector(1, 0));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(25, 15);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.getTeleportMove(map, a, portal, intersection, start, end);
+
+
+        Vector expectedEndPosition = new Vector(50, 35);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        double error = 0.0000001;
+        assertEquals(0, move.getEndDir().getX(), error);
+        assertEquals(-1, move.getEndDir().getY(), error);
+        assertEquals(expectedDeltaPos.getX(), move.getDeltaPos().getX(), error);
+        assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
+    }
+
+    @Test void testGetTeleportMoveDiagonal()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Agent a = map.getAgents().get(0);
+
+        a.updateLocation(new Vector(9, 16));
+        a.updateDirection(new Vector(1, -1));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(16, 9);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.getTeleportMove(map, a, portal, intersection, start, end);
+
+
+        Vector expectedEndPosition = new Vector(44, 44);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        double error = 0.0000001;
+        assertEquals(-1, move.getEndDir().getX(), error);
+        assertEquals(-1, move.getEndDir().getY(), error);
+        assertEquals(expectedDeltaPos.getX(), move.getDeltaPos().getX(), error);
+        assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
+    }
+
     /*
     @Test void TestIfTeleported()
     {
