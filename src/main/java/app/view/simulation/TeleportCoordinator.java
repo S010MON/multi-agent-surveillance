@@ -63,15 +63,11 @@ public abstract class TeleportCoordinator {
         Vector intersectionMin = intersection.sub(errorVector);
         if(legalMove(map, start, intersectionPlus) || legalMove(map, start, intersectionMin))
         {
-            //a.updateLocation(portal.getTeleportTo());
-
             Vector direction = a.getDirection();
             Vector newDirection = direction.rotate(portal.getTeleportRotation());
-            //a.updateDirection(newDirection);
 
             double leftOverDist = intersection.dist(end);
             Vector directedDist = newDirection.normalise().scale(leftOverDist);
-            //a.updateLocation(a.getPosition().add(directionDist));
             Vector finalPosition = portal.getTeleportTo().add(directedDist);
             Vector changePosition = finalPosition.sub(a.getPosition());
             move = new Move(newDirection, changePosition);
@@ -87,7 +83,6 @@ public abstract class TeleportCoordinator {
         {
             boolean added = false;
             List<Boundary> bounds = portal.getBoundaries();
-            Boolean intersects = false;
             for (Boundary bdy : bounds)
             {
                 if(!added & !bdy.validMove(start, end))

@@ -177,8 +177,8 @@ public class TeleportCoordinatorTest {
         assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
     }
 
-    /*
-    @Test void TestIfTeleported()
+
+    @Test void TestIfTeleportedBasic()
     {
         Settings s = createSettingsFile();
         Map map = new Map(s);
@@ -191,7 +191,7 @@ public class TeleportCoordinatorTest {
         assertNotNull(move);
     }
 
-    @Test void TestIfTeleportedEdgeCase()
+    @Test void testTeleportIfLegalEdgeCase()
     {
         Settings s = createSettingsFile();
         Map map = new Map(s);
@@ -200,22 +200,81 @@ public class TeleportCoordinatorTest {
         a.updateLocation(new Vector(10, 5));
         a.updateDirection(new Vector(0, -1));
         Move move = TeleportCoordinator.teleportIfLegal(a, a.getPosition(), new Vector(20, 15), map);
-        assertNotEquals(null, move);
+        assertNotNull(move);
     }
 
-    @Test void TestTeleportPosChange()
+    @Test void testTeleportIfLegalPosAndDirChange()
     {
-        Settings s = createSettingsFile();
-        Map map = new Map(s);
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
         Agent a = map.getAgents().get(0);
 
-        a.updateLocation(new Vector(10, 15));
-        a.updateDirection(new Vector(0, -1));
-        Move move = TeleportCoordinator.teleportIfLegal(a, a.getPosition(), new Vector(20, 15), map);
-        assertNotEquals(null, move);
-        //assertEquals();
+        a.updateLocation(new Vector(9, 16));
+        a.updateDirection(new Vector(1, -1));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(16, 9);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.teleportIfLegal(a, start, end, map);
+
+
+        Vector expectedEndPosition = new Vector(44, 44);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        double error = 0.0000001;
+        assertEquals(-1, move.getEndDir().getX(), error);
+        assertEquals(-1, move.getEndDir().getY(), error);
+        assertEquals(expectedDeltaPos.getX(), move.getDeltaPos().getX(), error);
+        assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
     }
-    */
+
+    @Test void testTeleportIfLegalIllegalCase()
+    {
+        Map map = new Map(createSettingsFile());
+        Portal portal = (Portal) map.getPortals().get(0);
+        Agent a = map.getAgents().get(0);
+
+        a.updateLocation(new Vector(9, 16));
+        a.updateDirection(new Vector(1, -1));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(0, 16);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.teleportIfLegal(a, start, end, map);
+
+
+        Vector expectedEndPosition = new Vector(44, 44);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        assertNull(move);
+    }
+
+    @Test void testTeleportIfLegalTwoPortals()
+    {
+        Settings s = createSettingsFile();
+        s.addTeleport(new Rectangle2D(30, 10, 10, 10), new Vector(60, 60), 90);
+        Map map = new Map(s);
+        Agent a = map.getAgents().get(0);
+        Portal portal = (Portal) map.getPortals().get(0);
+
+        a.updateLocation(new Vector(5, 15));
+        a.updateDirection(new Vector(1, 0));
+
+        Vector start = a.getPosition();
+        Vector end = new Vector(35, 15);
+        Vector intersection = TeleportCoordinator.getIntersectionPoint(portal, start, end);
+        Move move = TeleportCoordinator.getTeleportMove(map, a, portal, intersection, start, end);
+
+
+        Vector expectedEndPosition = new Vector(50, 25);
+        Vector expectedDeltaPos = expectedEndPosition.sub(start);
+
+        double error = 0.0000001;
+        assertEquals(0, move.getEndDir().getX(), error);
+        assertEquals(-1, move.getEndDir().getY(), error);
+        assertEquals(expectedDeltaPos.getX(), move.getDeltaPos().getX(), error);
+        assertEquals(expectedDeltaPos.getY(), move.getDeltaPos().getY(), error);
+    }
 
 
     /** Create a GameEngine */
