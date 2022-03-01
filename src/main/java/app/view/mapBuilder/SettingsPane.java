@@ -117,6 +117,16 @@ public class SettingsPane extends StackPane
         this.getChildren().addAll(vbox);
     }
 
+    public int getMapWidth()
+    {
+        return Integer.parseInt(w.getText());
+    }
+
+    public int getMapHeight()
+    {
+        return Integer.parseInt(h.getText());
+    }
+
     public void getSettings()
     {
         s.setName(name.getText());

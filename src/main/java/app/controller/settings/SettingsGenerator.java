@@ -10,8 +10,8 @@ public abstract class SettingsGenerator
         Settings settings = new Settings();
         settings.setName("best_map");
         settings.setGameMode(1);
-        settings.setTimeStep(0.5);
-        settings.setScaling(0.1);
+        settings.setWidth(1200);
+        settings.setHeight(600);
         settings.setNoOfGuards(3);
         settings.setNoOfIntruders(5);
         settings.setWalkSpeedGuard(13.5);

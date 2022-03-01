@@ -31,6 +31,16 @@ public class StartMenu extends BorderPane
         this.setCenter(displayPane);
     }
 
+    public int getMapWidth()
+    {
+        return settingsPane.getMapWidth();
+    }
+
+    public int getMapHeight()
+    {
+        return settingsPane.getMapHeight();
+    }
+
     public void saveSettings()
     {
         furniturePane.getSettings(settings);
