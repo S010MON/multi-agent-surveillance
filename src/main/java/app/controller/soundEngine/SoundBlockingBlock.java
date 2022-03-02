@@ -10,25 +10,21 @@ import java.util.ArrayList;
 
 public class SoundBlockingBlock implements SoundFurniture{
     @Getter @Setter private ArrayList<SoundBoundary> soundBoundaries;
+    private ArrayList<Vector> corners;
 
     public SoundBlockingBlock(Rectangle2D r){
-        Vector[] corners = cornersOf(r);
+        corners = new ArrayList<>();
+
+        corners.add(new Vector(r.getMinX(), r.getMinY()));      // top left corner
+        corners.add(new Vector(r.getMaxX(), r.getMinY()));      // top right corner
+        corners.add(new Vector(r.getMaxX(), r.getMaxY()));      // lower right corner
+        corners.add(new Vector(r.getMinX(), r.getMaxY()));      // lower left corner
 
         soundBoundaries = new ArrayList<>();
-        soundBoundaries.add(new SoundBlockingWall(corners[0], corners[1]));
-        soundBoundaries.add(new SoundBlockingWall(corners[1], corners[2]));
-        soundBoundaries.add(new SoundBlockingWall(corners[2], corners[3]));
-        soundBoundaries.add(new SoundBlockingWall(corners[3], corners[0]));
-    }
-
-    private Vector[] cornersOf(Rectangle2D r)
-    {
-        Vector[] corners = new Vector[4];
-        corners[0] = new Vector(r.getMinX(), r.getMinY());      // top left corner
-        corners[1] = new Vector(r.getMaxX(), r.getMinY());      // top right corner
-        corners[2] = new Vector(r.getMaxX(), r.getMaxY());      // lower right corner
-        corners[3] = new Vector(r.getMinX(), r.getMaxY());      // lower left corner
-        return corners;
+        soundBoundaries.add(new SoundBlockingWall(corners.get(0), corners.get(1)));
+        soundBoundaries.add(new SoundBlockingWall(corners.get(1), corners.get(2)));
+        soundBoundaries.add(new SoundBlockingWall(corners.get(2), corners.get(3)));
+        soundBoundaries.add(new SoundBlockingWall(corners.get(3), corners.get(0)));
     }
 
     @Override
@@ -39,6 +35,32 @@ public class SoundBlockingBlock implements SoundFurniture{
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean hitsCorner(SoundRay soundRay){
+       if(!corners.contains(soundRay.getEnd())) {
+           return false;
+       }
+
+        for (SoundBoundary sb: soundBoundaries) {
+            if(sb.getCorners().contains(soundRay.getEnd())){
+                for (SoundBoundary remaining : soundBoundaries) {
+                    if(remaining.getCorners().contains(soundRay.getEnd())){
+                        continue;
+                    }
+                    if(remaining.intersection(soundRay) != null){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isCorner(Vector pos) {
+        return corners.contains(pos);
     }
 
     @Override
