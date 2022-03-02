@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
+import app.view.simulation.Info;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -59,7 +60,6 @@ public class GameEngine
             case "d" -> map.walk(new Vector(1, 0));
         }
     }
-
 
     private boolean legalMove(Vector start, Vector end)
     {
