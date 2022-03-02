@@ -21,9 +21,9 @@ public class StartMenu extends BorderPane
     {
         this.app = app;
         settings = SettingsGenerator.mockSettings();
-        displayPane = new DisplayPane(this);
-        settingsPane = new SettingsPane(this, settings);
         furniturePane = new FurniturePane(this, displayPane);
+        settingsPane = new SettingsPane(this, settings);
+        displayPane = new DisplayPane(this);
 
         this.setTop(new FileMenuBar(app));
         this.setLeft(furniturePane);

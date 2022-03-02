@@ -51,7 +51,8 @@ public class DisplayPane extends Canvas
 
         // Draw map boundary
         gc.setStroke(Color.BLACK);
-        gc.strokeRect(0, 0, startMenu.getMapWidth(), startMenu.getMapHeight());
+        gc.setLineWidth(3.0);
+        gc.strokeRect(3, 3, startMenu.getMapWidth(), startMenu.getMapHeight());
 
         vLines.forEach(e -> e.draw(gc));
         hLines.forEach(e -> e.draw(gc));
