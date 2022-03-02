@@ -21,7 +21,7 @@ public class FurniturePane extends StackPane
     private TextField y;
     private StartMenu startMenu;
     private DisplayPane displayPane;
-    private final int BUTTON_WIDTH = 120;
+    private final int BUTTON_WIDTH = 140;
 
     public FurniturePane(StartMenu startMenu, DisplayPane displayPane)
     {
@@ -39,7 +39,9 @@ public class FurniturePane extends StackPane
         // Portal co-ordinates
         Label teleport = new Label("Teleport to x and y:");
         x = new TextField();
+        x.setPrefWidth(BUTTON_WIDTH);
         y = new TextField();
+        y.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(teleport, x, y);
 
