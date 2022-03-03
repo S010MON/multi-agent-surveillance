@@ -38,6 +38,11 @@ public class Renderer extends Canvas
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
 
+        // Draw map boundary
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(3.0);
+        gc.strokeRect(3, 3, map.getSettings().getWidth(), map.getSettings().getHeight());
+
         map.drawIntruderSpawn(gc);
         map.drawGuardSpawn(gc);
         map.getFurniture().forEach(e -> e.draw(gc));
