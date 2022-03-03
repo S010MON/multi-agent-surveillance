@@ -5,6 +5,7 @@ import app.model.Map;
 import app.model.agents.Agent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
@@ -41,25 +42,33 @@ public class CornerAimedTracing implements SoundEngine{
         return 0.0;
     }
 
-    public ArrayList<SoundSource> computeSources(Map map, Agent agent){
-        HashSet<SoundSource> heardSources = new HashSet<>();
-
-        // do smart things here
-
+    public HashMap<SoundSource, Sound> computeSources(Map map, Agent agent){
         // direct sound:
 
-        heardSources.addAll(audibleFrom(map, agent.getPosition()));
+        HashMap<SoundSource, Sound> soundTable = new HashMap<>();
+        Vector agentPos = agent.getPosition();
 
-        // first diffraction
+        ArrayList<SoundSource> audible = audibleFrom(map, agentPos);
 
-        ArrayList<Vector> firstLayerCorners = findReachableCorners(map, agent.getPosition());
+        for (SoundSource heard: audible) {
+            soundTable.put(heard, new Sound(heard, agentPos, heard.getPosition(), 0));
+        }
 
-        firstLayerCorners.forEach(pos -> {
-            heardSources.addAll(audibleFrom(map, pos));
-        });
+        ArrayList<Vector> firstLayerCorners = findReachableCorners(map, agentPos);
 
+        for (Vector pos: firstLayerCorners) {
+            audible = audibleFrom(map, pos);
 
-        return new ArrayList<>(heardSources);
+            for (SoundSource heard: audible) {
+                if(!soundTable.containsKey(heard)) {
+                    soundTable.put(heard, new Sound(heard, agentPos, pos, 1));
+                    continue;
+                }
+                soundTable.get(heard).update(pos,1);
+            }
+        }
+
+        return soundTable;
     }
 
     private ArrayList<SoundSource> audibleFrom(Map map, Vector pos){
@@ -105,8 +114,11 @@ public class CornerAimedTracing implements SoundEngine{
     }
 
     private boolean intersectsAnySoundFurniture(ArrayList<SoundFurniture> soundFurniture, SoundRay soundRay){
+        // TODO currently there is a problem for rays starting from points inside a furniture
+        // TODO need a way of checking if the ray starts from or ends in an "outside facing" boundary
+
         for (SoundFurniture sf: soundFurniture) {
-            if(sf.intersectsAny(soundRay) && sf.isCorner(soundRay.getStart())) {
+            if(sf.intersectsAny(soundRay) && !sf.isCorner(soundRay.getStart()) && !sf.isCorner(soundRay.getEnd())) {
                 return true;
             }
         }
