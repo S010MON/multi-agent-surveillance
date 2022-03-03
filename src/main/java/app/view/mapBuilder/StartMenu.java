@@ -21,14 +21,24 @@ public class StartMenu extends BorderPane
     {
         this.app = app;
         settings = SettingsGenerator.mockSettings();
-        displayPane = new DisplayPane(this);
-        settingsPane = new SettingsPane(this, settings);
         furniturePane = new FurniturePane(this, displayPane);
+        settingsPane = new SettingsPane(this, settings);
+        displayPane = new DisplayPane(this);
 
         this.setTop(new FileMenuBar(app));
         this.setLeft(furniturePane);
         this.setRight(settingsPane);
         this.setCenter(displayPane);
+    }
+
+    public int getMapWidth()
+    {
+        return settingsPane.getMapWidth();
+    }
+
+    public int getMapHeight()
+    {
+        return settingsPane.getMapHeight();
     }
 
     public void saveSettings(boolean open)
