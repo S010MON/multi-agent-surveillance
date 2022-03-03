@@ -23,6 +23,16 @@ public class Simulation extends BorderPane
         this.setTop(new FileMenuBar(app));
     }
 
+    public Simulation(App app, String fileName)
+    {
+        Settings settings = FileManager.loadSettings("src/main/resources/"+fileName);
+        Map map = new Map(settings);
+        Renderer renderer = new Renderer(map);
+        gameEngine = new GameEngine(map, renderer);
+        this.setCenter(renderer);
+        this.setTop(new FileMenuBar(app));
+    }
+
     public void handleKey(KeyEvent e)
     {
         gameEngine.handleKey(e);

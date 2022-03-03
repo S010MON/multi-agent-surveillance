@@ -21,9 +21,9 @@ public class StartMenu extends BorderPane
     {
         this.app = app;
         settings = SettingsGenerator.mockSettings();
-        furniturePane = new FurniturePane(this, displayPane);
         settingsPane = new SettingsPane(this, settings);
         displayPane = new DisplayPane(this);
+        furniturePane = new FurniturePane(this, displayPane);
 
         this.setTop(new FileMenuBar(app));
         this.setLeft(furniturePane);
@@ -41,12 +41,17 @@ public class StartMenu extends BorderPane
         return settingsPane.getMapHeight();
     }
 
-    public void saveSettings()
+    public void saveSettings(boolean open)
     {
         furniturePane.getSettings(settings);
         settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
         Alert.displayAlert("Done!", "The map file was successfully created.");
         // TODO Display success if it was actually successful, and failure if not
+        if(open)
+        {
+            String fileName = settings.getName();
+            app.gotoSimulation(fileName);
+        }
     }
 }
