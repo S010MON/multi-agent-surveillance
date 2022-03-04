@@ -22,13 +22,13 @@ public class BoundaryImp implements Boundary
     @Override
     public boolean isHit(Ray ray)
     {
-        return Intersection.hasIntersection(a,b, ray.getU(), ray.getV());
+        return Intersection.hasIntersection(a,b, ray);
     }
 
     @Override
     public Vector intersection(Ray ray)
     {
-        return Intersection.findIntersection(a,b, ray.getU(), ray.getV());
+        return Intersection.findIntersection(a,b, ray);
     }
 
     @Override
