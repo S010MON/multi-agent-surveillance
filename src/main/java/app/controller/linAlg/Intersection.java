@@ -1,5 +1,8 @@
 package app.controller.linAlg;
 
+import app.controller.graphicsEngine.Ray;
+import app.controller.soundEngine.SoundRay;
+
 public abstract class Intersection
 {
     public static Vector findIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
@@ -29,9 +32,25 @@ public abstract class Intersection
         return new Vector(x, y);
     }
 
+    public static Vector findIntersection(Ray r1, Ray r2){
+        return findIntersection(r1.getU(), r1.getV(), r2.getU(), r2.getV());
+    }
+
+    public static Vector findIntersection(SoundRay r1, SoundRay r2){
+        return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
+    }
+
     public static boolean hasIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
     {
         return findIntersection(p_1, p_2, p_3, p_4) != null;
+    }
+
+    public static boolean hasIntersection(Ray r1, Ray r2){
+        return findIntersection(r1, r2) != null;
+    }
+
+    public static boolean hasIntersection(SoundRay r1, SoundRay r2){
+        return findIntersection(r1, r2) != null;
     }
 
 }
