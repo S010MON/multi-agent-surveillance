@@ -1,6 +1,5 @@
 package app.controller.soundEngine;
 
-import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,5 +33,16 @@ public class SoundBlockingWall implements SoundBoundary{
     public Vector intersection(SoundRay soundRay)
     {
         return Intersection.findIntersection(a,b,soundRay.getStart(), soundRay.getEnd());
+    }
+
+    @Override
+    public boolean onSegment(Vector point) {
+        // det(AB,AM) != 0 -> AB and AM are not parallel, so M cant be on AB
+        if(b.sub(a).cross(point.sub(a)) != 0){
+            return false;
+        }
+        double t = (point.getX() - a.getX()) / (b.getX() - a.getX());
+
+        return  t <= 1 && t >= 0;
     }
 }

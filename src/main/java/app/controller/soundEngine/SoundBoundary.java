@@ -14,5 +14,5 @@ public interface SoundBoundary {
 
     Vector intersection(SoundRay soundRay);
 
-
+    boolean onSegment(Vector point);
 }
