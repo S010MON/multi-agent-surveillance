@@ -28,7 +28,16 @@ public class SoundBlockingBlock implements SoundFurniture{
     }
 
     @Override
-    public boolean intersectsAny(SoundRay soundRay) {
+    public boolean intersects(SoundRay soundRay) {
+        // TODO distinguish 6 cases for sound rays passing thru furniture
+        // ray start on outside part of the furniture boundary OK
+        // ray ends on outside part of the furniture boundary OK
+        // ray does not intersect furniture at all and does not start and end within the boundaries OK
+        // ray starts and ends within furniture without intersecting BAD
+        // ray intersects with boundary and ends within furniture BAD
+        // ray intersects with boundary and passes through the other side BAD
+
+
         for (SoundBoundary sb: soundBoundaries) {
             if(sb.intersection(soundRay) != null) {
                 return true;

@@ -53,5 +53,32 @@ public class SoundBoundaryTest {
 
         // p4, p5 should be off the segment
         assertFalse(sb.onSegment(p4));
-        assertFalse(sb.onSegment(p5));}
+        assertFalse(sb.onSegment(p5));
+    }
+
+    @Test void projectionTestHorizontal(){
+        SoundBoundary sb = new SoundBlockingWall(new Vector(0,20), new Vector(100, 20));
+
+        Vector p1 = new Vector(50,0);
+        Vector p2 = new Vector(60,1);
+        Vector p3 = new Vector(110,1);
+
+        assertEquals(new Vector(50, 20) ,sb.projectOnto(p1));
+        assertEquals(new Vector(60, 20), sb.projectOnto(p2));
+        assertNull(sb.projectOnto(p3));
+    }
+
+    @Test void projectionTest45Deg(){
+        SoundBoundary sb = new SoundBlockingWall(new Vector(0,0), new Vector(100, 100));
+
+        Vector p1 = new Vector(0,100);
+        Vector p2 = new Vector(0,50);
+        Vector p3 = new Vector(-10, 50);
+        Vector p4 = new Vector(10, -50);
+
+        assertEquals(new Vector(50,50) ,sb.projectOnto(p1));
+        assertEquals(new Vector(25,25) ,sb.projectOnto(p2));
+        assertEquals(new Vector(20,20), sb.projectOnto(p3));
+        assertNull(sb.projectOnto(p4));
+    }
 }

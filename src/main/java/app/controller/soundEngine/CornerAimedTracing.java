@@ -118,7 +118,7 @@ public class CornerAimedTracing implements SoundEngine{
         // TODO need a way of checking if the ray starts from or ends in an "outside facing" boundary
 
         for (SoundFurniture sf: soundFurniture) {
-            if(sf.intersectsAny(soundRay) && !sf.isCorner(soundRay.getStart()) && !sf.isCorner(soundRay.getEnd())) {
+            if(sf.intersects(soundRay) && !sf.isCorner(soundRay.getStart()) && !sf.isCorner(soundRay.getEnd())) {
                 return true;
             }
         }

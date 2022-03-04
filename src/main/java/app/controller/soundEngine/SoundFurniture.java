@@ -13,7 +13,7 @@ public interface SoundFurniture {
 
     ArrayList<SoundBoundary> getSoundBoundaries();
 
-    boolean intersectsAny(SoundRay soundRay);
+    boolean intersects(SoundRay soundRay);
 
     boolean hitsCorner(SoundRay soundRay);
 
