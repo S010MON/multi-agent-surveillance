@@ -20,13 +20,17 @@ public abstract class Intersection
         double denominator = (x_1 - x_2) * (y_3 - y_4) - (y_1 - y_2) * (x_3 - x_4);
 
         // lines are parallel
-        if (denominator == 0) return null;
+        if (denominator == 0){
+            return null;
+        }
 
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
         // lines intersect but not within the segments
-        if (t > 1 || t < 0 || u > 1 || u < 0) return null;
+        if (t > 1 || t < 0 || u > 1 || u < 0){
+            return null;
+        }
 
         double x = x_1 + (t * (x_2 - x_1));
         double y = y_1 + (t * (y_2 - y_1));
@@ -47,13 +51,17 @@ public abstract class Intersection
         double denominator = (x_1 - x_2) * (y_3 - y_4) - (y_1 - y_2) * (x_3 - x_4);
 
         // lines are parallel
-        if (denominator == 0) return null;
+        if (denominator == 0){
+            return null;
+        }
 
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
         // lines intersect but not within the segments
-        if (t > 1 || t < 0 || u < 0) return null;
+        if (t > 1 || t < 0 || u < 0){
+            return null;
+        }
 
         double x = x_1 + (t * (x_2 - x_1));
         double y = y_1 + (t * (y_2 - y_1));
