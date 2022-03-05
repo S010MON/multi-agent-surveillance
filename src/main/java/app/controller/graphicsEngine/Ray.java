@@ -1,32 +1,22 @@
 package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
+import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 public class Ray
 {
-    public Vector u;
-    public Vector v;
-    private double angle;
-    private Color colour = Color.RED;
+    @Getter private Vector u;
+    @Getter private Vector v;
+    private Color colour = Color.rgb(255,191,0, 0.5);
     private final double LINE_WIDTH = 1;
 
     public Ray(Vector u, Vector v)
     {
         this.u = u;
         this.v = v;
-        this.angle = angle();
-    }
-
-    public Vector getV()
-    {
-        return v;
-    }
-
-    public Vector getU()
-    {
-        return u;
     }
 
     public double angle()
@@ -53,6 +43,9 @@ public class Ray
     {
         gc.setStroke(colour);
         gc.setLineWidth(LINE_WIDTH);
-        gc.strokeLine(getU().getX(), getU().getY(), getV().getX(), getV().getY());
+        gc.strokeLine(getU().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      getU().getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                      getV().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      getV().getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
     }
 }

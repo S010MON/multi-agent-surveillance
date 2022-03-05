@@ -2,18 +2,21 @@ package app.controller.soundEngine;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public abstract class SoundRay extends Ray {
-    protected double amplitude;
+@AllArgsConstructor
+public class SoundRay {
+    @Getter private Vector start;
+    @Getter private Vector end;
 
-    public SoundRay(Vector u, Vector direction, double amplitude){
-        super(u,direction);
-        this.amplitude = amplitude;
+    public void draw(GraphicsContext gc)
+    {
+        // for illustration for now
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1);
+        gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
     }
-
-    /*
-    * Calculates the amplitude of a sound after some distance d
-    * Abstract because this allows for different dropoff types for sound (linear, square, cubic)
-    * */
-    public abstract double amplitudeAfter(double d);
 }

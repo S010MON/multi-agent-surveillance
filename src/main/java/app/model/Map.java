@@ -1,31 +1,33 @@
 package app.model;
 
-
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
+import app.controller.soundEngine.SoundFurniture;
+import app.controller.soundEngine.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
-import app.model.furniture.FurnitureType;
+import app.view.simulation.Info;
+import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
-import java.util.ArrayList;
-
 public class Map
 {
     @Getter private ArrayList<Furniture> furniture;
+    @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
+    @Getter private ArrayList<SoundSource> soundSources;
+    @Getter private Settings settings;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
     private Human human;
-    @Getter private Settings settings;
 
     public Map(Settings settings)
     {
@@ -36,11 +38,17 @@ public class Map
         furniture = new ArrayList<>();
         settings.getFurniture().forEach(e -> addFurniture(e));
 
+        /* Make sound furniture */
+        soundFurniture = new ArrayList<>();
+
+        /* Make some sound sources */
+        soundSources = settings.getSoundSources();
+
         agents = new ArrayList<>();
 
         /* Adds temporary WallFollowAgent */
         Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-        Vector dir = new Vector(1,0);
+        Vector dir = new Vector(-1,0);
         WallFollowAgent wallAgent = new WallFollowAgent(srt, dir, 10);
         //Assumes the wallFollowAgent is a guard
         wallAgent.setMaxWalk(settings.getWalkSpeedGuard());
@@ -73,8 +81,6 @@ public class Map
 
     /**
      * Only for testing, delete later
-     * @param agent
-     * @param obstacles
      */
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
@@ -103,7 +109,6 @@ public class Map
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj.getType(), obj.getRect()));
         }
-
     }
 
     public ArrayList<Boundary> getBoundaries()
@@ -116,19 +121,19 @@ public class Map
     public void drawGuardSpawn(GraphicsContext gc)
     {
         gc.setStroke(Color.BLUE);
-        gc.strokeRect(guardSpawn.getMinX(),
-                      guardSpawn.getMinY(),
-                      guardSpawn.getHeight(),
-                      guardSpawn.getHeight());
+        gc.strokeRect(guardSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      guardSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                      guardSpawn.getHeight() * Info.getInfo().zoom,
+                      guardSpawn.getHeight() * Info.getInfo().zoom);
     }
 
     public void drawIntruderSpawn(GraphicsContext gc)
     {
         gc.setStroke(Color.RED);
-        gc.strokeRect(intruderSpawn.getMinX(),
-                      intruderSpawn.getMinY(),
-                      intruderSpawn.getHeight(),
-                      intruderSpawn.getHeight());
+        gc.strokeRect(intruderSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                      intruderSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                      intruderSpawn.getHeight() * Info.getInfo().zoom,
+                      intruderSpawn.getHeight() * Info.getInfo().zoom);
     }
 
     private double randX(Rectangle2D r)

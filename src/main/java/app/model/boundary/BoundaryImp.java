@@ -5,23 +5,23 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
-public class InvisibleBoundary implements Boundary
+public class BoundaryImp implements Boundary
 {
     protected Vector a;
     protected Vector b;
 
-    public InvisibleBoundary(Vector a, Vector b) {
+    public BoundaryImp(Vector a, Vector b)
+    {
         this.a = a;
         this.b = b;
     }
 
     @Override
-    public void draw(GraphicsContext gc) {
-
-    }
+    public void draw(GraphicsContext gc) {}
 
     @Override
-    public boolean isHit(Ray ray) {
+    public boolean isHit(Ray ray)
+    {
         double x_1 = a.getX();
         double y_1 = a.getY();
         double x_2 = b.getX();
@@ -40,7 +40,7 @@ public class InvisibleBoundary implements Boundary
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
-        return 0 < t && t < 1 && u > 0;
+        return 0 <= t && t <= 1 && u >= 0;
     }
 
     @Override
@@ -65,6 +65,6 @@ public class InvisibleBoundary implements Boundary
     @Override
     public boolean validMove(Vector startPoint, Vector endPoint)
     {
-        return Intersection.findIntersection(startPoint,endPoint,a,b);
+        return Intersection.hasIntersection(startPoint,endPoint,a,b);
     }
 }
