@@ -3,7 +3,7 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
-import app.controller.linAlg.agentColision;
+import app.controller.linAlg.agentCollision;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -36,11 +36,8 @@ public class GameEngine {
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-            if (legalMove(startPoint, endPoint))
+            if (legalMove(startPoint, endPoint) && !agentHasCollision(a, a.getRadius()))
                 a.updateLocation(endPoint);
-
-            if (!agentHasCollision(startPoint, endPoint, a.getRadius())) ;
-            a.updateLocation(endPoint);
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
@@ -71,12 +68,15 @@ public class GameEngine {
     }
 
 
-    private boolean agentHasCollision(Vector startPoint, Vector endPoint, double radius) {
+    private boolean agentHasCollision(Agent a, double radius) {
+        Vector startPoint = a.getPosition();
+        Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
         for (Agent agent : map.getAgents()) {
-            boolean hasCol = agentColision.hasColision(startPoint, endPoint, radius, agent.getPosition(), agent.getRadius());
-            if (hasCol)
-                return true;
+            if(!agent.equals(a))
+                if(agentCollision.hasCollision(startPoint, endPoint, radius, agent.getPosition(), agent.getRadius()))
+                    return true;
+
         }
         return false;
     }

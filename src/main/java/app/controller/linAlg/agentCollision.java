@@ -2,12 +2,12 @@ package app.controller.linAlg;
 
 import static java.lang.Math.*;
 
-public abstract class agentColision {
+public abstract class agentCollision {
 
 
     // startPoint/endPoint  is the start/end point of agent
     // c  is stable agent
-    public static boolean hasColision(Vector startPoint, Vector endPoint, double r_1, Vector c, double r_2) {
+    public static boolean hasCollision(Vector startPoint, Vector endPoint, double r_1, Vector c, double r_2) {
 
         boolean overlapRec,overlapCir;
 
@@ -22,7 +22,6 @@ public abstract class agentColision {
         Vector rectTR_rotated = rotateCorner(recCenter,recTR_origin,theta);
         overlapRec = hasOverlapCircleRectangle(r_2, transCircle,rectBL_rotated,rectTR_rotated);
 
-
         // checking circle collision
         double distStart = sqrt(pow(c.getX() - startPoint.getX(),2) + pow(c.getY()- startPoint.getY(),2));
         double distEnd = sqrt(pow(c.getX() - endPoint.getX(),2) + pow(c.getY()- endPoint.getY(),2));
@@ -32,11 +31,11 @@ public abstract class agentColision {
             overlapCir = false;
         }
 
-        return overlapRec && overlapCir;
+        return overlapRec || overlapCir;
 
     }
 
-    //    rotate the corner point of rectangle
+    // rotate the corner point of rectangle
     // c = center of the square coordinates
     // p = corner point
     // theta is the angle of rotation
@@ -100,7 +99,7 @@ public abstract class agentColision {
 
 
 
-    // refrence
-//    https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/#:~:text=Case%201%3A%20The%20side%20of,that%20both%20the%20shapes%20intersect.
+    // reference
+// https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/#:~:text=Case%201%3A%20The%20side%20of,that%20both%20the%20shapes%20intersect.
 // https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle
 }
