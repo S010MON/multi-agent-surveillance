@@ -7,7 +7,7 @@ public abstract class agentColision {
 
     // startPoint/endPoint  is the start/end point of agent
     // c  is stable agent
-    public static boolean hasColisionRecCir(Vector startPoint, Vector endPoint, double r_1, Vector c, double r_2) {
+    public static boolean hasColision(Vector startPoint, Vector endPoint, double r_1, Vector c, double r_2) {
 
         boolean overlapRec,overlapCir;
 
