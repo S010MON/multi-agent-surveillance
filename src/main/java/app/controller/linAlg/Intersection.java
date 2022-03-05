@@ -20,24 +20,23 @@ public abstract class Intersection
         double denominator = (x_1 - x_2) * (y_3 - y_4) - (y_1 - y_2) * (x_3 - x_4);
 
         // lines are parallel
-        if (denominator == 0){
+        if (denominator == 0)
             return null;
-        }
 
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
         // lines intersect but not within the segments
-        if (t > 1 || t < 0 || u > 1 || u < 0){
+        if (t > 1 || t < 0 || u > 1 || u < 0)
             return null;
-        }
 
         double x = x_1 + (t * (x_2 - x_1));
         double y = y_1 + (t * (y_2 - y_1));
         return new Vector(x, y);
     }
 
-    public static Vector findIntersection(Vector a, Vector b, Ray r){
+    public static Vector findIntersection(Vector a, Vector b, Ray r)
+    {
         // ray-segment intersection (ray is a line from "b" on and a segment up to "a" [a,b) )
         double x_1 = a.getX();
         double y_1 = a.getY();
@@ -51,24 +50,23 @@ public abstract class Intersection
         double denominator = (x_1 - x_2) * (y_3 - y_4) - (y_1 - y_2) * (x_3 - x_4);
 
         // lines are parallel
-        if (denominator == 0){
+        if (denominator == 0)
             return null;
-        }
 
         double t = ((x_1 - x_3) * (y_3 - y_4) - (y_1 - y_3) * (x_3 - x_4)) / denominator;
         double u = ((x_1 - x_3) * (y_1 - y_2) - (y_1 - y_3) * (x_1 - x_2)) / denominator;
 
         // lines intersect but not within the segments
-        if (t > 1 || t < 0 || u < 0){
+        if (t > 1 || t < 0 || u < 0)
             return null;
-        }
 
         double x = x_1 + (t * (x_2 - x_1));
         double y = y_1 + (t * (y_2 - y_1));
         return new Vector(x, y);
     }
 
-    public static Vector findIntersection(SoundRay r1, SoundRay r2){
+    public static Vector findIntersection(SoundRay r1, SoundRay r2)
+    {
         // segment-segment intersection
         return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
     }
@@ -78,11 +76,13 @@ public abstract class Intersection
         return findIntersection(p_1, p_2, p_3, p_4) != null;
     }
 
-    public static boolean hasIntersection(Vector a, Vector b, Ray r){
+    public static boolean hasIntersection(Vector a, Vector b, Ray r)
+    {
         return findIntersection(a, b, r) != null;
     }
 
-    public static boolean hasIntersection(SoundRay r1, SoundRay r2){
+    public static boolean hasIntersection(SoundRay r1, SoundRay r2)
+    {
         return findIntersection(r1, r2) != null;
     }
 
