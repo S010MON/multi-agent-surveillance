@@ -37,6 +37,7 @@ public class GameEngine {
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
+            System.out.println(legalMove(startPoint, endPoint) && !agentHasCollision(a, a.getRadius()));
             if (legalMove(startPoint, endPoint) && !agentHasCollision(a, a.getRadius()))
                 a.updateLocation(endPoint);
         }
@@ -75,8 +76,10 @@ public class GameEngine {
 
         for (Agent agent : map.getAgents()) {
             if(!agent.equals(a))
-                if(agentCollision.hasCollision(startPoint, endPoint, radius, agent.getPosition(), agent.getRadius()))
+                if(agentCollision.hasCollision(startPoint, endPoint, radius, agent.getPosition(), agent.getRadius())){
+                    System.out.println("lllllllllllllllllllllllllllllllllllll");
                     return true;
+                }
 
         }
         return false;
