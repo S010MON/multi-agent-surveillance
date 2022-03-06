@@ -78,7 +78,13 @@ public class AgentImp implements Agent
     @Override
     public boolean isHit(Ray ray)
     {
-        return false;
+        double dx = ray.getU().getX() - ray.getV().getX();
+        double dy = ray.getU().getY() - ray.getV().getY();
+        double dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        double D = ray.getU().getX() * ray.getV().getY() - ray.getV().getX() * ray.getU().getY();
+
+        double incidence = Math.pow(radius,2) * Math.pow(dr,2) - Math.pow(D, 2);
+        return incidence >= 0;
     }
 
     @Override
