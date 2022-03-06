@@ -10,6 +10,8 @@ public interface Agent extends Boundary
 {
     void updateLocation(Vector endPoint);
 
+    boolean isHit(Ray ray);
+
     Move move();
 
     Vector getPosition();
