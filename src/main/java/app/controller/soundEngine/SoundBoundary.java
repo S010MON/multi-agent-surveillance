@@ -13,6 +13,8 @@ public interface SoundBoundary {
 
     Vector intersection(SoundRay soundRay);
 
+    boolean intersects(SoundRay soundRay);
+
     boolean onSegment(Vector point);
 
     // should be the projection (the closest point to line) of a point onto the boundary (segment)

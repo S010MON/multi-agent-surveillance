@@ -37,7 +37,7 @@ public class SoundBoundaryTest {
         assertNull(intersectionPoint);
     }
 
-    @Test void onBoundaryTest(){
+    @Test void onBoundaryHorizontalTest(){
         SoundBoundary sb = new SoundBlockingWall(new Vector(0,0), new Vector(100, 0));
 
         Vector p1 = new Vector(50,0);
@@ -45,6 +45,44 @@ public class SoundBoundaryTest {
         Vector p3 = new Vector(100,0);
         Vector p4 = new Vector(50,1);
         Vector p5 = new Vector(-1,0);
+
+        // p1,p2,p3 should be on the segment
+        assertTrue(sb.onSegment(p1));
+        assertTrue(sb.onSegment(p2));
+        assertTrue(sb.onSegment(p3));
+
+        // p4, p5 should be off the segment
+        assertFalse(sb.onSegment(p4));
+        assertFalse(sb.onSegment(p5));
+    }
+
+    @Test void onBoundaryVerticalTest(){
+        SoundBoundary sb = new SoundBlockingWall(new Vector(0,0), new Vector(0, 100));
+
+        Vector p1 = new Vector(0,50);
+        Vector p2 = new Vector(0,0);
+        Vector p3 = new Vector(0,100);
+        Vector p4 = new Vector(1,50);
+        Vector p5 = new Vector(0,-1);
+
+        // p1,p2,p3 should be on the segment
+        assertTrue(sb.onSegment(p1));
+        assertTrue(sb.onSegment(p2));
+        assertTrue(sb.onSegment(p3));
+
+        // p4, p5 should be off the segment
+        assertFalse(sb.onSegment(p4));
+        assertFalse(sb.onSegment(p5));
+    }
+
+    @Test void onBoundaryTiltedTest(){
+        SoundBoundary sb = new SoundBlockingWall(new Vector(0,0), new Vector(100, 100));
+
+        Vector p1 = new Vector(50,50);
+        Vector p2 = new Vector(0,0);
+        Vector p3 = new Vector(100,100);
+        Vector p4 = new Vector(50,1);
+        Vector p5 = new Vector(-1,-1);
 
         // p1,p2,p3 should be on the segment
         assertTrue(sb.onSegment(p1));

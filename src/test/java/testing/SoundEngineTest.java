@@ -2,7 +2,6 @@ package testing;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
-import app.controller.settings.SettingsGenerator;
 import app.controller.soundEngine.*;
 import app.model.Map;
 import app.model.agents.Agent;
@@ -11,7 +10,6 @@ import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -13,9 +13,13 @@ public interface SoundFurniture {
 
     ArrayList<SoundBoundary> getSoundBoundaries();
 
-    boolean intersects(SoundRay soundRay);
+    boolean isBlocked(SoundRay soundRay);
 
     boolean hitsCorner(SoundRay soundRay);
 
     boolean isCorner(Vector pos);
+
+    boolean onOutline(Vector pos);
+
+    boolean isInside(Vector pos);
 }
