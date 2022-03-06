@@ -1,6 +1,5 @@
 package app.controller.soundEngine;
 
-import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,19 +28,50 @@ public class SoundBlockingBlock implements SoundFurniture{
     }
 
     @Override
-    public boolean isBlocked(SoundRay soundRay) {
-        // TODO distinguish 6 cases for sound rays passing thru furniture
-        // ray start on outside part of the furniture boundary OK
-        // ray ends on outside part of the furniture boundary OK
-        // ray does not intersect furniture at all and does not start and end within the boundaries OK
-        // ray starts and ends within furniture without intersecting BAD
-        // ray intersects with boundary and ends within furniture BAD
-        // ray intersects with boundary and passes through the other side BAD
+    public boolean intersects(SoundRay soundRay) {
 
-        // TODO use new projection as a way of checking whether a ray is valid or not
+        // first check if any of the endpoints are inside the shape
+        if(isInside(soundRay.getStart()) || isInside(soundRay.getEnd())) {
+            return true;
+        }
 
+        // second, check if both points are on the outline
+
+        if(onOutline(soundRay.getStart()) && onOutline(soundRay.getEnd())){
+            // if both points are on the same line segment, it's fine, no intersection
+            for (SoundBoundary sb: soundBoundaries) {
+                if(sb.onSegment(soundRay.getStart()) && sb.onSegment(soundRay.getEnd())){
+                    return false;
+                }
+            }
+            // being here means the ray passes through the shape
+            return true;
+        }
+
+        // the start could be on the outline
+        if(onOutline(soundRay.getStart())){
+            // ignore all the segments that contain the start point and check intersections with the remaining
+            for (SoundBoundary sb: soundBoundaries) {
+                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getStart())){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // same idea for the end point
+        if(onOutline(soundRay.getEnd())){
+            for (SoundBoundary sb: soundBoundaries) {
+                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getEnd())){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // and here we check for intersections that pass through both sides of the shape
         for (SoundBoundary sb: soundBoundaries) {
-            if(sb.intersection(soundRay) != null) {
+            if(sb.intersects(soundRay)){
                 return true;
             }
         }
@@ -67,11 +97,6 @@ public class SoundBlockingBlock implements SoundFurniture{
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean isCorner(Vector pos) {
-        return corners.contains(pos);
     }
 
     @Override
