@@ -29,4 +29,6 @@ public interface Agent extends Boundary
     void updateView(ArrayList<Ray> view);
 
     double getHearing();
+
+    double getRadius();
 }

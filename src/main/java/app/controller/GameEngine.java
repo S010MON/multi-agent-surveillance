@@ -37,7 +37,7 @@ public class GameEngine
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-            if (legalMove(startPoint, endPoint))
+            if (legalMove(startPoint, endPoint) && legalMove(a, endPoint))
                 a.updateLocation(endPoint);
         }
 
@@ -66,6 +66,17 @@ public class GameEngine
         for (Boundary bdy : map.getBoundaries())
         {
             if(bdy.validMove(start, end))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean legalMove(Agent currentAgent, Vector end)
+    {
+        for(Agent otherAgent: map.getAgents())
+        {
+            double dist = otherAgent.getPosition().dist(end);
+            if(!currentAgent.equals(otherAgent) && dist <= currentAgent.getRadius())
                 return false;
         }
         return true;
