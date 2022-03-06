@@ -6,8 +6,7 @@ import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AgentVisionTest
 {
@@ -51,5 +50,73 @@ public class AgentVisionTest
         Ray ray = new Ray(a, b);
 
         assertTrue(agent.isHit(ray));
+    }
+
+    @Test void intersectionXAxisTouch()
+    {
+        Vector pos = new Vector(0,5);
+        Vector dir = new Vector(0,1);
+        double radius = 5;
+        Agent agent = new AgentImp(pos, dir, radius);
+
+        Vector a = new Vector(0, -10);
+        Vector b = new Vector(0, 0);
+        Ray ray = new Ray(a, b);
+
+        assertTrue(agent.isHit(ray));
+        Vector exp = new Vector(0,0);
+        Vector act = agent.intersection(ray);
+        assertEquals(exp, act);
+    }
+
+    @Test void intersectionYAxisTouch()
+    {
+        Vector pos = new Vector(5,0);
+        Vector dir = new Vector(0,1);
+        double radius = 5;
+        Agent agent = new AgentImp(pos, dir, radius);
+
+        Vector a = new Vector(-10, 0);
+        Vector b = new Vector(0, 0);
+        Ray ray = new Ray(a, b);
+
+        assertTrue(agent.isHit(ray));
+        Vector exp = new Vector(0,0);
+        Vector act = agent.intersection(ray);
+        assertEquals(exp, act);
+    }
+
+    @Test void intersectionXAxisNoTouch()
+    {
+        Vector pos = new Vector(0,5);
+        Vector dir = new Vector(0,1);
+        double radius = 5;
+        Agent agent = new AgentImp(pos, dir, radius);
+
+        Vector a = new Vector(0, -10);
+        Vector b = new Vector(0, -5);
+        Ray ray = new Ray(a, b);
+
+        assertTrue(agent.isHit(ray));
+        Vector exp = new Vector(0,0);
+        Vector act = agent.intersection(ray);
+        assertEquals(exp, act);
+    }
+
+    @Test void intersectionYAxisNoTouch()
+    {
+        Vector pos = new Vector(5,0);
+        Vector dir = new Vector(0,1);
+        double radius = 5;
+        Agent agent = new AgentImp(pos, dir, radius);
+
+        Vector a = new Vector(-10, 0);
+        Vector b = new Vector(-5, 0);
+        Ray ray = new Ray(a, b);
+
+        assertTrue(agent.isHit(ray));
+        Vector exp = new Vector(0,0);
+        Vector act = agent.intersection(ray);
+        assertEquals(exp, act);
     }
 }
