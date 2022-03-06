@@ -52,6 +52,16 @@ public class App extends Application
         scene.setRoot(simulation);
     }
 
+    public void gotoSimulation(String fileName)
+    {
+        if(simulation == null)
+        {
+            simulation = new Simulation(this, fileName);
+            scene.setOnKeyTyped(e -> simulation.handleKey(e));
+        }
+        scene.setRoot(simulation);
+    }
+
     public void gotoStart()
     {
         scene.setRoot(startMenu);

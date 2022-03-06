@@ -61,9 +61,10 @@ public class FurniturePane extends StackPane
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setPrefWidth(BUTTON_WIDTH);
-        create.setOnAction(e -> startMenu.saveSettings()); // TODO add event handling!
+        create.setOnAction(e -> startMenu.saveSettings(false)); // TODO add event handling!
 
         Button crOpen = new Button("Create & Open");
+        crOpen.setOnAction(e -> startMenu.saveSettings(true));
         crOpen.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(func, create, crOpen);
