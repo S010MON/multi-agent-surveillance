@@ -2,21 +2,17 @@ package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
+import app.controller.linAlg.AgentCollision;
 import app.controller.linAlg.Vector;
-import app.controller.linAlg.agentCollision;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
-import app.view.simulation.Info;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.lang.Math;
 
 public class GameEngine {
     private Map map;
@@ -37,9 +33,12 @@ public class GameEngine {
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-            System.out.println(legalMove(startPoint, endPoint) && !agentHasCollision(a, a.getRadius()));
-            if (legalMove(startPoint, endPoint) && !agentHasCollision(a, a.getRadius()))
+
+            if (legalMove(startPoint, endPoint) && !agentHasCollision(a)) {
+                System.out.println("startPoint " + startPoint);
+                System.out.println("endPoint " + endPoint);
                 a.updateLocation(endPoint);
+            }
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
@@ -70,19 +69,29 @@ public class GameEngine {
     }
 
 
-    private boolean agentHasCollision(Agent a, double radius) {
-        Vector startPoint = a.getPosition();
-        Vector endPoint = startPoint.add(a.move().getDeltaPos());
+    private boolean agentHasCollision(Agent currentAgent)
+    {
+        Vector startPoint = currentAgent.getPosition();
+        Vector endPoint = startPoint.add(currentAgent.move().getDeltaPos());
+        boolean hasCollision = false;
 
-        for (Agent agent : map.getAgents()) {
-            if(!agent.equals(a))
-                if(agentCollision.hasCollision(startPoint, endPoint, radius, agent.getPosition(), agent.getRadius())){
-                    System.out.println("lllllllllllllllllllllllllllllllllllll");
-                    return true;
+        for (Agent otherAgent : map.getAgents())
+        {
+            hasCollision = false;
+            if(!otherAgent.equals(currentAgent))
+            {
+                if (AgentCollision.hasCollision(startPoint, endPoint, currentAgent.getRadius(), otherAgent.getPosition(), otherAgent.getRadius()))
+                {
+                    System.out.println("coo");
+                    System.out.println("star : "+startPoint.getX()+","+startPoint.getY());
+                    System.out.println("end : "+endPoint.getX()+","+endPoint.getY());
+
+                    hasCollision = true;
+                    return hasCollision;
                 }
-
+            }
         }
-        return false;
+        return hasCollision;
     }
 
 }

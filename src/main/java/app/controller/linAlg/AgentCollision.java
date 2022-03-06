@@ -1,12 +1,23 @@
 package app.controller.linAlg;
 
+import app.model.agents.Agent;
+
 import static java.lang.Math.*;
 
 public abstract class AgentCollision {
 
 
-    // startPoint/endPoint  is the start/end point of agent
+    // startPoint/endPoint  is the st   art/end point of agent
     // c  is stable agent
+    public static boolean validMoveEndpoint(Agent current,Agent fixed)
+    {
+        Vector startPoint = current.getDirection();
+        Vector endPoint =startPoint.add(current.move().getDeltaPos());
+        return false;
+    }
+
+
+
     public static boolean hasCollision(Vector startPoint, Vector endPoint, double r_1, Vector c, double r_2) {
 
         boolean overlapRec,overlapCir;
@@ -30,6 +41,7 @@ public abstract class AgentCollision {
         }else {
             overlapCir = false;
         }
+
 
         return overlapRec || overlapCir;
 
