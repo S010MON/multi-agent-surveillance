@@ -7,42 +7,9 @@ import app.model.agents.Agent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.PriorityQueue;
 
 public class CornerAimedTracing implements SoundEngine{
-    public double compute(Map map, Agent agent){
-        // TODO return a vector with the soundLevel from what direction
-
-        // each element stores an arraylist of vectors with the diffraction count equal to its index in the array
-        ArrayList<HashSet<Vector>> listeners = new ArrayList<>();
-
-        ArrayList<SoundSource> hitSources = new ArrayList<>();
-
-        // for each sound source reachable from the current vector, add a child to the current node
-        // Step 2: for diffraction aim at all the corners
-
-        HashSet<Vector> currentListeners = new HashSet<>();
-
-        currentListeners.add(agent.getPosition());
-
-        int maxDiffraction = 10;
-
-        for (int i = 0; i < maxDiffraction && !currentListeners.isEmpty(); i++) {
-            listeners.add(currentListeners);
-            HashSet<Vector> newListeners =  new HashSet<>();
-            for (Vector listener: currentListeners) {
-                // very inefficient right now since it will look for any corner in reach
-                newListeners.addAll(findReachableCorners(map,listener));
-            }
-            currentListeners = newListeners;
-        }
-
-        // now for each layer, update each set with the soundsources that can be heard from it, maybe in the form of the loudest noise?
-
-        return 0.0;
-    }
-
-    public HashMap<SoundSource, Sound> computeSources(Map map, Agent agent){
+    public HashMap<SoundSource, Sound> compute(Map map, Agent agent){
         // direct sound:
 
         HashMap<SoundSource, Sound> soundTable = new HashMap<>();
@@ -118,7 +85,7 @@ public class CornerAimedTracing implements SoundEngine{
         // TODO need a way of checking if the ray starts from or ends in an "outside facing" boundary
 
         for (SoundFurniture sf: soundFurniture) {
-            if(sf.isBlocked(soundRay)) {
+            if(sf.intersects(soundRay)) {
                 return true;
             }
         }

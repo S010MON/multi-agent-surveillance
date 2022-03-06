@@ -3,6 +3,8 @@ package app.controller.soundEngine;
 import app.controller.linAlg.Vector;
 import lombok.Getter;
 
+import java.util.Objects;
+
 public class Sound {
     @Getter private SoundSource soundSource;
     @Getter private double amplitude;
@@ -27,5 +29,18 @@ public class Sound {
             direction = origin.sub(listenerPos);
             amplitude = newAmp;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sound sound = (Sound) o;
+        return Double.compare(sound.amplitude, amplitude) == 0 && soundSource.equals(sound.soundSource) && direction.equals(sound.direction) && listenerPos.equals(sound.listenerPos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(soundSource, amplitude, direction, listenerPos);
     }
 }
