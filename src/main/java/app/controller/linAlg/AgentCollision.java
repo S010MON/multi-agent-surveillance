@@ -2,7 +2,7 @@ package app.controller.linAlg;
 
 import static java.lang.Math.*;
 
-public abstract class agentCollision {
+public abstract class AgentCollision {
 
 
     // startPoint/endPoint  is the start/end point of agent
