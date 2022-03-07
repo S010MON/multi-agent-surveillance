@@ -90,4 +90,10 @@ public class Vector
     {
         return this.hashCode();
     }
+
+    public Vector findPointOnCircle(double r, double theta)
+    {
+        return new Vector(this.x + (r * Math.cos(Math.toRadians(theta))), this.y + (r * Math.sin(Math.toRadians(theta))));
+    }
+
 }

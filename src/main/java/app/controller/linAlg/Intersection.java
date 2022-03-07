@@ -3,6 +3,9 @@ package app.controller.linAlg;
 import app.controller.graphicsEngine.Ray;
 import app.controller.soundEngine.SoundRay;
 
+import static java.lang.Math.atan2;
+import static java.lang.Math.toDegrees;
+
 public abstract class Intersection
 {
     public static Vector findIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
@@ -137,23 +140,33 @@ public abstract class Intersection
         return findIntersection(r1, r2) != null;
     }
 
-    public static boolean hasIntersection(Ray ray, Vector center, double radius)
-    {
-        double baX = ray.getV().getX() - ray.getU().getX();
-        double baY = ray.getV().getY() - ray.getU().getY();
-        double caX = center.getX() - ray.getU().getX();
-        double caY = center.getY() - ray.getU().getY();
+    public static boolean hasDirectionIntersect(Vector start,Vector end,double radius,Vector positionOther,double radiusOther){
 
-        double a = baX * baX + baY * baY;
-        double bBy2 = baX * caX + baY * caY;
-        double c = caX * caX + caY * caY - radius * radius;
+        Vector recCenter = start.add(end).scale(0.5);
+        // rotate all the positions to the degree 0
+        Vector start_rotate = recCenter.findPointOnCircle(start.dist(recCenter),180);
+        Vector end_rotate = recCenter.findPointOnCircle(end.dist(recCenter), 0);
 
-        double pBy2 = bBy2 / a;
-        double q = c / a;
+        Vector recBL_rotate = start_rotate.findPointOnCircle(radius,270);
+        Vector recTR_rotate = end_rotate.findPointOnCircle(radius,90);
 
-        double disc = pBy2 * pBy2 - q;
+        Vector otherRotate = recCenter.findPointOnCircle(positionOther.dist(recCenter),0);
 
-        return disc >= 0;
+        // check if circle is in the rectangle but has no intersect
+        if(otherRotate.getX() >= recBL_rotate.getX() &&
+                otherRotate.getX() <= recTR_rotate.getX() &&
+                otherRotate.getY() >= recBL_rotate.getY() &&
+                otherRotate.getY() <= recTR_rotate.getY()){
+            return true;
+        }
+
+        // find the nearest point to rec
+        double Xn = Math.max(recBL_rotate.getX(), Math.min(otherRotate.getX(), recTR_rotate.getX()));
+        double Yn = Math.max(recBL_rotate.getY(), Math.min(otherRotate.getY(), recTR_rotate.getY()));
+        double Dx = Xn - otherRotate.getX();
+        double Dy = Yn - otherRotate.getY();
+
+        return (Dx * Dx + Dy * Dy) <= radiusOther * radiusOther;
     }
 
 
