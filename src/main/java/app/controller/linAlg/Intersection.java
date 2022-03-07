@@ -3,6 +3,9 @@ package app.controller.linAlg;
 import app.controller.graphicsEngine.Ray;
 import app.controller.soundEngine.SoundRay;
 
+import static java.lang.Math.atan2;
+import static java.lang.Math.toDegrees;
+
 public abstract class Intersection
 {
     public static Vector findIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
@@ -85,5 +88,35 @@ public abstract class Intersection
     {
         return findIntersection(r1, r2) != null;
     }
+
+    public static boolean hasDirectionIntersect(Vector start,Vector end,double radius,Vector positionOther,double radiusOther){
+
+        Vector recCenter = start.add(end).scale(0.5);
+        // rotate all the positions to the degree 0
+        Vector start_rotate = recCenter.findPointOnCircle(start.dist(recCenter),180);
+        Vector end_rotate = recCenter.findPointOnCircle(end.dist(recCenter), 0);
+
+        Vector recBL_rotate = start_rotate.findPointOnCircle(radius,270);
+        Vector recTR_rotate = end_rotate.findPointOnCircle(radius,90);
+
+        Vector otherRotate = recCenter.findPointOnCircle(positionOther.dist(recCenter),0);
+
+        // check if circle is in the rectangle but has no intersect
+        if(otherRotate.getX() >= recBL_rotate.getX() &&
+                otherRotate.getX() <= recTR_rotate.getX() &&
+                otherRotate.getY() >= recBL_rotate.getY() &&
+                otherRotate.getY() <= recTR_rotate.getY()){
+            return true;
+        }
+
+        // find the nearest point to rec
+        double Xn = Math.max(recBL_rotate.getX(), Math.min(otherRotate.getX(), recTR_rotate.getX()));
+        double Yn = Math.max(recBL_rotate.getY(), Math.min(otherRotate.getY(), recTR_rotate.getY()));
+        double Dx = Xn - otherRotate.getX();
+        double Dy = Yn - otherRotate.getY();
+
+        return (Dx * Dx + Dy * Dy) <= radiusOther * radiusOther;
+    }
+
 
 }
