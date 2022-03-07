@@ -12,14 +12,15 @@ import lombok.Getter;
 public class MbObject
 {
     @Getter private FurnitureType type;
-    @Getter private Vector vector;
     @Getter private Rectangle2D rect;
-    @Getter private Double rotation;
+    @Getter private double rotation;
+    @Getter @Setter private Vector teleportTo;
 
     public MbObject(Rectangle2D rect, FurnitureType type)
     {
         this.type = type;
         this.rect = rect;
+        this.rotation = 0;
     }
 
     public void draw(GraphicsContext gc)
@@ -34,6 +35,11 @@ public class MbObject
         {
             gc.setStroke(getTypeOutline());
             gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
+        }
+
+        if(teleportTo != null)
+        {
+            gc.fillOval(teleportTo.getX() - 5, teleportTo.getY() - 5, 10, 10);
         }
     }
 

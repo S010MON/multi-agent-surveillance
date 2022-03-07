@@ -41,17 +41,20 @@ public class StartMenu extends BorderPane
         return settingsPane.getMapHeight();
     }
 
-    public void saveSettings(boolean open)
+    public void saveSettings()
     {
         furniturePane.getSettings(settings);
         settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
         Alert.displayAlert("Done!", "The map file was successfully created.");
-        // TODO Display success if it was actually successful, and failure if not
-        if(open)
-        {
-            String fileName = settings.getName();
-            app.gotoSimulation(fileName);
-        }
+    }
+
+    public void saveSettingsAndOpen()
+    {
+        furniturePane.getSettings(settings);
+        settingsPane.getSettings();
+        FileManager.saveSettings(settings, settings.getName());
+        String fileName = settings.getName();
+        app.gotoSimulation(fileName);
     }
 }
