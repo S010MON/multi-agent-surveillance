@@ -2,15 +2,13 @@ package testing;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
-
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AgentCollisionTest
 {
-
-
     @Test
     void intersectOnePoint()
     {
@@ -23,13 +21,11 @@ public class AgentCollisionTest
         assertFalse(Intersection.hasDirectionIntersect(new Vector(0,0),new Vector(0,0),5,new Vector(10.1,0),5));
     }
 
-
     @Test
     void intersectRec()
     {
         assertTrue(Intersection.hasDirectionIntersect(new Vector(0,0),new Vector(10,10),1,new Vector(3,3),0.5));
     }
-
 
     @Test
     void noIntersect()
