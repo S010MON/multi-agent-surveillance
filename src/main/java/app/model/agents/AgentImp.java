@@ -1,5 +1,6 @@
 package app.model.agents;
 
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.model.map.Move;
@@ -9,6 +10,9 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class AgentImp implements Agent
@@ -78,24 +82,13 @@ public class AgentImp implements Agent
     @Override
     public boolean isHit(Ray ray)
     {
-        double dx = ray.getU().getX() - ray.getV().getX();
-        double dy = ray.getU().getY() - ray.getV().getY();
-        double dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        double D = ray.getU().getX() * ray.getV().getY() - ray.getV().getX() * ray.getU().getY();
-
-        double incidence = Math.pow(radius,2) * Math.pow(dr,2) - Math.pow(D, 2);
-        return incidence >= 0;
+        return Intersection.hasIntersection(ray, position, radius);
     }
 
     @Override
     public Vector intersection(Ray ray)
     {
-        double dx = ray.getU().getX() - ray.getV().getX();
-        double dy = ray.getU().getY() - ray.getV().getY();
-        double dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        double D = ray.getU().getX() * ray.getV().getY() - ray.getV().getX() * ray.getU().getY();
-
-        return null;
+        return Intersection.findIntersection(ray, position, radius);
     }
 
     @Override
