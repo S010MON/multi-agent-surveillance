@@ -2,18 +2,12 @@ package app.view.mapBuilder;
 
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayDeque;
 
 public class FurniturePane extends StackPane
 {
