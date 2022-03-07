@@ -125,6 +125,25 @@ public abstract class Intersection
         return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
     }
 
+    public static boolean hasIntersection(Ray ray, Vector center, double radius)
+    {
+        double baX = ray.getV().getX() - ray.getU().getX();
+        double baY = ray.getV().getY() - ray.getU().getY();
+        double caX = center.getX() - ray.getU().getX();
+        double caY = center.getY() - ray.getU().getY();
+
+        double a = baX * baX + baY * baY;
+        double bBy2 = baX * caX + baY * caY;
+        double c = caX * caX + caY * caY - radius * radius;
+
+        double pBy2 = bBy2 / a;
+        double q = c / a;
+
+        double disc = pBy2 * pBy2 - q;
+
+        return disc >= 0;
+    }
+
     public static boolean hasIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
     {
         return findIntersection(p_1, p_2, p_3, p_4) != null;
