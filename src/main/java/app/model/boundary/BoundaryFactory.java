@@ -25,8 +25,9 @@ public abstract class BoundaryFactory
         switch (f)
         {
             case WALL, TOWER -> { return new VisibleBoundary(a, b);}
-            case GLASS, PORTAL -> { return  new TransparentBoundary(a, b);}
+            case GLASS -> { return  new TransparentBoundary(a, b);}
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
+            case PORTAL -> {return new PortalBoundary(a, b, new Vector());} // TODO add actual endpoint
         }
         return null; // Redundant by design
     }

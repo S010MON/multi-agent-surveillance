@@ -88,7 +88,13 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public boolean validMove(Vector startPoint, Vector endPoint) {
+    public boolean isCrossed(Vector startPoint, Vector endPoint) {
         return false;
+    }
+
+    @Override
+    public Vector getTeleport()
+    {
+        return null;
     }
 }
