@@ -10,28 +10,34 @@ import java.util.HashSet;
 
 public class CornerAimedTracing implements SoundEngine{
     public HashMap<SoundSource, Sound> compute(Map map, Agent agent){
-        // direct sound:
-
         HashMap<SoundSource, Sound> soundTable = new HashMap<>();
+        int maxDiffraction = 1;
+
+        ArrayList<ArrayList<Vector>> pointsToCheck = new ArrayList<>(maxDiffraction + 1);
+
         Vector agentPos = agent.getPosition();
 
-        ArrayList<SoundSource> audible = audibleFrom(map, agentPos);
+        ArrayList<Vector> points = new ArrayList<>();
+        points.add(agentPos);
 
-        for (SoundSource heard: audible) {
-            soundTable.put(heard, new Sound(heard, agentPos, heard.getPosition(), 0));
-        }
+        pointsToCheck.add(0,points);
 
-        ArrayList<Vector> firstLayerCorners = findReachableCorners(map, agentPos);
+        for (int i = 0; i < maxDiffraction + 1; i++) {
+            pointsToCheck.add(i+1, new ArrayList<>());
+            for (Vector pos: pointsToCheck.get(i)) {
+                ArrayList<SoundSource> audible = audibleFrom(map, pos);
 
-        for (Vector pos: firstLayerCorners) {
-            audible = audibleFrom(map, pos);
-
-            for (SoundSource heard: audible) {
-                if(!soundTable.containsKey(heard)) {
-                    soundTable.put(heard, new Sound(heard, agentPos, pos, 1));
-                    continue;
+                for (SoundSource heard: audible) {
+                    if(!soundTable.containsKey(heard)) {
+                        soundTable.put(heard, new Sound(heard, agentPos, pos, i));
+                        continue;
+                    }
+                    soundTable.get(heard).update(pos, i);
                 }
-                soundTable.get(heard).update(pos,1);
+
+                ArrayList<Vector> nextLayer = findReachableCorners(map, agentPos);
+
+                pointsToCheck.get(i + 1).addAll(nextLayer);
             }
         }
 
