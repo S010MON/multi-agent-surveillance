@@ -78,4 +78,20 @@ public class FurniturePane extends StackPane
                 s.addFurniture(object.getRect(), object.getType());
         }
     }
+
+    public boolean checkSettings()
+    {
+        boolean guard = false;
+        boolean intruder = false;
+        for(MbObject object : displayPane.getObjects())
+        {
+            if(object.getType() == FurnitureType.GUARD_SPAWN)
+                guard = true;
+
+            if(object.getType() == FurnitureType.INTRUDER_SPAWN)
+                intruder = true;
+        }
+
+        return guard && intruder;
+    }
 }

@@ -51,10 +51,17 @@ public class StartMenu extends BorderPane
 
     public void saveSettingsAndOpen()
     {
-        furniturePane.getSettings(settings);
-        settingsPane.getSettings();
-        FileManager.saveSettings(settings, settings.getName());
-        String fileName = settings.getName();
-        app.gotoSimulation(fileName);
+        if(furniturePane.checkSettings())
+        {
+            furniturePane.getSettings(settings);
+            settingsPane.getSettings();
+            FileManager.saveSettings(settings, settings.getName());
+            String fileName = settings.getName();
+            app.gotoSimulation(fileName);
+        }
+        else
+        {
+            Alert.displayAlert("Error", "Map cannot be created as you are missing guard spawn, intruder spawn, or both!");
+        }
     }
 }
