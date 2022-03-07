@@ -21,9 +21,24 @@ public class RayTracing implements GraphicsEngine
 
         for(Ray r: rays)
         {
-            Vector intersection = getIntersection(r, boundaries);
-            if(intersection != null)
-                output.add(new Ray(origin, intersection));
+            Vector bdyIntersection = getIntersection(r, boundaries);
+            Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
+
+            if(bdyIntersection != null && agentIntersection != null)
+            {
+                if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
+                {
+                    output.add(new Ray(origin, bdyIntersection));
+                }
+                else
+                {
+                    output.add(new Ray(origin, agentIntersection));
+                }
+            }
+            else if(bdyIntersection != null)
+                output.add(new Ray(origin, bdyIntersection));
+            else if(agentIntersection != null)
+                output.add(new Ray(origin, agentIntersection));
         }
         return output;
     }
@@ -42,6 +57,29 @@ public class RayTracing implements GraphicsEngine
                 {
                     intersection = currentV;
                     closestDist = dist;
+                }
+            }
+        }
+        return intersection;
+    }
+
+    private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
+    {
+        Vector intersection = null;
+        double closestDist = Double.MAX_VALUE;
+        for (Agent agent: agents)
+        {
+            if(!agent.equals(currentAgent))
+            {
+                if (agent.isHit(r))
+                {
+                    Vector currentV = agent.intersection(r);
+                    double dist = r.getU().dist(currentV);
+                    if (dist < closestDist)
+                    {
+                        intersection = currentV;
+                        closestDist = dist;
+                    }
                 }
             }
         }
