@@ -82,7 +82,7 @@ public class FurniturePane extends StackPane
         for(MbObject object : displayPane.getObjects())
         {
             if(object.getType() == FurnitureType.PORTAL)
-                s.addTeleport(object.getRect(), object.getVector(), object.getRotation());
+                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
             else
                 s.addFurniture(object.getRect(), object.getType());
         }

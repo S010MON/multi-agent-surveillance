@@ -12,15 +12,15 @@ import lombok.Getter;
 public class MbObject
 {
     @Getter private FurnitureType type;
-    @Getter private Vector vector;
     @Getter private Rectangle2D rect;
-    @Getter private Double rotation;
+    @Getter private double rotation;
     @Getter @Setter private Vector teleportTo;
 
     public MbObject(Rectangle2D rect, FurnitureType type)
     {
         this.type = type;
         this.rect = rect;
+        this.rotation = 0;
     }
 
     public void draw(GraphicsContext gc)
