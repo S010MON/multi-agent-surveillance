@@ -32,8 +32,14 @@ public class BoundaryImp implements Boundary
     }
 
     @Override
-    public boolean validMove(Vector startPoint, Vector endPoint)
+    public boolean isCrossed(Vector startPoint, Vector endPoint)
     {
         return Intersection.hasIntersection(startPoint,endPoint,a,b);
+    }
+
+    @Override
+    public Vector getTeleport()
+    {
+        return null;
     }
 }

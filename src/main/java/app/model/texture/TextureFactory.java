@@ -12,6 +12,7 @@ public class TextureFactory
             case SHADE -> {return new Shade(rectangle);}
             case WALL -> {return new Wall(rectangle);}
             case GLASS -> {return new Glass(rectangle);}
+            case PORTAL -> {return new Portal(rectangle);}
         }
         return null; // Redundant by design
     }

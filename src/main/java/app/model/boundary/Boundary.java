@@ -12,5 +12,7 @@ public interface Boundary
 
     Vector intersection(Ray ray);
 
-    boolean validMove(Vector startPoint,Vector endPoint );
+    boolean isCrossed(Vector startPoint, Vector endPoint);
+
+    Vector getTeleport();
 }
