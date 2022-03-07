@@ -9,10 +9,10 @@ public class TextureFactory
     {
         switch (f)
         {
-            case SHADE -> {return new Shade(rectangle);}
-            case WALL -> {return new Wall(rectangle);}
-            case GLASS -> {return new Glass(rectangle);}
-            case PORTAL -> {return new Portal(rectangle);}
+            case SHADE -> {return new ShadeTexture(rectangle);}
+            case WALL -> {return new WallTexture(rectangle);}
+            case GLASS -> {return new GlassTexture(rectangle);}
+            case PORTAL -> {return new PortalTexture(rectangle);}
         }
         return null; // Redundant by design
     }

@@ -3,9 +3,9 @@ package app.model.texture;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 
-public class Glass extends TextureImp
+public class GlassTexture extends TextureImp
 {
-    public Glass(Rectangle2D rectangle)
+    public GlassTexture(Rectangle2D rectangle)
     {
         super(rectangle);
         this.color = Color.LIGHTBLUE;

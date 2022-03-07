@@ -3,11 +3,11 @@ package app.model.texture;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 
-public class Shade extends TextureImp
+public class WallTexture extends TextureImp
 {
-    public Shade(Rectangle2D rectangle)
+    public WallTexture(Rectangle2D rectangle)
     {
         super(rectangle);
-        this.color = Color.LIGHTGRAY;
+        this.color = Color.SANDYBROWN;
     }
 }
