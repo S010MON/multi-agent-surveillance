@@ -19,8 +19,6 @@ public class FurniturePane extends StackPane
 {
     @Getter private FurnitureType currentType;
     @Getter private boolean portal = false;
-    private TextField x;
-    private TextField y;
     private StartMenu startMenu;
     private DisplayPane displayPane;
     private final int BUTTON_WIDTH = 140;
@@ -36,7 +34,18 @@ public class FurniturePane extends StackPane
         this.getChildren().addAll(vbox);
     }
 
-    public void loadButtons(VBox vbox)
+    public void getSettings(Settings s)
+    {
+        for(MbObject object : displayPane.getObjects())
+        {
+            if(object.getType() == FurnitureType.PORTAL)
+                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
+            else
+                s.addFurniture(object.getRect(), object.getType());
+        }
+    }
+
+    private void loadButtons(VBox vbox)
     {
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
@@ -66,16 +75,5 @@ public class FurniturePane extends StackPane
     private void handleActionEvent(ActionEvent e, FurnitureType type)
     {
         currentType = type;
-    }
-
-    public void getSettings(Settings s)
-    {
-        for(MbObject object : displayPane.getObjects())
-        {
-            if(object.getType() == FurnitureType.PORTAL)
-                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
-            else
-                s.addFurniture(object.getRect(), object.getType());
-        }
     }
 }
