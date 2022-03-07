@@ -148,8 +148,14 @@ public class Map
 
     private Vector randDirection()
     {
-        Vector v = new Vector(1,0);
-        double rand = Math.random() * 360;
-        return v.rotate(rand);
+        double r = Math.random();
+        if(r < 0.25)
+            return new Vector(1,0);
+        else if( r < 0.5)
+            return new Vector(0,1);
+        else if( r < 0.75)
+            return new Vector(-1,0);
+        else
+            return new Vector(0,-1);
     }
 }
