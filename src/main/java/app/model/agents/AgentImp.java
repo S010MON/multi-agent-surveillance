@@ -1,5 +1,6 @@
 package app.model.agents;
 
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.model.map.Move;
@@ -8,7 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.ArrayList;
 
 public class AgentImp implements Agent
@@ -78,13 +78,13 @@ public class AgentImp implements Agent
     @Override
     public boolean isHit(Ray ray)
     {
-        return false;
+        return Intersection.hasIntersection(ray, position, radius);
     }
 
     @Override
     public Vector intersection(Ray ray)
     {
-        return null;
+        return Intersection.findIntersection(ray, position, radius);
     }
 
     @Override
