@@ -15,6 +15,7 @@ public class MbObject
     @Getter private Vector vector;
     @Getter private Rectangle2D rect;
     @Getter private Double rotation;
+    @Getter @Setter private Vector teleportTo;
 
     public MbObject(Rectangle2D rect, FurnitureType type)
     {
@@ -34,6 +35,11 @@ public class MbObject
         {
             gc.setStroke(getTypeOutline());
             gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
+        }
+
+        if(teleportTo != null)
+        {
+            gc.fillOval(teleportTo.getX() - 5, teleportTo.getY() - 5, 10, 10);
         }
     }
 

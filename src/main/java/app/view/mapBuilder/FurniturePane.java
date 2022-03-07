@@ -19,7 +19,6 @@ public class FurniturePane extends StackPane
 {
     @Getter private FurnitureType currentType;
     @Getter private boolean portal = false;
-    private Button portalButton;
     private TextField x;
     private TextField y;
     private StartMenu startMenu;
@@ -58,9 +57,6 @@ public class FurniturePane extends StackPane
             furnType.setOnAction(e -> handleActionEvent(e, ft));
             furnType.setPrefWidth(BUTTON_WIDTH);
             vbox.getChildren().add(furnType);
-
-            if(ft.label.equals("teleport"))
-                portalButton = furnType;
         }
 
         // Functionality buttons
@@ -78,7 +74,6 @@ public class FurniturePane extends StackPane
 
     private void handleActionEvent(ActionEvent e, FurnitureType type)
     {
-        portal = e.getTarget().equals(portalButton);
         currentType = type;
     }
 
