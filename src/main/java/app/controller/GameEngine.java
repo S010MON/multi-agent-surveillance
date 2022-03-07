@@ -2,11 +2,11 @@ package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
-import app.view.simulation.Info;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -37,12 +37,15 @@ public class GameEngine
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-            if (legalMove(startPoint, endPoint))
+            if (legalMove(startPoint, endPoint) &&
+                legalMove(a, endPoint) &&
+                legalMove(a, startPoint) && legalMove(a, startPoint,endPoint))
+            {
                 a.updateLocation(endPoint);
+            }
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-
         renderer.render();
     }
 
@@ -66,6 +69,30 @@ public class GameEngine
         for (Boundary bdy : map.getBoundaries())
         {
             if(bdy.validMove(start, end))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean legalMove(Agent currentAgent, Vector end)
+    {
+        for(Agent otherAgent: map.getAgents())
+        {
+            double dist = otherAgent.getPosition().dist(end);
+            if(!currentAgent.equals(otherAgent) && dist <= currentAgent.getRadius())
+                return false;
+        }
+        return true;
+    }
+
+    private boolean legalMove(Agent currentAgent, Vector start,Vector end)
+    {
+        double radius = currentAgent.getRadius();
+        for(Agent otherAgent: map.getAgents())
+        {
+            Vector positionOther = currentAgent.getPosition();
+            double radiusOther = otherAgent.getRadius();
+            if(!currentAgent.equals(otherAgent) && !Intersection.hasDirectionIntersect(start, end, radius, positionOther, radiusOther))
                 return false;
         }
         return true;
