@@ -51,7 +51,7 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = new Vector(randX(guardSpawn), randY(guardSpawn));
-            Vector dir = new Vector(-1,0);
+            Vector dir = randDirection();
             WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
@@ -62,7 +62,7 @@ public class Map
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-            Vector dir = new Vector(-1,0);
+            Vector dir = randDirection();
             WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
@@ -144,5 +144,12 @@ public class Map
     private double randY(Rectangle2D r)
     {
         return r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+    }
+
+    private Vector randDirection()
+    {
+        Vector v = new Vector(1,0);
+        double rand = Math.random() * 360;
+        return v.rotate(rand);
     }
 }
