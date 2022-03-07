@@ -38,15 +38,6 @@ public class FurniturePane extends StackPane
 
     public void loadButtons(VBox vbox)
     {
-        // Portal co-ordinates
-        Label teleport = new Label("Teleport to x and y:");
-        x = new TextField();
-        x.setPrefWidth(BUTTON_WIDTH);
-        y = new TextField();
-        y.setPrefWidth(BUTTON_WIDTH);
-
-        vbox.getChildren().addAll(teleport, x, y);
-
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
         vbox.getChildren().add(furniture);
