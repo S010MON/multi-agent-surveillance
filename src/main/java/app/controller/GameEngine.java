@@ -7,6 +7,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
+import app.model.boundary.PortalBoundary;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -37,6 +38,12 @@ public class GameEngine
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
+            Vector teleportTo = checkTeleport(startPoint, endPoint);
+            if(teleportTo != null)
+            {
+                a.updateLocation(teleportTo);
+            }
+
             if (legalMove(startPoint, endPoint) &&
                 legalMove(a, endPoint) &&
                 legalMove(a, startPoint) && legalMove(a, startPoint,endPoint))
@@ -64,11 +71,21 @@ public class GameEngine
         }
     }
 
+    private Vector checkTeleport(Vector start, Vector end)
+    {
+        for (Boundary bdy : map.getBoundaries())
+        {
+            if(bdy.isCrossed(start, end) && bdy instanceof PortalBoundary)
+                return bdy.getTeleport();
+        }
+        return null;
+    }
+
     private boolean legalMove(Vector start, Vector end)
     {
         for (Boundary bdy : map.getBoundaries())
         {
-            if(bdy.validMove(start, end))
+            if(bdy.isCrossed(start, end))
                 return false;
         }
         return true;

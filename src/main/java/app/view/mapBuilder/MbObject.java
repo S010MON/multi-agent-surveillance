@@ -51,7 +51,7 @@ public class MbObject
             case SHADE -> {return Color.LIGHTGRAY;}
             case GLASS -> {return Color.LIGHTBLUE;}
             case TOWER -> {return Color.OLIVE;}
-            case PORTAL -> {return Color.OLIVEDRAB;}
+            case PORTAL -> {return Color.PURPLE;}
             case GUARD_SPAWN -> {return Color.BLUE;}
             case INTRUDER_SPAWN -> {return Color.RED;}
             case TARGET -> {return Color.GOLD;}
