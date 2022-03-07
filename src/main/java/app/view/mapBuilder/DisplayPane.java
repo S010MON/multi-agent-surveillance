@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import lombok.Getter;
+import lombok.Setter;
 
 public class DisplayPane extends Canvas
 {

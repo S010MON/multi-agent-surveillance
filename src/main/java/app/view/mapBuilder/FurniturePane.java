@@ -11,12 +11,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayDeque;
 
 public class FurniturePane extends StackPane
 {
     @Getter private FurnitureType currentType;
+    @Getter private boolean portal = false;
+    private Button portalButton;
     private TextField x;
     private TextField y;
     private StartMenu startMenu;
@@ -55,16 +58,19 @@ public class FurniturePane extends StackPane
             furnType.setOnAction(e -> handleActionEvent(e, ft));
             furnType.setPrefWidth(BUTTON_WIDTH);
             vbox.getChildren().add(furnType);
+
+            if(ft.label.equals("teleport"))
+                portalButton = furnType;
         }
 
         // Functionality buttons
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setPrefWidth(BUTTON_WIDTH);
-        create.setOnAction(e -> startMenu.saveSettings(false)); // TODO add event handling!
+        create.setOnAction(e -> startMenu.saveSettings());
 
         Button crOpen = new Button("Create & Open");
-        crOpen.setOnAction(e -> startMenu.saveSettings(true));
+        crOpen.setOnAction(e -> startMenu.saveSettingsAndOpen());
         crOpen.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(func, create, crOpen);
@@ -72,6 +78,7 @@ public class FurniturePane extends StackPane
 
     private void handleActionEvent(ActionEvent e, FurnitureType type)
     {
+        portal = e.getTarget().equals(portalButton);
         currentType = type;
     }
 
