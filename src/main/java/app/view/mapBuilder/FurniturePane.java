@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayDeque;
 
 public class FurniturePane extends StackPane
 {
     @Getter private FurnitureType currentType;
+    @Getter private boolean portal = false;
     private TextField x;
     private TextField y;
     private StartMenu startMenu;
@@ -36,15 +38,6 @@ public class FurniturePane extends StackPane
 
     public void loadButtons(VBox vbox)
     {
-        // Portal co-ordinates
-        Label teleport = new Label("Teleport to x and y:");
-        x = new TextField();
-        x.setPrefWidth(BUTTON_WIDTH);
-        y = new TextField();
-        y.setPrefWidth(BUTTON_WIDTH);
-
-        vbox.getChildren().addAll(teleport, x, y);
-
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
         vbox.getChildren().add(furniture);
@@ -61,10 +54,10 @@ public class FurniturePane extends StackPane
         Label func = new Label("Create your Map:");
         Button create = new Button("Create");
         create.setPrefWidth(BUTTON_WIDTH);
-        create.setOnAction(e -> startMenu.saveSettings(false)); // TODO add event handling!
+        create.setOnAction(e -> startMenu.saveSettings());
 
         Button crOpen = new Button("Create & Open");
-        crOpen.setOnAction(e -> startMenu.saveSettings(true));
+        crOpen.setOnAction(e -> startMenu.saveSettingsAndOpen());
         crOpen.setPrefWidth(BUTTON_WIDTH);
 
         vbox.getChildren().addAll(func, create, crOpen);
@@ -80,7 +73,7 @@ public class FurniturePane extends StackPane
         for(MbObject object : displayPane.getObjects())
         {
             if(object.getType() == FurnitureType.PORTAL)
-                s.addTeleport(object.getRect(), object.getVector(), object.getRotation());
+                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
             else
                 s.addFurniture(object.getRect(), object.getType());
         }

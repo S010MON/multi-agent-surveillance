@@ -3,6 +3,8 @@ package app.view.mapBuilder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+import app.controller.linAlg.Vector;
+import app.model.furniture.FurnitureType;
 import app.view.ScreenSize;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -11,7 +13,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import lombok.Getter;
 
 public class DisplayPane extends Canvas
@@ -19,6 +20,8 @@ public class DisplayPane extends Canvas
     @Getter private ArrayDeque<MbObject> objects;
     private StartMenu startMenu;
     private Point2D click;
+    private MbObject portal;
+    private boolean settingTeleport;
     private Rectangle2D selection;
     private final Color backgroundColour = Color.WHITE;
     private double gridSize = 20;
@@ -32,6 +35,8 @@ public class DisplayPane extends Canvas
         objects = new ArrayDeque<>();
         click = null;
         selection = null;
+        portal = null;
+        settingTeleport = false;
 
         vLines = createVLines();
         hLines = createHLines();
@@ -57,7 +62,6 @@ public class DisplayPane extends Canvas
         vLines.forEach(e -> e.draw(gc));
         hLines.forEach(e -> e.draw(gc));
         objects.forEach(e -> e.draw(gc));
-
 
         if(selection != null)
         {
@@ -106,13 +110,29 @@ public class DisplayPane extends Canvas
 
     private void mouseReleased(MouseEvent e)
     {
-        if(click != null)
+        boolean portalSelected = startMenu.getFurniturePane().getCurrentType() == FurnitureType.PORTAL;
+
+        if(click == null)
+            return;
+
+        if(portalSelected && !settingTeleport)
+        {
+            portal = new MbObject(selection, FurnitureType.PORTAL);
+            objects.add(portal);
+            settingTeleport = true;
+        }
+        else if(portalSelected)
+        {
+            portal.setTeleportTo(new Vector(e.getX(), e.getY()));
+            settingTeleport = false;
+        }
+        else
         {
             objects.add(new MbObject(selection, startMenu.getFurniturePane().getCurrentType()));
-            selection = null;
-            click = null;
-            draw();
         }
+        selection = null;
+        click = null;
+        draw();
     }
 
     private ArrayList<GridLine> createVLines()
