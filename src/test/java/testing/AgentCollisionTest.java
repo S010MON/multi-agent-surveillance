@@ -34,6 +34,6 @@ public class AgentCollisionTest
     @Test
     void noIntersect()
     {
-        assertFalse(Intersection.hasDirectionIntersect(new Vector(0, 0), new Vector(2, 2), 1, new Vector(5, 5), 0.5));
+        assertFalse(Intersection.hasDirectionIntersect(new Vector(0, 0), new Vector(2, 2), 1, new Vector(3, 3), 0.5));
     }
 }
