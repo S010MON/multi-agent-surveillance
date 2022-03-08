@@ -3,7 +3,6 @@ package app.view.mapBuilder;
 import app.App;
 import app.controller.io.FileManager;
 import app.controller.settings.Settings;
-import app.controller.settings.SettingsGenerator;
 import app.view.Alert;
 import app.view.FileMenuBar;
 import javafx.scene.layout.BorderPane;
@@ -15,13 +14,11 @@ public class StartMenu extends BorderPane
     @Getter private FurniturePane furniturePane;
     @Getter private DisplayPane displayPane;
     @Getter private SettingsPane settingsPane;
-    private Settings settings;
 
     public StartMenu(App app)
     {
         this.app = app;
-        settings = SettingsGenerator.mockSettings();
-        settingsPane = new SettingsPane(this, settings);
+        settingsPane = new SettingsPane(this);
         displayPane = new DisplayPane(this);
         furniturePane = new FurniturePane(this, displayPane);
 
@@ -43,16 +40,16 @@ public class StartMenu extends BorderPane
 
     public void saveSettings()
     {
+        Settings settings = settingsPane.getSettings();
         furniturePane.getSettings(settings);
-        settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
         Alert.displayAlert("Done!", "The map file was successfully created.");
     }
 
     public void saveSettingsAndOpen()
     {
+        Settings settings = settingsPane.getSettings();
         furniturePane.getSettings(settings);
-        settingsPane.getSettings();
         FileManager.saveSettings(settings, settings.getName());
         String fileName = settings.getName();
         app.gotoSimulation(fileName);
