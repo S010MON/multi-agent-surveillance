@@ -77,9 +77,11 @@ public class SettingsPane extends StackPane
         w = new TextField();
         w.setMaxWidth(100);
         w.setText(""+s.getWidth());
+        w.textProperty().addListener((observable, oldValue, newValue) -> startMenu.getDisplayPane().draw());
         h = new TextField();
         h.setMaxWidth(100);
         h.setText(""+s.getHeight());
+        h.textProperty().addListener((observable, oldValue, newValue) -> startMenu.getDisplayPane().draw());
         noGuards = new TextField();
         noGuards.setMaxWidth(100);
         noGuards.setText(""+s.getNoOfGuards());
