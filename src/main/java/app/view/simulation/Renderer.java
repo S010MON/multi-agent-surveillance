@@ -68,6 +68,12 @@ public class Renderer extends Canvas
             Info.getInfo().zoom += zoomRate;
         else if(dy < 0)
             Info.getInfo().zoom -= zoomRate;
+        else if(dy < 0)
+        {
+            double dZoom = Info.getInfo().zoom - zoomRate;
+            if(dZoom > 0)
+                Info.getInfo().zoom += zoomRate;
+        }
         render();
     }
 
