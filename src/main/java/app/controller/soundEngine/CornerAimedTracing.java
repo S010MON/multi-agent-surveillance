@@ -6,28 +6,30 @@ import app.model.agents.Agent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class CornerAimedTracing implements SoundEngine{
     public HashMap<SoundSource, Sound> compute(Map map, Agent agent){
         HashMap<SoundSource, Sound> soundTable = new HashMap<>();
         int maxDiffraction = 1;
 
-        ArrayList<ArrayList<Vector>> pointsToCheck = new ArrayList<>(maxDiffraction + 1);
-
         Vector agentPos = agent.getPosition();
 
         ArrayList<Vector> points = new ArrayList<>();
         points.add(agentPos);
 
-        pointsToCheck.add(0,points);
+        ArrayList<Vector> nextToCheck = points;
 
         for (int i = 0; i < maxDiffraction + 1; i++) {
-            pointsToCheck.add(i+1, new ArrayList<>());
-            for (Vector pos: pointsToCheck.get(i)) {
+
+            ArrayList<Vector> corners = nextToCheck;
+            nextToCheck = new ArrayList<>();
+
+            for (Vector pos: corners) {
                 ArrayList<SoundSource> audible = audibleFrom(map, pos);
 
                 for (SoundSource heard: audible) {
+
                     if(!soundTable.containsKey(heard)) {
                         soundTable.put(heard, new Sound(heard, agentPos, pos, i));
                         continue;
@@ -37,7 +39,7 @@ public class CornerAimedTracing implements SoundEngine{
 
                 ArrayList<Vector> nextLayer = findReachableCorners(map, agentPos);
 
-                pointsToCheck.get(i + 1).addAll(nextLayer);
+                nextToCheck.addAll(nextLayer);
             }
         }
 
@@ -59,9 +61,10 @@ public class CornerAimedTracing implements SoundEngine{
     }
 
     private ArrayList<Vector> findReachableCorners(Map map, Vector pos){
-        HashSet<Vector> reachable = new HashSet<>();
-        // make sure that each corner can actually hear the source? so maybe store the loudest source in a var
+        // linked hashset, because order is important
+        LinkedHashSet<Vector> reachable = new LinkedHashSet<>();
 
+        // make sure that each corner can actually hear the source? so maybe store the loudest source in a var
         for (SoundFurniture soundFurniture: map.getSoundFurniture()) {
             for (SoundBoundary soundBoundary: soundFurniture.getSoundBoundaries()) {
                 for (Vector corner: soundBoundary.getCorners()) {

@@ -25,7 +25,7 @@ public class Sound {
     public void update(Vector origin, int diffractionCount){
         double newAmp = soundSource.soundLevelFrom(listenerPos, diffractionCount);
 
-        if(newAmp > amplitude) {
+        if(Double.compare(newAmp, amplitude) > 0) {
             direction = origin.sub(listenerPos);
             amplitude = newAmp;
         }

@@ -92,7 +92,7 @@ public class SoundEngineTest {
 
         Sound actualSound = soundSourceSoundHashMap.get(source);
 
-        Sound expectedSound = new Sound(source, new Vector(0,0), new Vector(1,2), 1);
+        Sound expectedSound = new Sound(source, new Vector(0,0), new Vector(2,1), 1);
 
         assertEquals(expectedSound,actualSound);
     }
