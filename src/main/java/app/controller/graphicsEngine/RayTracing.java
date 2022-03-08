@@ -75,7 +75,7 @@ public class RayTracing implements GraphicsEngine
                 {
                     Vector currentV = agent.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if (dist < closestDist)
+                    if (dist < closestDist && currentV.getAngle() == r.angle())
                     {
                         intersection = currentV;
                         closestDist = dist;

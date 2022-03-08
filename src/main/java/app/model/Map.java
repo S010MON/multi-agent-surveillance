@@ -46,7 +46,6 @@ public class Map
 
         agents = new ArrayList<>();
 
-
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
