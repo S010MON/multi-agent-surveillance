@@ -46,27 +46,27 @@ public class Map
 
         agents = new ArrayList<>();
 
-        /* Adds temporary WallFollowAgent */
-        Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-        Vector dir = new Vector(-1,0);
-        WallFollowAgent wallAgent = new WallFollowAgent(srt, dir, 10);
-        //Assumes the wallFollowAgent is a guard
-        wallAgent.setMaxWalk(settings.getWalkSpeedGuard());
-        wallAgent.setMaxSprint(settings.getSprintSpeedGuard());
-        agents.add(wallAgent);
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
-            Vector guardStart = new Vector(randX(guardSpawn), randY(guardSpawn));
-            /* TODO Add guard agents here!!! */
+            Vector srt = new Vector(randX(guardSpawn), randY(guardSpawn));
+            Vector dir = randDirection();
+            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
+            guard.setMaxWalk(settings.getWalkSpeedGuard());
+            guard.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(guard);
         }
 
         // On creation add the right number of infiltrators
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
-            Vector intruderStart = new Vector(randX(intruderSpawn), randY(intruderSpawn));
-            /* TODO intruder agents here!!! */
+            Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
+            Vector dir = randDirection();
+            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
+            intruder.setMaxWalk(settings.getWalkSpeedIntruder());
+            intruder.setMaxSprint(settings.getSprintSpeedIntruder());
+            agents.add(intruder);
         }
 
         Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
@@ -144,5 +144,18 @@ public class Map
     private double randY(Rectangle2D r)
     {
         return r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+    }
+
+    private Vector randDirection()
+    {
+        double r = Math.random();
+        if(r < 0.25)
+            return new Vector(1,0);
+        else if( r < 0.5)
+            return new Vector(0,1);
+        else if( r < 0.75)
+            return new Vector(-1,0);
+        else
+            return new Vector(0,-1);
     }
 }
