@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Renderer extends Canvas
 {
     private Map map;
-    private Color backgroundColour,outlineColor;
+    private Color backgroundColour, outlineColor;
     private double zoomRate = 0.2d;
     private Point2D click;
 
@@ -24,7 +24,7 @@ public class Renderer extends Canvas
         super(ScreenSize.width, ScreenSize.height);
         this.map = map;
         backgroundColour = Color.WHITE;
-        outlineColor = Color.rgb(191,191,191);
+        outlineColor = Color.rgb(191, 191, 191);
 
         setOnMousePressed(this::mousePressed);
         setOnMouseReleased(this::mouseReleased);
