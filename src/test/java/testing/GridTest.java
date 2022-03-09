@@ -29,8 +29,8 @@ public class GridTest
         int rows = grid.getRowDimension();
         int cols = grid.getColDimension();
 
-        assertEquals(rows, 53);
-        assertEquals(cols, 57);
+        assertEquals(rows, 54);
+        assertEquals(cols, 58);
     }
 
     @Test
@@ -40,8 +40,9 @@ public class GridTest
         int rows = grid.getRowDimension();
         int cols = grid.getColDimension();
 
-        assertEquals(rows, 50);
-        assertEquals(cols, 50);
+        //Accomodate for zero cell
+        assertEquals(rows, 51);
+        assertEquals(cols, 51);
     }
 
     @Test
@@ -51,8 +52,8 @@ public class GridTest
         int rows = grid.getRowDimension();
         int cols = grid.getColDimension();
 
-        assertEquals(rows, 50);
-        assertEquals(cols, 25);
+        assertEquals(rows, 52);
+        assertEquals(cols, 27);
     }
 
     @Test
