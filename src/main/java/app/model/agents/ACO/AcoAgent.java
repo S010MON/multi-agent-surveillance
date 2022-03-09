@@ -14,11 +14,15 @@ import java.util.Random;
 //TODO Accomodate for agents clashes
 public class AcoAgent extends AgentImp
 {
+    private static AcoGrid world = new AcoGrid();
+    private static int AcoAgentCount = 0;
+    private static int AcoMoveCount = 0;
+
     private double maxPheromone = 1;
-    private static AcoGrid world;
     private double cellSize = world.getCellSize();
     Random randomGenerator = new Random(1);
 
+    //TODO Implement for memory
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
 
     private int[] cardinalAngles = {0, 90, 180, 270};
@@ -28,6 +32,9 @@ public class AcoAgent extends AgentImp
     {
         super(position, direction, radius);
         world.updateAgent(this);
+
+        AcoAgentCount ++;
+        AcoMoveCount ++;
     }
 
     // 1. Agent looks around
@@ -45,6 +52,7 @@ public class AcoAgent extends AgentImp
 
         ArrayList<Vector> equivalentMinMoves = determineEquivalentMinMoves(cellPheromones, possibleMovements);
         Vector moveVector= selectRandomEquivalentMove(equivalentMinMoves);
+
         return new Move(position, moveVector);
     }
 
@@ -53,7 +61,18 @@ public class AcoAgent extends AgentImp
     {
         position = endPoint;
         world.updateAgent(this);
-        System.out.println(position.toString());
+
+        worldEvaporationProcess();
+    }
+
+    public static void worldEvaporationProcess()
+    {
+        AcoMoveCount ++;
+        if(AcoMoveCount >= AcoAgentCount)
+        {
+            world.evaporationProcess();
+            AcoMoveCount = AcoMoveCount - AcoAgentCount;
+        }
     }
 
     //TODO Implement movement bias based on target direction

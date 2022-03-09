@@ -7,6 +7,7 @@ import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
+import app.model.agents.Cells.PheromoneCell;
 import app.model.map.Move;
 import app.model.agents.ACO.AcoAgent;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,24 @@ public class AcoAgentTesting
     void init()
     {
         AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
+    }
+
+    @Test
+    void testEvaporationProcess()
+    {
+        Vector position_2 = position.add(new Vector(1, 0));
+
+        AcoAgent agent_1 = new AcoAgent(position, viewDirection, radius);
+        AcoAgent agent_2 = new AcoAgent(position_2, viewDirection, radius);
+
+        agent_1.updateView(graphicsEngine.compute(map, agent_1));
+        agent_2.updateView(graphicsEngine.compute(map, agent_2));
+
+        agent_1.updateLocation(new Vector(20, 30));
+        agent_2.updateLocation(new Vector(40, 50));
+
+        PheromoneCell cell = (PheromoneCell) AcoAgent.accessWorld().getCellAt(position);
+        assertTrue(cell.currentPheromoneValue() < agent_1.releaseMaxPheromone());
     }
 
     @Test

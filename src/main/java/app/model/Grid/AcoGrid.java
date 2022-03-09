@@ -13,6 +13,11 @@ public class AcoGrid extends Grid
         super(length, width, CellType.PHEROMONE);
     }
 
+    public AcoGrid()
+    {
+        super(1000, 1000, CellType.PHEROMONE);
+    }
+
     public AcoGrid(double length, double width, double cellSize)
     {
         super(length, width, CellType.PHEROMONE);

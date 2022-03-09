@@ -35,10 +35,6 @@ public class Map
         System.out.print("Loading settings ... ");
         this.settings = settings;
 
-        //TODO Make dynamic and singleton pattern
-        /* Initialize Aco World */
-        AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
-
         /* Make furniture */
         furniture = new ArrayList<>();
         settings.getFurniture().forEach(e -> addFurniture(e));

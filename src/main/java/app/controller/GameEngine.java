@@ -55,8 +55,6 @@ public class GameEngine
             }
         }
 
-        //TODO Abstract process to lower level
-        AcoAgent.accessWorld().evaporationProcess();
         renderer.render();
     }
 
