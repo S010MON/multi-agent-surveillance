@@ -20,7 +20,10 @@ public class AcoAgent extends AgentImp
 
     private double maxPheromone = 1;
     private double cellSize;
-    Random randomGenerator = new Random(1);
+    private Random randomGenerator = new Random(1);
+
+    private Move previousMove;
+    private HashMap<Integer, Move> shortTermMemory = new HashMap<>();
 
     //TODO Implement for memory
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
@@ -34,6 +37,7 @@ public class AcoAgent extends AgentImp
         cellSize = world.getCellSize();
         world.updateAgent(this);
 
+        previousMove = new Move(position, new Vector());
         AcoAgentCount ++;
         AcoMoveCount ++;
     }
@@ -48,13 +52,15 @@ public class AcoAgent extends AgentImp
     public Move move()
     {
         Ray[] cardinalRays = detectCardinalRays();
-        ArrayList<Vector> possibleMovements = determineAvailableMovements(cardinalRays);
+        ArrayList<Vector> possibleMovements = determineMovesAllScenarios(cardinalRays);
+
         ArrayList<Double> cellPheromones = accessAvaliableCellPheromones(possibleMovements);
 
         ArrayList<Vector> equivalentMinMoves = determineEquivalentMinMoves(cellPheromones, possibleMovements);
         Vector moveVector= selectRandomEquivalentMove(equivalentMinMoves);
 
-        return new Move(position, moveVector);
+        previousMove =  new Move(position, moveVector);
+        return previousMove;
     }
 
     @Override
@@ -74,6 +80,36 @@ public class AcoAgent extends AgentImp
             world.evaporationProcess();
             AcoMoveCount = AcoMoveCount - AcoAgentCount;
         }
+    }
+
+    public ArrayList<Vector> determineMovesAllScenarios(Ray[] cardinalRays)
+    {
+        ArrayList<Vector> possibleMovements = determineAvailableMovements(cardinalRays);
+
+        if(previousMove.getEndDir().equals(position))
+        {
+            possibleMovements = resolveAgentMovementClash(possibleMovements);
+        }
+        return possibleMovements;
+    }
+
+    /*
+    Case 1: There exists multiple possible other moves to select from
+     */
+    public ArrayList<Vector> resolveAgentMovementClash(ArrayList<Vector> possibleMoves)
+    {
+        ArrayList<Vector> modifiedPossibleMoves = new ArrayList<>();
+        if(possibleMoves.size() > 1)
+        {
+            for(Vector move: possibleMoves)
+            {
+                if(!move.equals(previousMove.getDeltaPos()))
+                {
+                    modifiedPossibleMoves.add(move);
+                }
+            }
+        }
+        return modifiedPossibleMoves;
     }
 
     //TODO Implement movement bias based on target direction
@@ -186,7 +222,7 @@ public class AcoAgent extends AgentImp
         return null;
     }
 
-    public int calculateMidPoint(int upperBound, int lowerBound)
+    private int calculateMidPoint(int upperBound, int lowerBound)
     {
         return lowerBound + (upperBound - lowerBound)/2;
     }

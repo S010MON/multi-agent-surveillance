@@ -37,6 +37,21 @@ public class AcoAgentTesting
     }
 
     @Test
+    void testAgentClashResolution()
+    {
+        AcoAgent agent_1 = new AcoAgent(position, viewDirection, radius);
+        agent_1.updateView(graphicsEngine.compute(map, agent_1));
+
+        Move selectedMove = agent_1.move();
+
+        //No agent update as simulating an invalid move.
+        Move alternativeSelectedMove = agent_1.move();
+
+        assertNotEquals(selectedMove.getDeltaPos(), alternativeSelectedMove.getDeltaPos());
+        assertEquals(selectedMove.getEndDir(), alternativeSelectedMove.getEndDir());
+    }
+
+    @Test
     void testEvaporationProcess()
     {
         Vector position_2 = position.add(new Vector(1, 0));
