@@ -33,6 +33,8 @@ public class GameEngine
 
     public void tick()
     {
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+
         for (Agent a :map.getAgents())
         {
             Vector startPoint = a.getPosition();
@@ -52,7 +54,6 @@ public class GameEngine
             }
         }
 
-        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         renderer.render();
     }
 

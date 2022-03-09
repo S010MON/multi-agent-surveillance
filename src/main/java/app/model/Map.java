@@ -5,6 +5,7 @@ import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.controller.soundEngine.SoundFurniture;
 import app.controller.soundEngine.SoundSource;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;

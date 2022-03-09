@@ -1,6 +1,7 @@
 package app.model.Grid;
 
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;
 
@@ -25,7 +26,7 @@ public class AcoGrid extends Grid
         int col = getCellCol(agent.getPosition());
 
         PheromoneCell cell = (PheromoneCell) super.getCellAt(row, col);
-        cell.updatePheromone(agent.releaseMaxPheramone());
+        cell.updatePheromone(agent.releaseMaxPheromone());
     }
 
     public void evaporationProcess()
@@ -40,13 +41,14 @@ public class AcoGrid extends Grid
         }
     }
 
-    public void displayGridState()
+    //TODO Rewrite method to toString
+    public void print()
     {
-        for(int i = 0; i < getRowDimension(); i++)
+        for(Cell[] line : grid)
         {
-            for(int j = 0; j < getColDimension(); j++)
+            for(Cell cell: line)
             {
-                System.out.print(grid[i][j].toString() + " ");
+                System.out.print(cell.toString() + " ");
             }
             System.out.println();
         }

@@ -14,8 +14,9 @@ public class Grid
 
     public Grid(double length, double width, CellType type)
     {
-        rowSize = (int)(length / cellSize);
-        colSize = (int)(width / cellSize);
+        //Addition of single cell to accomodate for 0 cells
+        rowSize = (int)(Math.ceil(length / cellSize) + 1);
+        colSize = (int)(Math.ceil(width / cellSize) + 1);
         this.type = type;
 
         grid = initializeAllCells();
@@ -66,5 +67,10 @@ public class Grid
     public int getColDimension()
     {
         return grid[0].length;
+    }
+
+    public double getCellSize()
+    {
+        return cellSize;
     }
 }
