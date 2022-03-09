@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Renderer extends Canvas
 {
     private Map map;
-    private Color backgroundColour;
+    private Color backgroundColour, outlineColor;
     private double zoomRate = 0.2d;
     private Point2D click;
 
@@ -24,12 +24,13 @@ public class Renderer extends Canvas
         super(ScreenSize.width, ScreenSize.height);
         this.map = map;
         backgroundColour = Color.WHITE;
+        outlineColor = Color.rgb(191, 191, 191);
 
         setOnMousePressed(this::mousePressed);
         setOnMouseReleased(this::mouseReleased);
         setOnMouseDragged(this::mouseDragged);
         setOnScroll(this::handleScroll);
-
+        Info.getInfo().setZoom(1.5);
         render();
     }
 
@@ -37,11 +38,6 @@ public class Renderer extends Canvas
     {
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
-
-        // Draw map boundary
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(3.0);
-        gc.strokeRect(3, 3, map.getSettings().getWidth(), map.getSettings().getHeight());
 
         map.drawIntruderSpawn(gc);
         map.drawGuardSpawn(gc);
@@ -57,8 +53,14 @@ public class Renderer extends Canvas
 
     private void drawBackground(GraphicsContext gc)
     {
-        gc.setFill(backgroundColour);
+        gc.setFill(outlineColor);
         gc.fillRect(0,0,getWidth(), getHeight());
+        gc.setFill(backgroundColour);
+        gc.setLineWidth(3.0);
+        gc.fillRect( 3 + Info.getInfo().offsetX ,
+                3 + Info.getInfo().offsetY,
+                map.getSettings().getWidth() *  Info.getInfo().zoom,
+                map.getSettings().getHeight() * Info.getInfo().zoom);
     }
 
     private void handleScroll(ScrollEvent e)
