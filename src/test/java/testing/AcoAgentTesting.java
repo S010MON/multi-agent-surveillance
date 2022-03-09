@@ -52,6 +52,12 @@ public class AcoAgentTesting
     }
 
     @Test
+    void testAgentClashResolutionShortTermMeoryClearing()
+    {
+
+    }
+
+    @Test
     void testEvaporationProcess()
     {
         Vector position_2 = position.add(new Vector(1, 0));

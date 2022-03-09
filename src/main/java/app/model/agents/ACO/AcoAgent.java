@@ -104,7 +104,6 @@ public class AcoAgent extends AgentImp
         ArrayList<Vector> modifiedPossibleMoves = new ArrayList<>();
         for(Vector move: possibleMoves)
         {
-            Integer testing = move.hashCode();
             if(shortTermMoveMemory.get(move.hashCode()) == null)
             {
                 modifiedPossibleMoves.add(move);
@@ -261,5 +260,11 @@ public class AcoAgent extends AgentImp
     {
         AcoAgentCount = 0;
         AcoMoveCount = 0;
+    }
+
+    //TODO Finish method to allow testing of Short Term Meory Clearance
+    public HashMap<Integer, Vector> accessShortTermMemeory()
+    {
+
     }
 }
