@@ -136,7 +136,17 @@ public class AcoAgent extends AgentImp
 
     public Vector selectRandomEquivalentMove(ArrayList<Vector> equivalentMoves)
     {
-        return equivalentMoves.get(randomGenerator.nextInt(equivalentMoves.size()));
+        if(equivalentMoves.size() != 0)
+        {
+            return equivalentMoves.get(randomGenerator.nextInt(equivalentMoves.size()));
+        }
+        else
+        {
+            ArrayList<Vector> rememberedMoves =  new ArrayList<Vector>(shortTermMoveMemory.values());
+            int randomIndex =  randomGenerator.nextInt(rememberedMoves.size());
+            return rememberedMoves.get(randomIndex);
+        }
+
     }
 
     public ArrayList<Double> accessAvaliableCellPheromones(ArrayList<Vector> possibleMovements)

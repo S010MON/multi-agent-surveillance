@@ -10,7 +10,7 @@ public class AcoGrid extends Grid
 {
     public AcoGrid()
     {
-        super(1000, 1000, CellType.PHEROMONE, 15);
+        super(1000, 1000, CellType.PHEROMONE, 20);
     }
 
     public AcoGrid(double length, double width)
