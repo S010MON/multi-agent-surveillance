@@ -28,11 +28,25 @@ public class FileMenuBar extends MenuBar
         newFile.setOnAction(e -> System.out.println("Test new..."));
         file.getItems().add(newFile);
 
+        /*
         MenuItem openFile = new MenuItem("Open");
-        // TODO: add opening of files here
         //openFile.setOnAction(e -> System.out.println("Test open..."));
         openFile.setOnAction(e -> printFiles());
         file.getItems().add(openFile);
+         */
+
+        /* Open file menu*/
+        Menu openFile = new Menu("Open");
+        for(File f: getResourceFolderFiles(""))
+        {
+            MenuItem fileOption = new MenuItem(f.getName());
+            openFile.getItems().add(fileOption);
+            //fileOption.setOnAction(e -> System.out.println(f));
+            fileOption.setOnAction(e -> app.gotoSimulation(f.getName()));
+        }
+        file.getItems().add(openFile);
+
+
 
         MenuItem undoFile = new MenuItem("Undo");
         undoFile.setOnAction(e -> app.getStartMenu().getDisplayPane().undo());
@@ -58,27 +72,23 @@ public class FileMenuBar extends MenuBar
 
     private void printFiles()
     {
-        for (File f : filterFiles()) {
+        for (File f : getResourceFolderFiles("")) {
             System.out.println(f);
         }
     }
 
-    private List<File> filterFiles()
+    private List<File> getResourceFolderFiles (String folder)
     {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(folder);
+        String path = url.getPath();
+
         List<File> files = new ArrayList<>();
-        for (File f : getResourceFolderFiles(""))
+        for (File f : new File(path).listFiles())
         {
             if(f.getPath().endsWith(".txt"))
                 files.add(f);
         }
         return files;
-    }
-
-    private File[] getResourceFolderFiles (String folder)
-    {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL url = loader.getResource(folder);
-        String path = url.getPath();
-        return new File(path).listFiles();
     }
 }
