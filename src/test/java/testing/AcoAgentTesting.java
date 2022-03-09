@@ -33,6 +33,7 @@ public class AcoAgentTesting
     {
         AcoGrid world = new AcoGrid(settings.getWidth(), settings.getHeight(), 1);
         AcoAgent.initializeWorld(world);
+        AcoAgent.clearAcoCounts();
     }
 
     @Test
@@ -116,7 +117,7 @@ public class AcoAgentTesting
 
         ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
         int indexOfLastValue = pheromoneValues.size() - 1;
-        assertEquals(pheromoneValues.get(indexOfLastValue), agent.releaseMaxPheromone());
+        assertTrue(pheromoneValues.get(indexOfLastValue) < agent.releaseMaxPheromone());
     }
 
     @Test

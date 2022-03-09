@@ -31,8 +31,8 @@ public class AcoAgent extends AgentImp
     public AcoAgent(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
-        world.updateAgent(this);
         cellSize = world.getCellSize();
+        world.updateAgent(this);
 
         AcoAgentCount ++;
         AcoMoveCount ++;
@@ -66,7 +66,7 @@ public class AcoAgent extends AgentImp
         worldEvaporationProcess();
     }
 
-    public static void worldEvaporationProcess()
+    public void worldEvaporationProcess()
     {
         AcoMoveCount ++;
         if(AcoMoveCount >= AcoAgentCount)
@@ -218,5 +218,11 @@ public class AcoAgent extends AgentImp
     public int[] getCardinalAngles()
     {
         return cardinalAngles;
+    }
+
+    public static void clearAcoCounts()
+    {
+        AcoAgentCount = 0;
+        AcoMoveCount = 0;
     }
 }
