@@ -13,7 +13,7 @@ public class Frame extends BorderPane
 
     public Frame(int width, int height)
     {
-        Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+        Settings settings = FileManager.loadSettings("src/main/resources/map_2_AcoMovement.txt");
         Map map = new Map(settings);
         FileMenuBar menuBar = new FileMenuBar(this);
         Renderer renderer = new Renderer(map, width, height);

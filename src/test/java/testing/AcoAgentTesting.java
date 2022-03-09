@@ -33,7 +33,16 @@ public class AcoAgentTesting
     }
 
     @Test
-    //TODO Finish Move testing
+    void testBoundaryMovementEdgeCase()
+    {
+        position = new Vector(91, 94);
+        Vector nextPosition = new Vector(91, 95);
+        AcoAgent agent = new AcoAgent(position, viewDirection, radius);
+        agent.updateLocation(nextPosition);
+        assertEquals(agent.getPosition(), nextPosition);
+    }
+
+    @Test
     void testMove()
     {
         Vector position_2 = position.add(new Vector(1, 0));
