@@ -19,10 +19,11 @@ public class Ray
         this.v = v;
     }
 
-    public double getAngle()
-    {
-        return angle;
-    }
+    //TODO Delete if unnecessary
+//    public double getAngle()
+//    {
+//        return angle;
+//    }
 
     public double angle()
     {
