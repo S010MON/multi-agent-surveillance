@@ -8,7 +8,7 @@ public class Grid
     protected int rowSize;
     protected int colSize;
     protected Cell[][] grid;
-    protected double cellSize = 15.0;
+    protected double cellSize = 1.0;
     protected CellType type;
 
 
@@ -17,6 +17,16 @@ public class Grid
         //Addition of single cell to accomodate for 0 cells
         rowSize = (int)(Math.ceil(length / cellSize) + 1);
         colSize = (int)(Math.ceil(width / cellSize) + 1);
+        this.type = type;
+
+        grid = initializeAllCells();
+    }
+
+    public Grid(double length, double width, CellType type, double cellSize)
+    {
+        //Addition of single cell to accomodate for 0 cells
+        rowSize = (int) (Math.ceil(length / cellSize) + 1);
+        colSize = (int) (Math.ceil(width / cellSize) + 1);
         this.type = type;
 
         grid = initializeAllCells();

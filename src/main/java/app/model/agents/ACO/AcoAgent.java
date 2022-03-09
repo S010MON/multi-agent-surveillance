@@ -19,7 +19,7 @@ public class AcoAgent extends AgentImp
     private static int AcoMoveCount = 0;
 
     private double maxPheromone = 1;
-    private double cellSize = world.getCellSize();
+    private double cellSize;
     Random randomGenerator = new Random(1);
 
     //TODO Implement for memory
@@ -32,6 +32,7 @@ public class AcoAgent extends AgentImp
     {
         super(position, direction, radius);
         world.updateAgent(this);
+        cellSize = world.getCellSize();
 
         AcoAgentCount ++;
         AcoMoveCount ++;
@@ -204,10 +205,11 @@ public class AcoAgent extends AgentImp
         return maxPheromone;
     }
 
-    public static void initializeWorld(double width, double height)
+    public static void initializeWorld(AcoGrid newWorld)
     {
-        world = new AcoGrid(height, width);
+        world = newWorld;
     }
+
     public static AcoGrid accessWorld()
     {
         return world;

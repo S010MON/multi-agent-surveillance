@@ -15,7 +15,8 @@ public class AcoGridTest
     @Test
     void testUpdateAgent()
     {
-        AcoAgent.initializeWorld(50.3, 25.7);
+        AcoGrid world = new AcoGrid(50.3, 25.7, 1.0);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
@@ -29,7 +30,8 @@ public class AcoGridTest
     @Test
     void testEvaporationProcess()
     {
-        AcoAgent.initializeWorld(50.3, 25.7);
+        AcoGrid world = new AcoGrid(50.3, 25.7, 1);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
@@ -47,7 +49,8 @@ public class AcoGridTest
     @Test
     void testAgentMovementWithinGrid()
     {
-        AcoAgent.initializeWorld(20, 20);
+        AcoGrid world = new AcoGrid(20, 20, 1);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10, 10);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
@@ -64,7 +67,7 @@ public class AcoGridTest
         }
 
         PheromoneCell currentCell = (PheromoneCell) AcoAgent.accessWorld().getCellAt(newPosition);
-        assertEquals(currentCell.currentPheromoneValue(), agent.releaseMaxPheromone());
+        assertTrue(currentCell.currentPheromoneValue() < agent.releaseMaxPheromone());
 
     }
 }

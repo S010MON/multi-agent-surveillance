@@ -8,20 +8,20 @@ import app.model.agents.Cells.PheromoneCell;
 //TODO Use singleton pattern to insist on only one world
 public class AcoGrid extends Grid
 {
+    public AcoGrid()
+    {
+        super(1000, 1000, CellType.PHEROMONE, 15);
+    }
+
     public AcoGrid(double length, double width)
     {
         super(length, width, CellType.PHEROMONE);
     }
 
-    public AcoGrid()
-    {
-        super(1000, 1000, CellType.PHEROMONE);
-    }
 
     public AcoGrid(double length, double width, double cellSize)
     {
-        super(length, width, CellType.PHEROMONE);
-        super.cellSize = cellSize;
+        super(length, width, CellType.PHEROMONE, cellSize);
     }
 
     //TODO Evaporation needs to be changed into group system, not individual
