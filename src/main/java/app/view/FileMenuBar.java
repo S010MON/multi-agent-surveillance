@@ -1,7 +1,10 @@
 package app.view;
 
 import app.App;
+import app.controller.io.FileManager;
 import app.controller.io.FilePath;
+import app.controller.settings.Settings;
+import app.model.Map;
 import app.view.mapBuilder.DisplayPane;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -28,20 +31,13 @@ public class FileMenuBar extends MenuBar
         newFile.setOnAction(e -> System.out.println("Test new..."));
         file.getItems().add(newFile);
 
-        /*
-        MenuItem openFile = new MenuItem("Open");
-        //openFile.setOnAction(e -> System.out.println("Test open..."));
-        openFile.setOnAction(e -> printFiles());
-        file.getItems().add(openFile);
-         */
 
         /* Open file menu*/
         Menu openFile = new Menu("Open");
-        for(File f: getResourceFolderFiles(""))
+        for(File f: filterErrorFiles(getResourceFolderFiles("")))
         {
             MenuItem fileOption = new MenuItem(f.getName());
             openFile.getItems().add(fileOption);
-            //fileOption.setOnAction(e -> System.out.println(f));
             fileOption.setOnAction(e -> app.gotoSimulation(f.getName()));
         }
         file.getItems().add(openFile);
@@ -70,11 +66,24 @@ public class FileMenuBar extends MenuBar
         this.getMenus().add(view);
     }
 
-    private void printFiles()
+    private List<File> filterErrorFiles(List<File> files)
     {
-        for (File f : getResourceFolderFiles("")) {
-            System.out.println(f);
+        List<File> legalFiles = new ArrayList<>();
+        for (File f : files)
+        {
+            try {
+                Settings settings = FileManager.loadSettings(f.getPath());
+                Map map = new Map(settings);
+
+                //if no errors thrown, can add to legalFiles
+                legalFiles.add(f);
+            }
+            catch (Exception e)
+            {
+                System.out.println("file " + f.getName() + " does not contain a legal map");
+            }
         }
+        return legalFiles;
     }
 
     private List<File> getResourceFolderFiles (String folder)
