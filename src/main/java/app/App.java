@@ -46,7 +46,6 @@ public class App extends Application
     {
         simulation = new Simulation(this);
         scene.setOnKeyTyped(e -> simulation.handleKey(e));
-
         scene.setRoot(simulation);
     }
 
@@ -54,7 +53,6 @@ public class App extends Application
     {
         simulation = new Simulation(this, fileName);
         scene.setOnKeyTyped(e -> simulation.handleKey(e));
-
         scene.setRoot(simulation);
     }
 
