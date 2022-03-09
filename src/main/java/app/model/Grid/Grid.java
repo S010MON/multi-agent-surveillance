@@ -25,6 +25,7 @@ public class Grid
     public Grid(double length, double width, CellType type, double cellSize)
     {
         //Addition of single cell to accomodate for 0 cells
+        this.cellSize = cellSize;
         rowSize = (int) (Math.ceil(length / cellSize) + 1);
         colSize = (int) (Math.ceil(width / cellSize) + 1);
         this.type = type;
