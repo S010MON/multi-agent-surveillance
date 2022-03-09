@@ -40,6 +40,22 @@ public class FurniturePane extends StackPane
         }
     }
 
+    public boolean checkSettings()
+    {
+        boolean guard = false;
+        boolean intruder = false;
+        for(MbObject object : displayPane.getObjects())
+        {
+            if(object.getType() == FurnitureType.GUARD_SPAWN)
+                guard = true;
+
+            if(object.getType() == FurnitureType.INTRUDER_SPAWN)
+                intruder = true;
+        }
+
+        return guard && intruder;
+    }
+
     private void loadButtons(VBox vbox)
     {
         // Furniture type enums
