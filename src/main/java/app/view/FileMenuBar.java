@@ -18,7 +18,7 @@ public class FileMenuBar extends MenuBar
         Menu file = new Menu("File");
 
         MenuItem newFile = new MenuItem("New");
-        newFile.setOnAction(e -> System.out.println("Test new..."));
+        newFile.setOnAction(e -> app.gotoStart());
         file.getItems().add(newFile);
 
         MenuItem openFile = new MenuItem("Open");
