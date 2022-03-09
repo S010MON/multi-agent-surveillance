@@ -1,10 +1,17 @@
 package app.view;
 
 import app.App;
+import app.controller.io.FilePath;
 import app.view.mapBuilder.DisplayPane;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileMenuBar extends MenuBar
 {
@@ -22,7 +29,9 @@ public class FileMenuBar extends MenuBar
         file.getItems().add(newFile);
 
         MenuItem openFile = new MenuItem("Open");
-        openFile.setOnAction(e -> System.out.println("Test open..."));
+        // TODO: add opening of files here
+        //openFile.setOnAction(e -> System.out.println("Test open..."));
+        openFile.setOnAction(e -> printFiles());
         file.getItems().add(openFile);
 
         MenuItem undoFile = new MenuItem("Undo");
@@ -45,5 +54,31 @@ public class FileMenuBar extends MenuBar
         // Add to the Menu Bar object
         this.getMenus().add(file);
         this.getMenus().add(view);
+    }
+
+    private void printFiles()
+    {
+        for (File f : filterFiles()) {
+            System.out.println(f);
+        }
+    }
+
+    private List<File> filterFiles()
+    {
+        List<File> files = new ArrayList<>();
+        for (File f : getResourceFolderFiles(""))
+        {
+            if(f.getPath().endsWith(".txt"))
+                files.add(f);
+        }
+        return files;
+    }
+
+    private File[] getResourceFolderFiles (String folder)
+    {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(folder);
+        String path = url.getPath();
+        return new File(path).listFiles();
     }
 }
