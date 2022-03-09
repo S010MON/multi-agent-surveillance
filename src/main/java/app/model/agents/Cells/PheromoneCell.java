@@ -1,5 +1,9 @@
 package app.model.agents.Cells;
 
+import app.model.agents.ACO.AcoAgent;
+
+import java.util.ArrayList;
+
 public class PheromoneCell implements Cell
 {
     private double pheromone;

@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -54,6 +55,8 @@ public class GameEngine
             }
         }
 
+        //TODO Abstract process to lower level
+        AcoAgent.accessWorld().evaporationProcess();
         renderer.render();
     }
 

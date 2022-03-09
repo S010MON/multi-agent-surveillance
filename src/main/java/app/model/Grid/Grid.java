@@ -8,7 +8,7 @@ public class Grid
     protected int rowSize;
     protected int colSize;
     protected Cell[][] grid;
-    protected double cellSize = 1.0;
+    protected double cellSize = 15.0;
     protected CellType type;
 
 
