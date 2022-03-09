@@ -22,7 +22,7 @@ public class AcoAgentTesting
     private Vector viewDirection = new Vector(0, 1);
     private double radius = 10;
 
-    Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+    Settings settings = FileManager.loadSettings("src/main/resources/map_2_original.txt");
     GraphicsEngine graphicsEngine = new RayTracing();
     Map map = new Map(settings);
 
