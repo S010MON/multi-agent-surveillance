@@ -233,10 +233,21 @@ public class VectorTest
     @Test void testHashCodeDeterministic()
     {
         Vector u = new Vector(345, 201);
-        Integer u_hashCode = u.vectorHashCode();
+        Integer u_hashCode = u.hashCode();
 
         Vector u_copy = new Vector(345, 201);
-        Integer uCopy_hashCode = u.vectorHashCode();
+        Integer uCopy_hashCode = u_copy.hashCode();
+
+        assertEquals(u_hashCode, uCopy_hashCode);
+    }
+
+    @Test void testHashCodeDeterministicAlternative()
+    {
+        Vector u = new Vector(345.5, 201.1);
+        Integer u_hashCode = u.hashCode();
+
+        Vector u_copy = new Vector(345.5, 201.1);
+        Integer uCopy_hashCode = u_copy.hashCode();
 
         assertEquals(u_hashCode, uCopy_hashCode);
     }

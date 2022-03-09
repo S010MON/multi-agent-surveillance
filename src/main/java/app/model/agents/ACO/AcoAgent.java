@@ -23,7 +23,7 @@ public class AcoAgent extends AgentImp
     private Random randomGenerator = new Random(1);
 
     private Move previousMove;
-    private HashMap<Integer, Move> shortTermMemory = new HashMap<>();
+    private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
     //TODO Implement for memory
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
@@ -59,7 +59,8 @@ public class AcoAgent extends AgentImp
         ArrayList<Vector> equivalentMinMoves = determineEquivalentMinMoves(cellPheromones, possibleMovements);
         Vector moveVector= selectRandomEquivalentMove(equivalentMinMoves);
 
-        previousMove =  new Move(position, moveVector);
+        previousMove = new Move(position, moveVector);
+
         return previousMove;
     }
 
@@ -88,25 +89,25 @@ public class AcoAgent extends AgentImp
 
         if(previousMove.getEndDir().equals(position))
         {
+            shortTermMoveMemory.put(previousMove.getDeltaPos().hashCode(), previousMove.getDeltaPos());
             possibleMovements = resolveAgentMovementClash(possibleMovements);
+        }
+        else
+        {
+            shortTermMoveMemory.clear();
         }
         return possibleMovements;
     }
 
-    /*
-    Case 1: There exists multiple possible other moves to select from
-     */
     public ArrayList<Vector> resolveAgentMovementClash(ArrayList<Vector> possibleMoves)
     {
         ArrayList<Vector> modifiedPossibleMoves = new ArrayList<>();
-        if(possibleMoves.size() > 1)
+        for(Vector move: possibleMoves)
         {
-            for(Vector move: possibleMoves)
+            Integer testing = move.hashCode();
+            if(shortTermMoveMemory.get(move.hashCode()) == null)
             {
-                if(!move.equals(previousMove.getDeltaPos()))
-                {
-                    modifiedPossibleMoves.add(move);
-                }
+                modifiedPossibleMoves.add(move);
             }
         }
         return modifiedPossibleMoves;

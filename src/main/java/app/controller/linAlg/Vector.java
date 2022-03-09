@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -94,9 +96,11 @@ public class Vector
         return false;
     }
 
-    public Integer vectorHashCode()
+
+    @Override
+    public int hashCode()
     {
-        return this.hashCode();
+        return Objects.hash(this.x, this.y);
     }
 
     public Vector findPointOnCircle(double r, double theta)
