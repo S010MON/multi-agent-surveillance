@@ -52,9 +52,22 @@ public class AcoAgentTesting
     }
 
     @Test
-    void testAgentClashResolutionShortTermMeoryClearing()
+    void testAgentClashResolutionShortTermMemoryClearing()
     {
+        AcoAgent agent_1 = new AcoAgent(position, viewDirection, radius);
+        agent_1.updateView(graphicsEngine.compute(map, agent_1));
 
+        //Agent not updated to simulate invalid move
+        Move selectedMove = agent_1.move();
+        Move alternativeSelectedMove = agent_1.move();
+        assertEquals(agent_1.accessShortTermMemory().size(), 2);
+
+        //Update agent and request a new move to refresh short term memory
+        agent_1.updateLocation(new Vector(16, 16));
+        agent_1.updateView(graphicsEngine.compute(map, agent_1));
+
+        Move nextMove = agent_1.move();
+        assertEquals(agent_1.accessShortTermMemory().size(), 0);
     }
 
     @Test

@@ -262,9 +262,8 @@ public class AcoAgent extends AgentImp
         AcoMoveCount = 0;
     }
 
-    //TODO Finish method to allow testing of Short Term Meory Clearance
-    public HashMap<Integer, Vector> accessShortTermMemeory()
+    public HashMap<Integer, Vector> accessShortTermMemory()
     {
-
+        return shortTermMoveMemory;
     }
 }
