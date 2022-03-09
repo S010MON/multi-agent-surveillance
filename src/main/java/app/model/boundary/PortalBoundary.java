@@ -1,5 +1,6 @@
 package app.model.boundary;
 
+import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import lombok.Getter;
 
@@ -11,5 +12,17 @@ public class PortalBoundary extends BoundaryImp
     {
         super(a, b);
         this.teleport = teleport;
+    }
+
+    @Override
+    public boolean isHit(Ray ray)
+    {
+        return false; // Overrides super -> light goes through it
+    }
+
+    @Override
+    public Vector intersection(Ray ray)
+    {
+        return null; // Overrides super -> light goes through it
     }
 }

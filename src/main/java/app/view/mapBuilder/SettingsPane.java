@@ -1,6 +1,7 @@
 package app.view.mapBuilder;
 
 import app.controller.settings.Settings;
+import app.controller.settings.SettingsGenerator;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,7 +14,6 @@ import javafx.scene.text.FontWeight;
 public class SettingsPane extends StackPane
 {
     private StartMenu startMenu;
-    private Settings s;
     private TextField name;
     private TextField mode;
     private TextField w;
@@ -25,10 +25,10 @@ public class SettingsPane extends StackPane
     private TextField sGuard;
     private TextField sIntruder;
 
-    public SettingsPane(StartMenu startMenu, Settings s)
+    public SettingsPane(StartMenu startMenu)
     {
         this.startMenu = startMenu;
-        this.s = s;
+        Settings s = SettingsGenerator.mockSettings();;
         this.setPrefWidth(300);
 
         // Labels displaying current settings information.
@@ -77,9 +77,11 @@ public class SettingsPane extends StackPane
         w = new TextField();
         w.setMaxWidth(100);
         w.setText(""+s.getWidth());
+        w.textProperty().addListener((observable, oldValue, newValue) -> startMenu.getDisplayPane().draw());
         h = new TextField();
         h.setMaxWidth(100);
         h.setText(""+s.getHeight());
+        h.textProperty().addListener((observable, oldValue, newValue) -> startMenu.getDisplayPane().draw());
         noGuards = new TextField();
         noGuards.setMaxWidth(100);
         noGuards.setText(""+s.getNoOfGuards());
@@ -138,17 +140,19 @@ public class SettingsPane extends StackPane
         return Integer.parseInt(h.getText());
     }
 
-    public void getSettings()
+    public Settings getSettings()
     {
-        s.setName(name.getText());
-        s.setGameMode(Integer.parseInt(mode.getText()));
-        s.setWidth(Integer.parseInt(w.getText()));
-        s.setHeight(Integer.parseInt(h.getText()));
-        s.setNoOfGuards(Integer.parseInt(noGuards.getText()));
-        s.setNoOfIntruders(Integer.parseInt(noIntruders.getText()));
-        s.setWalkSpeedGuard(Double.parseDouble(bGuard.getText()));
-        s.setWalkSpeedIntruder(Double.parseDouble(bIntruder.getText()));
-        s.setSprintSpeedGuard(Double.parseDouble(sGuard.getText()));
-        s.setWalkSpeedIntruder(Double.parseDouble(sIntruder.getText()));
+        Settings settings = new Settings();
+        settings.setName(name.getText());
+        settings.setGameMode(Integer.parseInt(mode.getText()));
+        settings.setWidth(Integer.parseInt(w.getText()));
+        settings.setHeight(Integer.parseInt(h.getText()));
+        settings.setNoOfGuards(Integer.parseInt(noGuards.getText()));
+        settings.setNoOfIntruders(Integer.parseInt(noIntruders.getText()));
+        settings.setWalkSpeedGuard(Double.parseDouble(bGuard.getText()));
+        settings.setWalkSpeedIntruder(Double.parseDouble(bIntruder.getText()));
+        settings.setSprintSpeedGuard(Double.parseDouble(sGuard.getText()));
+        settings.setWalkSpeedIntruder(Double.parseDouble(sIntruder.getText()));
+        return settings;
     }
 }

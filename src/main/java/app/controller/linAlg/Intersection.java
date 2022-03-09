@@ -127,6 +127,8 @@ public abstract class Intersection
 
     public static boolean hasIntersection(Ray ray, Vector center, double radius)
     {
+        double direction = ray.angle();
+
         double baX = ray.getV().getX() - ray.getU().getX();
         double baY = ray.getV().getY() - ray.getU().getY();
         double caX = center.getX() - ray.getU().getX();

@@ -2,25 +2,18 @@ package app.view.mapBuilder;
 
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayDeque;
 
 public class FurniturePane extends StackPane
 {
     @Getter private FurnitureType currentType;
     @Getter private boolean portal = false;
-    private TextField x;
-    private TextField y;
     private StartMenu startMenu;
     private DisplayPane displayPane;
     private final int BUTTON_WIDTH = 140;
@@ -36,7 +29,18 @@ public class FurniturePane extends StackPane
         this.getChildren().addAll(vbox);
     }
 
-    public void loadButtons(VBox vbox)
+    public void getSettings(Settings s)
+    {
+        for(MbObject object : displayPane.getObjects())
+        {
+            if(object.getType() == FurnitureType.PORTAL)
+                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
+            else
+                s.addFurniture(object.getRect(), object.getType());
+        }
+    }
+
+    private void loadButtons(VBox vbox)
     {
         // Furniture type enums
         Label furniture = new Label("Furniture Items:");
@@ -66,32 +70,5 @@ public class FurniturePane extends StackPane
     private void handleActionEvent(ActionEvent e, FurnitureType type)
     {
         currentType = type;
-    }
-
-    public void getSettings(Settings s)
-    {
-        for(MbObject object : displayPane.getObjects())
-        {
-            if(object.getType() == FurnitureType.PORTAL)
-                s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
-            else
-                s.addFurniture(object.getRect(), object.getType());
-        }
-    }
-
-    public boolean checkSettings()
-    {
-        boolean guard = false;
-        boolean intruder = false;
-        for(MbObject object : displayPane.getObjects())
-        {
-            if(object.getType() == FurnitureType.GUARD_SPAWN)
-                guard = true;
-
-            if(object.getType() == FurnitureType.INTRUDER_SPAWN)
-                intruder = true;
-        }
-
-        return guard && intruder;
     }
 }
