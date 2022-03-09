@@ -35,6 +35,10 @@ public class Map
         System.out.print("Loading settings ... ");
         this.settings = settings;
 
+        //TODO Make dynamic and singleton pattern
+        /* Initialize Aco World */
+        AcoAgent.initializeWorld(settings.getWidth(), settings.getHeight());
+
         /* Make furniture */
         furniture = new ArrayList<>();
         settings.getFurniture().forEach(e -> addFurniture(e));
@@ -51,8 +55,8 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = new Vector(randX(guardSpawn), randY(guardSpawn));
-            Vector dir = randDirection();
-            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
+            Vector dir = new Vector(0, 1);
+            AcoAgent guard = new AcoAgent(srt, dir, 10);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);

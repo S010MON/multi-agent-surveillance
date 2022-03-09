@@ -1,8 +1,8 @@
 name = map_1
 gameFile = //
 gameMode = 44
-height = 95
-width = 144
+height = 600
+width = 600
 scaling = 0.2
 numGuards = 7
 numIntruders = 4

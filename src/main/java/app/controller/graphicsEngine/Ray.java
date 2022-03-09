@@ -19,12 +19,6 @@ public class Ray
         this.v = v;
     }
 
-    //TODO Delete if unnecessary
-//    public double getAngle()
-//    {
-//        return angle;
-//    }
-
     public double angle()
     {
         return v.sub(u).getAngle();
