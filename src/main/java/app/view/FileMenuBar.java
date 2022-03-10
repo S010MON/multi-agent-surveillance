@@ -50,6 +50,8 @@ public class FileMenuBar extends MenuBar
 
 
         FileChooser fileChooser = new FileChooser();
+        String directory = FilePath.get("");
+        fileChooser.setInitialDirectory(new File(directory));
         MenuItem openFile = new MenuItem("Open");
 
         // create an Event Handler
