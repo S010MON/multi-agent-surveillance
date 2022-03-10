@@ -25,10 +25,16 @@ public class FileMenuBar extends MenuBar
         openFile.setOnAction(e -> System.out.println("Test open..."));
         file.getItems().add(openFile);
 
+        /* Edit menu */
+        Menu edit = new Menu("Edit");
+
         MenuItem undoFile = new MenuItem("Undo");
         undoFile.setOnAction(e -> app.getStartMenu().getDisplayPane().undo());
-        file.getItems().add(undoFile);
+        edit.getItems().add(undoFile);
 
+        MenuItem clear = new MenuItem("Clear");
+        clear.setOnAction(e -> app.getStartMenu().getDisplayPane().clear());
+        edit.getItems().add(clear);
 
         /* View menu */
         Menu view = new Menu("View");
@@ -43,7 +49,6 @@ public class FileMenuBar extends MenuBar
 
 
         // Add to the Menu Bar object
-        this.getMenus().add(file);
-        this.getMenus().add(view);
+        this.getMenus().addAll(file, edit, view);
     }
 }
