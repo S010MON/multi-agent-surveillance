@@ -1,6 +1,8 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundBlockingBlock;
+import app.controller.soundEngine.SoundFurniture;
 import app.controller.soundEngine.SoundSource;
 import app.controller.soundEngine.SoundSourceBase;
 import app.model.furniture.Furniture;
@@ -32,6 +34,7 @@ public class Settings
     private double scaling;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
     private ArrayList<SoundSource> soundSources = new ArrayList<>();
+    private ArrayList<SoundFurniture> soundFurniture = new ArrayList<>();
 
     public void addFurniture(Rectangle2D rectangle, FurnitureType type)
     {
@@ -52,5 +55,9 @@ public class Settings
         return furniture.stream()
                 .filter(obj -> obj.getType() == type)
                 .toList();
+    }
+
+    public void addSoundFurniture(Rectangle2D rectangle2D) {
+        soundFurniture.add(new SoundBlockingBlock(rectangle2D));
     }
 }
