@@ -54,11 +54,8 @@ public class App extends Application
 
     public void gotoSimulation(String fileName)
     {
-        if(simulation == null)
-        {
-            simulation = new Simulation(this, fileName);
-            scene.setOnKeyTyped(e -> simulation.handleKey(e));
-        }
+        simulation = new Simulation(this, fileName);
+        scene.setOnKeyTyped(e -> simulation.handleKey(e));
         scene.setRoot(simulation);
     }
 
