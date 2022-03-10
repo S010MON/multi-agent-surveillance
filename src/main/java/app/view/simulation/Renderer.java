@@ -30,7 +30,6 @@ public class Renderer extends Canvas
         setOnMouseReleased(this::mouseReleased);
         setOnMouseDragged(this::mouseDragged);
         setOnScroll(this::handleScroll);
-        Info.getInfo().setZoom(1.5);
         render();
     }
 
