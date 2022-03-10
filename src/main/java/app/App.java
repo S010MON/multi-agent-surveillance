@@ -32,9 +32,15 @@ public class App extends Application
         scene = new Scene(startMenu, ScreenSize.width, ScreenSize.height);
 
         // Shortcuts
+        // Undoing
         KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-        Runnable r = () -> startMenu.getDisplayPane().undo();
-        scene.getAccelerators().put(ctrlZ, r);
+        Runnable r1 = () -> startMenu.getDisplayPane().undo();
+        scene.getAccelerators().put(ctrlZ, r1);
+
+        // Clearing
+        KeyCombination ctrlBackspace = new KeyCodeCombination(KeyCode.BACK_SPACE, KeyCombination.CONTROL_DOWN);
+        Runnable r2 = () -> startMenu.getDisplayPane().clear();
+        scene.getAccelerators().put(ctrlBackspace, r2);
 
         stage.setScene(scene);
         stage.show();
@@ -57,11 +63,8 @@ public class App extends Application
 
     public void gotoSimulation(String fileName)
     {
-        if(simulation == null)
-        {
-            simulation = new Simulation(this, fileName);
-            scene.setOnKeyTyped(e -> simulation.handleKey(e));
-        }
+        simulation = new Simulation(this, fileName);
+        scene.setOnKeyTyped(e -> simulation.handleKey(e));
         scene.setRoot(simulation);
     }
 

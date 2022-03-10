@@ -32,7 +32,16 @@ public class FileMenuBar extends MenuBar
         Menu file = new Menu("File");
 
         MenuItem newFile = new MenuItem("New");
-        newFile.setOnAction(e -> System.out.println("Test new..."));
+        newFile.setOnAction(e ->
+        {
+            if(Alert.askAlert("Warning...", "By clicking continue, any changes currently" +
+                                                        " in the map builder not saved to a file will" +
+                                                        " be lost."))
+            {
+                app.getStartMenu().getDisplayPane().clear();
+                app.gotoStart();
+            }
+        });
         file.getItems().add(newFile);
 
 
@@ -72,11 +81,16 @@ public class FileMenuBar extends MenuBar
         openFile.setOnAction(eventOpen);
         file.getItems().add(openFile);
 
+        /* Edit menu */
+        Menu edit = new Menu("Edit");
 
         MenuItem undoFile = new MenuItem("Undo");
         undoFile.setOnAction(e -> app.getStartMenu().getDisplayPane().undo());
-        file.getItems().add(undoFile);
+        edit.getItems().add(undoFile);
 
+        MenuItem clear = new MenuItem("Clear");
+        clear.setOnAction(e -> app.getStartMenu().getDisplayPane().clear());
+        edit.getItems().add(clear);
 
         /* View menu */
         Menu view = new Menu("View");
@@ -91,42 +105,6 @@ public class FileMenuBar extends MenuBar
 
 
         // Add to the Menu Bar object
-        this.getMenus().add(file);
-        this.getMenus().add(view);
-    }
-
-    private List<File> filterErrorFiles(List<File> files)
-    {
-        List<File> legalFiles = new ArrayList<>();
-        for (File f : files)
-        {
-            try {
-                Settings settings = FileManager.loadSettings(f.getPath());
-                Map map = new Map(settings);
-
-                //if no errors thrown, can add to legalFiles
-                legalFiles.add(f);
-            }
-            catch (Exception e)
-            {
-                System.out.println("file " + f.getName() + " does not contain a legal map");
-            }
-        }
-        return legalFiles;
-    }
-
-    private List<File> getResourceFolderFiles (String folder)
-    {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL url = loader.getResource(folder);
-        String path = url.getPath();
-
-        List<File> files = new ArrayList<>();
-        for (File f : new File(path).listFiles())
-        {
-            if(f.getPath().endsWith(".txt"))
-                files.add(f);
-        }
-        return files;
+        this.getMenus().addAll(file, edit, view);
     }
 }
