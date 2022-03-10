@@ -11,6 +11,7 @@ import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
@@ -36,6 +37,9 @@ public class Map
 
         /* Make furniture */
         furniture = new ArrayList<>();
+        Rectangle2D rect = new Rectangle2D(0, 0, settings.getWidth(), settings.getHeight());
+        SettingsObject border = new SettingsObject(rect, FurnitureType.BORDER);
+        addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
 
         /* Make sound furniture */
