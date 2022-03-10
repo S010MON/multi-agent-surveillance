@@ -49,17 +49,9 @@ public class Alert
         lbl.setText(message);
 
         Button continueButton = new Button("continue");
-        continueButton.setOnAction(e ->
-        {
-            response = true;
-            window.close();
-        });
+        continueButton.setOnAction(e -> handleContinue(window));
         Button cancelButton = new Button("cancel");
-        cancelButton.setOnAction(e ->
-        {
-            response = false;
-            window.close();
-        });
+        cancelButton.setOnAction(e -> handleCancel(window));
 
         HBox hLayout = new HBox(25);
         hLayout.getChildren().addAll(continueButton, cancelButton);
@@ -74,5 +66,17 @@ public class Alert
         window.showAndWait();
 
         return response;
+    }
+
+    private static void handleContinue(Stage window)
+    {
+        response = true;
+        window.close();
+    }
+
+    private static void handleCancel(Stage window)
+    {
+        response = false;
+        window.close();
     }
 }
