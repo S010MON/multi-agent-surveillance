@@ -51,15 +51,13 @@ public class SoundBlockingWall implements SoundBoundary{
             return false;
         }
 
-        if(b.getX() == a.getX()){
-            double t = (point.getY() - a.getY()) / (b.getY() - a.getY());
+        double t;
+        if(b.getX() == a.getX())
+            t = (point.getY() - a.getY()) / (b.getY() - a.getY());
+        else
+            t = (point.getX() - a.getX()) / (b.getX() - a.getX());
 
-            return  t <= 1 && t >= 0;
-        } else {
-            double t = (point.getX() - a.getX()) / (b.getX() - a.getX());
-
-            return  t <= 1 && t >= 0;
-        }
+        return  t <= 1 && t >= 0;
     }
 
     @Override

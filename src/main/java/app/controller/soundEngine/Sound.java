@@ -33,10 +33,15 @@ public class Sound {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Sound sound = (Sound) o;
-        return Double.compare(sound.amplitude, amplitude) == 0 && soundSource.equals(sound.soundSource) && direction.equals(sound.direction) && listenerPos.equals(sound.listenerPos);
+        return Double.compare(sound.amplitude, amplitude) == 0 &&
+                soundSource.equals(sound.soundSource) &&
+                direction.equals(sound.direction) &&
+                listenerPos.equals(sound.listenerPos);
     }
 
     @Override
