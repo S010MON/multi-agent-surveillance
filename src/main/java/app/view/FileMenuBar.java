@@ -18,7 +18,16 @@ public class FileMenuBar extends MenuBar
         Menu file = new Menu("File");
 
         MenuItem newFile = new MenuItem("New");
-        newFile.setOnAction(e -> app.gotoStart());
+        newFile.setOnAction(e ->
+        {
+            if(Alert.askAlert("Warning...", "By clicking continue, any changes currently" +
+                                                        " in the map builder not saved to a file will" +
+                                                        " be lost."))
+            {
+                app.getStartMenu().getDisplayPane().clear();
+                app.gotoStart();
+            }
+        });
         file.getItems().add(newFile);
 
         MenuItem openFile = new MenuItem("Open");
