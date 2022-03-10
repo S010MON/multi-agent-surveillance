@@ -5,7 +5,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
-import app.model.agents.WallFollowAgent;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;

@@ -7,16 +7,17 @@ import app.controller.soundEngine.SoundFurniture;
 import app.controller.soundEngine.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.Human;
-import app.model.agents.WallFollowAgent;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.view.simulation.Info;
-import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+
+import java.util.ArrayList;
 
 public class Map
 {
