@@ -48,6 +48,8 @@ public class FileMenuBar extends MenuBar
         file.getItems().add(openFile);
         */
 
+
+        FileChooser fileChooser = new FileChooser();
         MenuItem openFile = new MenuItem("Open");
 
         // create an Event Handler
@@ -57,7 +59,7 @@ public class FileMenuBar extends MenuBar
                     public void handle(ActionEvent e)
                     {
                         // get the file selected
-                        File file = app.getFileChooser().showOpenDialog(app.getStage());
+                        File file = fileChooser.showOpenDialog(app.getStage());
 
                         if (file != null) {
                             app.gotoSimulation(file.getName());

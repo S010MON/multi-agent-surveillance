@@ -19,7 +19,6 @@ public class App extends Application
     @Getter private FileMenuBar fileMenuBar;
     @Getter private StartMenu startMenu;
     @Getter private Stage stage;
-    @Getter private FileChooser fileChooser;
     private Simulation simulation;
 
     @Override
@@ -31,10 +30,6 @@ public class App extends Application
 
         startMenu = new StartMenu(this);
         scene = new Scene(startMenu, ScreenSize.width, ScreenSize.height);
-
-        // fileChooser
-        fileChooser = new FileChooser();
-
 
         // Shortcuts
         KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
