@@ -6,9 +6,13 @@ import app.controller.io.FilePath;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.view.mapBuilder.DisplayPane;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.net.URL;
@@ -33,6 +37,7 @@ public class FileMenuBar extends MenuBar
 
 
         /* Open file menu*/
+        /*
         Menu openFile = new Menu("Open");
         for(File f: filterErrorFiles(getResourceFolderFiles("")))
         {
@@ -41,7 +46,27 @@ public class FileMenuBar extends MenuBar
             fileOption.setOnAction(e -> app.gotoSimulation(f.getName()));
         }
         file.getItems().add(openFile);
+        */
 
+        MenuItem openFile = new MenuItem("Open");
+
+        // create an Event Handler
+        EventHandler<ActionEvent> eventOpen =
+                new EventHandler<ActionEvent>() {
+
+                    public void handle(ActionEvent e)
+                    {
+                        // get the file selected
+                        File file = app.getFileChooser().showOpenDialog(app.getStage());
+
+                        if (file != null) {
+                            app.gotoSimulation(file.getName());
+                        }
+                        System.out.println("clicked on openFile");
+                    }
+                };
+        openFile.setOnAction(eventOpen);
+        file.getItems().add(openFile);
 
 
         MenuItem undoFile = new MenuItem("Undo");
