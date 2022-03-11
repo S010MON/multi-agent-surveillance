@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-//TODO Accomodate for agents clashes
+//TODO Accommodate for agents clashes
 public class AcoAgent extends AgentImp
 {
     private static AcoGrid world = new AcoGrid();
@@ -141,11 +141,10 @@ public class AcoAgent extends AgentImp
         }
         else
         {
-            ArrayList<Vector> rememberedMoves =  new ArrayList<Vector>(shortTermMoveMemory.values());
+            ArrayList<Vector> rememberedMoves =  new ArrayList<>(shortTermMoveMemory.values());
             int randomIndex =  randomGenerator.nextInt(rememberedMoves.size());
             return rememberedMoves.get(randomIndex);
         }
-
     }
 
     public ArrayList<Double> accessAvaliableCellPheromones(ArrayList<Vector> possibleMovements)
