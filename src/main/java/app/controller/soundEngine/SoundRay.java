@@ -1,6 +1,5 @@
 package app.controller.soundEngine;
 
-import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -8,7 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class SoundRay {
+public class SoundRay
+{
     @Getter private Vector start;
     @Getter private Vector end;
 
