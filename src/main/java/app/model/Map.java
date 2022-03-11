@@ -14,6 +14,8 @@ import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import java.util.ArrayList;
+import java.util.List;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -163,12 +165,20 @@ public class Map
     private Vector getTargetDirection(Vector position)
     {
         Vector target = getTargetCentre();
-        return target.sub(position).normalise();
+        if(target!=null) {
+            return target.sub(position).normalise();
+        }
+        return null;
     }
 
     private Vector getTargetCentre()
     {
-        SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
-        return new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
+        List<SettingsObject> targetList = settings.getFurniture(FurnitureType.TARGET);
+        if(targetList.size()!=0)
+        {
+            SettingsObject target = targetList.get(0);
+            return new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
+        }
+        return null;
     }
 }
