@@ -1,4 +1,4 @@
-package app.controller.soundEngine;
+package app.model.soundSource;
 
 
 import app.controller.linAlg.Vector;

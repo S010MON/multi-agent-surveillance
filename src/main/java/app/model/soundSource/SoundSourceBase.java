@@ -1,12 +1,13 @@
-package app.controller.soundEngine;
+package app.model.soundSource;
 
 
 import app.controller.linAlg.Vector;
+import app.model.soundSource.SoundSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class SoundSourceBase implements SoundSource{
+public class SoundSourceBase implements SoundSource {
     @Getter private Vector position;
     private double amplitude;
 
