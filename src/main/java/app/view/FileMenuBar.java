@@ -18,17 +18,32 @@ public class FileMenuBar extends MenuBar
         Menu file = new Menu("File");
 
         MenuItem newFile = new MenuItem("New");
-        newFile.setOnAction(e -> System.out.println("Test new..."));
+        newFile.setOnAction(e ->
+        {
+            if(Alert.askAlert("Warning...", "By clicking continue, any changes currently" +
+                                                        " in the map builder not saved to a file will" +
+                                                        " be lost."))
+            {
+                app.getStartMenu().getDisplayPane().clear();
+                app.gotoStart();
+            }
+        });
         file.getItems().add(newFile);
 
         MenuItem openFile = new MenuItem("Open");
         openFile.setOnAction(e -> System.out.println("Test open..."));
         file.getItems().add(openFile);
 
+        /* Edit menu */
+        Menu edit = new Menu("Edit");
+
         MenuItem undoFile = new MenuItem("Undo");
         undoFile.setOnAction(e -> app.getStartMenu().getDisplayPane().undo());
-        file.getItems().add(undoFile);
+        edit.getItems().add(undoFile);
 
+        MenuItem clear = new MenuItem("Clear");
+        clear.setOnAction(e -> app.getStartMenu().getDisplayPane().clear());
+        edit.getItems().add(clear);
 
         /* View menu */
         Menu view = new Menu("View");
@@ -43,7 +58,6 @@ public class FileMenuBar extends MenuBar
 
 
         // Add to the Menu Bar object
-        this.getMenus().add(file);
-        this.getMenus().add(view);
+        this.getMenus().addAll(file, edit, view);
     }
 }

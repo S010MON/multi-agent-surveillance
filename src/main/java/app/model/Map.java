@@ -39,7 +39,7 @@ public class Map
         settings.getFurniture().forEach(e -> addFurniture(e));
 
         /* Make sound furniture */
-        soundFurniture = new ArrayList<>();
+        soundFurniture = settings.getSoundFurniture();
 
         /* Make some sound sources */
         soundSources = settings.getSoundSources();

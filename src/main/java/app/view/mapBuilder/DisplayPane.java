@@ -76,6 +76,12 @@ public class DisplayPane extends Canvas
         draw();
     }
 
+    public void clear()
+    {
+        objects.clear();
+        draw();
+    }
+
     private void mousePressed(MouseEvent e)
     {
         click = new Point2D(e.getX(), e.getY());
