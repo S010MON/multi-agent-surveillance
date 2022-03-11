@@ -3,8 +3,6 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.controller.soundEngine.SoundFurniture;
-import app.controller.soundEngine.SoundSource;
 import app.model.agents.ACO.AcoAgent;
 import app.model.soundFurniture.SoundFurniture;
 import app.model.soundSource.SoundSource;

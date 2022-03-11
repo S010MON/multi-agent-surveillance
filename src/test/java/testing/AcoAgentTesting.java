@@ -2,7 +2,6 @@ package testing;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
-import app.controller.graphicsEngine.RayTracing;
 import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
@@ -25,7 +24,7 @@ public class AcoAgentTesting
     private double radius = 10;
 
     Settings settings = FileManager.loadSettings("src/main/resources/map_2_original.txt");
-    GraphicsEngine graphicsEngine = new RayTracing();
+    GraphicsEngine graphicsEngine = new GraphicsEngine();
     Map map = new Map(settings);
 
     @BeforeEach

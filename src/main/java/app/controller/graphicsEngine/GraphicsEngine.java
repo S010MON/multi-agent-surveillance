@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GraphicsEngine
 {
-    private double angle = 180; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
+    private double angle = 181; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
     public ArrayList<Ray> compute(Map map, Agent agent)
     {
