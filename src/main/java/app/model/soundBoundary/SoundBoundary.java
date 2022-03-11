@@ -1,6 +1,7 @@
-package app.controller.soundEngine;
+package app.model.soundBoundary;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -16,7 +17,4 @@ public interface SoundBoundary {
     boolean intersects(SoundRay soundRay);
 
     boolean onSegment(Vector point);
-
-    // should be the projection (the closest point to line) of a point onto the boundary (segment)
-    Vector projectOnto(Vector point);
 }
