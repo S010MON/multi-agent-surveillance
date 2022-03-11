@@ -18,14 +18,15 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter protected Vector direction;
     @Getter protected double radius;
-    @Getter @Setter protected Vector targetDirection;
+    @Getter protected Vector targetDirection;
     protected ArrayList<Ray> view;
 
-    public AgentImp(Vector position, Vector direction, double radius)
+    public AgentImp(Vector position, Vector direction, double radius, Vector targetDirection)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
+        this.targetDirection = targetDirection;
         view = new ArrayList<>();
     }
 

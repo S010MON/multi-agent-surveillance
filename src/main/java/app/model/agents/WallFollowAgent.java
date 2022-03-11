@@ -22,9 +22,9 @@ public class WallFollowAgent extends AgentImp
     private boolean DEBUG = false;
     private boolean wallEncountered = false;
 
-    public WallFollowAgent(Vector position, Vector direction, double radius)
+    public WallFollowAgent(Vector position, Vector direction, double radius, Vector targetDirection)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, targetDirection);
     }
 
     @Override

@@ -14,9 +14,9 @@ public class AcoAgent extends AgentImp
     private static AcoGrid world;
     private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
 
-    public AcoAgent(Vector position, Vector direction, double radius)
+    public AcoAgent(Vector position, Vector direction, double radius, Vector targetDirection)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, targetDirection);
         world.updateAgent(this);
     }
 

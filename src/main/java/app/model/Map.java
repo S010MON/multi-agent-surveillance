@@ -52,13 +52,9 @@ public class Map
         {
             Vector srt = new Vector(randX(guardSpawn), randY(guardSpawn));
             Vector dir = randDirection();
-            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
+            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10, getTargetDirection(srt));
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
-
-            SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
-            Vector centerTarget = new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
-            guard.setTargetDirection(centerTarget.sub(guard.getPosition()).normalise());
             agents.add(guard);
         }
 
@@ -67,18 +63,15 @@ public class Map
         {
             Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
             Vector dir = randDirection();
-            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
+            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10, getTargetDirection(srt));
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
 
-            SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
-            Vector centerTarget = new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
-            intruder.setTargetDirection(centerTarget.sub(intruder.getPosition()).normalise());
             agents.add(intruder);
         }
 
         Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
-        human = new Human(humanStart, new Vector(1,0), 10);
+        human = new Human(humanStart, new Vector(1,0), 10, getTargetDirection(humanStart));
         //Assumes the human is a guard
         human.setMaxWalk(settings.getWalkSpeedGuard());
         human.setMaxSprint(settings.getSprintSpeedGuard());
@@ -165,5 +158,17 @@ public class Map
             return new Vector(-1,0);
         else
             return new Vector(0,-1);
+    }
+
+    private Vector getTargetDirection(Vector position)
+    {
+        Vector target = getTargetCentre();
+        return target.sub(position).normalise();
+    }
+
+    private Vector getTargetCentre()
+    {
+        SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
+        return new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
     }
 }

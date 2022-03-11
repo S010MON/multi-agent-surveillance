@@ -29,7 +29,7 @@ public class WallFollowAgentTest
     //Agent setup
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1);
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, null);
 
     @Test
     void testAgentDirectionAngle()

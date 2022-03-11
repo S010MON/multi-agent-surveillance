@@ -7,9 +7,9 @@ public class Human extends AgentImp
 {
     private Vector nextMove;
 
-    public Human(Vector position, Vector direction, double radius)
+    public Human(Vector position, Vector direction, double radius, Vector targetDirection)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, targetDirection);
         nextMove = new Vector();
     }
 

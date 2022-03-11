@@ -30,7 +30,7 @@ public class SoundEngineTest {
         settings.getSoundSources().add(s1);
         settings.getSoundSources().add(s2);
 
-        Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1);
+        Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1, null);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
@@ -58,7 +58,7 @@ public class SoundEngineTest {
 
         settings.addSoundFurniture(new Rectangle2D(40, -40, 10, 160));
 
-        Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1);
+        Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1, null);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
@@ -82,7 +82,7 @@ public class SoundEngineTest {
 
         settings.getSoundSources().add(source);
 
-        Agent listener =  new AgentImp(new Vector(0,0), new Vector(), 1);
+        Agent listener =  new AgentImp(new Vector(0,0), new Vector(), 1, null);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 

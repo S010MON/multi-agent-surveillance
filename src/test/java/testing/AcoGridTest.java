@@ -17,7 +17,7 @@ public class AcoGridTest
         AcoAgent.initializeWorld(50.3, 25.7);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
+        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10, null);
         AcoGrid grid = AcoAgent.accessWorld();
 
         PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
@@ -31,7 +31,7 @@ public class AcoGridTest
         AcoAgent.initializeWorld(50.3, 25.7);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
+        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10, null);
         AcoGrid grid = AcoAgent.accessWorld();
 
         PheromoneCell cell = (PheromoneCell) grid.getCellAt(agentPosition);
@@ -49,7 +49,7 @@ public class AcoGridTest
         AcoAgent.initializeWorld(20, 20);
 
         Vector agentPosition = new Vector(10, 10);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
+        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10, null);
         AcoAgent.accessWorld().displayGridState();
 
         agent.updateLocation(new Vector(9, 9));

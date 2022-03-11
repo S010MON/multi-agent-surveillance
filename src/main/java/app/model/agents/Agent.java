@@ -35,7 +35,4 @@ public interface Agent extends Boundary
     double getRadius();
 
     Vector getTargetDirection();
-
-    void setTargetDirection(Vector targetDirection);
-
 }
