@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
-import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
@@ -25,7 +24,7 @@ public class GameEngine
     {
         this.map = map;
         this.renderer = renderer;
-        this.graphicsEngine = new RayTracing();
+        this.graphicsEngine = new GraphicsEngine();
         Timeline timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
