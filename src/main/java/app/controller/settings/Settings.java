@@ -41,7 +41,8 @@ public class Settings
         furniture.add(new SettingsObject(rectangle, vector, teleportRotation));
     }
 
-    public void addSoundSource(Vector position, double amplitude){
+    public void addSoundSource(Vector position, double amplitude)
+    {
         soundSources.add(new SettingsObject(position, amplitude));
     }
 
@@ -59,9 +60,8 @@ public class Settings
                 .toList();
     }
 
-
-
-    public void addSoundFurniture(Rectangle2D rectangle2D, FurnitureType type) {
+    public void addSoundFurniture(Rectangle2D rectangle2D, FurnitureType type)
+    {
         soundFurniture.add(new SettingsObject(rectangle2D, type));
     }
 }

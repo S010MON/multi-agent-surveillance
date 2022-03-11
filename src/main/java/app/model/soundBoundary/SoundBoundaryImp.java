@@ -5,14 +5,15 @@ import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
-public class SoundBoundaryImp implements SoundBoundary {
+public class SoundBoundaryImp implements SoundBoundary
+{
     private Vector a;
     private  Vector b;
 
-    public SoundBoundaryImp(Vector a, Vector b) {
+    public SoundBoundaryImp(Vector a, Vector b)
+    {
         // TODO handle exception where a == b, because that just leads to terrible things
 
         this.a = a;
@@ -20,7 +21,8 @@ public class SoundBoundaryImp implements SoundBoundary {
     }
 
     @Override
-    public ArrayList<Vector> getCorners(){
+    public ArrayList<Vector> getCorners()
+    {
         ArrayList<Vector> corners = new ArrayList<>();
         corners.add(a);
         corners.add(b);
@@ -41,16 +43,17 @@ public class SoundBoundaryImp implements SoundBoundary {
     }
 
     @Override
-    public boolean intersects(SoundRay soundRay) {
+    public boolean intersects(SoundRay soundRay)
+    {
         return Intersection.hasIntersection(a,b,soundRay.getStart(), soundRay.getEnd());
     }
 
     @Override
-    public boolean onSegment(Vector point) {
+    public boolean onSegment(Vector point)
+    {
         // det(AB,AM) != 0 -> AB and AM are not parallel, so M cant be on AB
-        if(b.sub(a).cross(point.sub(a)) != 0){
+        if(b.sub(a).cross(point.sub(a)) != 0)
             return false;
-        }
 
         double t;
         if(b.getX() == a.getX())

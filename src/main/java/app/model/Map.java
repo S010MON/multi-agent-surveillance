@@ -115,16 +115,19 @@ public class Map
         }
     }
 
-    public void addSoundFurniture(SettingsObject obj){
-        switch (obj.getType()){
+    public void addSoundFurniture(SettingsObject obj)
+    {
+        switch (obj.getType())
+        {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
             default -> this.soundFurniture.add(SoundFurnitureFactory.make(obj));
         }
     }
 
-    public void addSoundSource(SettingsObject obj){
-        // for now?
+    public void addSoundSource(SettingsObject obj)
+    {
+        // TODO for now?
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 

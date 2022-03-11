@@ -1,6 +1,7 @@
 package app.model.soundSource;
 
-public enum SoundSourceType {
+public enum SoundSourceType
+{
     SIREN("siren");
 
     public final String label;

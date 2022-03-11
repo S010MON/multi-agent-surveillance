@@ -8,7 +8,8 @@ import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
 
-public abstract class SoundBoundaryFactory {
+public abstract class SoundBoundaryFactory
+{
     public static ArrayList<SoundBoundary> make(SettingsObject obj)
     {
         ArrayList<SoundBoundary> objects = new ArrayList<>();
@@ -26,9 +27,7 @@ public abstract class SoundBoundaryFactory {
         switch (f)
         {
             case WALL, TOWER -> { return new SoundBoundaryImp(a, b);}
-            case GLASS -> { return  new SoundBoundaryImp(a, b);}
-            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new SoundBoundaryImp(a, b);}
-            case PORTAL -> { return new SoundBoundaryImp(a, b); }
+            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS, PORTAL -> { return new SoundBoundaryImp(a, b);}
         }
         return null;
     }

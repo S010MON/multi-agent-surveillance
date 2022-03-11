@@ -12,11 +12,13 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-public class SoundFurnitureBase implements SoundFurniture {
+public class SoundFurnitureBase implements SoundFurniture
+{
     @Getter @Setter private ArrayList<SoundBoundary> soundBoundaries;
     private ArrayList<Vector> corners;
 
-    public SoundFurnitureBase(Rectangle2D r){
+    public SoundFurnitureBase(Rectangle2D r)
+    {
         corners = new ArrayList<>();
 
         corners.add(new Vector(r.getMinX(), r.getMinY()));      // top left corner
@@ -31,12 +33,14 @@ public class SoundFurnitureBase implements SoundFurniture {
         soundBoundaries.add(new SoundBoundaryImp(corners.get(3), corners.get(0)));
     }
 
-    public SoundFurnitureBase(ArrayList<SoundBoundary> soundBoundaries){
+    public SoundFurnitureBase(ArrayList<SoundBoundary> soundBoundaries)
+    {
         setSoundBoundaries(soundBoundaries);
 
         LinkedHashSet<Vector> cornersSet = new LinkedHashSet<>();
 
-        for (SoundBoundary sb: soundBoundaries) {
+        for (SoundBoundary sb: soundBoundaries)
+        {
             cornersSet.addAll(sb.getCorners());
         }
 
@@ -44,19 +48,21 @@ public class SoundFurnitureBase implements SoundFurniture {
     }
 
     @Override
-    public boolean intersects(SoundRay soundRay) {
-
+    public boolean intersects(SoundRay soundRay)
+    {
         // first check if any of the endpoints are inside the shape
-        if(isInside(soundRay.getStart()) || isInside(soundRay.getEnd())) {
+        if(isInside(soundRay.getStart()) || isInside(soundRay.getEnd()))
             return true;
-        }
 
         // second, check if both points are on the outline
 
-        if(onOutline(soundRay.getStart()) && onOutline(soundRay.getEnd())){
+        if(onOutline(soundRay.getStart()) && onOutline(soundRay.getEnd()))
+        {
             // if both points are on the same line segment, it's fine, no intersection
-            for (SoundBoundary sb: soundBoundaries) {
-                if(sb.onSegment(soundRay.getStart()) && sb.onSegment(soundRay.getEnd())){
+            for (SoundBoundary sb: soundBoundaries)
+            {
+                if(sb.onSegment(soundRay.getStart()) && sb.onSegment(soundRay.getEnd()))
+                {
                     return false;
                 }
             }
@@ -65,50 +71,55 @@ public class SoundFurnitureBase implements SoundFurniture {
         }
 
         // the start could be on the outline
-        if(onOutline(soundRay.getStart())){
+        if(onOutline(soundRay.getStart()))
+        {
             // ignore all the segments that contain the start point and check intersections with the remaining
-            for (SoundBoundary sb: soundBoundaries) {
-                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getStart())){
+            for (SoundBoundary sb: soundBoundaries)
+            {
+                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getStart()))
                     return true;
-                }
             }
             return false;
         }
 
         // same idea for the end point
-        if(onOutline(soundRay.getEnd())){
-            for (SoundBoundary sb: soundBoundaries) {
-                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getEnd())){
+        if(onOutline(soundRay.getEnd()))
+        {
+            for (SoundBoundary sb: soundBoundaries)
+            {
+                if(sb.intersects(soundRay) && !sb.onSegment(soundRay.getEnd()))
                     return true;
-                }
             }
             return false;
         }
 
         // and here we check for intersections that pass through both sides of the shape
-        for (SoundBoundary sb: soundBoundaries) {
-            if(sb.intersects(soundRay)){
+        for (SoundBoundary sb: soundBoundaries)
+        {
+            if(sb.intersects(soundRay))
                 return true;
-            }
         }
         return false;
     }
 
     @Override
-    public boolean hitsCorner(SoundRay soundRay){
-        if(!corners.contains(soundRay.getEnd())) {
+    public boolean hitsCorner(SoundRay soundRay)
+    {
+        if(!corners.contains(soundRay.getEnd()))
             return false;
-        }
 
-        for (SoundBoundary sb: soundBoundaries) {
-            if(sb.getCorners().contains(soundRay.getEnd())){
-                for (SoundBoundary remaining : soundBoundaries) {
-                    if(remaining.getCorners().contains(soundRay.getEnd())){
+        for (SoundBoundary sb: soundBoundaries)
+        {
+            if(sb.getCorners().contains(soundRay.getEnd()))
+            {
+                for (SoundBoundary remaining : soundBoundaries)
+                {
+                    if(remaining.getCorners().contains(soundRay.getEnd()))
                         continue;
-                    }
-                    if(remaining.intersection(soundRay) != null){
+
+                    if(remaining.intersection(soundRay) != null)
                         return false;
-                    }
+
                 }
             }
         }
@@ -116,24 +127,24 @@ public class SoundFurnitureBase implements SoundFurniture {
     }
 
     @Override
-    public void draw(GraphicsContext gc) {
+    public void draw(GraphicsContext gc) {}
 
-    }
-
-    public boolean onOutline(Vector pos){
-        for (SoundBoundary sb: soundBoundaries) {
-            if(sb.onSegment(pos)){
+    public boolean onOutline(Vector pos)
+    {
+        for (SoundBoundary sb: soundBoundaries)
+        {
+            if(sb.onSegment(pos))
                 return true;
-            }
         }
         return false;
     }
 
     @Override
-    public boolean isInside(Vector pos) {
-        if(onOutline(pos)){
+    public boolean isInside(Vector pos)
+    {
+        if(onOutline(pos))
             return false;
-        }
+
         // https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
         // checks if point is inside the bounds of the polygon, excluding(!!) the borders
         // horizontal ray to the right
@@ -142,13 +153,13 @@ public class SoundFurnitureBase implements SoundFurniture {
 
         int count = 0;
 
-        for (SoundBoundary sb: soundBoundaries) {
-            if(sb.intersects(comparisonRay)) {
+        for (SoundBoundary sb: soundBoundaries)
+        {
+            if(sb.intersects(comparisonRay))
                 count++;
-            }
+
         }
 
         return count % 2 == 1;
-
     }
 }

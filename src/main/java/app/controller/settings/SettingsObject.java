@@ -36,7 +36,8 @@ public class SettingsObject extends Rectangle2D
         this.amplitude = 0.0;
     }
 
-    public SettingsObject(Vector position, double amplitude){
+    public SettingsObject(Vector position, double amplitude)
+    {
         super(position.getX(), position.getY(), 0,0);
         this.amplitude = amplitude;
     }

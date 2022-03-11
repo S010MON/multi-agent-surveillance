@@ -1,18 +1,18 @@
 package app.model.soundSource;
 
-
 import app.controller.linAlg.Vector;
-import app.model.soundSource.SoundSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class SoundSourceBase implements SoundSource {
+public class SoundSourceBase implements SoundSource
+{
     @Getter private Vector position;
     private double amplitude;
 
     @Override
-    public double soundLevelFrom(Vector listener, int diffractionCount) {
+    public double soundLevelFrom(Vector listener, int diffractionCount)
+    {
             // this could be put this input a config
             double dropOff = 1.0;
             double diffractionPenalty = 0.05;
