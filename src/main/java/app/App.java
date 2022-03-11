@@ -15,8 +15,10 @@ import lombok.Getter;
 public class App extends Application
 {
     private Scene scene;
-    @Getter private FileMenuBar fileMenuBar;
-    @Getter private StartMenu startMenu;
+    @Getter
+    private FileMenuBar fileMenuBar;
+    @Getter
+    private StartMenu startMenu;
     private Simulation simulation;
 
     @Override
@@ -50,7 +52,7 @@ public class App extends Application
 
     public void gotoSimulation()
     {
-        if(simulation == null)
+        if (simulation == null)
         {
             simulation = new Simulation(this);
             scene.setOnKeyTyped(e -> simulation.handleKey(e));
