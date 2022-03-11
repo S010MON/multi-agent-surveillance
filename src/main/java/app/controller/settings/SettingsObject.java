@@ -10,6 +10,7 @@ public class SettingsObject extends Rectangle2D
     @Getter private FurnitureType type;
     @Getter private Vector teleportTo;
     @Getter private Double teleportRotation;
+    @Getter private Double amplitude;
 
     public SettingsObject(Rectangle2D rectangle, FurnitureType type)
     {
@@ -20,6 +21,7 @@ public class SettingsObject extends Rectangle2D
         this.type = type;
         this.teleportTo = null;
         this.teleportRotation = null;
+        this.amplitude = 0.0;
     }
 
     public SettingsObject(Rectangle2D rectangle, Vector teleportTo, double teleportRotation)
@@ -31,6 +33,13 @@ public class SettingsObject extends Rectangle2D
         this.type = FurnitureType.PORTAL;
         this.teleportTo = teleportTo;
         this.teleportRotation = teleportRotation;
+        this.amplitude = 0.0;
+    }
+
+    public SettingsObject(Vector position, double amplitude)
+    {
+        super(position.getX(), position.getY(), 0,0);
+        this.amplitude = amplitude;
     }
 
     public Rectangle2D getRect()
