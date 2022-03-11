@@ -1,5 +1,6 @@
 package app.controller.linAlg;
 
+import javafx.geometry.Rectangle2D;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -106,6 +107,11 @@ public class Vector
     public Vector findPointOnCircle(double r, double theta)
     {
         return new Vector(this.x + (r * Math.cos(Math.toRadians(theta))), this.y + (r * Math.sin(Math.toRadians(theta))));
+    }
+
+    public static Vector from(Rectangle2D r)
+    {
+        return new Vector(r.getMinX(), r.getMinY());
     }
 
 }

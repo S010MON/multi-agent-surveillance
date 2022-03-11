@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 
@@ -17,12 +18,14 @@ public class App extends Application
     private Scene scene;
     @Getter private FileMenuBar fileMenuBar;
     @Getter private StartMenu startMenu;
+    @Getter private Stage stage;
     private Simulation simulation;
 
     @Override
     public void start(Stage stage)
     {
         this.fileMenuBar = new FileMenuBar(this);
+        this.stage = stage;
         stage.setTitle("Multi Agent Surveillance");
 
         startMenu = new StartMenu(this);
@@ -50,7 +53,7 @@ public class App extends Application
 
     public void gotoSimulation()
     {
-        if(simulation == null)
+        if (simulation == null)
         {
             simulation = new Simulation(this);
             scene.setOnKeyTyped(e -> simulation.handleKey(e));

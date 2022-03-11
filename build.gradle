@@ -11,7 +11,13 @@ plugins {
     // Removed 16 Feb - Seems to have had no effect
 }
 
-version '1.0-SNAPSHOT'
+version '1.0'
+
+jar{
+    manifest{
+        attributes 'Main-Class': 'app.App'
+    }
+}
 
 repositories {
     mavenCentral()
