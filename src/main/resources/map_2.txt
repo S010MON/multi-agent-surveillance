@@ -1,4 +1,4 @@
-name = map_1
+name = map_2
 gameFile = /home/leon/IdeaProjects/multi-agent-surveillance/src/main/resources/best_map
 gameMode = 1
 height = 900

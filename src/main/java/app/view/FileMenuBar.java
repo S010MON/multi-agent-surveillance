@@ -46,39 +46,11 @@ public class FileMenuBar extends MenuBar
 
 
         /* Open file menu*/
-        /*
-        Menu openFile = new Menu("Open");
-        for(File f: filterErrorFiles(getResourceFolderFiles("")))
-        {
-            MenuItem fileOption = new MenuItem(f.getName());
-            openFile.getItems().add(fileOption);
-            fileOption.setOnAction(e -> app.gotoSimulation(f.getName()));
-        }
-        file.getItems().add(openFile);
-        */
-
-
         FileChooser fileChooser = new FileChooser();
         String directory = FilePath.get("");
         fileChooser.setInitialDirectory(new File(directory));
         MenuItem openFile = new MenuItem("Open");
-
-        // create an Event Handler
-        EventHandler<ActionEvent> eventOpen =
-                new EventHandler<ActionEvent>() {
-
-                    public void handle(ActionEvent e)
-                    {
-                        // get the file selected
-                        File file = fileChooser.showOpenDialog(app.getStage());
-
-                        if (file != null) {
-                            app.gotoSimulation(file.getName());
-                        }
-                        System.out.println("clicked on openFile");
-                    }
-                };
-        openFile.setOnAction(eventOpen);
+        openFile.setOnAction(e -> eventOpen(e, fileChooser));
         file.getItems().add(openFile);
 
         /* Edit menu */
@@ -106,5 +78,16 @@ public class FileMenuBar extends MenuBar
 
         // Add to the Menu Bar object
         this.getMenus().addAll(file, edit, view);
+    }
+
+    private void eventOpen(ActionEvent e, FileChooser fileChooser)
+    {
+        // get the file selected
+        File file = fileChooser.showOpenDialog(app.getStage());
+
+        if (file != null) {
+            app.gotoSimulation(file.getName());
+        }
+        System.out.println("clicked on openFile");
     }
 }
