@@ -1,10 +1,24 @@
 package app.view;
 
 import app.App;
+import app.controller.io.FileManager;
+import app.controller.io.FilePath;
+import app.controller.settings.Settings;
+import app.model.Map;
 import app.view.mapBuilder.DisplayPane;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileMenuBar extends MenuBar
 {
@@ -30,8 +44,13 @@ public class FileMenuBar extends MenuBar
         });
         file.getItems().add(newFile);
 
+
+        /* Open file menu*/
+        FileChooser fileChooser = new FileChooser();
+        String directory = FilePath.get("");
+        fileChooser.setInitialDirectory(new File(directory));
         MenuItem openFile = new MenuItem("Open");
-        openFile.setOnAction(e -> System.out.println("Test open..."));
+        openFile.setOnAction(e -> eventOpen(e, fileChooser));
         file.getItems().add(openFile);
 
         /* Edit menu */
@@ -59,5 +78,16 @@ public class FileMenuBar extends MenuBar
 
         // Add to the Menu Bar object
         this.getMenus().addAll(file, edit, view);
+    }
+
+    private void eventOpen(ActionEvent e, FileChooser fileChooser)
+    {
+        // get the file selected
+        File file = fileChooser.showOpenDialog(app.getStage());
+
+        if (file != null) {
+            app.gotoSimulation(file.getName());
+        }
+        System.out.println("clicked on openFile");
     }
 }
