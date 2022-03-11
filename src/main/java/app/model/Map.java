@@ -3,14 +3,17 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.controller.soundEngine.SoundFurniture;
-import app.controller.soundEngine.SoundSource;
+import app.model.soundFurniture.SoundFurniture;
+import app.model.soundSource.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.Human;
 import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
+import app.model.soundFurniture.SoundFurnitureFactory;
+import app.model.soundSource.SoundSourceFactory;
+import app.model.soundSource.SoundSourceType;
 import app.view.simulation.Info;
 import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
@@ -39,10 +42,12 @@ public class Map
         settings.getFurniture().forEach(e -> addFurniture(e));
 
         /* Make sound furniture */
-        soundFurniture = settings.getSoundFurniture();
+        soundFurniture = new ArrayList<>();
+        settings.getSoundFurniture().forEach(e -> addSoundFurniture(e));
 
         /* Make some sound sources */
-        soundSources = settings.getSoundSources();
+        soundSources = new ArrayList<>();
+        settings.getSoundSources().forEach(e -> addSoundSource(e));
 
         agents = new ArrayList<>();
 
@@ -108,6 +113,19 @@ public class Map
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
+    }
+
+    public void addSoundFurniture(SettingsObject obj){
+        switch (obj.getType()){
+            case GUARD_SPAWN -> guardSpawn = obj.getRect();
+            case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
+            default -> this.soundFurniture.add(SoundFurnitureFactory.make(obj));
+        }
+    }
+
+    public void addSoundSource(SettingsObject obj){
+        // for now?
+        this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
     public ArrayList<Boundary> getBoundaries()

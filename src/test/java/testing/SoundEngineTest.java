@@ -7,6 +7,7 @@ import app.model.Map;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.furniture.FurnitureType;
+import app.model.soundSource.SoundSource;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +24,13 @@ public class SoundEngineTest {
         settings.setWidth(300);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.INTRUDER_SPAWN);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.GUARD_SPAWN);
+        settings.addSoundSource(new Vector(0,0), 50);
+        settings.addSoundSource(new Vector(0,0), 100);
 
-        SoundSource s1 = new SoundSourceBase(new Vector(0,0), 50);
-        SoundSource s2 = new SoundSourceBase(new Vector(0,0), 100);
+        Map map = new Map(settings);
 
-        settings.getSoundSources().add(s1);
-        settings.getSoundSources().add(s2);
+        SoundSource s1 = map.getSoundSources().get(0);
+        SoundSource s2 = map.getSoundSources().get(1);
 
         Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1);
 
@@ -36,7 +38,7 @@ public class SoundEngineTest {
 
         // 30**2 + 40**2 = 50**2, so we expect the ones with amp 100 to give a remaining amp of 50
 
-        HashMap<SoundSource, Sound> soundHashMap = cornerAimedTracing.compute(new Map(settings),listener);
+        HashMap<SoundSource, Sound> soundHashMap = cornerAimedTracing.compute(map,listener);
 
         double maxAmp = Math.max(soundHashMap.get(s1).getAmplitude(), soundHashMap.get(s2).getAmplitude());
 
@@ -49,20 +51,20 @@ public class SoundEngineTest {
         settings.setWidth(300);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.INTRUDER_SPAWN);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.GUARD_SPAWN);
+        settings.addSoundFurniture(new Rectangle2D(40, -40, 10, 160), FurnitureType.WALL);
+        settings.addSoundSource(new Vector(0,0), 60);
+        settings.addSoundSource(new Vector(60,80), 70);
 
-        SoundSource s1 = new SoundSourceBase(new Vector(0,0), 60);
-        SoundSource s2 = new SoundSourceBase(new Vector(60,80), 70);
+        Map map = new Map(settings);
 
-        settings.getSoundSources().add(s1);
-        settings.getSoundSources().add(s2);
-
-        settings.addSoundFurniture(new Rectangle2D(40, -40, 10, 160));
+        SoundSource s1 = map.getSoundSources().get(0);
+        SoundSource s2 = map.getSoundSources().get(1);
 
         Agent listener =  new AgentImp(new Vector(30,40), new Vector(), 1);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
-        HashMap<SoundSource, Sound> soundHashMapBlocked = cornerAimedTracing.compute(new Map(settings),listener);
+        HashMap<SoundSource, Sound> soundHashMapBlocked = cornerAimedTracing.compute(map,listener);
 
         double maxAmpBlocked = soundHashMapBlocked.get(s1).getAmplitude();
 
@@ -77,18 +79,18 @@ public class SoundEngineTest {
         settings.setWidth(300);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.INTRUDER_SPAWN);
         settings.addFurniture(new Rectangle2D(50, 50, 10, 10), FurnitureType.GUARD_SPAWN);
+        settings.addSoundFurniture(new Rectangle2D(1, 1, 1, 1), FurnitureType.WALL);
+        settings.addSoundSource(new Vector(3,3), 80);
 
-        SoundSource source = new SoundSourceBase(new Vector(3,3), 80);
+        Map map = new Map(settings);
 
-        settings.getSoundSources().add(source);
+        SoundSource source = map.getSoundSources().get(0);
 
         Agent listener =  new AgentImp(new Vector(0,0), new Vector(), 1);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
-        settings.addSoundFurniture(new Rectangle2D(1, 1, 1, 1));
-
-        HashMap<SoundSource, Sound> soundSourceSoundHashMap = cornerAimedTracing.compute(new Map(settings),listener);
+        HashMap<SoundSource, Sound> soundSourceSoundHashMap = cornerAimedTracing.compute(map,listener);
 
         Sound actualSound = soundSourceSoundHashMap.get(source);
 

@@ -1,11 +1,6 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Vector;
-import app.controller.soundEngine.SoundBlockingBlock;
-import app.controller.soundEngine.SoundFurniture;
-import app.controller.soundEngine.SoundSource;
-import app.controller.soundEngine.SoundSourceBase;
-import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
@@ -33,8 +28,8 @@ public class Settings
     private double timeStep;
     private double scaling;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
-    private ArrayList<SoundSource> soundSources = new ArrayList<>();
-    private ArrayList<SoundFurniture> soundFurniture = new ArrayList<>();
+    private ArrayList<SettingsObject> soundSources = new ArrayList<>();
+    private ArrayList<SettingsObject> soundFurniture = new ArrayList<>();
 
     public void addFurniture(Rectangle2D rectangle, FurnitureType type)
     {
@@ -47,7 +42,7 @@ public class Settings
     }
 
     public void addSoundSource(Vector position, double amplitude){
-        soundSources.add(new SoundSourceBase(position, amplitude));
+        soundSources.add(new SettingsObject(position, amplitude));
     }
 
     public List<SettingsObject> getFurniture(FurnitureType type)
@@ -57,7 +52,16 @@ public class Settings
                 .toList();
     }
 
-    public void addSoundFurniture(Rectangle2D rectangle2D) {
-        soundFurniture.add(new SoundBlockingBlock(rectangle2D));
+    public List<SettingsObject> getSoundFurniture(FurnitureType type)
+    {
+        return soundFurniture.stream()
+                .filter(obj -> obj.getType() == type)
+                .toList();
+    }
+
+
+
+    public void addSoundFurniture(Rectangle2D rectangle2D, FurnitureType type) {
+        soundFurniture.add(new SettingsObject(rectangle2D, type));
     }
 }
