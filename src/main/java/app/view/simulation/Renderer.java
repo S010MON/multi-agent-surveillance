@@ -23,6 +23,7 @@ public class Renderer extends Canvas
     {
         super(ScreenSize.width, ScreenSize.height);
         this.map = map;
+        this.setInitialZoom(map.getSettings().getHeight(),map.getSettings().getWidth());
         backgroundColour = Color.WHITE;
         outlineColor = Color.rgb(191, 191, 191);
 
@@ -56,8 +57,8 @@ public class Renderer extends Canvas
         gc.fillRect(0,0,getWidth(), getHeight());
         gc.setFill(backgroundColour);
         gc.setLineWidth(3.0);
-        gc.fillRect( 3 + Info.getInfo().offsetX ,
-                3 + Info.getInfo().offsetY,
+        gc.fillRect( 0 + Info.getInfo().offsetX ,
+                0 + Info.getInfo().offsetY,
                 map.getSettings().getWidth() *  Info.getInfo().zoom,
                 map.getSettings().getHeight() * Info.getInfo().zoom);
     }
@@ -75,6 +76,8 @@ public class Renderer extends Canvas
             if(dZoom > 0)
                 Info.getInfo().zoom += zoomRate;
         }
+
+
         render();
     }
 
@@ -101,5 +104,16 @@ public class Renderer extends Canvas
             Info.getInfo().moveY(dy);
             render();
         }
+    }
+
+    private void setInitialZoom(double mapHeight,double mapWidth)
+    {
+        double dy = ScreenSize.height/mapHeight;
+        double dx = ScreenSize.width/mapWidth;
+        double padding = 0.1;
+        if(mapWidth * dy <= ScreenSize.width && mapHeight * dx<= ScreenSize.height)
+            Info.getInfo().setZoom(Math.max(dy,dx)-padding);
+        else
+            Info.getInfo().setZoom(Math.min(dy,dx)-padding);
     }
 }
