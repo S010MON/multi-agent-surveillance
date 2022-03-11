@@ -11,6 +11,7 @@ import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
@@ -54,6 +55,10 @@ public class Map
             WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
+
+            SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
+            Vector centerTarget = new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
+            guard.setTargetDirection(centerTarget.sub(guard.getPosition()).normalise());
             agents.add(guard);
         }
 
@@ -65,6 +70,10 @@ public class Map
             WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
+
+            SettingsObject target = settings.getFurniture(FurnitureType.TARGET).get(0);
+            Vector centerTarget = new Vector(target.getMaxX() + target.getWidth()/2, target.getMaxY() + target.getHeight()/2);
+            intruder.setTargetDirection(centerTarget.sub(intruder.getPosition()).normalise());
             agents.add(intruder);
         }
 
