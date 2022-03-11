@@ -2,7 +2,6 @@ package app.model.agents.ACO;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
-import app.model.Grid.AcoGrid;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.PheromoneCell;
 import app.model.map.Move;
@@ -179,19 +178,14 @@ public class AcoAgent extends AgentImp
 
     public Vector angleToGridMovementLink(int angle)
     {
-        switch(angle)
-        {
-            case 0:
-                return new Vector(0, cellSize);
-            case 90:
-                return new Vector(cellSize, 0);
-            case 180:
-                return new Vector(0, -cellSize);
-            case 270:
-                return new Vector(-cellSize, 0);
-            default:
-                return null;
-        }
+        return switch (angle)
+                {
+                    case 0 -> new Vector(0, cellSize);
+                    case 90 -> new Vector(cellSize, 0);
+                    case 180 -> new Vector(0, -cellSize);
+                    case 270 -> new Vector(-cellSize, 0);
+                    default -> null;
+                };
     }
 
     public Ray[] detectCardinalRays()
@@ -239,11 +233,7 @@ public class AcoAgent extends AgentImp
 
     public boolean approximateAngleRange(double detectedAngle, double targetAngle)
     {
-        if(detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon))
-        {
-            return true;
-        }
-        return false;
+        return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
     }
 
     public double releaseMaxPheromone()

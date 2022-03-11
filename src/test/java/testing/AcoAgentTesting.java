@@ -5,7 +5,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
-import app.model.Grid.AcoGrid;
+import app.model.agents.ACO.AcoGrid;
 import app.model.Map;
 import app.model.agents.Cells.PheromoneCell;
 import app.model.map.Move;
