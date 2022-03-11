@@ -1,32 +1,36 @@
 package app.model.agents.Cells;
 
+import app.model.agents.ACO.AcoAgent;
+
+import java.util.ArrayList;
+
 public class PheromoneCell implements Cell
 {
-    private double pheramone;
+    private double pheromone;
     private double evaporationConstant = 0.001;
 
     public PheromoneCell()
     {
-        this.pheramone = 0.0;
+        this.pheromone = 0.0;
     }
 
     public double currentPheromoneValue()
     {
-        return pheramone;
+        return pheromone;
     }
 
     public void updatePheromone(double maxPheramone)
     {
-        pheramone += maxPheramone;
+        pheromone += maxPheramone;
     }
 
     public void evaporation()
     {
-        pheramone = pheramone * (1 - evaporationConstant);
+        pheromone = pheromone * (1 - evaporationConstant);
     }
 
     public String toString()
     {
-        return Double.toString(pheramone);
+        return Double.toString(pheromone);
     }
 }

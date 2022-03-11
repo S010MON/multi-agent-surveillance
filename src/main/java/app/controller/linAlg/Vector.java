@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -69,7 +71,15 @@ public class Vector
     public double getAngle()
     {
         // + 90 to set the angle to north, negate angle to make it clockwise
-        return (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
+        // Rounded to 1 decimal place
+        double angle = (-Math.toDegrees(Math.atan2(y,x)) + 360.0 + 90.0) % 360.0;
+        double roundedAngle = (double) Math.round(angle * 10) / 10;
+
+        if(roundedAngle == 360.0)
+        {
+            roundedAngle = 0.0;
+        }
+        return roundedAngle;
     }
 
     public Vector copy()
@@ -87,9 +97,11 @@ public class Vector
         return false;
     }
 
-    public Integer vectorHashCode()
+
+    @Override
+    public int hashCode()
     {
-        return this.hashCode();
+        return Objects.hash(this.x, this.y);
     }
 
     public Vector findPointOnCircle(double r, double theta)

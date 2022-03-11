@@ -3,6 +3,7 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -32,6 +33,8 @@ public class GameEngine
 
     public void tick()
     {
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+
         for (Agent a :map.getAgents())
         {
             Vector startPoint = a.getPosition();
@@ -51,7 +54,6 @@ public class GameEngine
             }
         }
 
-        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         renderer.render();
     }
 

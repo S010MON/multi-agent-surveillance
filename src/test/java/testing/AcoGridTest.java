@@ -11,10 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AcoGridTest
 {
+    private final boolean display = false;
     @Test
     void testUpdateAgent()
     {
-        AcoAgent.initializeWorld(50.3, 25.7);
+        AcoGrid world = new AcoGrid(50.3, 25.7, 1.0);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
@@ -22,13 +24,14 @@ public class AcoGridTest
 
         PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
 
-        assertEquals(occupiedCell.currentPheromoneValue(), agent.releaseMaxPheramone());
+        assertEquals(occupiedCell.currentPheromoneValue(), agent.releaseMaxPheromone());
     }
 
     @Test
     void testEvaporationProcess()
     {
-        AcoAgent.initializeWorld(50.3, 25.7);
+        AcoGrid world = new AcoGrid(50.3, 25.7, 1);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
@@ -46,14 +49,25 @@ public class AcoGridTest
     @Test
     void testAgentMovementWithinGrid()
     {
-        AcoAgent.initializeWorld(20, 20);
+        AcoGrid world = new AcoGrid(20, 20, 1);
+        AcoAgent.initializeWorld(world);
 
         Vector agentPosition = new Vector(10, 10);
         AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-        AcoAgent.accessWorld().displayGridState();
+        if(display)
+        {
+            AcoAgent.accessWorld().print();
+        }
 
-        agent.updateLocation(new Vector(9, 9));
-        AcoAgent.accessWorld().displayGridState();
+        Vector newPosition = new Vector(9, 9);
+        agent.updateLocation(newPosition);
+        if(display)
+        {
+            AcoAgent.accessWorld().print();
+        }
+
+        PheromoneCell currentCell = (PheromoneCell) AcoAgent.accessWorld().getCellAt(newPosition);
+        assertTrue(currentCell.currentPheromoneValue() < agent.releaseMaxPheromone());
 
     }
 }

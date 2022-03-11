@@ -3,6 +3,7 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
+import app.model.agents.ACO.AcoAgent;
 import app.model.soundFurniture.SoundFurniture;
 import app.model.soundSource.SoundSource;
 import app.model.agents.Agent;
@@ -11,6 +12,7 @@ import app.model.agents.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import app.model.soundFurniture.SoundFurnitureFactory;
 import app.model.soundSource.SoundSourceFactory;
 import app.model.soundSource.SoundSourceType;
@@ -39,6 +41,9 @@ public class Map
 
         /* Make furniture */
         furniture = new ArrayList<>();
+        Rectangle2D rect = new Rectangle2D(0, 0, settings.getWidth(), settings.getHeight());
+        SettingsObject border = new SettingsObject(rect, FurnitureType.BORDER);
+        addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
 
         /* Make sound furniture */
@@ -54,9 +59,10 @@ public class Map
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
-            Vector srt = new Vector(randX(guardSpawn), randY(guardSpawn));
-            Vector dir = randDirection();
-            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10);
+            Vector srt = randPosition(guardSpawn);
+            Vector dir = new Vector(0, 1);
+            AcoAgent guard = new AcoAgent(srt, dir, 10);
+
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -65,7 +71,7 @@ public class Map
         // On creation add the right number of infiltrators
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
-            Vector srt = new Vector(randX(intruderSpawn), randY(intruderSpawn));
+            Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
             WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
@@ -73,7 +79,7 @@ public class Map
             agents.add(intruder);
         }
 
-        Vector humanStart = new Vector(randX(guardSpawn), randY(guardSpawn));
+        Vector humanStart = randPosition(intruderSpawn);
         human = new Human(humanStart, new Vector(1,0), 10);
         //Assumes the human is a guard
         human.setMaxWalk(settings.getWalkSpeedGuard());
@@ -156,16 +162,6 @@ public class Map
                       intruderSpawn.getHeight() * Info.getInfo().zoom);
     }
 
-    private double randX(Rectangle2D r)
-    {
-        return r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
-    }
-
-    private double randY(Rectangle2D r)
-    {
-        return r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
-    }
-
     private Vector randDirection()
     {
         double r = Math.random();
@@ -177,5 +173,28 @@ public class Map
             return new Vector(-1,0);
         else
             return new Vector(0,-1);
+    }
+
+    private Vector randPosition(Rectangle2D r)
+    {
+        Vector v;
+        do {
+            double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+            double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+            v = new Vector(x, y);
+        } while (!clearSpot(v));
+
+        return v;
+    }
+
+    private boolean clearSpot(Vector v)
+    {
+        for(Agent agent: agents)
+        {
+            double dist = agent.getPosition().dist(v);
+            if(dist < 2*agent.getRadius())
+                return false;
+        }
+        return true;
     }
 }
