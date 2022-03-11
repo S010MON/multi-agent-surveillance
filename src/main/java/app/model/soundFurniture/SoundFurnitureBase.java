@@ -1,18 +1,22 @@
-package app.controller.soundEngine;
+package app.model.soundFurniture;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
+import app.model.soundBoundary.SoundBoundaryImp;
+import app.model.soundBoundary.SoundBoundary;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
-public class SoundBlockingBlock implements SoundFurniture{
+public class SoundFurnitureBase implements SoundFurniture {
     @Getter @Setter private ArrayList<SoundBoundary> soundBoundaries;
     private ArrayList<Vector> corners;
 
-    public SoundBlockingBlock(Rectangle2D r){
+    public SoundFurnitureBase(Rectangle2D r){
         corners = new ArrayList<>();
 
         corners.add(new Vector(r.getMinX(), r.getMinY()));      // top left corner
@@ -21,10 +25,22 @@ public class SoundBlockingBlock implements SoundFurniture{
         corners.add(new Vector(r.getMinX(), r.getMaxY()));      // lower left corner
 
         soundBoundaries = new ArrayList<>();
-        soundBoundaries.add(new SoundBlockingWall(corners.get(0), corners.get(1)));
-        soundBoundaries.add(new SoundBlockingWall(corners.get(1), corners.get(2)));
-        soundBoundaries.add(new SoundBlockingWall(corners.get(2), corners.get(3)));
-        soundBoundaries.add(new SoundBlockingWall(corners.get(3), corners.get(0)));
+        soundBoundaries.add(new SoundBoundaryImp(corners.get(0), corners.get(1)));
+        soundBoundaries.add(new SoundBoundaryImp(corners.get(1), corners.get(2)));
+        soundBoundaries.add(new SoundBoundaryImp(corners.get(2), corners.get(3)));
+        soundBoundaries.add(new SoundBoundaryImp(corners.get(3), corners.get(0)));
+    }
+
+    public SoundFurnitureBase(ArrayList<SoundBoundary> soundBoundaries){
+        setSoundBoundaries(soundBoundaries);
+
+        LinkedHashSet<Vector> cornersSet = new LinkedHashSet<>();
+
+        for (SoundBoundary sb: soundBoundaries) {
+            cornersSet.addAll(sb.getCorners());
+        }
+
+        corners = new ArrayList<>(cornersSet);
     }
 
     @Override
@@ -80,9 +96,9 @@ public class SoundBlockingBlock implements SoundFurniture{
 
     @Override
     public boolean hitsCorner(SoundRay soundRay){
-       if(!corners.contains(soundRay.getEnd())) {
-           return false;
-       }
+        if(!corners.contains(soundRay.getEnd())) {
+            return false;
+        }
 
         for (SoundBoundary sb: soundBoundaries) {
             if(sb.getCorners().contains(soundRay.getEnd())){
