@@ -1,6 +1,8 @@
-package app.controller.soundEngine;
+package app.model.soundFurniture;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
+import app.model.soundBoundary.SoundBoundary;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
