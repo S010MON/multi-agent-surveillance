@@ -1,8 +1,8 @@
 package testing;
 
 import app.controller.linAlg.Vector;
-import app.model.Grid.Grid;
-import app.model.Grid.AcoGrid;
+import app.model.agents.Grid;
+import app.model.agents.ACO.AcoGrid;
 import app.model.agents.Cells.BooleanCell;
 import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;

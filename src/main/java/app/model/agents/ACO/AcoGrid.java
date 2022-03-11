@@ -1,6 +1,6 @@
-package app.model.Grid;
+package app.model.agents.ACO;
 
-import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Grid;
 import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;

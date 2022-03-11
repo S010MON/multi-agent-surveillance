@@ -2,6 +2,7 @@ package app.view.simulation;
 
 import app.controller.graphicsEngine.Ray;
 import app.model.Map;
+import app.model.Trail;
 import app.view.ScreenSize;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -11,6 +12,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Renderer extends Canvas
 {
@@ -18,11 +20,13 @@ public class Renderer extends Canvas
     private Color backgroundColour, outlineColor;
     private double zoomRate = 0.2d;
     private Point2D click;
+    private PriorityQueue<Trail> trails;
 
     public Renderer(Map map)
     {
         super(ScreenSize.width, ScreenSize.height);
         this.map = map;
+        this.trails = new PriorityQueue<>();
         this.setInitialZoom(map.getSettings().getHeight(),map.getSettings().getWidth());
         backgroundColour = Color.WHITE;
         outlineColor = Color.rgb(191, 191, 191);
@@ -42,8 +46,14 @@ public class Renderer extends Canvas
         map.drawIntruderSpawn(gc);
         map.drawGuardSpawn(gc);
         map.getFurniture().forEach(e -> e.draw(gc));
+        trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
         map.getAgents().forEach(e -> e.draw(gc));
+    }
+
+    public void addTrail(Trail t)
+    {
+        trails.add(t);
     }
 
     private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
@@ -61,6 +71,15 @@ public class Renderer extends Canvas
                 0 + Info.getInfo().offsetY,
                 map.getSettings().getWidth() *  Info.getInfo().zoom,
                 map.getSettings().getHeight() * Info.getInfo().zoom);
+    }
+
+    private void drawTrail(GraphicsContext gc, Trail t)
+    {
+        gc.setFill(Color.GRAY);
+        gc.fillOval(t.getLoc().getX() * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                t.getLoc().getY() * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                2 * Info.getInfo().getZoom(),
+                2 * Info.getInfo().getZoom());
     }
 
     private void handleScroll(ScrollEvent e)
