@@ -13,9 +13,14 @@ plugins {
 
 version '1.0'
 
-jar{
-    manifest{
-        attributes 'Main-Class': 'app.App'
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes 'Main-Class': 'app.Launcher'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
@@ -36,7 +41,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'app'
-    mainClass = 'app.App'
+    mainClass = 'app.Launcher'
 }
 
 javafx {
