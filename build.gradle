@@ -11,7 +11,7 @@ plugins {
     // Removed 16 Feb - Seems to have had no effect
 }
 
-version '1.0'
+version '1.1'
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
