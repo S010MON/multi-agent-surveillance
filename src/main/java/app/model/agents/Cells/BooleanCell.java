@@ -3,16 +3,11 @@ package app.model.agents.Cells;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-
 public class BooleanCell implements Cell
 {
 
-    @Getter private Boolean explored;  // TODO remove
-    private Boolean obstacle;  // permanent obstacle
+    @Getter @Setter private Boolean obstacle;  // permanent obstacle
     private Boolean occupied;  // cell temporarily occupied by an agent or intruder
-    private Boolean nextToMapEdge;  // TODO remove
     private int row = -1;
     private int col = -1;
     @Getter private int x;
@@ -21,10 +16,8 @@ public class BooleanCell implements Cell
 
     public BooleanCell()
     {
-        explored = null;
         obstacle = null;
         occupied = null;
-        nextToMapEdge = null;
     }
 
     public BooleanCell(int x, int y)

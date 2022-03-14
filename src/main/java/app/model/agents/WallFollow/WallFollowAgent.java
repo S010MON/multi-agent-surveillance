@@ -102,8 +102,10 @@ public class WallFollowAgent extends AgentImp
              3. move there with Dijkstra's algorithm
              4. reset wallEncountered to false and initialWallFollowPos to null
              */
-            System.out.println("agent final vertex " + cellGraph.getAgentPos());
-            System.out.println(cellGraph.getVerticesWithUnexploredNeighbours());
+            if (DEBUG) {
+                System.out.println("agent final vertex " + cellGraph.getAgentPos());
+                System.out.println(cellGraph.getVerticesWithUnexploredNeighbours());
+            }
             return new Move(newDirection, newMove);  // currently agent stops if found initial vertex
         }
         else if (!wallEncountered)
