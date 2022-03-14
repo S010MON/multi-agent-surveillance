@@ -1,7 +1,7 @@
 package app.model.agents;
 
 import app.controller.linAlg.Vector;
-import app.model.map.Move;
+import app.model.Move;
 
 public class Human extends AgentImp
 {

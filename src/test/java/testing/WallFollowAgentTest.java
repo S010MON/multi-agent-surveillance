@@ -4,12 +4,12 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
-import app.model.agents.WallFollowAgent;
+import app.model.Map;
+import app.model.Move;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.Map;
-import app.model.map.Move;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WallFollowAgentTest
 {
@@ -28,7 +26,7 @@ public class WallFollowAgentTest
     //Agent setup
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1);
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75);
 
     @Test
     void testAgentDirectionAngle()
@@ -55,7 +53,7 @@ public class WallFollowAgentTest
 
         //Detect surroundings
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.setMoveLength(100);
+        //agent.setMoveLength(100);
         ArrayList<Double> hittingRayAngles = new ArrayList<>();
 
         for (Ray r : agent.getView())
@@ -81,7 +79,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(300);
+        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
 
         assertTrue(noWallDetected);
@@ -98,7 +96,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(300);
+        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
 
         assertTrue(noWallDetected);
@@ -118,7 +116,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(300);
+        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
 
         assertFalse(noWallDetected);
@@ -129,7 +127,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
+        Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -138,7 +136,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(300);
+        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
 
         assertFalse(noWallDetected);
@@ -149,7 +147,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(300, 50, 2, 100);
+        Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -158,7 +156,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(200);
+        //agent.setMoveLength(200);
         boolean noWallDetectedFront = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noWallDetectedLeft = agent.noWallDetected(agent.getAngleOfLeftRay());
 
@@ -180,7 +178,7 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        agent.setMoveLength(300);
+        //agent.setMoveLength(300);
         boolean noWallDetectedFront = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noWallDetectedLeft = agent.noWallDetected(agent.getAngleOfLeftRay());
 
@@ -244,21 +242,20 @@ public class WallFollowAgentTest
                 turn 90 deg right
                 set wallEcountered = true
          */
-
+        agent.setDEBUG(true);
         agent.updateLocation(initialPosition);
         agent.setDirection(initialDirection);
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
+        Rectangle2D obstacle = new Rectangle2D(150, 275, 100, 2);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
 
         // Update surroundings and move 3 times
         // Agent should move forward 2 times and third move should be turning right
-        double moveLength = 20;
-        agent.setMoveLength(moveLength);
+        double moveLength = agent.getMoveLength();
         // move 1
         agent.updateView(graphicsEngine.compute(map, agent));
         Move newMove1 = agent.move();
@@ -312,13 +309,12 @@ public class WallFollowAgentTest
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
 
-        double moveLength = 100;
-        agent.setMoveLength(moveLength);
+        double moveLength = agent.getMoveLength();
         Move newMove = agent.move();
         agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
         Vector expectedDeltaPos = new Vector(moveLength * initialDirection.getX(), moveLength * initialDirection.getY());
 
-        Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
+        Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+moveLength);
         Vector expectedDir = initialDirection;
 
         // Check position change, last turn type, direction and if moved forward
@@ -427,14 +423,13 @@ public class WallFollowAgentTest
 
         // Detect surroundings and move
         agent.updateView(graphicsEngine.compute(map, agent));
-        double moveLength = 100;
-        agent.setMoveLength(moveLength);
+        double moveLength = agent.getMoveLength();
         boolean noFrontWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
         Move newMove = agent.move();
         agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
         Vector expectedDeltaPos = new Vector(moveLength * initialDirection.getX(), moveLength * initialDirection.getY());
-        Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+100);
+        Vector expectedPos = new Vector(initialPosition.getX(),initialPosition.getY()+moveLength);
         Vector expectedDir = initialDirection;
 
         // Check wall on left detected, no wall in front detected, new position, direction, last turn type, if moved forward

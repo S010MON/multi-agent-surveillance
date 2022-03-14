@@ -8,7 +8,7 @@ import app.controller.settings.Settings;
 import app.model.agents.ACO.AcoGrid;
 import app.model.Map;
 import app.model.agents.Cells.PheromoneCell;
-import app.model.map.Move;
+import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
