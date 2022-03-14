@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.graph.SimpleGraph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
@@ -13,6 +14,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     @Getter private BooleanCell agentPos;
     @Getter private HashMap<String,BooleanCell> vertices = new HashMap<>();
     @Setter int edge;  // edge length between vertices (moveLength)
+    boolean DEBUG = false;
 
     public BooleanCellGraph()
     {
@@ -31,13 +33,6 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
         vertices.put(forwardCell.toString(), forwardCell);
         vertices.put(leftCell.toString(), leftCell);
         vertices.put(rightCell.toString(), rightCell);
-        System.out.println("VertexSet is: " + this.vertexSet());
-        if (forwardNotPresent)  // TODO adding edges here duplicates updateVertex code?
-            this.addEdge(agentPos,forwardCell);
-        if (leftNotPresent)
-            this.addEdge(agentPos,leftCell);
-        if (rightNotPresent)
-            this.addEdge(agentPos,rightCell);
         updateVertex(forwardCell);
         updateVertex(leftCell);
         updateVertex(rightCell);
@@ -68,7 +63,30 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     public void addExploredVertex(BooleanCell vertex)
     {
         this.addVertex(vertex);
-        vertices.put(vertex.toString(), vertex);  // TODO
+        vertices.put(vertex.toString(), vertex);
         updateVertex(vertex);
+    }
+
+    public ArrayList<BooleanCell> getVerticesWithUnexploredNeighbours()
+    {
+        ArrayList<BooleanCell> unexploredFrontier = new ArrayList<>();
+        for (String v : vertices.keySet())
+        {
+            BooleanCell vertex = vertices.get(v);
+            if (!vertex.getObstacle() && edgesOf(vertex).size() < 4)
+            {
+                unexploredFrontier.add(vertex);
+            }
+            else if (DEBUG && edgesOf(vertex).size() > 4)
+            {
+                System.out.println("VERTEX " + vertex + " HAS TOO MANY EDGES !!!");
+            }
+        }
+        if (DEBUG)
+        {
+            System.out.println("Total nr of vertices explored: " + vertexSet().size());
+            System.out.println("Nr of vertices with unexplored neighbours: " + unexploredFrontier.size());
+        }
+        return unexploredFrontier;
     }
 }
