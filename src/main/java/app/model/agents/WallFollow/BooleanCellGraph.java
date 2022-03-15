@@ -25,11 +25,10 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     public void updateAgentPos(BooleanCell agentCell, BooleanCell forwardCell,
                                BooleanCell leftCell, BooleanCell rightCell)
     {
-        // adds three new vertices to graph (forward, left, right) and updates agent's position vertex
         agentPos = agentCell;
-        boolean forwardNotPresent = this.addVertex(forwardCell);
-        boolean leftNotPresent = this.addVertex(leftCell);
-        boolean rightNotPresent = this.addVertex(rightCell);
+        addVertex(forwardCell);
+        addVertex(leftCell);
+        addVertex(rightCell);
         vertices.put(forwardCell.toString(), forwardCell);
         vertices.put(leftCell.toString(), leftCell);
         vertices.put(rightCell.toString(), rightCell);
@@ -62,7 +61,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
 
     public void addExploredVertex(BooleanCell vertex)
     {
-        this.addVertex(vertex);
+        addVertex(vertex);
         vertices.put(vertex.toString(), vertex);
         updateVertex(vertex);
     }
@@ -76,10 +75,6 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
             if (!vertex.getObstacle() && edgesOf(vertex).size() < 4)
             {
                 unexploredFrontier.add(vertex);
-            }
-            else if (DEBUG && edgesOf(vertex).size() > 4)
-            {
-                System.out.println("VERTEX " + vertex + " HAS TOO MANY EDGES !!!");
             }
         }
         if (DEBUG)

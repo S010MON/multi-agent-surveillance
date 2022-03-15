@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class WallFollowAgentTest
 {
     GraphicsEngine graphicsEngine = new GraphicsEngine();
-
-    //Agent setup
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
     WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75);
@@ -53,7 +51,6 @@ public class WallFollowAgentTest
 
         //Detect surroundings
         agent.updateView(graphicsEngine.compute(map, agent));
-        //agent.setMoveLength(100);
         ArrayList<Double> hittingRayAngles = new ArrayList<>();
 
         for (Ray r : agent.getView())
@@ -79,7 +76,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
 
         assertTrue(noWallDetected);
@@ -96,7 +92,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
 
         assertTrue(noWallDetected);
@@ -116,7 +111,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
 
         assertFalse(noWallDetected);
@@ -136,7 +130,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(300);
         boolean noWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
 
         assertFalse(noWallDetected);
@@ -156,7 +149,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(200);
         boolean noWallDetectedFront = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noWallDetectedLeft = agent.noWallDetected(agent.getAngleOfLeftRay());
 
@@ -178,7 +170,6 @@ public class WallFollowAgentTest
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Detect obstacle
-        //agent.setMoveLength(300);
         boolean noWallDetectedFront = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noWallDetectedLeft = agent.noWallDetected(agent.getAngleOfLeftRay());
 

@@ -17,7 +17,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected double maxWalk = 5;
     @Getter @Setter protected double maxSprint = 10;
     @Getter protected Vector position;
-    @Getter protected Vector direction;
+    @Getter @Setter protected Vector direction;
     @Getter protected double radius;
     protected ArrayList<Ray> view;
 
