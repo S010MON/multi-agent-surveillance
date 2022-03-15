@@ -30,12 +30,10 @@ public class AcoAgent extends AgentImp
     private int[] cardinalAngles = {0, 90, 180, 270};
     private double epsilon = 0.3;
 
-    public AcoAgent(Vector position, Vector direction, double radius)
     public AcoAgent(Vector position, Vector direction, double radius, Vector targetDirection)
     {
-        super(position, direction, radius);
-        cellSize = world.getCellSize();
         super(position, direction, radius, targetDirection);
+        cellSize = world.getCellSize();
         world.updateAgent(this);
 
         previousMove = new Move(position, new Vector());

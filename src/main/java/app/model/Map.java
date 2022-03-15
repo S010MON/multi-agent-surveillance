@@ -58,9 +58,8 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10, getTargetDirection(srt));
             Vector dir = new Vector(0, 1);
-            AcoAgent guard = new AcoAgent(srt, dir, 10);
+            WallFollowAgent guard = new WallFollowAgent(srt, dir, 10, getTargetDirection(srt));
 
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
@@ -73,6 +72,7 @@ public class Map
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
             WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10, getTargetDirection(srt));
+
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
