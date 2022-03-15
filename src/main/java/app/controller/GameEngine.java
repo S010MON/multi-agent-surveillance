@@ -1,9 +1,9 @@
 package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
-import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -14,18 +14,21 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
+import lombok.Getter;
 
 public class GameEngine
 {
+    @Getter private long tics;
     private Map map;
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
 
     public GameEngine(Map map, Renderer renderer)
     {
+        this.tics = 0;
         this.map = map;
         this.renderer = renderer;
-        this.graphicsEngine = new RayTracing();
+        this.graphicsEngine = new GraphicsEngine();
         Timeline timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -33,6 +36,8 @@ public class GameEngine
 
     public void tick()
     {
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+
         for (Agent a :map.getAgents())
         {
             Vector startPoint = a.getPosition();
@@ -42,6 +47,7 @@ public class GameEngine
             if(teleportTo != null)
             {
                 a.updateLocation(teleportTo);
+                renderer.addTrail(new Trail(teleportTo, tics));
             }
 
             if (legalMove(startPoint, endPoint) &&
@@ -49,10 +55,10 @@ public class GameEngine
                 legalMove(a, startPoint) && legalMove(a, startPoint,endPoint))
             {
                 a.updateLocation(endPoint);
+                renderer.addTrail(new Trail(endPoint, tics));
             }
         }
-
-        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        tics++;
         renderer.render();
     }
 

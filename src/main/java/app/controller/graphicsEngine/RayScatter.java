@@ -15,4 +15,18 @@ public abstract class RayScatter
         }
         return rays;
     }
+
+    public static ArrayList<Ray> angle(Vector origin, Vector direction, double angle)
+    {
+        ArrayList<Ray> rays = new ArrayList<>();
+        for(int i = 0; i < angle; i++)
+        {
+            rays.add(new Ray(origin, origin.add(direction.rotate(i))));
+        }
+        for(int i = 0; i < angle; i++)
+        {
+            rays.add(new Ray(origin, origin.add(direction.rotate(-i))));
+        }
+        return rays;
+    }
 }

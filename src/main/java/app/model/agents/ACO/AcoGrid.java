@@ -1,21 +1,27 @@
-package app.model.Grid;
+package app.model.agents.ACO;
 
-import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Grid;
+import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;
 
 //TODO Use singleton pattern to insist on only one world
 public class AcoGrid extends Grid
 {
+    public AcoGrid()
+    {
+        super(1000, 1000, CellType.PHEROMONE, 20);
+    }
+
     public AcoGrid(double length, double width)
     {
         super(length, width, CellType.PHEROMONE);
     }
 
+
     public AcoGrid(double length, double width, double cellSize)
     {
-        super(length, width, CellType.PHEROMONE);
-        super.cellSize = cellSize;
+        super(length, width, CellType.PHEROMONE, cellSize);
     }
 
     //TODO Evaporation needs to be changed into group system, not individual
@@ -25,7 +31,7 @@ public class AcoGrid extends Grid
         int col = getCellCol(agent.getPosition());
 
         PheromoneCell cell = (PheromoneCell) super.getCellAt(row, col);
-        cell.updatePheromone(agent.releaseMaxPheramone());
+        cell.updatePheromone(agent.releaseMaxPheromone());
     }
 
     public void evaporationProcess()
@@ -40,13 +46,14 @@ public class AcoGrid extends Grid
         }
     }
 
-    public void displayGridState()
+    //TODO Rewrite method to toString
+    public void print()
     {
-        for(int i = 0; i < getRowDimension(); i++)
+        for(Cell[] line : grid)
         {
-            for(int j = 0; j < getColDimension(); j++)
+            for(Cell cell: line)
             {
-                System.out.print(grid[i][j].toString() + " ");
+                System.out.print(cell.toString() + " ");
             }
             System.out.println();
         }

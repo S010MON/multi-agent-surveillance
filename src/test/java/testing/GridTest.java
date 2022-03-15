@@ -1,17 +1,38 @@
 package testing;
 
 import app.controller.linAlg.Vector;
-import app.model.Grid.Grid;
-import app.model.Grid.AcoGrid;
+import app.model.agents.Grid;
+import app.model.agents.ACO.AcoGrid;
 import app.model.agents.Cells.BooleanCell;
+import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GridTest
 {
+
+    @Test
+    void testGetCellAtBoundaryStart()
+    {
+        Grid grid = new AcoGrid(50, 50, 1);
+        Cell cell = grid.getCellAt(0, 0);
+        assertNotNull(cell);
+    }
+
+    @Test
+    void testGetCellAtBoundaryFinish()
+    {
+        Grid grid = new AcoGrid(52.3, 56.8, 1);
+        int rows = grid.getRowDimension();
+        int cols = grid.getColDimension();
+
+        assertEquals(rows, 54);
+        assertEquals(cols, 58);
+    }
+
     @Test
     void testDimensionsWholeNumbers()
     {
@@ -19,8 +40,9 @@ public class GridTest
         int rows = grid.getRowDimension();
         int cols = grid.getColDimension();
 
-        assertEquals(rows, 50);
-        assertEquals(cols, 50);
+        //Accomodate for zero cell
+        assertEquals(rows, 51);
+        assertEquals(cols, 51);
     }
 
     @Test
@@ -30,8 +52,8 @@ public class GridTest
         int rows = grid.getRowDimension();
         int cols = grid.getColDimension();
 
-        assertEquals(rows, 50);
-        assertEquals(cols, 25);
+        assertEquals(rows, 52);
+        assertEquals(cols, 27);
     }
 
     @Test

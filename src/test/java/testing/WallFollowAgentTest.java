@@ -2,7 +2,6 @@ package testing;
 
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
-import app.controller.graphicsEngine.RayTracing;
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.agents.WallFollowAgent;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WallFollowAgentTest
 {
-    GraphicsEngine graphicsEngine = new RayTracing();
+    GraphicsEngine graphicsEngine = new GraphicsEngine();
 
     //Agent setup
     Vector initialPosition = new Vector(200, 100);

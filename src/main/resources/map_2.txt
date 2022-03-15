@@ -1,0 +1,17 @@
+name = map_2
+gameFile = /home/leon/IdeaProjects/multi-agent-surveillance/src/main/resources/best_map
+gameMode = 1
+height = 900
+width = 1400
+scaling = 0.0
+numGuards = 2
+numIntruders = 2
+baseSpeedIntruder = 10.0
+sprintSpeedIntruder = 15.0
+baseSpeedGuard = 10.0
+sprintSpeedGuard = 15.0
+timeStep = 0.0
+spawnAreaGuards = 200 320 300 421
+spawnAreaIntruders = 1100 300 1200 400
+targetArea = 800 99 920 181
+wall = 20 40 39 183
