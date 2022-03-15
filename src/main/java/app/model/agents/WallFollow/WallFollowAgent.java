@@ -269,7 +269,6 @@ public class WallFollowAgent extends AgentImp
     {
         for (Ray r : view)
         {
-            // TODO need to deal with edge case for 0 = 360 degrees and area around that
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.rayLength() <= moveLength)
             {
                 if (DEBUG)
@@ -277,6 +276,7 @@ public class WallFollowAgent extends AgentImp
                     System.out.print("WALL DETECTED! Angle of detecting ray: " + rayAngle + " and ray length: ");
                     System.out.println(r.rayLength());
                 }
+                // TODO: deal with glass and map boundary detection
                 return false;
             }
         }
