@@ -75,6 +75,10 @@ public class FileMenuBar extends MenuBar
         simView.setOnAction(e -> app.gotoSimulation());
         view.getItems().add(simView);
 
+        MenuItem pauseView = new MenuItem("Pause simulation");
+        pauseView.setOnAction(e -> app.pauseSimulation());
+        view.getItems().add(pauseView);
+
 
         // Add to the Menu Bar object
         this.getMenus().addAll(file, edit, view);

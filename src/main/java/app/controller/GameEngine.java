@@ -22,6 +22,7 @@ public class GameEngine
     private Map map;
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
+    private boolean paused = false;
 
     public GameEngine(Map map, Renderer renderer)
     {
@@ -36,30 +37,29 @@ public class GameEngine
 
     public void tick()
     {
-        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        if(!paused) {
+            map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
 
-        for (Agent a :map.getAgents())
-        {
-            Vector startPoint = a.getPosition();
-            Vector endPoint = startPoint.add(a.move().getDeltaPos());
+            for (Agent a : map.getAgents()) {
+                Vector startPoint = a.getPosition();
+                Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-            Vector teleportTo = checkTeleport(startPoint, endPoint);
-            if(teleportTo != null)
-            {
-                a.updateLocation(teleportTo);
-                renderer.addTrail(new Trail(teleportTo, tics));
+                Vector teleportTo = checkTeleport(startPoint, endPoint);
+                if (teleportTo != null) {
+                    a.updateLocation(teleportTo);
+                    renderer.addTrail(new Trail(teleportTo, tics));
+                }
+
+                if (legalMove(startPoint, endPoint) &&
+                        legalMove(a, endPoint) &&
+                        legalMove(a, startPoint) && legalMove(a, startPoint, endPoint)) {
+                    a.updateLocation(endPoint);
+                    renderer.addTrail(new Trail(endPoint, tics));
+                }
             }
-
-            if (legalMove(startPoint, endPoint) &&
-                legalMove(a, endPoint) &&
-                legalMove(a, startPoint) && legalMove(a, startPoint,endPoint))
-            {
-                a.updateLocation(endPoint);
-                renderer.addTrail(new Trail(endPoint, tics));
-            }
+            tics++;
+            renderer.render();
         }
-        tics++;
-        renderer.render();
     }
 
     public void handleKey(KeyEvent e)
@@ -74,6 +74,19 @@ public class GameEngine
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));
             case "d" -> map.walk(new Vector(1, 0));
+            case " " -> pause();
+        }
+    }
+
+    public void pause()
+    {
+        if(paused)
+        {
+            paused = false;
+        }
+        else
+        {
+            paused = true;
         }
     }
 
