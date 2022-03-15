@@ -58,8 +58,16 @@ public class GameEngine
                 renderer.addTrail(new Trail(endPoint, tics));
             }
         }
+
+        // Calculate Coverage
+        calculateCoverage();
         tics++;
         renderer.render();
+    }
+
+    public void calculateCoverage()
+    {
+
     }
 
     public void handleKey(KeyEvent e)

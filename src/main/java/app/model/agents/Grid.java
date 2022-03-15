@@ -2,12 +2,13 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.*;
+import lombok.Getter;
 
 public class Grid
 {
     protected int rowSize;
     protected int colSize;
-    protected Cell[][] grid;
+    @Getter protected Cell[][] grid;
     protected double cellSize = 1.0;
     protected CellType type;
 
@@ -83,5 +84,23 @@ public class Grid
     public double getCellSize()
     {
         return cellSize;
+    }
+
+    public int getCellsExplored()
+    {
+        // Loop through grid and divide explored cells by total cells
+        int cellsExplored = 0;
+        for(Cell[] row : grid)
+        {
+            for(Cell cell : row)
+            {
+                BooleanCell bc = (BooleanCell) cell;
+                if(bc.getExploredState())
+                {
+                    cellsExplored++;
+                }
+            }
+        }
+        return cellsExplored;
     }
 }
