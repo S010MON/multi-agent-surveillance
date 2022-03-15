@@ -7,9 +7,7 @@ public class BooleanCell implements Cell
 {
 
     @Getter @Setter private Boolean obstacle;  // permanent obstacle
-    private Boolean occupied;  // cell temporarily occupied by an agent or intruder
-    private int row = -1;
-    private int col = -1;
+    private Boolean occupied;  // temporarily occupied by an agent or intruder
     @Getter private int x;
     @Getter private int y;
     private String XY;
