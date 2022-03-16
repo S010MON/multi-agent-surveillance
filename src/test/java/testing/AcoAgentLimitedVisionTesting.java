@@ -12,6 +12,8 @@ import app.model.agents.ACO.AcoGrid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class AcoAgentLimitedVisionTesting
 {
     private Vector position = new Vector(250, 350);
@@ -19,7 +21,7 @@ public class AcoAgentLimitedVisionTesting
     private double radius = 10;
 
     Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
-    GraphicsEngine graphicsEngine = new GraphicsEngine();
+    GraphicsEngine graphicsEngine = new GraphicsEngine(90);
     Map map = new Map(settings);
 
     @BeforeEach
@@ -31,6 +33,20 @@ public class AcoAgentLimitedVisionTesting
     }
 
     @Test
+    void movePossible()
+    {
+        position = new Vector(678, 100);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        double angle = viewDirection.getAngle();
+
+        Ray ray = agent.detectCardinalPoint(angle);
+        boolean movePossible =  agent.movePossible(ray);
+
+        assertFalse(movePossible);
+    }
+
+    @Test
     void testCardinalPointDetection()
     {
         AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
@@ -38,5 +54,8 @@ public class AcoAgentLimitedVisionTesting
         double angle = viewDirection.getAngle();
 
         Ray ray = agent.detectCardinalPoint(angle);
+
+        assertNotEquals(ray.getU().getX(), ray.getV().getX());
+        assertEquals(ray.getU().getY(), ray.getV().getY());
     }
 }
