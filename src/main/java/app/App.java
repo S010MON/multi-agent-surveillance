@@ -19,7 +19,6 @@ public class App extends Application
     @Getter private StartMenu startMenu;
     @Getter private Stage stage;
     private Simulation simulation;
-    //private Timeline animation;
 
     @Override
     public void start(Stage stage)
