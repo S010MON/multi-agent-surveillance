@@ -8,6 +8,7 @@ import app.model.agents.Cells.PheromoneCell;
 //TODO Use singleton pattern to insist on only one world
 public class AcoGrid extends Grid
 {
+    //TODO Dynamically set map size
     public AcoGrid()
     {
         super(2000, 2000, CellType.PHEROMONE, 20);
