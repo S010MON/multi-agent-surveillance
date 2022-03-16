@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class AcoAgent360Vision extends AgentImp
 {
-    private static AcoGrid world = new AcoGrid();
+    protected static AcoGrid world = new AcoGrid();
     private static int AcoAgentCount = 0;
     private static int AcoMoveCount = 0;
 

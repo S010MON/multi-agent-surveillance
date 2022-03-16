@@ -35,6 +35,21 @@ public class AcoAgentLimitedVisionTesting
     }
 
     @Test
+    void testStuckAtWindows()
+    {
+        viewDirection = new Vector(-1, 0);
+        position = new Vector(51.4758040349858, 367.0214134418279);
+
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+    }
+
+    @Test
     void testBasicMovement()
     {
         AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);

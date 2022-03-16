@@ -17,6 +17,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     private Vector directionBias = new Vector();
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
     public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
     {
@@ -78,6 +79,23 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         pheromoneSenseDirections();
 
         return new Move(position, move.scale(cellSize));
+    }
+
+    public void shortTermMemory(Vector currentPosition)
+    {
+        Vector usedMove = previousMove.getDeltaPos();
+
+        if(!usedMove.equals(new Vector()) &&
+                position.equals(previousMove.getEndDir()))
+        {
+            pheromoneDirections.remove(usedMove);
+            shortTermMoveMemory.put(usedMove.hashCode(), usedMove);
+        }
+    }
+
+    public void relyOnShortTermMemory()
+    {
+        visualDirectionsToExplore.addAll(shortTermMoveMemory.values());
     }
 
     public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
