@@ -54,7 +54,7 @@ public class FileMenuBar extends MenuBar
         clear.setOnAction(e -> app.getStartMenu().getDisplayPane().clear());
         edit.getItems().add(clear);
 
-        MenuItem pauseView = new MenuItem("Pause simulation");
+        MenuItem pauseView = new MenuItem("Pause/Resume");
         pauseView.setOnAction(e -> app.pause());
         edit.getItems().add(pauseView);
 
