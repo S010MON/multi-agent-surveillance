@@ -39,19 +39,22 @@ public class GameEngine
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
 
-        for (Agent a : map.getAgents()) {
+        for (Agent a : map.getAgents())
+        {
             Vector startPoint = a.getPosition();
             Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
             Vector teleportTo = checkTeleport(startPoint, endPoint);
-            if (teleportTo != null) {
+            if (teleportTo != null)
+            {
                 a.updateLocation(teleportTo);
                 renderer.addTrail(new Trail(teleportTo, tics));
             }
 
             if (legalMove(startPoint, endPoint) &&
                     legalMove(a, endPoint) &&
-                    legalMove(a, startPoint) && legalMove(a, startPoint, endPoint)) {
+                    legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
+            {
                 a.updateLocation(endPoint);
                 renderer.addTrail(new Trail(endPoint, tics));
             }
