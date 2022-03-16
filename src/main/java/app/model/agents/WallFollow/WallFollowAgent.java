@@ -31,7 +31,10 @@ public class WallFollowAgent extends AgentImp
     private boolean initialVertexFound = false;
     private BooleanCell tempAgentCell;
     private boolean noMovesDone = true;
-    private List<Vector> directions;
+    private List<Vector> directions = Arrays.asList(new Vector(0,1),
+                                                    new Vector(1,0),
+                                                    new Vector(0,-1),
+                                                    new Vector(-1,0));
 
     public WallFollowAgent(Vector position, Vector direction, double radius)
     {
@@ -243,7 +246,7 @@ public class WallFollowAgent extends AgentImp
     }
 
     /**
-     * Overloads getNeighbourVertex with double values cast to int
+     * Overloads {@code getNeighbourVertex()} with double values cast to int
      */
     public  BooleanCell getNeighbourVertex(double neighbourX,
                                            double neighbourY,
@@ -308,18 +311,13 @@ public class WallFollowAgent extends AgentImp
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.rayLength() <= moveLength)
             {
                 if (DEBUG)
-                {
-                    System.out.print("WALL DETECTED! Angle of detecting ray: " + rayAngle + " and ray length: ");
-                    System.out.println(r.rayLength());
-                }
+                    System.out.print("WALL DETECTED! Ray Angle: " + rayAngle + ", Length: " + r.rayLength());
                 // TODO: deal with glass and map boundary detection
                 return false;
             }
         }
         if (DEBUG)
-        {
             System.out.println("No wall detected with ray of angle: " + rayAngle);
-        }
         return true;
     }
 
@@ -355,11 +353,6 @@ public class WallFollowAgent extends AgentImp
 
     public Vector rotateAgentLeft()
     {
-        directions = Arrays.asList(new Vector(0,1),
-                new Vector(1,0),
-                new Vector(0,-1),
-                new Vector(-1,0));
-
         for (int i = 0; i <= directions.size(); i++)
         {
             if (direction.equals(directions.get(i)))
@@ -379,11 +372,6 @@ public class WallFollowAgent extends AgentImp
 
     public Vector rotateAgentRight()
     {
-        directions = Arrays.asList(new Vector(0,1),
-                new Vector(1,0),
-                new Vector(0,-1),
-                new Vector(-1,0));
-
         for (int i = 0; i <= directions.size(); i++)
         {
             if (direction.equals(directions.get(i)))
