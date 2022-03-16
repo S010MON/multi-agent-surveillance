@@ -72,7 +72,7 @@ public class App extends Application
         scene.setRoot(startMenu);
     }
 
-    public void pauseSimulation()
+    public void pause()
     {
         simulation.pauseOrResume();
     }
