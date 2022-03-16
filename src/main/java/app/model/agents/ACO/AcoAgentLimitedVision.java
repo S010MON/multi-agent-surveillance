@@ -1,0 +1,113 @@
+package app.model.agents.ACO;
+
+import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Vector;
+import app.model.map.Move;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Stack;
+
+
+public class AcoAgentLimitedVision extends AcoAgent360Vision
+{
+    private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    private Vector directionBias = new Vector();
+    private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    private ArrayList<Vector> possibleMovements = new ArrayList<>();
+
+    public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
+    {
+        super(position, direction, radius);
+        pheromoneDirectionDetection();
+    }
+
+    public void pheromoneDirectionDetection()
+    {
+        for(int cardinalAngle: getCardinalAngles())
+        {
+            pheromoneDirections.add(angleToGridMovementLink(cardinalAngle));
+        }
+    }
+
+    /*
+    1. Agent accesses smells in 360 degrees
+    2. Determines directions of lowest pheromones
+    3. Determines if directions are viable through vision ~ (Randomly) (If not viable ...)
+    4. Moves in that direction
+     */
+    @Override
+    public Move move()
+    {
+        if(!visualDirectionsToExplore.empty())
+        {
+            explorationToPossibleMovement();
+            exploreNextDirection();
+        }
+        else
+        {
+            ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
+            directionsToVisiblyExplore(pheromoneValues);
+        }
+        return null;
+    }
+
+    public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
+    {
+        double minValue = Double.MAX_VALUE;
+        visualDirectionsToExplore = new Stack<>();
+
+        for(int i = 0; i < pheromoneValues.size(); i++)
+        {
+            if(pheromoneValues.get(i) == minValue)
+            {
+                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+            }
+            else if(pheromoneValues.get(i) < minValue)
+            {
+                visualDirectionsToExplore.clear();
+                minValue = pheromoneValues.get(i);
+                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+            }
+        }
+    }
+
+    public void explorationToPossibleMovement()
+    {
+        Ray cardinalRay = detectCardinalPoint(direction.getAngle());
+        if(movePossible(cardinalRay))
+        {
+            possibleMovements.add(direction);
+        }
+    }
+
+    public void exploreNextDirection()
+    {
+        Vector directionToExplore = visualDirectionsToExplore.pop();
+        direction = directionToExplore;
+    }
+
+    public boolean movePossible(Ray cardinalRay)
+    {
+        if(cardinalRay.rayLength() > cellSize + epsilon)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Ray detectCardinalPoint(double targetCardinalAngle)
+    {
+        for(Ray ray: view)
+        {
+            if(approximateAngleRange(ray.angle(), targetCardinalAngle))
+            {
+                return ray;
+            }
+        }
+        throw new RuntimeException("Cardinal point not found");
+    }
+
+}

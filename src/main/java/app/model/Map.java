@@ -3,7 +3,7 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.ACO.AcoAgent;
+import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.boundary.Boundary;
 import app.model.furniture.*;
@@ -57,7 +57,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = new Vector(0, 1);
-            AcoAgent guard = new AcoAgent(srt, dir, 10);
+            AcoAgent360Vision guard = new AcoAgent360Vision(srt, dir, 10);
 
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());

@@ -1,7 +1,7 @@
 package testing;
 
 import app.controller.linAlg.Vector;
-import app.model.agents.ACO.AcoAgent;
+import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.ACO.AcoGrid;
 import app.model.agents.Cells.PheromoneCell;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,11 @@ public class AcoGridTest
     void testUpdateAgent()
     {
         AcoGrid world = new AcoGrid(50.3, 25.7, 1.0);
-        AcoAgent.initializeWorld(world);
+        AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-        AcoGrid grid = AcoAgent.accessWorld();
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
+        AcoGrid grid = AcoAgent360Vision.accessWorld();
 
         PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
 
@@ -32,11 +32,11 @@ public class AcoGridTest
     void testEvaporationProcess()
     {
         AcoGrid world = new AcoGrid(50.3, 25.7, 1);
-        AcoAgent.initializeWorld(world);
+        AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
-        AcoGrid grid = AcoAgent.accessWorld();
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
+        AcoGrid grid = AcoAgent360Vision.accessWorld();
 
         PheromoneCell cell = (PheromoneCell) grid.getCellAt(agentPosition);
         double currentPheromone = cell.currentPheromoneValue();
@@ -51,19 +51,19 @@ public class AcoGridTest
     void testAgentMovementWithinGrid()
     {
         AcoGrid world = new AcoGrid(20, 20, 1);
-        AcoAgent.initializeWorld(world);
+        AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10, 10);
-        AcoAgent agent = new AcoAgent(agentPosition, new Vector(1, 0), 10);
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
 
-        if(display) AcoAgent.accessWorld().print();
+        if(display) AcoAgent360Vision.accessWorld().print();
 
         Vector newPosition = new Vector(9, 9);
         agent.updateLocation(newPosition);
 
-        if(display) AcoAgent.accessWorld().print();
+        if(display) AcoAgent360Vision.accessWorld().print();
 
-        PheromoneCell currentCell = (PheromoneCell) AcoAgent.accessWorld().getCellAt(newPosition);
+        PheromoneCell currentCell = (PheromoneCell) AcoAgent360Vision.accessWorld().getCellAt(newPosition);
         assertTrue(currentCell.currentPheromoneValue() < agent.releaseMaxPheromone());
 
     }

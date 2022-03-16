@@ -10,27 +10,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-//TODO Accommodate for agents clashes
-public class AcoAgent extends AgentImp
+public class AcoAgent360Vision extends AgentImp
 {
     private static AcoGrid world = new AcoGrid();
     private static int AcoAgentCount = 0;
     private static int AcoMoveCount = 0;
 
-    private double maxPheromone = 1;
-    private double cellSize;
+    private double maxPheromone = 5;
+    protected double cellSize;
     private Random randomGenerator = new Random(1);
 
     private Move previousMove;
     private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
-    //TODO Implement for memory
-    private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
-
     private int[] cardinalAngles = {0, 90, 180, 270};
-    private double epsilon = 0.3;
+    protected double epsilon = 0.3;
 
-    public AcoAgent(Vector position, Vector direction, double radius)
+    public AcoAgent360Vision(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
         cellSize = world.getCellSize();
@@ -111,7 +107,6 @@ public class AcoAgent extends AgentImp
         return modifiedPossibleMoves;
     }
 
-    //TODO Implement movement bias based on target direction
     public ArrayList<Vector> determineEquivalentMinMoves(ArrayList<Double> cellPheromones, ArrayList<Vector> possibleMovements)
     {
         double minValue = Double.MAX_VALUE;
@@ -259,6 +254,11 @@ public class AcoAgent extends AgentImp
     {
         AcoAgentCount = 0;
         AcoMoveCount = 0;
+    }
+
+    public double getCellSize()
+    {
+        return cellSize;
     }
 
     public HashMap<Integer, Vector> accessShortTermMemory()
