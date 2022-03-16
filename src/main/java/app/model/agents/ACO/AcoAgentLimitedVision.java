@@ -42,15 +42,37 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     {
         if(!visualDirectionsToExplore.empty())
         {
-            explorationToPossibleMovement();
-            exploreNextDirection();
+            return visibleExploration();
         }
         else
         {
-            ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
-            directionsToVisiblyExplore(pheromoneValues);
+            return pheromonesDetection();
         }
-        return null;
+
+        //Select move to actually make
+    }
+
+    public Move visibleExploration()
+    {
+        explorationToViableMovement();
+        nextExplorationVisionDirection();
+
+        previousMove = new Move(position, new Vector());
+        return new Move(position, new Vector());
+    }
+
+    public Move pheromonesDetection()
+    {
+        ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
+        directionsToVisiblyExplore(pheromoneValues);
+
+        previousMove = new Move(position, new Vector());
+        return new Move(position, new Vector());
+    }
+
+    public Move makeMove()
+    {
+        //Randomly or with bias select move
     }
 
     public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
@@ -73,7 +95,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         }
     }
 
-    public void explorationToPossibleMovement()
+    public void explorationToViableMovement()
     {
         Ray cardinalRay = detectCardinalPoint(direction.getAngle());
         if(movePossible(cardinalRay))
@@ -82,7 +104,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         }
     }
 
-    public void exploreNextDirection()
+    public void nextExplorationVisionDirection()
     {
         Vector directionToExplore = visualDirectionsToExplore.pop();
         direction = directionToExplore;

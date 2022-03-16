@@ -20,7 +20,7 @@ public class AcoAgent360Vision extends AgentImp
     protected double cellSize;
     private Random randomGenerator = new Random(1);
 
-    private Move previousMove;
+    protected Move previousMove;
     private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
     private int[] cardinalAngles = {0, 90, 180, 270};
