@@ -73,7 +73,9 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         //Take into account agent clash
         Vector move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
         previousMove = new Move(position, move.scale(cellSize));
+
         possibleMovements.clear();
+        pheromoneSenseDirections();
 
         return new Move(position, move.scale(cellSize));
     }
@@ -102,6 +104,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
     public void pheromoneSenseDirections()
     {
+        pheromoneDirections.clear();
         for(int cardinalAngle: cardinalAngles)
         {
             pheromoneDirections.add(angleToGridMovementLink(cardinalAngle));
@@ -111,11 +114,22 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     public void explorationToViableMovement()
     {
         Ray cardinalRay = detectCardinalPoint(direction.getAngle());
-        visualDirectionsToExplore.pop();
+        Vector currentDirection = visualDirectionsToExplore.pop();
         if(movePossible(cardinalRay))
         {
             possibleMovements.add(direction);
         }
+
+        //Agent stuck/frozen handling
+        if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
+        {
+            agentFreezeHandling(currentDirection);
+        }
+    }
+
+    public void agentFreezeHandling(Vector attemptedDirection)
+    {
+        pheromoneDirections.remove(attemptedDirection);
     }
 
     public void nextExplorationVisionDirection()
