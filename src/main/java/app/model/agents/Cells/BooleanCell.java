@@ -1,27 +1,55 @@
 package app.model.agents.Cells;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BooleanCell implements Cell
 {
-    private boolean explored;
-    private boolean obstacle;
 
-    public void isExplored()
+    @Getter @Setter private Boolean obstacle;  // permanent obstacle
+    private Boolean occupied;  // temporarily occupied by an agent or intruder
+    @Getter private int x;
+    @Getter private int y;
+    private String XY;
+
+    public BooleanCell()
     {
-        explored = true;
+        obstacle = null;
+        occupied = null;
     }
 
-    public void isObstacle()
+    public BooleanCell(int x, int y)
     {
-        obstacle = true;
+        this.x = x;
+        this.y = y;
+        XY = x + " " + y;
+        obstacle = false;
+        occupied = false;
     }
 
-    public boolean getExploredState()
+    public boolean equalsXY(int otherX, int otherY)
     {
-        return explored;
+        return this.x == otherX && this.y == otherY;
     }
 
-    public boolean getObstacleState()
+    @Override
+    public boolean equals(Object o)
     {
-        return obstacle;
+        if (o.getClass() == this.getClass())
+            return equalsXY(((BooleanCell) o).getX(), ((BooleanCell) o).getY());
+        return false;
     }
+
+    @Override
+    public String toString()
+    {
+        return XY;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return toString().hashCode();
+    }
+
 }

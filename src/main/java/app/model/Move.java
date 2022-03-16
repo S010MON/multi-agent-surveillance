@@ -1,4 +1,4 @@
-package app.model.map;
+package app.model;
 
 import app.controller.linAlg.Vector;
 import lombok.AllArgsConstructor;

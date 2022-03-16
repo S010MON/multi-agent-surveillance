@@ -4,20 +4,25 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.ACO.AcoAgent;
-import app.model.agents.*;
+import app.model.agents.Agent;
+import app.model.agents.Human;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
-import app.model.furniture.*;
+import app.model.furniture.Furniture;
+import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import app.model.soundFurniture.SoundFurniture;
-import app.model.soundSource.SoundSource;
 import app.model.soundFurniture.SoundFurnitureFactory;
+import app.model.soundSource.SoundSource;
 import app.model.soundSource.SoundSourceFactory;
 import app.model.soundSource.SoundSourceType;
 import app.view.simulation.Info;
-import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+
+import java.util.ArrayList;
 
 public class Map
 {

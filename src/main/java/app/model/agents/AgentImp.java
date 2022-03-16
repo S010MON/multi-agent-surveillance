@@ -1,14 +1,15 @@
 package app.model.agents;
 
+import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
-import app.controller.graphicsEngine.Ray;
-import app.model.map.Move;
+import app.model.Move;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.ArrayList;
 
 public class AgentImp implements Agent
@@ -16,7 +17,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected double maxWalk = 5;
     @Getter @Setter protected double maxSprint = 10;
     @Getter protected Vector position;
-    @Getter protected Vector direction;
+    @Getter @Setter protected Vector direction;
     @Getter protected double radius;
     protected ArrayList<Ray> view;
 

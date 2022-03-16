@@ -1,15 +1,15 @@
 package testing;
 
 import app.controller.linAlg.Vector;
-import app.model.agents.Grid;
 import app.model.agents.ACO.AcoGrid;
-import app.model.agents.Cells.BooleanCell;
 import app.model.agents.Cells.Cell;
 import app.model.agents.Cells.CellType;
 import app.model.agents.Cells.PheromoneCell;
+import app.model.agents.Grid;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GridTest
 {
@@ -64,16 +64,6 @@ public class GridTest
         double value = cell.currentPheromoneValue();
 
         assertEquals(value, 0.0);
-    }
-
-    @Test
-    void testBooleanCell()
-    {
-        Grid grid = new Grid(100, 100, CellType.BOOLEAN);
-        BooleanCell cell = (BooleanCell) grid.getCellAt(10, 10);
-        boolean value = cell.getExploredState();
-
-        assertFalse(value);
     }
 
     @Test
