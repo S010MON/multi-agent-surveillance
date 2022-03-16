@@ -31,6 +31,7 @@ public class WallFollowAgent extends AgentImp
     private boolean initialVertexFound = false;
     private BooleanCell tempAgentCell;
     private boolean noMovesDone = true;
+    private List<Vector> directions;
 
     public WallFollowAgent(Vector position, Vector direction, double radius)
     {
@@ -109,7 +110,7 @@ public class WallFollowAgent extends AgentImp
             else
             {
                 if (DEBUG) { System.out.println("ALGORITHM CASE 0: wall encountered!"); }
-                newDirection = rotateAgentLeft(false);
+                newDirection = rotateAgentRight();
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
                 wallEncountered = true;
@@ -126,7 +127,7 @@ public class WallFollowAgent extends AgentImp
         else if (noWallDetected(getAngleOfLeftRay()))
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
-            newDirection = rotateAgentLeft(true);
+            newDirection = rotateAgentLeft();
             lastTurn = TurnType.LEFT;
             movedForwardLast = false;
         }
@@ -140,7 +141,7 @@ public class WallFollowAgent extends AgentImp
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            newDirection = rotateAgentLeft(false);
+            newDirection = rotateAgentRight();
             lastTurn = TurnType.RIGHT;
             movedForwardLast = false;
         }
@@ -164,15 +165,15 @@ public class WallFollowAgent extends AgentImp
                                                     false,
                                                     1);
 
-        BooleanCell leftCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft(true).getX() * moveLength),
-                                                  (agentCell.getY() + rotateAgentLeft(true).getY() * moveLength),
-                                                  rotateAgentLeft(true).getAngle(),
+        BooleanCell leftCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft().getX() * moveLength),
+                                                  (agentCell.getY() + rotateAgentLeft().getY() * moveLength),
+                                                  rotateAgentLeft().getAngle(),
                                                   false,
                                                   1);
 
-        BooleanCell rightCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft(false).getX() * moveLength),
-                                                   (agentCell.getY() + rotateAgentLeft(false).getY() * moveLength),
-                                                    rotateAgentLeft(false).getAngle(),
+        BooleanCell rightCell = getNeighbourVertex((agentCell.getX() + rotateAgentRight().getX() * moveLength),
+                                                   (agentCell.getY() + rotateAgentRight().getY() * moveLength),
+                                                    rotateAgentRight().getAngle(),
                                                    false,
                                                     1);
 
@@ -180,8 +181,8 @@ public class WallFollowAgent extends AgentImp
         if (!noMovesDone)
         {
             exploreVerticesUntilObstacle(forwardCell, direction, 1);
-            exploreVerticesUntilObstacle(leftCell, rotateAgentLeft(true), 1);
-            exploreVerticesUntilObstacle(rightCell, rotateAgentLeft(false), 1);
+            exploreVerticesUntilObstacle(leftCell, rotateAgentLeft(), 1);
+            exploreVerticesUntilObstacle(rightCell, rotateAgentRight(), 1);
         }
     }
 
@@ -263,17 +264,17 @@ public class WallFollowAgent extends AgentImp
             BooleanCell cellToUpdate = null;
             if (lastTurn == TurnType.LEFT)
             {
-                cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft(true).getX() * moveLength),
-                                                  (agentY + rotateAgentLeft(true).getY() * moveLength),
-                                                  rotateAgentLeft(true).getAngle(),
+                cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft().getX() * moveLength),
+                                                  (agentY + rotateAgentLeft().getY() * moveLength),
+                                                  rotateAgentLeft().getAngle(),
                                                   false,
                                                   1);
             }
             else if (lastTurn == TurnType.RIGHT)
             {
-                cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft(false).getX() * moveLength),
-                                                  (agentY + rotateAgentLeft(false).getY() * moveLength),
-                                                  rotateAgentLeft(false).getAngle(),
+                cellToUpdate = getNeighbourVertex((agentX + rotateAgentRight().getX() * moveLength),
+                                                  (agentY + rotateAgentRight().getY() * moveLength),
+                                                  rotateAgentRight().getAngle(),
                                                   false,
                                                   1);
             }
@@ -352,28 +353,16 @@ public class WallFollowAgent extends AgentImp
         return false;
     }
 
-    public Vector rotateAgentLeft(boolean rotateLeft)
+    public Vector rotateAgentLeft()
     {
-        // if rotateLeft is true, rotate agent 90 degrees left
-        // if rotateLeft id false, rotate agent 90 degrees right
-        List<Vector> directions = Arrays.asList(new Vector(0,1),
-                                                new Vector(1,0),
-                                                new Vector(0,-1),
-                                                new Vector(-1,0));
-        for (int i=0; i<=directions.size(); i++)
+        directions = Arrays.asList(new Vector(0,1),
+                new Vector(1,0),
+                new Vector(0,-1),
+                new Vector(-1,0));
+
+        for (int i = 0; i <= directions.size(); i++)
         {
-            if (direction.equals(directions.get(i)) && !rotateLeft)
-            {
-                if (i == 0)
-                {
-                    return directions.get(3);
-                }
-                else
-                {
-                    return directions.get(i-1);
-                }
-            }
-            else if (direction.equals(directions.get(i)) && rotateLeft)
+            if (direction.equals(directions.get(i)))
             {
                 if (i == directions.size()-1)
                 {
@@ -382,6 +371,30 @@ public class WallFollowAgent extends AgentImp
                 else
                 {
                     return directions.get(i+1);
+                }
+            }
+        }
+        throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
+    }
+
+    public Vector rotateAgentRight()
+    {
+        directions = Arrays.asList(new Vector(0,1),
+                new Vector(1,0),
+                new Vector(0,-1),
+                new Vector(-1,0));
+
+        for (int i = 0; i <= directions.size(); i++)
+        {
+            if (direction.equals(directions.get(i)))
+            {
+                if (i == 0)
+                {
+                    return directions.get(3);
+                }
+                else
+                {
+                    return directions.get(i-1);
                 }
             }
         }

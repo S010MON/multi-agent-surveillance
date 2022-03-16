@@ -182,19 +182,19 @@ public class WallFollowAgentTest
     {
         // dir. before rotate = (0,-1)
         agent.setDirection(new Vector(0,-1));
-        agent.setDirection(agent.rotateAgentLeft(true));
+        agent.setDirection(agent.rotateAgentLeft());
         Vector expectedDir = new Vector(-1,0);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (1,0)
-        agent.setDirection(agent.rotateAgentLeft(true));
+        agent.setDirection(agent.rotateAgentLeft());
         expectedDir = new Vector(0,1);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (0,1)
-        agent.setDirection(agent.rotateAgentLeft(true));
+        agent.setDirection(agent.rotateAgentLeft());
         expectedDir = new Vector(1,0);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (1,0)
-        agent.setDirection(agent.rotateAgentLeft(true));
+        agent.setDirection(agent.rotateAgentLeft());
         expectedDir = new Vector(0,-1);
         assertEquals(expectedDir, agent.getDirection());
     }
@@ -204,19 +204,19 @@ public class WallFollowAgentTest
     {
         // dir. before rotate = (0,-1)
         agent.setDirection(new Vector(0,-1));
-        agent.setDirection(agent.rotateAgentLeft(false));
+        agent.setDirection(agent.rotateAgentRight());
         Vector expectedDir = new Vector(1,0);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (-1,0)
-        agent.setDirection(agent.rotateAgentLeft(false));
+        agent.setDirection(agent.rotateAgentRight());
         expectedDir = new Vector(0,1);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (0,1)
-        agent.setDirection(agent.rotateAgentLeft(false));
+        agent.setDirection(agent.rotateAgentRight());
         expectedDir = new Vector(-1,0);
         assertEquals(expectedDir, agent.getDirection());
         // dir. before rotate = (1,0)
-        agent.setDirection(agent.rotateAgentLeft(false));
+        agent.setDirection(agent.rotateAgentRight());
         expectedDir = new Vector(0,-1);
         assertEquals(expectedDir, agent.getDirection());
     }
@@ -459,7 +459,7 @@ public class WallFollowAgentTest
         boolean noFrontWallDetected = agent.noWallDetected(agent.getDirection().getAngle());
         boolean noLeftWallDetected = agent.noWallDetected(agent.getAngleOfLeftRay());
         Vector expectedPos = initialPosition;
-        Vector expectedDir = agent.rotateAgentLeft(false);
+        Vector expectedDir = agent.rotateAgentRight();
         Move newMove = agent.move();
         agent.updateLocation(initialPosition.add(newMove.getDeltaPos()));
         Vector expectedDeltaPos = new Vector(0,0);
