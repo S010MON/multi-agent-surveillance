@@ -178,7 +178,7 @@ public class WallFollowAgent extends AgentImp
                                                    (agentCell.getY() + rotateAgentRight().getY() * moveLength),
                                                     rotateAgentRight().getAngle(),
                                                    false,
-                                                    1);
+                                                   1);
 
         cellGraph.updateAgentPos(agentCell,forwardCell,leftCell,rightCell);
         if (!noMovesDone)
@@ -345,12 +345,6 @@ public class WallFollowAgent extends AgentImp
         return true;
     }
 
-    public boolean obstacleDetected(Vector direction)
-    {
-        // TODO use BoundaryImp methods to check if ray finds obstacle
-        return false;
-    }
-
     public Vector rotateAgentLeft()
     {
         for (int i = 0; i <= directions.size(); i++)
@@ -401,4 +395,11 @@ public class WallFollowAgent extends AgentImp
             return currentAngle + 90 - 360;
         }
     }
+
+    private boolean obstacleDetected(Vector direction)
+    {
+        // TODO use BoundaryImp methods to check if ray finds obstacle
+        return false;
+    }
 }
+
