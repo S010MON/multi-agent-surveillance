@@ -95,7 +95,7 @@ public class WallFollowAgent extends AgentImp
                 System.out.println("agent final vertex " + cellGraph.getAgentPos());
                 System.out.println(cellGraph.getVerticesWithUnexploredNeighbours());
             }
-            return new Move(newDirection, newMove);  // currently agent stops if found initial vertex
+            return new Move(newDirection, newMove);  // currently, agent stops if found initial vertex
         }
         else if (!wallEncountered)
         {
@@ -158,20 +158,20 @@ public class WallFollowAgent extends AgentImp
     public void updateNeighbouringVertices(BooleanCell agentCell)
     {
         tempAgentCell = agentCell;
-        BooleanCell forwardCell = getNeighbourVertex((int) (agentCell.getX() + direction.getX() * moveLength),
-                                                     (int) (agentCell.getY() + direction.getY() * moveLength),
+        BooleanCell forwardCell = getNeighbourVertex((agentCell.getX() + direction.getX() * moveLength),
+                                                     (agentCell.getY() + direction.getY() * moveLength),
                                                      direction.getAngle(),
                                                     false,
                                                     1);
 
-        BooleanCell leftCell = getNeighbourVertex((int) (agentCell.getX() + rotateAgentLeft(true).getX() * moveLength),
-                                                  (int) (agentCell.getY() + rotateAgentLeft(true).getY() * moveLength),
+        BooleanCell leftCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft(true).getX() * moveLength),
+                                                  (agentCell.getY() + rotateAgentLeft(true).getY() * moveLength),
                                                   rotateAgentLeft(true).getAngle(),
                                                   false,
                                                   1);
 
-        BooleanCell rightCell = getNeighbourVertex((int) (agentCell.getX() + rotateAgentLeft(false).getX() * moveLength),
-                                                   (int) (agentCell.getY() + rotateAgentLeft(false).getY() * moveLength),
+        BooleanCell rightCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft(false).getX() * moveLength),
+                                                   (agentCell.getY() + rotateAgentLeft(false).getY() * moveLength),
                                                     rotateAgentLeft(false).getAngle(),
                                                    false,
                                                     1);
@@ -194,8 +194,8 @@ public class WallFollowAgent extends AgentImp
      */
     public void exploreVerticesUntilObstacle(BooleanCell initVertex, Vector dir, int distFromAgentVertex)
     {
-        BooleanCell nextCell = getNeighbourVertex((int) (initVertex.getX() + dir.getX() * moveLength),
-                                                  (int) (initVertex.getY() + dir.getY() * moveLength),
+        BooleanCell nextCell = getNeighbourVertex((initVertex.getX() + dir.getX() * moveLength),
+                                                  (initVertex.getY() + dir.getY() * moveLength),
                                                   dir.getAngle(),
                                                   true,
                                                   distFromAgentVertex);
@@ -241,23 +241,38 @@ public class WallFollowAgent extends AgentImp
         return neighbour;
     }
 
+    /**
+     * Overloads getNeighbourVertex with double values cast to int
+     */
+    public  BooleanCell getNeighbourVertex(double neighbourX,
+                                           double neighbourY,
+                                           double rayAngle,
+                                           boolean exploring,
+                                           int distFromAgentVertex)
+    {
+        return getNeighbourVertex((int) neighbourX, (int) neighbourY, rayAngle, exploring, distFromAgentVertex);
+    }
+
     public void updateGraph()
     {
+        int agentX = cellGraph.getAgentPos().getX();
+        int agentY = cellGraph.getAgentPos().getY();
+
         if (getLastTurn() != TurnType.NO_TURN && !movedForwardLast)
         {
             BooleanCell cellToUpdate = null;
             if (lastTurn == TurnType.LEFT)
             {
-                cellToUpdate = getNeighbourVertex((int) (cellGraph.getAgentPos().getX() + rotateAgentLeft(true).getX() * moveLength),
-                                                  (int) (cellGraph.getAgentPos().getY() + rotateAgentLeft(true).getY() * moveLength),
+                cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft(true).getX() * moveLength),
+                                                  (agentY + rotateAgentLeft(true).getY() * moveLength),
                                                   rotateAgentLeft(true).getAngle(),
                                                   false,
                                                   1);
             }
             else if (lastTurn == TurnType.RIGHT)
             {
-                cellToUpdate = getNeighbourVertex((int) (cellGraph.getAgentPos().getX() + rotateAgentLeft(false).getX() * moveLength),
-                                                  (int) (cellGraph.getAgentPos().getY() + rotateAgentLeft(false).getY() * moveLength),
+                cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft(false).getX() * moveLength),
+                                                  (agentY + rotateAgentLeft(false).getY() * moveLength),
                                                   rotateAgentLeft(false).getAngle(),
                                                   false,
                                                   1);
@@ -269,8 +284,8 @@ public class WallFollowAgent extends AgentImp
         }
         else if (movedForwardLast)
         {
-            BooleanCell newAgentCell = getNeighbourVertex((int) (cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
-                                                          (int) (cellGraph.getAgentPos().getY() + direction.getY() * moveLength),
+            BooleanCell newAgentCell = getNeighbourVertex((agentX + direction.getX() * moveLength),
+                                                          (agentY + direction.getY() * moveLength),
                                                            direction.getAngle(),
                                                            false,
                                                            1);
