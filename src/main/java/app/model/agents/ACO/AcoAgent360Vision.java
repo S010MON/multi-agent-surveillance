@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.PheromoneCell;
 import app.model.map.Move;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class AcoAgent360Vision extends AgentImp
     protected double cellSize;
     protected Random randomGenerator = new Random(1);
 
-    protected Move previousMove;
+    @Getter protected Move previousMove;
     private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
     protected int[] cardinalAngles = {0, 90, 180, 270};

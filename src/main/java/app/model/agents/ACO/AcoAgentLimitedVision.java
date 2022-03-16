@@ -16,7 +16,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
     private Vector directionBias = new Vector();
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
-    private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
 
     public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
     {
@@ -33,16 +33,19 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     @Override
     public Move move()
     {
-        if(!visualDirectionsToExplore.empty())
+        if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
         {
-            return visibleExploration();
+            Move nextMove = pheromonesDetection();
+            return nextMove;
+        }
+        else if(visualDirectionsToExplore.empty() && !possibleMovements.isEmpty())
+        {
+            return makeMove();
         }
         else
         {
-            return pheromonesDetection();
+            return visibleExploration();
         }
-
-        //Select move to actually make
     }
 
     public Move visibleExploration()
@@ -58,6 +61,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     {
         ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
         directionsToVisiblyExplore(pheromoneValues);
+        direction = visualDirectionsToExplore.peek().normalise();
 
         previousMove = new Move(position, new Vector());
         return new Move(position, new Vector());
@@ -68,7 +72,10 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         //Randomly or with bias select move
         //Take into account agent clash
         Vector move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
-        return new Move(position, move);
+        previousMove = new Move(position, move.scale(cellSize));
+        possibleMovements.clear();
+
+        return new Move(position, move.scale(cellSize));
     }
 
     public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
@@ -78,11 +85,13 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
         for(int i = 0; i < pheromoneValues.size(); i++)
         {
-            if(pheromoneValues.get(i) == minValue)
+            Double pheromoneValue = pheromoneValues.get(i);
+
+            if(pheromoneValue != null && pheromoneValue == minValue)
             {
                 visualDirectionsToExplore.add(pheromoneDirections.get(i));
             }
-            else if(pheromoneValues.get(i) < minValue)
+            else if(pheromoneValue != null && pheromoneValues.get(i) < minValue)
             {
                 visualDirectionsToExplore.clear();
                 minValue = pheromoneValues.get(i);
@@ -102,6 +111,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     public void explorationToViableMovement()
     {
         Ray cardinalRay = detectCardinalPoint(direction.getAngle());
+        visualDirectionsToExplore.pop();
         if(movePossible(cardinalRay))
         {
             possibleMovements.add(direction);
@@ -110,8 +120,11 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
     public void nextExplorationVisionDirection()
     {
-        Vector directionToExplore = visualDirectionsToExplore.pop();
-        direction = directionToExplore;
+        if(!visualDirectionsToExplore.empty())
+        {
+            Vector directionToExplore = visualDirectionsToExplore.peek();
+            direction = directionToExplore.normalise();
+        }
     }
 
     public boolean movePossible(Ray cardinalRay)
@@ -136,4 +149,14 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         throw new RuntimeException("Cardinal point not found");
     }
 
+    public int getSizeOfDirectionsToVisiblyExplore()
+    {
+        int count = 0;
+        while(!visualDirectionsToExplore.empty())
+        {
+            visualDirectionsToExplore.pop();
+            count ++;
+        }
+        return count;
+    }
 }

@@ -57,7 +57,6 @@ public class Grid
         catch(Exception e)
         {
             System.out.println("Cell index out of bounds");
-            e.printStackTrace();
         }
         return null;
     }
@@ -73,7 +72,6 @@ public class Grid
         catch(Exception e)
         {
             System.out.println("Cell index out of bounds");
-            e.printStackTrace();
         }
         return null;
     }

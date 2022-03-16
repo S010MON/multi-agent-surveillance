@@ -35,6 +35,52 @@ public class AcoAgentLimitedVisionTesting
     }
 
     @Test
+    void testBasicMovement()
+    {
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        //Case 1: Smelling pheromones
+        agent.move();
+        assertEquals(agent.getPreviousMove().getEndDir(), position);
+        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector());
+        assertEquals(agent.getDirection(), new Vector(-1, 0));
+
+        //Case 2: Exploring directions
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertEquals(agent.getDirection(), new Vector(0, -1));
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        // Case 3: Agent makes move based on information extracted
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector(1, 0));
+    }
+
+    @Test
+    void testMovementAgainstWall()
+    {
+        position = new Vector(678, 100);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+    }
+
+    @Test
     void testDirectionsToVisiblyExplore()
     {
         AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
@@ -48,6 +94,33 @@ public class AcoAgentLimitedVisionTesting
     }
 
     @Test
+    void testExplorationToViableMovementFacingWall()
+    {
+        position = new Vector(678, 100);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        agent.explorationToViableMovement();
+
+        ArrayList<Vector> possibleMovements = agent.getPossibleMovements();
+        assertEquals(possibleMovements.size(), 0);
+    }
+
+    @Test
+    void testExplorationToViableMovementFreeSpace()
+    {
+        viewDirection = new Vector(-1, 0);
+        position = new Vector(678, 100);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        agent.explorationToViableMovement();
+
+        ArrayList<Vector> possibleMovements = agent.getPossibleMovements();
+        assertEquals(possibleMovements.size(), 1);
+    }
+
+    @Test
     void testDirectionsToVisiblyExploreAgainstWall()
     {
         position = new Vector(0, 0);
@@ -56,6 +129,9 @@ public class AcoAgentLimitedVisionTesting
 
         ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
         ArrayList<Double> pheromones = agent.accessAvaliableCellPheromones(pheromoneDirections);
+        agent.directionsToVisiblyExplore(pheromones);
+
+        assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 2);
 
         //No gird access off of map boundaries (Maintains direction order)
         assertEquals(pheromones.get(0), 0.0);
