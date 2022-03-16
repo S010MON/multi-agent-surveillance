@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 
@@ -72,4 +71,10 @@ public class App extends Application
     {
         scene.setRoot(startMenu);
     }
+
+    public void pause()
+    {
+        simulation.pauseOrResume();
+    }
+
 }
