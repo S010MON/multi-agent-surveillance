@@ -37,6 +37,4 @@ public class Simulation extends BorderPane
     {
         gameEngine.handleKey(e);
     }
-
-    public void pause() {gameEngine.pause(); }
 }

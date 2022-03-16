@@ -74,7 +74,7 @@ public class GameEngine
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));
             case "d" -> map.walk(new Vector(1, 0));
-            case " " -> pause();
+            //case " " -> pause();
         }
     }
 
