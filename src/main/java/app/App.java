@@ -42,9 +42,9 @@ public class App extends Application
         };
 
 
-        animation = new Timeline(new KeyFrame(Duration.millis(1000), eventHandler));
-        //animation.setCycleCount(Timeline.INDEFINITE);
-        //animation.play();
+        animation = new Timeline(new KeyFrame(Duration.millis(1000), e -> {System.out.println("timeline event");}));
+        //animation = new TimeLine();
+        animation.setCycleCount(Timeline.INDEFINITE);
 
 
         this.fileMenuBar = new FileMenuBar(this);
@@ -105,6 +105,18 @@ public class App extends Application
             case " " -> pauseSimulation();
             default -> simulation.handleKey(e);
         }
+    }
+
+    public void handleEvent(ActionEvent e)
+    {
+        /*
+        switch (e.getCharacter())
+        {
+            case " " -> pauseSimulation();
+            default -> simulation.handleKey(e);
+        }
+
+         */
     }
 
     public void pauseSimulation()
