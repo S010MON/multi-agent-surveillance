@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 public class Simulation extends BorderPane
 {
     private GameEngine gameEngine;
+    private App app;
 
     public Simulation(App app)
     {
@@ -21,6 +22,7 @@ public class Simulation extends BorderPane
         gameEngine = new GameEngine(map, renderer);
         this.setCenter(renderer);
         this.setTop(new FileMenuBar(app));
+        this.app = app;
     }
 
     public Simulation(App app, String fileName)
@@ -35,6 +37,10 @@ public class Simulation extends BorderPane
 
     public void handleKey(KeyEvent e)
     {
-        gameEngine.handleKey(e);
+        switch (e.getCharacter())
+        {
+            case " " -> app.pauseSimulation();
+            default -> gameEngine.handleKey(e);
+        }
     }
 }

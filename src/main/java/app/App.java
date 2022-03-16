@@ -34,16 +34,8 @@ public class App extends Application
     @Override
     public void start(Stage stage)
     {
-        // Create a handler for animation
-
-        EventHandler<ActionEvent> eventHandler = e -> {
-            //TODO
-            System.out.println("eventHandler called");
-        };
-
-
+        // Create timeLine to allow pause/resume of simulation
         animation = new Timeline(new KeyFrame(Duration.millis(1000), e -> {System.out.println("timeline event");}));
-        //animation = new TimeLine();
         animation.setCycleCount(Timeline.INDEFINITE);
 
 
@@ -96,27 +88,6 @@ public class App extends Application
     public void gotoStart()
     {
         scene.setRoot(startMenu);
-    }
-
-    public void handleKey(KeyEvent e)
-    {
-        switch (e.getCharacter())
-        {
-            case " " -> pauseSimulation();
-            default -> simulation.handleKey(e);
-        }
-    }
-
-    public void handleEvent(ActionEvent e)
-    {
-        /*
-        switch (e.getCharacter())
-        {
-            case " " -> pauseSimulation();
-            default -> simulation.handleKey(e);
-        }
-
-         */
     }
 
     public void pauseSimulation()
