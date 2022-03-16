@@ -10,6 +10,13 @@ public class GraphicsEngine
 {
     private double angle = 180; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
+    public GraphicsEngine(){};
+
+    public GraphicsEngine(double angle)
+    {
+        this.angle = angle;
+    }
+
     public ArrayList<Ray> compute(Map map, Agent agent)
     {
         ArrayList<Boundary> boundaries = collectBoundaries(map);

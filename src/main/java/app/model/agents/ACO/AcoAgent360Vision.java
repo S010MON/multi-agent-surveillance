@@ -18,7 +18,7 @@ public class AcoAgent360Vision extends AgentImp
 
     private double maxPheromone = 5;
     protected double cellSize;
-    private Random randomGenerator = new Random(1);
+    protected Random randomGenerator = new Random(1);
 
     protected Move previousMove;
     private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();

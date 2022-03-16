@@ -73,6 +73,9 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     public Move makeMove()
     {
         //Randomly or with bias select move
+        //Take into account agent clash
+        Vector move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
+        return new Move(position, move);
     }
 
     public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
