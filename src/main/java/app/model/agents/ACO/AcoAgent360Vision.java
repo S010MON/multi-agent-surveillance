@@ -23,7 +23,7 @@ public class AcoAgent360Vision extends AgentImp
     protected Move previousMove;
     private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
-    private int[] cardinalAngles = {0, 90, 180, 270};
+    protected int[] cardinalAngles = {0, 90, 180, 270};
     protected double epsilon = 0.3;
 
     public AcoAgent360Vision(Vector position, Vector direction, double radius)
@@ -114,11 +114,12 @@ public class AcoAgent360Vision extends AgentImp
 
         for(int i = 0; i < cellPheromones.size(); i++)
         {
-            if(cellPheromones.get(i) == minValue)
+            Double cellPheromone = cellPheromones.get(i);
+            if(cellPheromone != null && cellPheromone == minValue)
             {
                 equivalentMoves.add(possibleMovements.get(i));
             }
-            else if(cellPheromones.get(i) < minValue)
+            else if(cellPheromone != null && cellPheromones.get(i) < minValue)
             {
                 equivalentMoves.clear();
                 minValue = cellPheromones.get(i);
@@ -151,7 +152,14 @@ public class AcoAgent360Vision extends AgentImp
         {
             Vector resultingPosition = position.add(movement);
             PheromoneCell possibleCell = (PheromoneCell) world.getCellAt(resultingPosition);
-            cellPheromoneValues.add(possibleCell.currentPheromoneValue());
+            if(possibleCell != null)
+            {
+                cellPheromoneValues.add(possibleCell.currentPheromoneValue());
+            }
+            else
+            {
+                cellPheromoneValues.add(null);
+            }
         }
         return cellPheromoneValues;
     }

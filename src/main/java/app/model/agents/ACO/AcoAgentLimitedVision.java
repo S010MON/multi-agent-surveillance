@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.map.Move;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Stack;
 
 public class AcoAgentLimitedVision extends AcoAgent360Vision
 {
-    private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
     private Vector directionBias = new Vector();
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     private ArrayList<Vector> possibleMovements = new ArrayList<>();
@@ -20,15 +21,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
-        pheromoneDirectionDetection();
-    }
-
-    public void pheromoneDirectionDetection()
-    {
-        for(int cardinalAngle: getCardinalAngles())
-        {
-            pheromoneDirections.add(angleToGridMovementLink(cardinalAngle));
-        }
+        pheromoneSenseDirections();
     }
 
     /*
@@ -95,6 +88,14 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
                 minValue = pheromoneValues.get(i);
                 visualDirectionsToExplore.add(pheromoneDirections.get(i));
             }
+        }
+    }
+
+    public void pheromoneSenseDirections()
+    {
+        for(int cardinalAngle: cardinalAngles)
+        {
+            pheromoneDirections.add(angleToGridMovementLink(cardinalAngle));
         }
     }
 

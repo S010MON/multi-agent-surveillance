@@ -12,6 +12,8 @@ import app.model.agents.ACO.AcoGrid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AcoAgentLimitedVisionTesting
@@ -30,6 +32,46 @@ public class AcoAgentLimitedVisionTesting
         AcoGrid world = new AcoGrid(settings.getWidth(), settings.getHeight(), 1);
         AcoAgent360Vision.initializeWorld(world);
         AcoAgent360Vision.clearAcoCounts();
+    }
+
+    @Test
+    void testDirectionsToVisiblyExplore()
+    {
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
+        ArrayList<Double> pheromones = agent.accessAvaliableCellPheromones(pheromoneDirections);
+
+        assertEquals(pheromones.size(), pheromoneDirections.size());
+        assertEquals(0.0, pheromones.get(0));
+    }
+
+    @Test
+    void testDirectionsToVisiblyExploreAgainstWall()
+    {
+        position = new Vector(0, 0);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
+        ArrayList<Double> pheromones = agent.accessAvaliableCellPheromones(pheromoneDirections);
+
+        //No gird access off of map boundaries (Maintains direction order)
+        assertEquals(pheromones.get(0), 0.0);
+        assertEquals(pheromones.get(1), 0.0);
+        assertNull(pheromones.get(2));
+        assertNull(pheromones.get(3));
+    }
+
+    @Test
+    void testPheromoneSenseDirections()
+    {
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        ArrayList<Vector> directions = agent.getPheromoneDirections();
+        assertEquals(directions.size(), agent.getCardinalAngles().length);
     }
 
     @Test
