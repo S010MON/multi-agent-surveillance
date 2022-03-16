@@ -37,10 +37,11 @@ public class Simulation extends BorderPane
 
     public void handleKey(KeyEvent e)
     {
-        switch (e.getCharacter())
-        {
-            case " " -> app.pauseSimulation();
-            default -> gameEngine.handleKey(e);
-        }
+        gameEngine.handleKey(e);
+    }
+
+    public void pauseOrResume()
+    {
+        gameEngine.pauseOrResume();
     }
 }

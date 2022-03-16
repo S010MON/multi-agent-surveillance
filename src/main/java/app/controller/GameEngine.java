@@ -22,7 +22,7 @@ public class GameEngine
     private Map map;
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
-    private boolean paused = false;
+    private Timeline timeline;
 
     public GameEngine(Map map, Renderer renderer)
     {
@@ -30,36 +30,35 @@ public class GameEngine
         this.map = map;
         this.renderer = renderer;
         this.graphicsEngine = new GraphicsEngine();
-        Timeline timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
+        this.timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
     public void tick()
     {
-        if(!paused) {
-            map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
 
-            for (Agent a : map.getAgents()) {
-                Vector startPoint = a.getPosition();
-                Vector endPoint = startPoint.add(a.move().getDeltaPos());
+        for (Agent a : map.getAgents()) {
+            Vector startPoint = a.getPosition();
+            Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
-                Vector teleportTo = checkTeleport(startPoint, endPoint);
-                if (teleportTo != null) {
-                    a.updateLocation(teleportTo);
-                    renderer.addTrail(new Trail(teleportTo, tics));
-                }
-
-                if (legalMove(startPoint, endPoint) &&
-                        legalMove(a, endPoint) &&
-                        legalMove(a, startPoint) && legalMove(a, startPoint, endPoint)) {
-                    a.updateLocation(endPoint);
-                    renderer.addTrail(new Trail(endPoint, tics));
-                }
+            Vector teleportTo = checkTeleport(startPoint, endPoint);
+            if (teleportTo != null) {
+                a.updateLocation(teleportTo);
+                renderer.addTrail(new Trail(teleportTo, tics));
             }
-            tics++;
-            renderer.render();
+
+            if (legalMove(startPoint, endPoint) &&
+                    legalMove(a, endPoint) &&
+                    legalMove(a, startPoint) && legalMove(a, startPoint, endPoint)) {
+                a.updateLocation(endPoint);
+                renderer.addTrail(new Trail(endPoint, tics));
+            }
         }
+        tics++;
+        renderer.render();
+
     }
 
     public void handleKey(KeyEvent e)
@@ -74,19 +73,19 @@ public class GameEngine
             case "s" -> map.walk(new Vector(0, 1));
             case "a" -> map.walk(new Vector(-1, 0));
             case "d" -> map.walk(new Vector(1, 0));
-            //case " " -> pause();
+            case " " -> pauseOrResume();
         }
     }
 
-    public void pause()
+    public void pauseOrResume()
     {
-        if(paused)
+        if(timeline.getStatus()== Animation.Status.RUNNING)
         {
-            paused = false;
+            timeline.pause();
         }
         else
         {
-            paused = true;
+            timeline.play();
         }
     }
 

@@ -1,25 +1,15 @@
 package app;
 
-import app.controller.linAlg.Vector;
 import app.view.FileMenuBar;
 import app.view.simulation.Simulation;
 import app.view.ScreenSize;
 import app.view.mapBuilder.StartMenu;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import lombok.Getter;
 
 public class App extends Application
@@ -29,16 +19,11 @@ public class App extends Application
     @Getter private StartMenu startMenu;
     @Getter private Stage stage;
     private Simulation simulation;
-    private Timeline animation;
+    //private Timeline animation;
 
     @Override
     public void start(Stage stage)
     {
-        // Create timeLine to allow pause/resume of simulation
-        animation = new Timeline(new KeyFrame(Duration.millis(1000), e -> {System.out.println("timeline event");}));
-        animation.setCycleCount(Timeline.INDEFINITE);
-
-
         this.fileMenuBar = new FileMenuBar(this);
         this.stage = stage;
         stage.setTitle("Multi Agent Surveillance");
@@ -74,7 +59,6 @@ public class App extends Application
             scene.setOnKeyTyped(e -> simulation.handleKey(e));
         }
         scene.setRoot(simulation);
-        animation.play();
     }
 
     public void gotoSimulation(String fileName)
@@ -82,7 +66,6 @@ public class App extends Application
         simulation = new Simulation(this, fileName);
         scene.setOnKeyTyped(e -> simulation.handleKey(e));
         scene.setRoot(simulation);
-        animation.play();
     }
 
     public void gotoStart()
@@ -92,18 +75,7 @@ public class App extends Application
 
     public void pauseSimulation()
     {
-        System.out.println("pause/resume simulation");
-        System.out.println("animation status: " + animation.getStatus().toString());
-        if(animation.getStatus()== Animation.Status.PAUSED)
-        {
-            animation.play();
-        }
-        else
-        {
-            animation.pause();
-        }
-        System.out.println("animation status: " + animation.getStatus().toString());
-        System.out.println();
+        simulation.pauseOrResume();
     }
 
 }
