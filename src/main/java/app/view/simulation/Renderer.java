@@ -6,6 +6,7 @@ import app.model.Map;
 import app.model.Trail;
 import app.model.agents.Agent;
 import app.view.ScreenSize;
+import app.view.agentView.AgentView;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -101,7 +102,7 @@ public class Renderer extends Canvas
         Agent agent = selectAgent(vector);
         if(agent != null)
         {
-            AgentView view = new AgentView();
+            AgentView view = new AgentView(agent);
         }
     }
 

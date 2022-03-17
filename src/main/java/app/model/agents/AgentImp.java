@@ -12,7 +12,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class AgentImp implements Agent
 {
@@ -21,8 +20,8 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
-    protected ArrayList<Ray> view;
-    @Getter protected Set<Vector> seen;
+    @Getter protected ArrayList<Ray> view;
+    @Getter protected HashSet<Vector> seen;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
@@ -104,14 +103,14 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public Set<Vector> getSeen()
+    public HashSet<Vector> getSeen()
     {
         return seen;
     }
 
     @Override
-    public void updateSeen(HashSet<Vector> seen)
+    public void updateSeen(Vector vector)
     {
-        this.seen = seen;
+        this.seen.add(vector);
     }
 }
