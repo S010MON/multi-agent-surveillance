@@ -5,7 +5,6 @@ import app.model.agents.Agent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import java.util.HashSet;
 
 public class AgentViewCanvas extends Canvas
@@ -56,43 +55,5 @@ public class AgentViewCanvas extends Canvas
         gc.setFill(backgroundColour);
         gc.setLineWidth(3.0);
         gc.fillRect(0, 0, agentViewWidth, agentViewHeight);
-    }
-
-    private void canvasWidth(HashSet<Vector> vectors)
-    {
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        for(Vector v : vectors)
-        {
-            if(v.getX() < minX)
-            {
-                minX = v.getX();
-            }
-            if(v.getX() > maxX)
-            {
-                maxX = v.getX();
-            }
-        }
-        agentOffsetX = minX;
-        agentViewWidth = maxX - minX;
-    }
-
-    private void canvasHeight(HashSet<Vector> vectors)
-    {
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-        for(Vector v : vectors)
-        {
-            if(v.getY() < minY)
-            {
-                minY = v.getX();
-            }
-            if(v.getY() > maxY)
-            {
-                maxY = v.getY();
-            }
-        }
-        agentOffsetY = minY;
-        agentViewHeight = maxY - minY;
     }
 }
