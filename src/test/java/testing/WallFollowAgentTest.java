@@ -240,8 +240,13 @@ public class WallFollowAgentTest
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 275, 100, 2);
+        Rectangle2D obstacle2 = new Rectangle2D(10, 10, 2, 700);
+        Rectangle2D obstacle3 = new Rectangle2D(700, 10, 2, 700);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
-        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
+        SettingsObject obj2 = new SettingsObject(obstacle2, obstacleType);
+        SettingsObject obj3 = new SettingsObject(obstacle3, obstacleType);
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj),FurnitureFactory.make(obj2),
+                FurnitureFactory.make(obj3)));
         Map map = new Map(agent, walls);
 
         // Update surroundings and move 3 times
@@ -294,7 +299,15 @@ public class WallFollowAgentTest
         agent.setDirection(initialDirection);
 
         // Map
-        ArrayList<Furniture> walls = new ArrayList<>();
+        FurnitureType obstacleType = FurnitureType.WALL;
+        Rectangle2D obstacle = new Rectangle2D(150, 275, 100, 2);
+        Rectangle2D obstacle2 = new Rectangle2D(10, 10, 2, 700);
+        Rectangle2D obstacle3 = new Rectangle2D(700, 10, 2, 700);
+        SettingsObject obj = new SettingsObject(obstacle, obstacleType);
+        SettingsObject obj2 = new SettingsObject(obstacle2, obstacleType);
+        SettingsObject obj3 = new SettingsObject(obstacle3, obstacleType);
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj),FurnitureFactory.make(obj2),
+                FurnitureFactory.make(obj3)));
         Map map = new Map(agent, walls);
 
         // Detect surroundings and move
@@ -407,9 +420,14 @@ public class WallFollowAgentTest
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
+        Rectangle2D obstacle = new Rectangle2D(150, 400, 100, 2);
+        Rectangle2D obstacle2 = new Rectangle2D(250, 50, 2, 200);
+        Rectangle2D obstacle3 = new Rectangle2D(50, 10, 2, 700);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
-        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
+        SettingsObject obj2 = new SettingsObject(obstacle2, obstacleType);
+        SettingsObject obj3 = new SettingsObject(obstacle3, obstacleType);
+        ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj),FurnitureFactory.make(obj2),
+                FurnitureFactory.make(obj3)));
         Map map = new Map(agent, walls);
 
         // Detect surroundings and move

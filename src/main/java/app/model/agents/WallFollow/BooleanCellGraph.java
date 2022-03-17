@@ -1,5 +1,6 @@
 package app.model.agents.WallFollow;
 
+import app.controller.linAlg.Vector;
 import app.model.agents.Cells.BooleanCell;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,17 +16,18 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     @Getter private HashMap<String,BooleanCell> vertices = new HashMap<>();
     @Setter int edge;  // edge length between vertices (moveLength)
     boolean DEBUG = false;
+    ArrayList<BooleanCell> lastPositions = new ArrayList<>();
 
     public BooleanCellGraph()
     {
         super(org.jgrapht.graph.DefaultEdge.class);
-        // TODO: maybe need to add weights to edges for heuristics later?
     }
 
     public void updateAgentPos(BooleanCell agentCell, BooleanCell forwardCell,
                                BooleanCell leftCell, BooleanCell rightCell)
     {
         agentPos = agentCell;
+        updateLastFivePositions();
         addVertex(forwardCell);
         addVertex(leftCell);
         addVertex(rightCell);
@@ -83,5 +85,57 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
             System.out.println("Nr of vertices with unexplored neighbours: " + unexploredFrontier.size());
         }
         return unexploredFrontier;
+    }
+
+    public Vector getNeighbourDir(BooleanCell vertex)
+    {
+        if (agentPos.getX() == vertex.getX() && vertex.getY() < agentPos.getY())
+        {
+            return new Vector(0,-1);  // north of agent
+        }
+        else if (agentPos.getX() == vertex.getX() && vertex.getY() > agentPos.getY())
+        {
+            return new Vector(0,1);  // south of agent
+        }
+        else if (agentPos.getY() == vertex.getY() && vertex.getX() < agentPos.getX())
+        {
+            return new Vector(-1,0);  // west of agent
+        }
+        else if (agentPos.getY() == vertex.getY() && vertex.getX() > agentPos.getX())
+        {
+            return new Vector(1,0);  // east of agent
+        }
+        throw new RuntimeException("Vertex that was checked is not a neighbour of agent's vertex! " +
+                "Agent vertex: " + agentPos + " and checked vertex: " + vertex);
+    }
+
+    public void updateLastFivePositions()
+    {
+        if (lastPositions.size() >= 8) {
+            lastPositions.remove(0);
+        }
+        lastPositions.add(agentPos);
+    }
+
+    public boolean agentInStuckMovement()
+    {
+        if (lastPositions.size() == 8)
+        {
+            for (BooleanCell vertex : lastPositions)
+            {
+                for (BooleanCell other: lastPositions)
+                {
+                    if (!vertex.equals(other))
+                    {
+                        if (Math.abs(vertex.getX() - other.getX()) > edge || Math.abs(vertex.getY() - other.getY()) > edge)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
