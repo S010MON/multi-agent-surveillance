@@ -2,6 +2,7 @@ package app.controller.linAlg;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.soundEngine.SoundRay;
+import app.model.boundary.Boundary;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.toDegrees;
@@ -123,6 +124,25 @@ public abstract class Intersection
     {
         // segment-segment intersection
         return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
+    }
+
+    public static boolean hasIntersection(Vector A, Vector B, Vector center, double radius)
+    {
+        double baX = B.getX() - A.getX();
+        double baY = B.getY() - A.getY();
+        double caX = center.getX() - A.getX();
+        double caY = center.getY() - A.getY();
+
+        double a = baX * baX + baY * baY;
+        double bBy2 = baX * caX + baY * caY;
+        double c = caX * caX + caY * caY - radius * radius;
+
+        double pBy2 = bBy2 / a;
+        double q = c / a;
+
+        double disc = pBy2 * pBy2 - q;
+
+        return disc >= 0;
     }
 
     public static boolean hasIntersection(Ray ray, Vector center, double radius)

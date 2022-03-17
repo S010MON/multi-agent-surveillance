@@ -31,6 +31,8 @@ public class Map
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
     @Getter private Settings settings;
+    @Getter private double width;
+    @Getter private double height;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
     private Human human;
@@ -39,6 +41,8 @@ public class Map
     {
         System.out.print("Loading settings ... ");
         this.settings = settings;
+        this.width = settings.getWidth();
+        this.height = settings.getHeight();
 
         /* Make furniture */
         furniture = new ArrayList<>();

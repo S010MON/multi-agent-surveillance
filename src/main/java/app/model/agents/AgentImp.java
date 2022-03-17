@@ -95,6 +95,12 @@ public class AgentImp implements Agent
     }
 
     @Override
+    public boolean isCrossed(Vector centre, double radius)
+    {
+        return position.dist(centre) <= radius;
+    }
+
+    @Override
     public Vector getTeleport()
     {
         return null;

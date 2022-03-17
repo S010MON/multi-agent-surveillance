@@ -40,4 +40,24 @@ public abstract class SettingsGenerator
         return settings;
     }
 
+    public static Settings coverageMapTest(int width, int height)
+    {
+        Settings settings = new Settings();
+        settings.setName("map_test");
+        settings.setGameMode(1);
+        settings.setHeight(height);
+        settings.setWidth(width);
+        settings.setScaling(4);
+        settings.setNoOfGuards(5);
+        settings.setNoOfIntruders(6);
+        settings.setWalkSpeedIntruder(7);
+        settings.setSprintSpeedIntruder(8);
+        settings.setWalkSpeedGuard(9);
+        settings.setSprintSpeedGuard(10);
+        settings.setTimeStep(11);
+        settings.addFurniture(new Rectangle2D(10, 10,100,100), FurnitureType.GUARD_SPAWN);
+        settings.addFurniture(new Rectangle2D(10, 10,100,100), FurnitureType.INTRUDER_SPAWN);
+        return settings;
+    }
+
 }
