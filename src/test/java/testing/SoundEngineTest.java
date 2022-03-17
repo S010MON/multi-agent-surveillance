@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SoundEngineTest {
 
@@ -42,7 +41,10 @@ public class SoundEngineTest {
 
         double maxAmp = Math.max(soundHashMap.get(s1).getAmplitude(), soundHashMap.get(s2).getAmplitude());
 
+        Sound expectedSound = new Sound(s2, listener.getPosition(), s2.getPosition(), 0);
+
         assertEquals(50, maxAmp);
+        assertEquals(expectedSound, soundHashMap.get(s2));
     }
 
     @Test void blockedSoundTest(){
@@ -71,6 +73,9 @@ public class SoundEngineTest {
         // we expect the weaker amplitude source to be heard because the other source should be blocked
         assertEquals(10, maxAmpBlocked);
         assertNull(soundHashMapBlocked.get(s2));
+
+        Sound expectedSound = new Sound(s1, listener.getPosition(), s1.getPosition(), 0);
+        assertEquals(expectedSound, soundHashMapBlocked.get(s1));
     }
 
     @Test void blockedSoundTestDiffraction(){
