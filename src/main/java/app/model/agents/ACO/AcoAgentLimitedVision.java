@@ -107,12 +107,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     {
         Vector usedMove = previousMove.getDeltaPos();
 
-        if(pheromoneDirections.size() < cardinalAngles.length && usedMove.equals(new Vector()))
-        {
-            System.out.println("Indicates agent's stuck");
-            //pheromoneSenseDirections();
-        }
-        else
+        if(!usedMove.equals(new Vector()))
         {
             pheromoneSenseDirections();
         }

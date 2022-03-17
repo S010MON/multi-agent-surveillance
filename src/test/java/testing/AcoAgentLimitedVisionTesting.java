@@ -48,6 +48,8 @@ public class AcoAgentLimitedVisionTesting
 
         agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
         agent.setMoveFailed(false);
         assertEquals(agent.getPheromoneDirections().size(), 3);
 
@@ -71,10 +73,9 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-
-        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         agent.setMoveFailed(false);
 
@@ -89,15 +90,15 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-
-        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         agent.setMoveFailed(false);
         assertEquals(agent.getPheromoneDirections().size(), 1);
     }
 
+    //Point at which is relies on short term memory only
     public void thirdMoveCycleAfterStuck(AcoAgentLimitedVision agent)
     {
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -106,13 +107,12 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-
-        agent.setMoveFailed(true);
-        agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         agent.setMoveFailed(false);
-        assertEquals(agent.getPheromoneDirections().size(), 0);
+        assertEquals(agent.getPheromoneDirections().size(), 4);
+        agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
     }
 
     public void fourthMoveCycleUsingSTM(AcoAgentLimitedVision agent)
@@ -120,15 +120,16 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-
-        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
-        assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 0);
+        assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 1);
+        //Used directly to make the move
         assertEquals(agent.getShortTermMemorySize(), 1);
         assertEquals(agent.getPheromoneDirections().size(), 3);
-        agent.setMoveFailed(true);
+        assertEquals(agent.getPossibleMovements().size(), 0);
+        agent.setMoveFailed(false);
     }
 
     public void getAgentStuckAtWindow(AcoAgentLimitedVision agent)
@@ -161,13 +162,14 @@ public class AcoAgentLimitedVisionTesting
         getAgentStuckAtWindow(agent);
 
         agent.setMoveFailed(true);
+        agent.move();
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         agent.setMoveFailed(false);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
-        assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 2);
+        assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 1);
     }
 
     @Test
