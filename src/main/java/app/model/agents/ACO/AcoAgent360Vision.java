@@ -22,7 +22,7 @@ public class AcoAgent360Vision extends AgentImp
     protected Random randomGenerator = new Random(1);
 
     @Getter protected Move previousMove;
-    private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
+    protected HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
     protected int[] cardinalAngles = {0, 90, 180, 270};
     protected double epsilon = 0.3;
@@ -273,5 +273,10 @@ public class AcoAgent360Vision extends AgentImp
     public HashMap<Integer, Vector> accessShortTermMemory()
     {
         return shortTermMoveMemory;
+    }
+
+    public int getShortTermMemorySize()
+    {
+        return shortTermMoveMemory.size();
     }
 }

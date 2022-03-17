@@ -47,6 +47,14 @@ public class AcoAgentLimitedVisionTesting
         getAgentStuckAtWindow(agent);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         assertEquals(agent.getPheromoneDirections().size(), 3);
+
+        firstMoveCycleAfterStuck(agent);
+
+        secondMoveCycleAfterStuck(agent);
+
+        thirdMoveCycleAfterStuck(agent);
+
+        fourthMoveCycleUsingSTM(agent);
     }
 
     public void firstMoveCycleAfterStuck(AcoAgentLimitedVision agent)
@@ -107,8 +115,8 @@ public class AcoAgentLimitedVisionTesting
         agent.move();
 
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
-        assertEquals(agent.getPossibleMovements().size(), 4);
         assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 0);
+        assertEquals(agent.getShortTermMemorySize(), 1);
         assertEquals(agent.getPheromoneDirections().size(), 3);
     }
 
@@ -147,14 +155,6 @@ public class AcoAgentLimitedVisionTesting
         agent.move();
 
         assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 2);
-
-        firstMoveCycleAfterStuck(agent);
-
-        secondMoveCycleAfterStuck(agent);
-
-        thirdMoveCycleAfterStuck(agent);
-
-        fourthMoveCycleUsingSTM(agent);
     }
 
     @Test
@@ -254,8 +254,11 @@ public class AcoAgentLimitedVisionTesting
         viewDirection = new Vector(-1, 0);
         position = new Vector(678, 100);
         AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
-        agent.updateView(graphicsEngine.compute(map, agent));
 
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.pheromonesDetection();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
         agent.explorationToViableMovement();
 
         ArrayList<Vector> possibleMovements = agent.getPossibleMovements();

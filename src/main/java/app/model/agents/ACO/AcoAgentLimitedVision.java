@@ -16,7 +16,8 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     private Vector directionBias = new Vector();
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
-    private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
+
+    private boolean stuckFlag = false;
 
     public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
     {
@@ -89,8 +90,9 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         //Randomly or with bias select move
         //Take into account agent clash
         Vector move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
-        previousMove = new Move(position, move.scale(cellSize));
+        move = move.normalise();
 
+        previousMove = new Move(position, move.scale(cellSize));
         possibleMovements.clear();
 
         return new Move(position, move.scale(cellSize));
@@ -106,7 +108,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
             pheromoneDirections.remove(usedMove);
             shortTermMoveMemory.put(usedMove.hashCode(), usedMove);
         }
-        else
+        else if(shortTermMoveMemory.isEmpty() && pheromoneDirections.size() == cardinalAngles.length)
         {
             pheromoneSenseDirections();
         }
