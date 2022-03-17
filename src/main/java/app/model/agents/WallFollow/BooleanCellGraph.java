@@ -17,6 +17,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     @Setter int edge;  // edge length between vertices (moveLength)
     boolean DEBUG = false;
     ArrayList<BooleanCell> lastPositions = new ArrayList<>();
+    @Getter BooleanCell prevAgentVertex = new BooleanCell();
 
     public BooleanCellGraph()
     {
@@ -27,7 +28,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
                                BooleanCell leftCell, BooleanCell rightCell)
     {
         agentPos = agentCell;
-        updateLastFivePositions();
+        updateLastPositions();
         addVertex(forwardCell);
         addVertex(leftCell);
         addVertex(rightCell);
@@ -78,6 +79,10 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
             {
                 unexploredFrontier.add(vertex);
             }
+            else if (!vertex.getObstacle() && edgesOf(vertex).size() > 4)
+            {
+                throw new RuntimeException("Vertex has too many neighbours!");
+            }
         }
         if (DEBUG)
         {
@@ -89,7 +94,11 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
 
     public Vector getNeighbourDir(BooleanCell vertex)
     {
-        if (agentPos.getX() == vertex.getX() && vertex.getY() < agentPos.getY())
+        if (agentPos.getX() == vertex.getX() && vertex.getY() == agentPos.getY())
+        {
+            return new Vector(0,0);
+        }
+        else if (agentPos.getX() == vertex.getX() && vertex.getY() < agentPos.getY())
         {
             return new Vector(0,-1);  // north of agent
         }
@@ -109,22 +118,39 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
                 "Agent vertex: " + agentPos + " and checked vertex: " + vertex);
     }
 
-    public void updateLastFivePositions()
+    public void updateLastPositions()
     {
         if (lastPositions.size() >= 8) {
             lastPositions.remove(0);
+        }
+        if (lastPositions.size() > 0)
+        {
+            prevAgentVertex = lastPositions.get(lastPositions.size()-1);
         }
         lastPositions.add(agentPos);
     }
 
     public boolean agentInStuckMovement()
     {
+        ArrayList<BooleanCell> diffVertices = new ArrayList<>();
         if (lastPositions.size() == 8)
         {
+            if (agentStuckInVertex())
+            {
+                return true;
+            }
             for (BooleanCell vertex : lastPositions)
             {
                 for (BooleanCell other: lastPositions)
                 {
+                    if (!diffVertices.contains(other))
+                    {
+                        diffVertices.add(other);
+                        if (diffVertices.indexOf(other) == 7 && diffVertices.size() < 5)
+                        {
+                            return true;
+                        }
+                    }
                     if (!vertex.equals(other))
                     {
                         if (Math.abs(vertex.getX() - other.getX()) > edge || Math.abs(vertex.getY() - other.getY()) > edge)
@@ -137,5 +163,24 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
             return true;
         }
         return false;
+    }
+
+    public boolean agentStuckInVertex()
+    {
+        for (BooleanCell vertex : lastPositions)
+        {
+            if (vertex != agentPos)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void moveAgentBack()
+    {
+        agentPos = prevAgentVertex;
+        lastPositions.remove(lastPositions.size()-1);
+        prevAgentVertex = lastPositions.get(lastPositions.size()-2);
     }
 }
