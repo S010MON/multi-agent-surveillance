@@ -51,12 +51,6 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public ArrayList<Ray> getView()
-    {
-        return view;
-    }
-
-    @Override
     public void updateView(ArrayList<Ray> view)
     {
         this.view = view;
@@ -99,12 +93,6 @@ public class AgentImp implements Agent
     public Vector getTeleport()
     {
         return null;
-    }
-
-    @Override
-    public HashSet<Vector> getSeen()
-    {
-        return seen;
     }
 
     @Override
