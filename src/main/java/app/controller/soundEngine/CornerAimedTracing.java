@@ -19,10 +19,8 @@ public class CornerAimedTracing implements SoundEngine
 
         Vector agentPos = agent.getPosition();
 
-        ArrayList<Vector> points = new ArrayList<>();
-        points.add(agentPos);
-
-        ArrayList<Vector> nextToCheck = points;
+        ArrayList<Vector> nextToCheck =  new ArrayList<>();
+        nextToCheck.add(agentPos);
 
         for (int i = 0; i < maxDiffraction + 1; i++)
         {
@@ -38,6 +36,10 @@ public class CornerAimedTracing implements SoundEngine
                 {
                     if(!soundTable.containsKey(heard))
                     {
+                        if(i == 0) {
+                            soundTable.put(heard, new Sound(heard, agentPos, heard.getPosition(), 0));
+                            continue;
+                        }
                         soundTable.put(heard, new Sound(heard, agentPos, pos, i));
                         continue;
                     }
