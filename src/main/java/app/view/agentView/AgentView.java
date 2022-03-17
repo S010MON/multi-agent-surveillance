@@ -5,7 +5,6 @@ import app.model.agents.Agent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
 import java.util.HashSet;
 
 public class AgentView extends Stage
