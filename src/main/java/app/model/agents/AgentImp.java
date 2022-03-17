@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -21,6 +22,7 @@ public class AgentImp implements Agent
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
     @Getter protected HashSet<Vector> seen;
+    protected AgentView agentViewWindow;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
@@ -54,6 +56,9 @@ public class AgentImp implements Agent
     public void updateView(ArrayList<Ray> view)
     {
         this.view = view;
+
+        if(agentViewWindow != null)
+            agentViewWindow.update();
     }
 
     @Override
@@ -99,5 +104,11 @@ public class AgentImp implements Agent
     public void updateSeen(Vector vector)
     {
         this.seen.add(vector);
+    }
+
+    @Override
+    public void addViewWindow(AgentView agentView)
+    {
+        agentViewWindow = agentView;
     }
 }
