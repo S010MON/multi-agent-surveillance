@@ -19,10 +19,13 @@ public class AgentView extends Stage
     public AgentView(Agent agent)
     {
         setTitle("Agent View");
-        canvasWidth(agent.getSeen());
-        canvasHeight(agent.getSeen());
-        AgentViewCanvas avc = new AgentViewCanvas(  agent, agentViewWidth, agentViewHeight,
-                                                            agentOffsetX, agentOffsetY);
+        setCanvasWidth(agent.getSeen());
+        setCanvasHeight(agent.getSeen());
+        AgentViewCanvas avc = new AgentViewCanvas(agent,
+                                                  agentViewWidth,
+                                                  agentViewHeight,
+                                                  agentOffsetX,
+                                                  agentOffsetY);
         BorderPane bp = new BorderPane();
         bp.setCenter(avc);
         Scene scene = new Scene(bp, agentViewWidth, agentViewHeight);
@@ -30,7 +33,7 @@ public class AgentView extends Stage
         show();
     }
 
-    private void canvasWidth(HashSet<Vector> vectors)
+    private void setCanvasWidth(HashSet<Vector> vectors)
     {
         double minX = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
@@ -49,7 +52,7 @@ public class AgentView extends Stage
         agentViewWidth = maxX - minX;
     }
 
-    private void canvasHeight(HashSet<Vector> vectors)
+    private void setCanvasHeight(HashSet<Vector> vectors)
     {
         double minY = Double.MAX_VALUE;
         double maxY = Double.MIN_VALUE;
