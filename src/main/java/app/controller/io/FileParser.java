@@ -1,6 +1,7 @@
 package app.controller.io;
 
 import app.controller.settings.Settings;
+import app.controller.settings.SettingsGenerator;
 import app.model.furniture.FurnitureType;
 import app.controller.linAlg.Vector;
 import javafx.geometry.Rectangle2D;
@@ -10,7 +11,7 @@ public class FileParser
 {
     public static Settings parse(Scanner scanner)
     {
-        Settings settings = new Settings();
+        Settings settings = SettingsGenerator.defaultSettings();
         int countLines=1;
         while(scanner.hasNextLine())
         {
@@ -25,6 +26,7 @@ public class FileParser
         try(Scanner scan = new Scanner(nextLine))
         {
             scan.useDelimiter("=");
+            //scan.useDelimiter("//");
             if(scan.hasNext())
             {
                 String id=scan.next();

@@ -61,31 +61,47 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            Vector dir = new Vector(0, 1);
-            AcoAgent guard = new AcoAgent(srt, dir, 10);
+            if(srt!=null)
+            {
+                Vector dir = new Vector(0, 1);
+                AcoAgent guard = new AcoAgent(srt, dir, 10);
 
-            guard.setMaxWalk(settings.getWalkSpeedGuard());
-            guard.setMaxSprint(settings.getSprintSpeedGuard());
-            agents.add(guard);
+                guard.setMaxWalk(settings.getWalkSpeedGuard());
+                guard.setMaxSprint(settings.getSprintSpeedGuard());
+                agents.add(guard);
+            }
         }
 
         // On creation add the right number of infiltrators
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
-            Vector dir = randDirection();
-            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
-            intruder.setMaxWalk(settings.getWalkSpeedIntruder());
-            intruder.setMaxSprint(settings.getSprintSpeedIntruder());
-            agents.add(intruder);
+            if(srt!=null)
+            {
+                Vector dir = randDirection();
+                WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
+                intruder.setMaxWalk(settings.getWalkSpeedIntruder());
+                intruder.setMaxSprint(settings.getSprintSpeedIntruder());
+                agents.add(intruder);
+            }
+            else
+            {
+                i=settings.getNoOfIntruders();
+            }
         }
 
-        Vector humanStart = randPosition(intruderSpawn);
-        human = new Human(humanStart, new Vector(1,0), 10);
-        //Assumes the human is a guard
-        human.setMaxWalk(settings.getWalkSpeedGuard());
-        human.setMaxSprint(settings.getSprintSpeedGuard());
-        agents.add(human);
+        if(intruderSpawn!=null)
+        {
+            Vector humanStart = randPosition(intruderSpawn);
+            if (humanStart != null)
+            {
+                human = new Human(humanStart, new Vector(1, 0), 10);
+                //Assumes the human is a guard
+                human.setMaxWalk(settings.getWalkSpeedGuard());
+                human.setMaxSprint(settings.getSprintSpeedGuard());
+                agents.add(human);
+            }
+        }
 
         System.out.println("done.");
     }
@@ -147,20 +163,26 @@ public class Map
 
     public void drawGuardSpawn(GraphicsContext gc)
     {
-        gc.setStroke(Color.BLUE);
-        gc.strokeRect(guardSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      guardSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                      guardSpawn.getHeight() * Info.getInfo().zoom,
-                      guardSpawn.getHeight() * Info.getInfo().zoom);
+        if(guardSpawn!=null)
+        {
+            gc.setStroke(Color.BLUE);
+            gc.strokeRect(guardSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                    guardSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                    guardSpawn.getHeight() * Info.getInfo().zoom,
+                    guardSpawn.getHeight() * Info.getInfo().zoom);
+        }
     }
 
     public void drawIntruderSpawn(GraphicsContext gc)
     {
-        gc.setStroke(Color.RED);
-        gc.strokeRect(intruderSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      intruderSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                      intruderSpawn.getHeight() * Info.getInfo().zoom,
-                      intruderSpawn.getHeight() * Info.getInfo().zoom);
+        if(intruderSpawn!=null)
+        {
+            gc.setStroke(Color.RED);
+            gc.strokeRect(intruderSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                    intruderSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                    intruderSpawn.getHeight() * Info.getInfo().zoom,
+                    intruderSpawn.getHeight() * Info.getInfo().zoom);
+        }
     }
 
     private Vector randDirection()
@@ -179,10 +201,17 @@ public class Map
     private Vector randPosition(Rectangle2D r)
     {
         Vector v;
+        int tries = 0;
         do {
+            tries++;
             double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
             double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
             v = new Vector(x, y);
+            if(tries>500)
+            {
+                System.out.println("GuardSpawn not big enough for number of guards");
+                return null;
+            }
         } while (!clearSpot(v));
 
         return v;

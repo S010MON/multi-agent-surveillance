@@ -3,6 +3,7 @@ package testing;
 import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
+import app.model.Map;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
@@ -62,5 +63,32 @@ public class FileParserTest
         // Glass
         assertEquals(new Rectangle2D(0, 0, 20, 20), s.getFurniture().get(12).getRect());
         assertEquals("glass", s.getFurniture().get(12).getType().label);
+    }
+
+    @Test void testCreationOfSettingsNewMapWithoutComments()
+    {
+        Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 without comments.txt");
+
+        // Height
+        assertEquals(100, s.getHeight());
+        // Width
+        assertEquals(200, s.getWidth());
+        // Number of guards
+        assertEquals(5, s.getNoOfGuards());
+        // Walk speed guard
+        assertEquals(5.0, s.getWalkSpeedGuard());
+        // Guard spawn
+        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(0).getRect());
+        assertEquals("spawnAreaGuards", s.getFurniture().get(0).getType().label);
+        // Wall
+        assertEquals(new Rectangle2D(50, 0, 1, 20), s.getFurniture().get(1).getRect());
+        assertEquals("wall", s.getFurniture().get(1).getType().label);
+        // Teleport
+        assertEquals(new Rectangle2D(20, 70, 5, 5), s.getFurniture().get(6).getRect());
+        assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
+        assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
+        assertEquals("teleport", s.getFurniture().get(6).getType().label);
+
+        Map map = new Map(s);
     }
 }
