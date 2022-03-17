@@ -26,11 +26,14 @@ public class FileParser
         try(Scanner scan = new Scanner(nextLine))
         {
             scan.useDelimiter("=");
-            //scan.useDelimiter("//");
             if(scan.hasNext())
             {
                 String id=scan.next();
                 String val=scan.next();
+                if(val.contains("//"))
+                {
+                    val = val.split("//")[0];
+                }
                 id = id.trim();
                 val = val.trim();
                 String[] coords = val.split(" ");

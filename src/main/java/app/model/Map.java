@@ -37,7 +37,7 @@ public class Map
 
     public Map(Settings settings)
     {
-        System.out.print("Loading settings ... ");
+        System.out.println("Loading settings ... ");
         this.settings = settings;
 
         /* Make furniture */
@@ -103,7 +103,7 @@ public class Map
             }
         }
 
-        System.out.println("done.");
+        System.out.println("   ...done");
     }
 
     /**

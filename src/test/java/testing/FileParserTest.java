@@ -91,4 +91,31 @@ public class FileParserTest
 
         Map map = new Map(s);
     }
+
+    @Test void testCreationOfSettingsNewMapWithComments()
+    {
+        Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 with comments.txt");
+
+        // Height
+        assertEquals(100, s.getHeight());
+        // Width
+        assertEquals(200, s.getWidth());
+        // Number of guards
+        assertEquals(5, s.getNoOfGuards());
+        // Walk speed guard
+        assertEquals(5.0, s.getWalkSpeedGuard());
+        // Guard spawn
+        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(0).getRect());
+        assertEquals("spawnAreaGuards", s.getFurniture().get(0).getType().label);
+        // Wall
+        assertEquals(new Rectangle2D(50, 0, 1, 20), s.getFurniture().get(1).getRect());
+        assertEquals("wall", s.getFurniture().get(1).getType().label);
+        // Teleport
+        assertEquals(new Rectangle2D(20, 70, 5, 5), s.getFurniture().get(6).getRect());
+        assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
+        assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
+        assertEquals("teleport", s.getFurniture().get(6).getType().label);
+
+        Map map = new Map(s);
+    }
 }
