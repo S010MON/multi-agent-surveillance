@@ -121,10 +121,19 @@ public class Renderer extends Canvas
     {
         double dy = ScreenSize.height/mapHeight;
         double dx = ScreenSize.width/mapWidth;
-        double padding = 0.1;
+        double padding = 0.05;
+        double scale;
         if(mapWidth * dy <= ScreenSize.width && mapHeight * dx<= ScreenSize.height)
-            Info.getInfo().setZoom(Math.max(dy,dx)-padding);
+            scale = Math.max(dy,dx)-padding;
         else
-            Info.getInfo().setZoom(Math.min(dy,dx)-padding);
+            scale = Math.min(dy,dx)-padding;
+
+        Info.getInfo().setZoom(scale);
+
+        double offsetX = (Math.abs(ScreenSize.width- mapWidth * scale)/2);
+        double offsetY = (Math.abs(ScreenSize.height- mapHeight * scale))/2;
+
+        Info.getInfo().setOffsetX(offsetX);
+        Info.getInfo().setOffsetY(offsetY);
     }
 }
