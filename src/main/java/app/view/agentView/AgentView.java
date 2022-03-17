@@ -9,7 +9,8 @@ import java.util.HashSet;
 
 public class AgentView extends Stage
 {
-
+    private Agent agent;
+    private AgentViewCanvas canvas;
     private double agentOffsetX;
     private double agentOffsetY;
     private double agentViewWidth;
@@ -17,19 +18,25 @@ public class AgentView extends Stage
 
     public AgentView(Agent agent)
     {
+        this.agent = agent;
         setTitle("Agent View");
         setCanvasWidth(agent.getSeen());
         setCanvasHeight(agent.getSeen());
-        AgentViewCanvas avc = new AgentViewCanvas(agent,
-                                                  agentViewWidth,
-                                                  agentViewHeight,
-                                                  agentOffsetX,
-                                                  agentOffsetY);
+        canvas = new AgentViewCanvas(agent,
+                                     agentViewWidth,
+                                     agentViewHeight,
+                                     agentOffsetX,
+                                     agentOffsetY);
         BorderPane bp = new BorderPane();
-        bp.setCenter(avc);
+        bp.setCenter(canvas);
         Scene scene = new Scene(bp, agentViewWidth, agentViewHeight);
         setScene(scene);
         show();
+    }
+
+    public void update()
+    {
+        canvas.render();
     }
 
     private void setCanvasWidth(HashSet<Vector> vectors)

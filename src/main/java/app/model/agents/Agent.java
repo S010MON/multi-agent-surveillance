@@ -4,6 +4,8 @@ import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.model.boundary.Boundary;
 import app.model.Move;
+import app.view.agentView.AgentView;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -38,4 +40,6 @@ public interface Agent extends Boundary
     HashSet<Vector> getSeen();
 
     void updateSeen(Vector vector);
+
+    void addViewWindow(AgentView agentView);
 }

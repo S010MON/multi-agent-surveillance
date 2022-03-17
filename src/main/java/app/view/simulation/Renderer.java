@@ -103,6 +103,7 @@ public class Renderer extends Canvas
         if(agent != null)
         {
             AgentView view = new AgentView(agent);
+            agent.addViewWindow(view);
         }
     }
 
