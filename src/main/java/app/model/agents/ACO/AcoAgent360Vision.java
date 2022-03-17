@@ -2,9 +2,9 @@ package app.model.agents.ACO;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.PheromoneCell;
-import app.model.map.Move;
 import lombok.Getter;
 
 import java.util.ArrayList;

@@ -6,6 +6,7 @@ import app.controller.settings.SettingsObject;
 import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgentLimitedVision;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;

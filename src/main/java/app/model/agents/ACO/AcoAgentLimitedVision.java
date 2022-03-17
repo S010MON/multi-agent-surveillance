@@ -2,11 +2,10 @@ package app.model.agents.ACO;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
-import app.model.map.Move;
+import app.model.Move;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Stack;
 
 
@@ -34,6 +33,12 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     @Override
     public Move move()
     {
+        if(moveFailed)
+        {
+            Vector usedMove = previousMove.getDeltaPos();
+            pheromoneDirections.remove(usedMove);
+            shortTermMoveMemory.put(usedMove.hashCode(), usedMove);
+        }
         if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
         {
             Move nextMove = pheromonesDetection();
@@ -102,13 +107,12 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     {
         Vector usedMove = previousMove.getDeltaPos();
 
-        if(!usedMove.equals(new Vector()) &&
-                position.equals(previousMove.getEndDir()))
+        if(pheromoneDirections.size() < cardinalAngles.length && usedMove.equals(new Vector()))
         {
-            pheromoneDirections.remove(usedMove);
-            shortTermMoveMemory.put(usedMove.hashCode(), usedMove);
+            System.out.println("Indicates agent's stuck");
+            //pheromoneSenseDirections();
         }
-        else if(shortTermMoveMemory.isEmpty() && pheromoneDirections.size() == cardinalAngles.length)
+        else
         {
             pheromoneSenseDirections();
         }
@@ -169,13 +173,14 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         //Agent stuck/frozen handling
         if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
         {
-            agentFreezeHandling(currentDirection);
+            agentFreezeHandling(direction);
         }
     }
 
     public void agentFreezeHandling(Vector attemptedDirection)
     {
-        pheromoneDirections.remove(attemptedDirection);
+        Vector standardizedVector = attemptedDirection.normalise().scale(cellSize);
+        pheromoneDirections.remove(standardizedVector);
     }
 
     public void nextExplorationVisionDirection()

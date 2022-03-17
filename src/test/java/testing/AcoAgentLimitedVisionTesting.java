@@ -45,7 +45,10 @@ public class AcoAgentLimitedVisionTesting
         AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
 
         getAgentStuckAtWindow(agent);
+
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.setMoveFailed(false);
         assertEquals(agent.getPheromoneDirections().size(), 3);
 
         firstMoveCycleAfterStuck(agent);
@@ -71,7 +74,9 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.setMoveFailed(false);
 
         assertEquals(agent.getPheromoneDirections().size(), 2);
     }
@@ -87,7 +92,9 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.setMoveFailed(false);
         assertEquals(agent.getPheromoneDirections().size(), 1);
     }
 
@@ -102,7 +109,9 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.setMoveFailed(false);
         assertEquals(agent.getPheromoneDirections().size(), 0);
     }
 
@@ -114,10 +123,12 @@ public class AcoAgentLimitedVisionTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
         assertEquals(agent.getSizeOfDirectionsToVisiblyExplore(), 0);
         assertEquals(agent.getShortTermMemorySize(), 1);
         assertEquals(agent.getPheromoneDirections().size(), 3);
+        agent.setMoveFailed(true);
     }
 
     public void getAgentStuckAtWindow(AcoAgentLimitedVision agent)
@@ -149,7 +160,9 @@ public class AcoAgentLimitedVisionTesting
 
         getAgentStuckAtWindow(agent);
 
+        agent.setMoveFailed(true);
         agent.updateLocation(new Vector(51.4758040349858, 367.0214134418279));
+        agent.setMoveFailed(false);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
