@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Stack;
 
 
@@ -49,6 +48,16 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         }
     }
 
+    @Override
+    public void updateLocation(Vector endPoint)
+    {
+        position = endPoint;
+        world.updateAgent(this);
+
+        worldEvaporationProcess();
+        shortTermMemory(endPoint);
+    }
+
     public Move visibleExploration()
     {
         explorationToViableMovement();
@@ -60,9 +69,16 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
     public Move pheromonesDetection()
     {
-        ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
-        directionsToVisiblyExplore(pheromoneValues);
-        direction = visualDirectionsToExplore.peek().normalise();
+        if(pheromoneDirections.isEmpty())
+        {
+            relyOnShortTermMemory();
+        }
+        else
+        {
+            ArrayList<Double> pheromoneValues = accessAvaliableCellPheromones(pheromoneDirections);
+            directionsToVisiblyExplore(pheromoneValues);
+            direction = visualDirectionsToExplore.peek().normalise();
+        }
 
         previousMove = new Move(position, new Vector());
         return new Move(position, new Vector());
@@ -76,7 +92,6 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         previousMove = new Move(position, move.scale(cellSize));
 
         possibleMovements.clear();
-        pheromoneSenseDirections();
 
         return new Move(position, move.scale(cellSize));
     }
@@ -91,11 +106,22 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
             pheromoneDirections.remove(usedMove);
             shortTermMoveMemory.put(usedMove.hashCode(), usedMove);
         }
+        else
+        {
+            pheromoneSenseDirections();
+        }
+    }
+
+    public void rememberDirections()
+    {
+        pheromoneDirections.addAll(shortTermMoveMemory.values());
     }
 
     public void relyOnShortTermMemory()
     {
-        visualDirectionsToExplore.addAll(shortTermMoveMemory.values());
+        possibleMovements.addAll(shortTermMoveMemory.values());
+        rememberDirections();
+        shortTermMoveMemory.clear();
     }
 
     public void directionsToVisiblyExplore(ArrayList<Double> pheromoneValues)
