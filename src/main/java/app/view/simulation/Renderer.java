@@ -100,7 +100,9 @@ public class Renderer extends Canvas
         Vector vector = convertToMapVector(click);
         Agent agent = selectAgent(vector);
         if(agent != null)
-            System.out.println(agent);
+        {
+            AgentView view = new AgentView();
+        }
     }
 
     private void mouseReleased(MouseEvent e)
