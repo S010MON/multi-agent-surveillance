@@ -34,4 +34,5 @@ public interface Agent extends Boundary
 
     double getRadius();
 
+    void setMoveFailed(boolean failed);
 }
