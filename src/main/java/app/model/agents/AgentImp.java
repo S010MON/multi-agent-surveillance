@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AgentImp implements Agent
 {
@@ -20,6 +22,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
     protected ArrayList<Ray> view;
+    @Getter protected Set<Vector> seen;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
@@ -27,6 +30,7 @@ public class AgentImp implements Agent
         this.position = position;
         this.radius = radius;
         view = new ArrayList<>();
+        seen = new HashSet<>();
     }
 
     @Override
@@ -97,5 +101,17 @@ public class AgentImp implements Agent
     public Vector getTeleport()
     {
         return null;
+    }
+
+    @Override
+    public Set<Vector> getSeen()
+    {
+        return seen;
+    }
+
+    @Override
+    public void updateSeen(HashSet<Vector> seen)
+    {
+        this.seen = seen;
     }
 }
