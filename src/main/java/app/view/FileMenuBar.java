@@ -1,24 +1,14 @@
 package app.view;
 
 import app.App;
-import app.controller.io.FileManager;
 import app.controller.io.FilePath;
-import app.controller.settings.Settings;
-import app.model.Map;
-import app.view.mapBuilder.DisplayPane;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class FileMenuBar extends MenuBar
 {
@@ -63,6 +53,10 @@ public class FileMenuBar extends MenuBar
         MenuItem clear = new MenuItem("Clear");
         clear.setOnAction(e -> app.getStartMenu().getDisplayPane().clear());
         edit.getItems().add(clear);
+
+        MenuItem pauseView = new MenuItem("Pause/Resume");
+        pauseView.setOnAction(e -> app.pause());
+        edit.getItems().add(pauseView);
 
         /* View menu */
         Menu view = new Menu("View");
