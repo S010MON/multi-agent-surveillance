@@ -5,6 +5,7 @@ import app.controller.graphicsEngine.Ray;
 import app.model.boundary.Boundary;
 import app.model.Move;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public interface Agent extends Boundary
 {
@@ -34,4 +35,7 @@ public interface Agent extends Boundary
 
     double getRadius();
 
+    HashSet<Vector> getSeen();
+
+    void updateSeen(Vector vector);
 }
