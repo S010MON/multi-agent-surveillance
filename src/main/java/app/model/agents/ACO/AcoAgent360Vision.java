@@ -18,7 +18,7 @@ public class AcoAgent360Vision extends AgentImp
     private static int AcoMoveCount = 0;
 
     private double maxPheromone = 5;
-    protected double cellSize;
+    @Getter protected double cellSize;
     protected Random randomGenerator = new Random(1);
 
     @Getter protected Move previousMove;
@@ -263,11 +263,6 @@ public class AcoAgent360Vision extends AgentImp
     {
         AcoAgentCount = 0;
         AcoMoveCount = 0;
-    }
-
-    public double getCellSize()
-    {
-        return cellSize;
     }
 
     public HashMap<Integer, Vector> accessShortTermMemory()
