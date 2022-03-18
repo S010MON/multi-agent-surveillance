@@ -21,8 +21,8 @@ public class VectorSet extends HashSet<Vector>
 
     public boolean add(Vector v)
     {
-        double x  = new BigDecimal(v.getX()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        double y  = new BigDecimal(v.getY()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        double x  = new BigDecimal(v.getX()).setScale(0, RoundingMode.HALF_UP).doubleValue();
+        double y  = new BigDecimal(v.getY()).setScale(0, RoundingMode.HALF_UP).doubleValue();
         return super.add(new Vector(x, y));
     }
 }
