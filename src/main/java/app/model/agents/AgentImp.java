@@ -8,10 +8,11 @@ import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.HashSet;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AgentImp implements Agent
 {
@@ -21,7 +22,6 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
     @Getter @Setter boolean moveFailed;
-    protected ArrayList<Ray> view;
     @Getter protected ArrayList<Ray> view;
     @Getter protected HashSet<Vector> seen;
     protected AgentView agentViewWindow;
