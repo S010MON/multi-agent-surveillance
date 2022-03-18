@@ -201,19 +201,27 @@ public class Map
     {
         Vector v;
         int tries = 0;
-        do
+        try
         {
-            tries++;
-            double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
-            double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
-            v = new Vector(x, y);
-            if (tries > 500)
+            do
             {
-                throw new RuntimeException("GuardSpawn not big enough for number of guards");
-            }
-        } while (!clearSpot(v));
+                tries++;
+                double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+                double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+                v = new Vector(x, y);
+                if (tries > 500)
+                {
+                    throw new RuntimeException("SpawnArea not big enough for number of agents");
+                }
+            } while (!clearSpot(v));
 
-        return v;
+            return v;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private boolean clearSpot(Vector v)
