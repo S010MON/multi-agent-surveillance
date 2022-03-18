@@ -3,6 +3,7 @@ package app.model.agents;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.model.Move;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -21,7 +22,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
-    @Getter protected HashSet<Vector> seen;
+    @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
     public AgentImp(Vector position, Vector direction, double radius)
@@ -30,7 +31,7 @@ public class AgentImp implements Agent
         this.position = position;
         this.radius = radius;
         view = new ArrayList<>();
-        seen = new HashSet<>();
+        seen = new VectorSet();
     }
 
     @Override
