@@ -28,11 +28,6 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
                                BooleanCell leftCell, BooleanCell rightCell)
     {
         agentPos = agentCell;
-        //TODO
-        /*if (agentPos.getObstacle())
-        {
-            throw new RuntimeException("Agent is in obstacle!");
-        }*/
         updateLastPositions();
         addVertex(forwardCell);
         addVertex(leftCell);
@@ -89,11 +84,6 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
                 throw new RuntimeException("Vertex has too many neighbours!");
             }
         }
-        if (DEBUG)
-        {
-            System.out.println("Total nr of vertices explored: " + vertexSet().size());
-            System.out.println("Nr of vertices with unexplored neighbours: " + unexploredFrontier.size());
-        }
         return unexploredFrontier;
     }
 
@@ -138,7 +128,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     public boolean agentInStuckMovement()
     {
         ArrayList<BooleanCell> diffVertices = new ArrayList<>();
-        if (lastPositions.size() == 8)
+        if (lastPositions.size() >= 5)
         {
             for (BooleanCell vertex : lastPositions)
             {
@@ -147,7 +137,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
                     if (!diffVertices.contains(other))
                     {
                         diffVertices.add(other);
-                        if (diffVertices.indexOf(other) == 7 && diffVertices.size() < 5)
+                        if (diffVertices.indexOf(other) == lastPositions.size()-1 && diffVertices.size() < 5)
                         {
                             return true;
                         }
@@ -168,6 +158,10 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
 
     public boolean agentStuckInVertex()
     {
+        if (lastPositions.size() < 5)
+        {
+            return false;
+        }
         for (BooleanCell vertex : lastPositions)
         {
             if (vertex != agentPos)
@@ -181,7 +175,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
     public void moveAgentBack()
     {
         if (lastPositions.size() >= 3) {
-            agentPos.setObstacle(true);  // TODO added this
+            agentPos.setObstacle(true);
             agentPos = prevAgentVertex;
             lastPositions.remove(lastPositions.size()-1);
             prevAgentVertex = lastPositions.get(lastPositions.size()-2);
