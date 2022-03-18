@@ -536,17 +536,9 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        /*if (!noMovesDone && rayAngle == direction.getAngle())
+        /*if (!noMovesDone && getNeighbourBasedOnAngle(rayAngle).getObstacle())
         {
-            BooleanCell forwardCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
-                    (cellGraph.getAgentPos().getY() + direction.getY() * moveLength), direction.getAngle(),
-                    false,
-                    1);
-            if (forwardCell.getObstacle())
-            {
-                System.out.println("forward cell is obstacle, rotating");
-                return false;
-            }
+            return false;
         }*/
         for (Ray r : view)
         {
@@ -636,6 +628,36 @@ public class WallFollowAgent extends AgentImp
         {
             return currentAngle + 90 - 360;
         }
+    }
+
+    public BooleanCell getNeighbourBasedOnAngle(double rayAngle)
+    {
+        BooleanCell agentCell = cellGraph.getAgentPos();
+        if (rayAngle == direction.getAngle())
+        {
+            return getNeighbourVertex((agentCell.getX() + direction.getX() * moveLength),
+                    (agentCell.getY() + direction.getY() * moveLength),
+                    direction.getAngle(),
+                    false,
+                    1);
+        }
+        else if (rayAngle == getAngleOfLeftRay())
+        {
+            return getNeighbourVertex((agentCell.getX() + rotateAgentLeft().getX() * moveLength),
+                    (agentCell.getY() + rotateAgentLeft().getY() * moveLength),
+                    rotateAgentLeft().getAngle(),
+                    false,
+                    1);
+        }
+        else if (rayAngle == rotateAgentRight().getAngle())
+        {
+            return getNeighbourVertex((agentCell.getX() + rotateAgentRight().getX() * moveLength),
+                    (agentCell.getY() + rotateAgentRight().getY() * moveLength),
+                    rotateAgentRight().getAngle(),
+                    false,
+                    1);
+        }
+        throw new RuntimeException("Checking vertex that is behind agent!");
     }
 }
 
