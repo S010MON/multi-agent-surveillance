@@ -37,7 +37,7 @@ public class Map
 
     public Map(Settings settings)
     {
-        System.out.println("Loading settings ... ");
+        System.out.print("Loading settings ... ");
         this.settings = settings;
 
         /* Make furniture */
@@ -58,10 +58,10 @@ public class Map
         agents = new ArrayList<>();
 
         // On creation add the right number of guards
-        for(int i = 0; i < settings.getNoOfGuards(); i++)
+        for (int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            if(srt!=null)
+            if (srt != null)
             {
                 Vector dir = new Vector(0, 1);
                 AcoAgent guard = new AcoAgent(srt, dir, 10);
@@ -73,24 +73,23 @@ public class Map
         }
 
         // On creation add the right number of infiltrators
-        for(int i = 0; i < settings.getNoOfIntruders(); i++)
+        for (int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
-            if(srt!=null)
+            if (srt != null)
             {
                 Vector dir = randDirection();
                 WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
                 intruder.setMaxWalk(settings.getWalkSpeedIntruder());
                 intruder.setMaxSprint(settings.getSprintSpeedIntruder());
                 agents.add(intruder);
-            }
-            else
+            } else
             {
-                i=settings.getNoOfIntruders();
+                i = settings.getNoOfIntruders();
             }
         }
 
-        if(intruderSpawn!=null)
+        if (intruderSpawn != null)
         {
             Vector humanStart = randPosition(intruderSpawn);
             if (humanStart != null)
@@ -103,7 +102,7 @@ public class Map
             }
         }
 
-        System.out.println("   ...done");
+        System.out.println("  done");
     }
 
     /**
@@ -163,7 +162,7 @@ public class Map
 
     public void drawGuardSpawn(GraphicsContext gc)
     {
-        if(guardSpawn!=null)
+        if (guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);
             gc.strokeRect(guardSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
@@ -175,7 +174,7 @@ public class Map
 
     public void drawIntruderSpawn(GraphicsContext gc)
     {
-        if(intruderSpawn!=null)
+        if (intruderSpawn != null)
         {
             gc.setStroke(Color.RED);
             gc.strokeRect(intruderSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
@@ -188,26 +187,27 @@ public class Map
     private Vector randDirection()
     {
         double r = Math.random();
-        if(r < 0.25)
-            return new Vector(1,0);
-        else if( r < 0.5)
-            return new Vector(0,1);
-        else if( r < 0.75)
-            return new Vector(-1,0);
+        if (r < 0.25)
+            return new Vector(1, 0);
+        else if (r < 0.5)
+            return new Vector(0, 1);
+        else if (r < 0.75)
+            return new Vector(-1, 0);
         else
-            return new Vector(0,-1);
+            return new Vector(0, -1);
     }
 
     private Vector randPosition(Rectangle2D r)
     {
         Vector v;
         int tries = 0;
-        do {
+        do
+        {
             tries++;
             double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
             double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
             v = new Vector(x, y);
-            if(tries>500)
+            if (tries > 500)
             {
                 throw new RuntimeException("GuardSpawn not big enough for number of guards");
             }
@@ -218,10 +218,10 @@ public class Map
 
     private boolean clearSpot(Vector v)
     {
-        for(Agent agent: agents)
+        for (Agent agent : agents)
         {
             double dist = agent.getPosition().dist(v);
-            if(dist < 2*agent.getRadius())
+            if (dist < 2 * agent.getRadius())
                 return false;
         }
         return true;
