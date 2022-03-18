@@ -21,7 +21,7 @@ public class CoverageMap
 
         pxWidth =  (int) (realWidth / pixelSize);
         pxHeight = (int) (realHeight / pixelSize);
-        pixelMap = new boolean[pxWidth][pxHeight];
+        pixelMap = createMap(pxWidth, pxHeight);
 
         for(int i = 1; i <= pxWidth; i++)
         {
@@ -45,5 +45,19 @@ public class CoverageMap
                 return true;
         }
         return false;
+    }
+
+    private  boolean[][] createMap(int pxWidth, int pxHeight)
+    {
+        boolean[][] map = new boolean[pxWidth][pxHeight];
+        for(int i = 0; i < pxWidth; i++)
+        {
+            for(int j = 0; j < pxWidth; j++)
+            {
+                map[i][j] = false;
+            }
+        }
+
+        return map;
     }
 }
