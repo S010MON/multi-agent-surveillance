@@ -209,8 +209,7 @@ public class Map
             v = new Vector(x, y);
             if(tries>500)
             {
-                System.out.println("GuardSpawn not big enough for number of guards");
-                return null;
+                throw new RuntimeException("GuardSpawn not big enough for number of guards");
             }
         } while (!clearSpot(v));
 
