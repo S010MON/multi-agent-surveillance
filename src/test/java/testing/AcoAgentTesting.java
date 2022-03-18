@@ -24,7 +24,7 @@ public class AcoAgentTesting
     private double radius = 10;
 
     Settings settings = FileManager.loadSettings("src/main/resources/map_2_original.txt");
-    GraphicsEngine graphicsEngine = new GraphicsEngine();
+    GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Map map = new Map(settings);
 
     @BeforeEach
