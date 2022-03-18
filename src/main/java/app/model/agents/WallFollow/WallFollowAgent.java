@@ -27,6 +27,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 15;
+    private double maxViewingDistance = 100;
     @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
@@ -41,6 +42,7 @@ public class WallFollowAgent extends AgentImp
     private List<BooleanCell> currentPathToNextVertex = null;
     private BooleanCell currentTargetVertex = null;
     private boolean rotatedOutOfStuck = false;
+    private boolean handledFailedMove = false;
     private ArrayList<BooleanCell> inaccessibleCells = new ArrayList<>();
     private boolean explorationDone = false;
 
@@ -104,17 +106,19 @@ public class WallFollowAgent extends AgentImp
             currentTargetVertex = null;
             currentPathToNextVertex = null;
         }
-        // TODO handle stuck movement in a separate method, move agent somewhere far away
-        else if (rotatedOutOfStuck || cellGraph.agentInStuckMovement())
+        else if (cellGraph.agentStuckInVertex())
         {
-            currentTargetVertex = null;
-            currentPathToNextVertex = null;
-            if (noWallDetected(direction.getAngle()))
+            // TODO add neighbour cell checking to noWallDetected and obstacle detection from seeing
+            BooleanCell forwardCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
+                    (cellGraph.getAgentPos().getY() + direction.getY() * moveLength),
+                    direction.getAngle(),
+                    false,
+                    1);
+            if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
             {
                 deltaPos = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
                 movedForwardLast = true;
                 lastTurn = TurnType.NO_TURN;
-                rotatedOutOfStuck = false;
             }
             else
             {
@@ -122,6 +126,9 @@ public class WallFollowAgent extends AgentImp
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
             }
+            wallEncountered = false;
+            currentTargetVertex = null;
+            currentPathToNextVertex = null;
         }
         else if (currentPathToNextVertex != null)
         {
@@ -140,7 +147,12 @@ public class WallFollowAgent extends AgentImp
             }
         }
         else if (!wallEncountered) {
-            if (noWallDetected(direction.getAngle())) {
+            BooleanCell forwardCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
+                    (cellGraph.getAgentPos().getY() + direction.getY() * moveLength),
+                    direction.getAngle(),
+                    false,
+                    1);
+            if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle()) {
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: no wall encountered");
                 }
@@ -170,7 +182,7 @@ public class WallFollowAgent extends AgentImp
         if (DEBUG)
         {
             System.out.println("Did move: " + nextMove.getDeltaPos().getX() + " " + nextMove.getDeltaPos().getY());
-            System.out.println(cellGraph.getVertices());
+            System.out.println("new dir: " + direction);
         }
         return nextMove;
     }
@@ -191,21 +203,31 @@ public class WallFollowAgent extends AgentImp
     {
         Vector newMove = new Vector(0,0);
         Vector newDirection = direction;
-        if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
+        BooleanCell forwardCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
+                (cellGraph.getAgentPos().getY() + direction.getY() * moveLength),
+                direction.getAngle(),
+                false,
+                1);
+        BooleanCell leftCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + rotateAgentLeft().getX() * moveLength),
+                (cellGraph.getAgentPos().getY() + rotateAgentLeft().getY() * moveLength),
+                rotateAgentLeft().getAngle(),
+                false,
+                1);
+        if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
             movedForwardLast = true;
             lastTurn = TurnType.NO_TURN;
         }
-        else if (noWallDetected(getAngleOfLeftRay()))
+        else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle())
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentLeft();
             lastTurn = TurnType.LEFT;
             movedForwardLast = false;
         }
-        else if (noWallDetected(direction.getAngle()))
+        else if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
@@ -279,6 +301,9 @@ public class WallFollowAgent extends AgentImp
             newDirection = rotateAgentRight();
             lastTurn = TurnType.RIGHT;
             movedForwardLast = false;
+            //wallEncountered = false;  // TODO changed this
+            handledFailedMove = true;
+            //initialVertexFound = true;
         }
         else {
             throw new RuntimeException("Move failed but last move was not position change!");
@@ -328,12 +353,12 @@ public class WallFollowAgent extends AgentImp
             {
                 currentPathToNextVertex = null;
                 // only start wall following again if wall has not been followed before
-                /*if (nextVertex.getX() != cellGraph.getInitialWallFollowPos().getX() &&
+                if (nextVertex.getX() != cellGraph.getInitialWallFollowPos().getX() &&
                         nextVertex.getY() != cellGraph.getInitialWallFollowPos().getY())
                 {
                     initialVertexFound = false;
                     cellGraph.setInitialWallFollowPos(null);
-                }*/
+                }
             }
             lastTurn = TurnType.NO_TURN;
             movedForwardLast = true;
@@ -482,7 +507,7 @@ public class WallFollowAgent extends AgentImp
                                                   true,
                                                   distFromAgentVertex);
         cellGraph.addExploredVertex(nextCell);
-        if (!nextCell.getObstacle())
+        if (!nextCell.getObstacle() && distFromAgentVertex < maxViewingDistance)
         {
             exploreVerticesUntilObstacle(nextCell, dir, distFromAgentVertex+1);
         }
@@ -511,6 +536,18 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
+        /*if (!noMovesDone && rayAngle == direction.getAngle())
+        {
+            BooleanCell forwardCell = getNeighbourVertex((cellGraph.getAgentPos().getX() + direction.getX() * moveLength),
+                    (cellGraph.getAgentPos().getY() + direction.getY() * moveLength), direction.getAngle(),
+                    false,
+                    1);
+            if (forwardCell.getObstacle())
+            {
+                System.out.println("forward cell is obstacle, rotating");
+                return false;
+            }
+        }*/
         for (Ray r : view)
         {
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.rayLength() <= moveLength)
