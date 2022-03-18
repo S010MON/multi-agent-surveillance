@@ -1,16 +1,18 @@
 package app.view.simulation;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Trail;
+import app.model.agents.Agent;
 import app.view.ScreenSize;
+import app.view.agentView.AgentView;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -95,13 +97,19 @@ public class Renderer extends Canvas
     private void mousePressed(MouseEvent e)
     {
         click = new Point2D(e.getX(), e.getY());
-        System.out.println("click = " + click);
+
+        Vector vector = convertToMapVector(click);
+        Agent agent = selectAgent(vector);
+        if(agent != null)
+        {
+            AgentView view = new AgentView(agent);
+            agent.addViewWindow(view);
+        }
     }
 
     private void mouseReleased(MouseEvent e)
     {
         click = null;
-        System.out.println("click = null");
     }
 
     private void mouseDragged(MouseEvent e)
@@ -121,10 +129,41 @@ public class Renderer extends Canvas
     {
         double dy = ScreenSize.height/mapHeight;
         double dx = ScreenSize.width/mapWidth;
-        double padding = 0.1;
+        double padding = 0.05;
+        double scale;
         if(mapWidth * dy <= ScreenSize.width && mapHeight * dx<= ScreenSize.height)
-            Info.getInfo().setZoom(Math.max(dy,dx)-padding);
+            scale = Math.max(dy,dx)-padding;
         else
-            Info.getInfo().setZoom(Math.min(dy,dx)-padding);
+            scale = Math.min(dy,dx)-padding;
+
+        Info.getInfo().setZoom(scale);
+
+        double offsetX = (Math.abs(ScreenSize.width- mapWidth * scale)/2);
+        double offsetY = (Math.abs(ScreenSize.height- mapHeight * scale))/2;
+
+        Info.getInfo().setOffsetX(offsetX);
+        Info.getInfo().setOffsetY(offsetY);
+    }
+
+    private Agent selectAgent(Vector v)
+    {
+        for(Agent a: map.getAgents())
+        {
+            if(v.dist(a.getPosition()) <= 20)
+                return a;
+        }
+        return null;
+    }
+
+    private Vector convertToMapVector(Point2D point)
+    {
+        return new Vector((point.getX() - Info.getInfo().offsetX)/Info.getInfo().getZoom(),
+                          (point.getY() - Info.getInfo().offsetY)/Info.getInfo().getZoom());
+    }
+
+    private Point2D convertToScreenPoint(Vector vector)
+    {
+        return new Point2D(vector.getX() * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                           vector.getY() * Info.getInfo().getZoom() + Info.getInfo().offsetY);
     }
 }
