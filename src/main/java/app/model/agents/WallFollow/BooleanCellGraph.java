@@ -140,11 +140,6 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
         ArrayList<BooleanCell> diffVertices = new ArrayList<>();
         if (lastPositions.size() == 8)
         {
-            if (agentStuckInVertex())
-            {
-                System.out.println("agent stuck in one place");
-                return true;
-            }
             for (BooleanCell vertex : lastPositions)
             {
                 for (BooleanCell other: lastPositions)

@@ -26,7 +26,7 @@ public class WallFollowAgent extends AgentImp
     }
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
-    @Getter @Setter private double moveLength = 15;
+    @Getter @Setter private double moveLength = 20;
     private double maxViewingDistance = 100;
     @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean wallEncountered = false;
@@ -96,6 +96,7 @@ public class WallFollowAgent extends AgentImp
 
         if (explorationDone)
         {
+            System.out.println("exploration done");
             return new Move(direction, deltaPos);
         }
         if (isMoveFailed())
@@ -136,7 +137,7 @@ public class WallFollowAgent extends AgentImp
             deltaPos = pathMove.getDeltaPos();
             newDirection = pathMove.getEndDir();
         }
-        else if (initialVertexFound)
+        else if (initialVertexFound || cellGraph.agentInStuckMovement())
         {
             Move heuristicsMove = runHeuristicsAlgorithm();
             deltaPos = heuristicsMove.getDeltaPos();
@@ -352,13 +353,13 @@ public class WallFollowAgent extends AgentImp
             if (currentPathToNextVertex.isEmpty())
             {
                 currentPathToNextVertex = null;
-                // only start wall following again if wall has not been followed before
+                /*// only start wall following again if wall has not been followed before
                 if (nextVertex.getX() != cellGraph.getInitialWallFollowPos().getX() &&
                         nextVertex.getY() != cellGraph.getInitialWallFollowPos().getY())
                 {
                     initialVertexFound = false;
                     cellGraph.setInitialWallFollowPos(null);
-                }
+                }*/
             }
             lastTurn = TurnType.NO_TURN;
             movedForwardLast = true;
@@ -546,7 +547,6 @@ public class WallFollowAgent extends AgentImp
             {
                 if (DEBUG)
                     System.out.print("WALL DETECTED! Ray Angle: " + rayAngle + ", Length: " + r.rayLength());
-                // TODO: deal with glass and map boundary detection
                 return false;
             }
         }
