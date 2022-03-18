@@ -49,15 +49,20 @@ public class GameEngine
             if (teleportTo != null)
             {
                 a.updateLocation(teleportTo);
+                a.setMoveFailed(false);
                 renderer.addTrail(new Trail(teleportTo, tics));
             }
-
-            if (legalMove(startPoint, endPoint) &&
+            else if (legalMove(startPoint, endPoint) &&
                     legalMove(a, endPoint) &&
                     legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
             {
                 a.updateLocation(endPoint);
+                a.setMoveFailed(false);
                 renderer.addTrail(new Trail(endPoint, tics));
+            }
+            else
+            {
+                a.setMoveFailed(true);
             }
         }
         tics++;
