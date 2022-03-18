@@ -30,10 +30,8 @@ public class FileParser
             {
                 String id=scan.next();
                 String val=scan.next();
-                if(val.contains("//"))
-                {
-                    val = val.split("//")[0];
-                }
+                val = filterOutComments(val);
+
                 id = id.trim();
                 val = val.trim();
                 String[] coords = val.split(" ");
@@ -79,5 +77,14 @@ public class FileParser
                                Double.parseDouble(coords[1]),
                          Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                          Integer.parseInt(coords[3]) - Integer.parseInt(coords[1]));
+    }
+
+    private static String filterOutComments(String s)
+    {
+        if(s.contains("//"))
+        {
+            return s.split("//")[0];
+        }
+        return s;
     }
 }
