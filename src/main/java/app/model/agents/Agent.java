@@ -4,7 +4,10 @@ import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.model.boundary.Boundary;
 import app.model.Move;
+import app.view.agentView.AgentView;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public interface Agent extends Boundary
 {
@@ -35,4 +38,10 @@ public interface Agent extends Boundary
     double getRadius();
 
     void setMoveFailed(boolean failed);
+
+    HashSet<Vector> getSeen();
+
+    void updateSeen(Vector vector);
+
+    void addViewWindow(AgentView agentView);
 }
