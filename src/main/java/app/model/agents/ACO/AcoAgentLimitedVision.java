@@ -16,8 +16,6 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
 
-    private boolean stuckFlag = false;
-
     public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);

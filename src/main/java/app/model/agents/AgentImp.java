@@ -27,7 +27,7 @@ public class AgentImp implements Agent
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        view = new ArrayList<>();
+        this.view = new ArrayList<>();
     }
 
     @Override
