@@ -30,9 +30,8 @@ public abstract class BoundaryFactory
             case GLASS -> { return  new TransparentBoundary(a, b);}
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
-            case SIREN -> { return null;}
         }
-        return null; // Redundant by design
+        return null; // Only for SIREN (SoundSource)
     }
 
     private static Vector[] cornersOf(Rectangle2D r)

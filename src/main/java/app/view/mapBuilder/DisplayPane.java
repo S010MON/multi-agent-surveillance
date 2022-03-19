@@ -29,7 +29,6 @@ public class DisplayPane extends Canvas
     private MbObject portal;
     private boolean settingTeleport;
     private Rectangle2D selection;
-    @Setter private FurnitureType currentType;
     private final Color backgroundColour = Color.WHITE;
     private double gridSize = 20;
     private ArrayList<GridLine> vLines;
@@ -184,11 +183,10 @@ public class DisplayPane extends Canvas
         textField.setContentText("range:");
         Optional<String> result = textField.showAndWait();
 
-        if(result.isPresent())
+        if (result.isPresent())
         {
             return Double.parseDouble(result.get());
-        }
-        else
+        } else
         {
             return 100;
         }

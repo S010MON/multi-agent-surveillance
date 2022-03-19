@@ -26,14 +26,13 @@ public class MbObject
 
     public void draw(GraphicsContext gc)
     {
-        if(type == FurnitureType.SIREN)
+        if (type == FurnitureType.SIREN)
         {
             gc.setFill(getTypeColour());
-            gc.fillOval(rect.getMinX()-2, rect.getMinY()-2, 4, 4);
+            gc.fillOval(rect.getMinX() - 2, rect.getMinY() - 2, 4, 4);
             gc.setStroke(getTypeColour());
-            gc.strokeOval(rect.getMinX() - amplitude/2, rect.getMinY() - amplitude/2, amplitude, amplitude);
-        }
-        else
+            gc.strokeOval(rect.getMinX() - amplitude / 2, rect.getMinY() - amplitude / 2, amplitude, amplitude);
+        } else
         {
             if (isFilled())
             {
