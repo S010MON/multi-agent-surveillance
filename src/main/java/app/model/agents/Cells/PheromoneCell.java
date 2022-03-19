@@ -1,9 +1,5 @@
 package app.model.agents.Cells;
 
-import app.model.agents.ACO.AcoAgent;
-
-import java.util.ArrayList;
-
 public class PheromoneCell implements Cell
 {
     private double pheromone;
@@ -19,9 +15,9 @@ public class PheromoneCell implements Cell
         return pheromone;
     }
 
-    public void updatePheromone(double maxPheramone)
+    public void updatePheromone(double maxPheromone)
     {
-        pheromone += maxPheramone;
+        pheromone += maxPheromone;
     }
 
     public void evaporation()

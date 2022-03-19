@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WallFollowAgentTest
 {
-    GraphicsEngine graphicsEngine = new GraphicsEngine();
+    GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
     WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75);

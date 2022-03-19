@@ -49,15 +49,31 @@ public class Grid
 
     public Cell getCellAt(int row, int col)
     {
-        return grid[row][col];
+        try
+        {
+            Cell cell = grid[row][col];
+            return cell;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Cell index out of bounds");
+        }
+        return null;
     }
 
     public Cell getCellAt(Vector position)
     {
-        int row = getCellRow(position);
-        int col = getCellCol(position);
-
-        return grid[row][col];
+        try
+        {
+            int row = getCellRow(position);
+            int col = getCellCol(position);
+            return grid[row][col];
+        }
+        catch(Exception e)
+        {
+            System.out.println("Cell index out of bounds");
+        }
+        return null;
     }
 
     public int getCellRow(Vector position)
