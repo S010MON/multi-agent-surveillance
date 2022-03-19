@@ -43,8 +43,12 @@ public class Settings
 
     public void addSoundSource(Vector position, double amplitude)
     {
-        soundSources.add(new SettingsObject(position, amplitude));
-        furniture.add(new SettingsObject(position, amplitude));
+        // TODO: the soundSource list will be deleted later,
+        //  when all functionality of Sound gets moved to standard Furniture.
+        //  But it is necessary for now to have both lists
+        SettingsObject soundSource = new SettingsObject(position, amplitude);
+        soundSources.add(soundSource);
+        furniture.add(soundSource);
     }
 
     public List<SettingsObject> getFurniture(FurnitureType type)
@@ -63,6 +67,11 @@ public class Settings
 
     public void addSoundFurniture(Rectangle2D rectangle2D, FurnitureType type)
     {
-        soundFurniture.add(new SettingsObject(rectangle2D, type));
+        // TODO: the soundFurniture list will be deleted later,
+        //  when all functionality of Sound gets moved to standard Furniture.
+        //  But it is necessary for now to have both lists
+        SettingsObject soundFurnitureObj = new SettingsObject(rectangle2D, type);
+        soundFurniture.add(soundFurnitureObj);
+        furniture.add(soundFurnitureObj);
     }
 }
