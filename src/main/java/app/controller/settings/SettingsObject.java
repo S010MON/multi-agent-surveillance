@@ -38,7 +38,7 @@ public class SettingsObject extends Rectangle2D
 
     public SettingsObject(Vector position, double amplitude)
     {
-        super(position.getX(), position.getY(), 0,0);
+        super(position.getX(), position.getY(), 0, 0);
         this.amplitude = amplitude;
         this.type = FurnitureType.SIREN;
     }
@@ -56,24 +56,24 @@ public class SettingsObject extends Rectangle2D
         sb.append(" = ");
         sb.append((int) getMinX()).append(" ");
         sb.append((int) getMinY()).append(" ");
-        if(type != FurnitureType.SIREN)
+        if (type != FurnitureType.SIREN)
         {
             sb.append((int) getMaxX()).append(" ");
             sb.append((int) getMaxY());
         }
 
-        if(type == FurnitureType.PORTAL && teleportTo != null)
+        if (type == FurnitureType.PORTAL && teleportTo != null)
         {
             sb.append(" ");
             sb.append((int) teleportTo.getX()).append(" ");
             sb.append((int) teleportTo.getY());
         }
-        if(type == FurnitureType.PORTAL && teleportRotation != null)
+        if (type == FurnitureType.PORTAL && teleportRotation != null)
         {
             sb.append(" ");
             sb.append(teleportRotation);
         }
-        if(type == FurnitureType.SIREN)
+        if (type == FurnitureType.SIREN)
         {
             sb.append(amplitude.intValue());
         }
