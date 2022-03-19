@@ -52,10 +52,10 @@ public class FurniturePane extends StackPane
         boolean intruder = false;
         for(MbObject object : displayPane.getObjects())
         {
-            if(object.getType() == FurnitureType.GUARD_SPAWN)
+            if(object.getType() == FurnitureType.GUARD_SPAWN || Integer.parseInt(startMenu.getSettingsPane().getNoGuards().getText())==0)
                 guard = true;
 
-            if(object.getType() == FurnitureType.INTRUDER_SPAWN)
+            if(object.getType() == FurnitureType.INTRUDER_SPAWN || Integer.parseInt(startMenu.getSettingsPane().getNoIntruders().getText())==0)
                 intruder = true;
         }
 

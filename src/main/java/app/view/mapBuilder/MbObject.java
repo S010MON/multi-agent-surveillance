@@ -29,25 +29,28 @@ public class MbObject
         if(type == FurnitureType.SIREN)
         {
             gc.setFill(getTypeColour());
-            Vector pos = new Vector(rect.getMinX()+rect.getWidth()/2, rect.getMinY()+rect.getHeight()/2);
-            gc.fillOval(pos.getX()-2, pos.getY()-2, 4, 4);
+            gc.fillOval(rect.getMinX()-2, rect.getMinY()-2, 4, 4);
+            gc.setStroke(getTypeColour());
+            gc.strokeOval(rect.getMinX() - amplitude/2, rect.getMinY() - amplitude/2, amplitude, amplitude);
         }
-
-        else if(isFilled())
+        else
         {
-            gc.setFill(getTypeColour());
-            gc.fillRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
-        }
+            if (isFilled())
+            {
+                gc.setFill(getTypeColour());
+                gc.fillRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
+            }
 
-        else if(hasOutline())
-        {
-            gc.setStroke(getTypeOutline());
-            gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
-        }
+            if (hasOutline())
+            {
+                gc.setStroke(getTypeOutline());
+                gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
+            }
 
-        if(teleportTo != null)
-        {
-            gc.fillOval(teleportTo.getX() - 5, teleportTo.getY() - 5, 10, 10);
+            if (teleportTo != null)
+            {
+                gc.fillOval(teleportTo.getX() - 5, teleportTo.getY() - 5, 10, 10);
+            }
         }
     }
 

@@ -143,7 +143,7 @@ public class DisplayPane extends Canvas
         else if(soundSourceSelected)
         {
             Rectangle2D rect = new Rectangle2D(e.getX(), e.getY(), 0, 0);
-            MbObject soundSource = new MbObject(rect, startMenu.getFurniturePane().getCurrentType());
+            MbObject soundSource = new MbObject(rect, FurnitureType.SIREN);
 
             soundSource.setAmplitude(getAmplitudeFromPopUp());
             objects.add(soundSource);
