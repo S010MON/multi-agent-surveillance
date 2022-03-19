@@ -70,6 +70,5 @@ public class FileParserTest
 
         // Check if can turn into map
         Map map = new Map(s);
-        map.getFurniture().get(12).toString();
     }
 }
