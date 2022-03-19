@@ -56,8 +56,12 @@ public class SettingsObject extends Rectangle2D
         sb.append(" = ");
         sb.append((int) getMinX()).append(" ");
         sb.append((int) getMinY()).append(" ");
-        sb.append((int) getMaxX()).append(" ");
-        sb.append((int) getMaxY());
+        if(type != FurnitureType.SIREN)
+        {
+            sb.append((int) getMaxX()).append(" ");
+            sb.append((int) getMaxY());
+        }
+
         if(type == FurnitureType.PORTAL && teleportTo != null)
         {
             sb.append(" ");
@@ -68,6 +72,10 @@ public class SettingsObject extends Rectangle2D
         {
             sb.append(" ");
             sb.append(teleportRotation);
+        }
+        if(type == FurnitureType.SIREN)
+        {
+            sb.append(amplitude.intValue());
         }
         return sb.toString();
     }
