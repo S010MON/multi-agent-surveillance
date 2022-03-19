@@ -20,17 +20,19 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
+    @Setter protected boolean moveFailed;
     @Getter protected ArrayList<Ray> view;
     @Getter protected HashSet<Vector> seen;
     protected AgentView agentViewWindow;
+
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        view = new ArrayList<>();
-        seen = new HashSet<>();
+        this.view = new ArrayList<>();
+        this.seen = new HashSet<>();
     }
 
     @Override

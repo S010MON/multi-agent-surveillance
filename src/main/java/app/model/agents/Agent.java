@@ -37,6 +37,8 @@ public interface Agent extends Boundary
 
     double getRadius();
 
+    void setMoveFailed(boolean failed);
+
     HashSet<Vector> getSeen();
 
     void updateSeen(Vector vector);

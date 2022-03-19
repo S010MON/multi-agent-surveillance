@@ -5,32 +5,29 @@ import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.PheromoneCell;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-//TODO Accommodate for agents clashes
-public class AcoAgent extends AgentImp
+public class AcoAgent360Vision extends AgentImp
 {
-    private static AcoGrid world = new AcoGrid();
+    protected static AcoGrid world = new AcoGrid();
     private static int AcoAgentCount = 0;
     private static int AcoMoveCount = 0;
 
-    private double maxPheromone = 1;
-    private double cellSize;
-    private Random randomGenerator = new Random(1);
+    private double maxPheromone = 5;
+    @Getter protected double cellSize;
+    protected Random randomGenerator = new Random(1);
 
-    private Move previousMove;
-    private HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
+    @Getter protected Move previousMove;
+    protected HashMap<Integer, Vector> shortTermMoveMemory = new HashMap<>();
 
-    //TODO Implement for memory
-    private HashMap<Integer, PheromoneCell> agentMap = new HashMap<>();
+    protected int[] cardinalAngles = {0, 90, 180, 270};
+    protected double epsilon = 0.3;
 
-    private int[] cardinalAngles = {0, 90, 180, 270};
-    private double epsilon = 0.3;
-
-    public AcoAgent(Vector position, Vector direction, double radius)
+    public AcoAgent360Vision(Vector position, Vector direction, double radius)
     {
         super(position, direction, radius);
         cellSize = world.getCellSize();
@@ -111,7 +108,6 @@ public class AcoAgent extends AgentImp
         return modifiedPossibleMoves;
     }
 
-    //TODO Implement movement bias based on target direction
     public ArrayList<Vector> determineEquivalentMinMoves(ArrayList<Double> cellPheromones, ArrayList<Vector> possibleMovements)
     {
         double minValue = Double.MAX_VALUE;
@@ -119,11 +115,12 @@ public class AcoAgent extends AgentImp
 
         for(int i = 0; i < cellPheromones.size(); i++)
         {
-            if(cellPheromones.get(i) == minValue)
+            Double cellPheromone = cellPheromones.get(i);
+            if(cellPheromone != null && cellPheromone == minValue)
             {
                 equivalentMoves.add(possibleMovements.get(i));
             }
-            else if(cellPheromones.get(i) < minValue)
+            else if(cellPheromone != null && cellPheromones.get(i) < minValue)
             {
                 equivalentMoves.clear();
                 minValue = cellPheromones.get(i);
@@ -156,7 +153,14 @@ public class AcoAgent extends AgentImp
         {
             Vector resultingPosition = position.add(movement);
             PheromoneCell possibleCell = (PheromoneCell) world.getCellAt(resultingPosition);
-            cellPheromoneValues.add(possibleCell.currentPheromoneValue());
+            if(possibleCell != null)
+            {
+                cellPheromoneValues.add(possibleCell.currentPheromoneValue());
+            }
+            else
+            {
+                cellPheromoneValues.add(null);
+            }
         }
         return cellPheromoneValues;
     }
@@ -264,5 +268,10 @@ public class AcoAgent extends AgentImp
     public HashMap<Integer, Vector> accessShortTermMemory()
     {
         return shortTermMoveMemory;
+    }
+
+    public int getShortTermMemorySize()
+    {
+        return shortTermMoveMemory.size();
     }
 }

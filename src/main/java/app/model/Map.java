@@ -3,9 +3,9 @@ package app.model;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.ACO.AcoAgent;
-import app.model.agents.Agent;
-import app.model.agents.Human;
+import app.model.agents.ACO.AcoAgent360Vision;
+import app.model.agents.*;
+import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
@@ -64,7 +64,7 @@ public class Map
             if (srt != null)
             {
                 Vector dir = new Vector(0, 1);
-                AcoAgent guard = new AcoAgent(srt, dir, 10);
+                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10);
 
                 guard.setMaxWalk(settings.getWalkSpeedGuard());
                 guard.setMaxSprint(settings.getSprintSpeedGuard());
@@ -102,7 +102,7 @@ public class Map
             }
         }
 
-        System.out.println("  done");
+        System.out.println("done.");
     }
 
     /**
