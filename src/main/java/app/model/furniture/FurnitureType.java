@@ -10,7 +10,8 @@ public enum FurnitureType
     GUARD_SPAWN("spawnAreaGuards"),
     INTRUDER_SPAWN("spawnAreaIntruders"),
     TARGET("targetArea"),
-    BORDER("border");
+    BORDER("border"),
+    SIREN("soundSource");
 
     public final String label;
 

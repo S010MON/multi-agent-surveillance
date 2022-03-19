@@ -44,6 +44,7 @@ public class Settings
     public void addSoundSource(Vector position, double amplitude)
     {
         soundSources.add(new SettingsObject(position, amplitude));
+        furniture.add(new SettingsObject(position, amplitude));
     }
 
     public List<SettingsObject> getFurniture(FurnitureType type)

@@ -40,6 +40,7 @@ public class SettingsObject extends Rectangle2D
     {
         super(position.getX(), position.getY(), 0,0);
         this.amplitude = amplitude;
+        this.type = FurnitureType.SIREN;
     }
 
     public Rectangle2D getRect()
