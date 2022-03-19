@@ -4,13 +4,14 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.HashSet;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
 
 public class AgentImp implements Agent
 {
@@ -19,7 +20,9 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
-    protected ArrayList<Ray> view;
+    @Getter protected ArrayList<Ray> view;
+    @Getter protected HashSet<Vector> seen;
+    protected AgentView agentViewWindow;
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
@@ -27,6 +30,7 @@ public class AgentImp implements Agent
         this.position = position;
         this.radius = radius;
         view = new ArrayList<>();
+        seen = new HashSet<>();
     }
 
     @Override
@@ -49,15 +53,12 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public ArrayList<Ray> getView()
-    {
-        return view;
-    }
-
-    @Override
     public void updateView(ArrayList<Ray> view)
     {
         this.view = view;
+
+        if(agentViewWindow != null)
+            agentViewWindow.update();
     }
 
     @Override
@@ -97,5 +98,17 @@ public class AgentImp implements Agent
     public Vector getTeleport()
     {
         return null;
+    }
+
+    @Override
+    public void updateSeen(Vector vector)
+    {
+        this.seen.add(vector);
+    }
+
+    @Override
+    public void addViewWindow(AgentView agentView)
+    {
+        agentViewWindow = agentView;
     }
 }

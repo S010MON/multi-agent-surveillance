@@ -38,6 +38,7 @@ public class GameEngine
     public void tick()
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
 
         for (Agent a : map.getAgents())
         {
