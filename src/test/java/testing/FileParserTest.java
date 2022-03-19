@@ -67,8 +67,5 @@ public class FileParserTest
         assertEquals(new Rectangle2D(20, 30, 0, 0), s.getFurniture().get(13).getRect());
         assertEquals(100, s.getFurniture().get(13).getAmplitude(), 0.0001);
         assertEquals("soundSource", s.getFurniture().get(13).getType().label);
-
-        // Check if can turn into map
-        Map map = new Map(s);
     }
 }
