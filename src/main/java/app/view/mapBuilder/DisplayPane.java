@@ -2,18 +2,24 @@ package app.view.mapBuilder;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
+import app.model.soundSource.SoundSource;
 import app.view.ScreenSize;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
 
 public class DisplayPane extends Canvas
 {
@@ -23,6 +29,7 @@ public class DisplayPane extends Canvas
     private MbObject portal;
     private boolean settingTeleport;
     private Rectangle2D selection;
+    @Setter private FurnitureType currentType;
     private final Color backgroundColour = Color.WHITE;
     private double gridSize = 20;
     private ArrayList<GridLine> vLines;
@@ -117,6 +124,7 @@ public class DisplayPane extends Canvas
     private void mouseReleased(MouseEvent e)
     {
         boolean portalSelected = startMenu.getFurniturePane().getCurrentType() == FurnitureType.PORTAL;
+        boolean soundSourceSelected = startMenu.getFurniturePane().getCurrentType() == FurnitureType.SIREN;
 
         if(click == null)
             return;
@@ -131,6 +139,14 @@ public class DisplayPane extends Canvas
         {
             portal.setTeleportTo(new Vector(e.getX(), e.getY()));
             settingTeleport = false;
+        }
+        else if(soundSourceSelected)
+        {
+            Rectangle2D rect = new Rectangle2D(e.getX(), e.getY(), 0, 0);
+            MbObject soundSource = new MbObject(rect, startMenu.getFurniturePane().getCurrentType());
+
+            soundSource.setAmplitude(getAmplitudeFromPopUp());
+            objects.add(soundSource);
         }
         else
         {
@@ -159,5 +175,22 @@ public class DisplayPane extends Canvas
             lines.add(new GridLine(0, y, getWidth(), y));
         }
         return lines;
+    }
+
+    private double getAmplitudeFromPopUp()
+    {
+        TextInputDialog textField = new TextInputDialog("100");
+        textField.setHeaderText("Enter the range of the SoundSource \nif no legal number is entered, it will be set to 100");
+        textField.setContentText("range:");
+        Optional<String> result = textField.showAndWait();
+
+        if(result.isPresent())
+        {
+            return Double.parseDouble(result.get());
+        }
+        else
+        {
+            return 100;
+        }
     }
 }

@@ -19,6 +19,6 @@ public class SoundSourceTexture implements Texture
     public void draw(GraphicsContext gc)
     {
         gc.setFill(color);
-        gc.strokeOval(pos.getX()-gc.getLineWidth()/2, pos.getY()-gc.getLineWidth(), gc.getLineWidth(), gc.getLineWidth());
+        gc.fillOval(pos.getX()-2, pos.getY()-2, 4, 4);
     }
 }

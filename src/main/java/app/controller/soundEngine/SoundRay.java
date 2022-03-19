@@ -15,7 +15,7 @@ public class SoundRay
     public void draw(GraphicsContext gc)
     {
         // for illustration for now
-        gc.setStroke(Color.RED);
+        gc.setStroke(Color.BLUE);
         gc.setLineWidth(1);
         gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
     }

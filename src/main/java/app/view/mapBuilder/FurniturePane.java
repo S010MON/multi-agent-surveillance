@@ -1,5 +1,6 @@
 package app.view.mapBuilder;
 
+import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
 import javafx.event.ActionEvent;
@@ -35,6 +36,11 @@ public class FurniturePane extends StackPane
         {
             if(object.getType() == FurnitureType.PORTAL)
                 s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
+            else if(object.getType() == FurnitureType.SIREN)
+            {
+                Vector pos = new Vector(object.getRect().getMinX(), object.getRect().getMinY());
+                s.addSoundSource(pos, object.getAmplitude());
+            }
             else
                 s.addFurniture(object.getRect(), object.getType());
         }
