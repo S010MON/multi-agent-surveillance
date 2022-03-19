@@ -15,6 +15,7 @@ public class MbObject
     @Getter private Rectangle2D rect;
     @Getter private double rotation;
     @Getter @Setter private Vector teleportTo;
+    @Getter @Setter private Double amplitude;
 
     public MbObject(Rectangle2D rect, FurnitureType type)
     {
@@ -25,13 +26,20 @@ public class MbObject
 
     public void draw(GraphicsContext gc)
     {
-        if(isFilled())
+        if(type == FurnitureType.SIREN)
+        {
+            gc.setFill(getTypeColour());
+            Vector pos = new Vector(rect.getMinX()+rect.getWidth()/2, rect.getMinY()+rect.getHeight()/2);
+            gc.fillOval(pos.getX()-2, pos.getY()-2, 4, 4);
+        }
+
+        else if(isFilled())
         {
             gc.setFill(getTypeColour());
             gc.fillRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
         }
 
-        if(hasOutline())
+        else if(hasOutline())
         {
             gc.setStroke(getTypeOutline());
             gc.strokeRect(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
@@ -55,6 +63,7 @@ public class MbObject
             case GUARD_SPAWN -> {return Color.BLUE;}
             case INTRUDER_SPAWN -> {return Color.RED;}
             case TARGET -> {return Color.GOLD;}
+            case SIREN -> {return Color.BLUE;}
         }
         return null;
     }
@@ -68,6 +77,7 @@ public class MbObject
             case GUARD_SPAWN -> {return Color.BLUE;}
             case INTRUDER_SPAWN -> {return Color.RED;}
             case TARGET -> {return Color.GOLD;}
+            case SIREN -> {return Color.BLUE;}
         }
         return null;
     }
@@ -76,7 +86,7 @@ public class MbObject
     {
         switch(type)
         {
-            case WALL, SHADE, GLASS, TOWER, PORTAL -> {return true;}
+            case WALL, SHADE, GLASS, TOWER, PORTAL, SIREN -> {return true;}
             case GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> {return false;}
         }
         return false;
@@ -87,7 +97,7 @@ public class MbObject
         switch(type)
         {
             case WALL, INTRUDER_SPAWN, TARGET, TOWER, PORTAL, GUARD_SPAWN -> {return true;}
-            case SHADE, GLASS -> {return false;}
+            case SHADE, GLASS, SIREN -> {return false;}
         }
         return false;
     }
