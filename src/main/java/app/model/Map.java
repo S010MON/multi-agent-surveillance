@@ -171,6 +171,14 @@ public class Map
                       intruderSpawn.getHeight() * Info.getInfo().zoom);
     }
 
+    public double percentageComplete(Team team)
+    {
+        if(team == Team.GUARD)
+            return coverage.percentSeen(guardsSeen);
+        else
+            return coverage.percentSeen(intrudersSeen);
+    }
+
     private Vector randDirection()
     {
         double r = Math.random();
