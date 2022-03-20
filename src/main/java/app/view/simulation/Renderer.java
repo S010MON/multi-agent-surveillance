@@ -103,7 +103,8 @@ public class Renderer extends Canvas
         gc.setFont(new Font(40 * Info.getInfo().getZoom()));
         gc.fillText("Current Area Explored:",
                       xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
-                      (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY);
+                      (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                      mapWidthScaled * Info.getInfo().getZoom());
 
         // Add the rectangle background
         gc.setFill(Color.WHITE);
