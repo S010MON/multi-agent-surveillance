@@ -24,7 +24,7 @@ public class WallFollowAgentTest
     GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75);
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75.0);
 
     @Test
     void testAgentDirectionAngle()

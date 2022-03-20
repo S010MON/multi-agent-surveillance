@@ -27,7 +27,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
-    private double maxViewingDistance = 100;
+    private int maxViewingDistance = 10;
     @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
@@ -52,6 +52,19 @@ public class WallFollowAgent extends AgentImp
         BooleanCell agentInitialVertex = new BooleanCell(0,0);
         cellGraph.addVertex(agentInitialVertex);
         cellGraph.getVertices().put(agentInitialVertex.toString(),agentInitialVertex);
+        updateNeighbouringVertices(agentInitialVertex);
+        noMovesDone = false;
+    }
+
+    public WallFollowAgent(Vector position, Vector direction, double radius, int maxViewingDist)
+    {
+        super(position, direction, radius);
+        this.maxViewingDistance = maxViewingDist;
+        cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
+        cellGraph.setEdge((int)moveLength);
+        BooleanCell agentInitialVertex = new BooleanCell(0,0);
+        tempAgentCell = agentInitialVertex;
+        cellGraph.addVertex(agentInitialVertex);
         updateNeighbouringVertices(agentInitialVertex);
         noMovesDone = false;
     }
