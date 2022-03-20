@@ -57,7 +57,6 @@ public class CoverageMap
                 map[i][j] = false;
             }
         }
-
         return map;
     }
 }

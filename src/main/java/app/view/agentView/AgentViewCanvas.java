@@ -1,11 +1,11 @@
 package app.view.agentView;
 
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.model.agents.Agent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import java.util.HashSet;
 
 public class AgentViewCanvas extends Canvas
 {
@@ -38,7 +38,7 @@ public class AgentViewCanvas extends Canvas
         drawSeen(gc, agent.getSeen());
     }
 
-    public void drawSeen(GraphicsContext gc, HashSet<Vector> seen)
+    public void drawSeen(GraphicsContext gc, VectorSet seen)
     {
         gc.setFill(Color.GREEN);
         for(Vector v : seen)
