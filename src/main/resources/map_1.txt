@@ -64,7 +64,7 @@ wall = 980 740 1002 821
 wall = 1001 740 1078 760
 wall = 1139 740 1158 759
 spawnAreaGuards = 200 320 300 421
-spawnAreaIntruders = 1100 300 1200 400
+spawnAreaIntruders = 1250 700 1350 800
 targetArea = 800 99 920 181
 soundSource = 300 300 200
 

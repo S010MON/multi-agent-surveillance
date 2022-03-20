@@ -1,6 +1,7 @@
 package app.view.simulation;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Trail;
@@ -38,6 +39,7 @@ public class Renderer extends Canvas
         setOnMousePressed(this::mousePressed);
         setOnMouseReleased(this::mouseReleased);
         setOnMouseDragged(this::mouseDragged);
+        setOnMouseMoved(this::mouseMoved);
         setOnScroll(this::handleScroll);
         render();
     }
@@ -47,8 +49,7 @@ public class Renderer extends Canvas
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
 
-        map.drawIntruderSpawn(gc);
-        map.drawGuardSpawn(gc);
+        map.drawIndicatorBoxes(gc);
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
@@ -206,6 +207,19 @@ public class Renderer extends Canvas
             Info.getInfo().moveX(dx);
             Info.getInfo().moveY(dy);
             render();
+        }
+    }
+
+    private void mouseMoved(MouseEvent e)
+    {
+        Point2D p = new Point2D(e.getX(), e.getY());
+        Vector mousePsn = convertToMapVector(p);
+        Vector humanPsn = map.getHuman().getPosition();
+
+        if(humanPsn != null)
+        {
+            Line line = new Line(humanPsn, mousePsn);
+            map.getHuman().rotateTo(line.angle());
         }
     }
 

@@ -4,7 +4,6 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -24,7 +23,6 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Map
 {
@@ -41,6 +39,7 @@ public class Map
     private Coverage coverage;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
+    private Rectangle2D target;
 
 
     public Map(Settings settings)
@@ -121,6 +120,7 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
+            case TARGET -> target = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }
@@ -156,22 +156,25 @@ public class Map
         return boundaries;
     }
 
-    public void drawGuardSpawn(GraphicsContext gc)
+    public void drawIndicatorBoxes(GraphicsContext gc)
     {
+        gc.setStroke(Color.GOLD);
+        gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                target.getHeight() * Info.getInfo().zoom,
+                target.getHeight() * Info.getInfo().zoom);
+
         gc.setStroke(Color.BLUE);
         gc.strokeRect(guardSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      guardSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                      guardSpawn.getHeight() * Info.getInfo().zoom,
-                      guardSpawn.getHeight() * Info.getInfo().zoom);
-    }
+                guardSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                guardSpawn.getHeight() * Info.getInfo().zoom,
+                guardSpawn.getHeight() * Info.getInfo().zoom);
 
-    public void drawIntruderSpawn(GraphicsContext gc)
-    {
         gc.setStroke(Color.RED);
         gc.strokeRect(intruderSpawn.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      intruderSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                      intruderSpawn.getHeight() * Info.getInfo().zoom,
-                      intruderSpawn.getHeight() * Info.getInfo().zoom);
+                intruderSpawn.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                intruderSpawn.getHeight() * Info.getInfo().zoom,
+                intruderSpawn.getHeight() * Info.getInfo().zoom);
     }
 
     public double percentageComplete(Team team)

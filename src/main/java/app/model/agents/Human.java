@@ -37,6 +37,11 @@ public class Human extends AgentImp
         this.nextMove = nextMove.scale(maxSprint);
     }
 
+    public void rotateTo(double degrees)
+    {
+        this.direction = new Vector(0, 1).rotate(degrees);
+    }
+
     public void rotateLeft()
     {
         this.direction = direction.rotate(90);
