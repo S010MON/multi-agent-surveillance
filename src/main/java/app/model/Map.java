@@ -4,7 +4,6 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -148,7 +147,10 @@ public class Map
 
     public void updateAllSeen(Agent agent)
     {
-        //if(agent instanceof ) TODO stuff
+        if(agent.getTeam() == Team.GUARD)
+            guardsSeen.addAll(agent.getSeen());
+        else
+            intrudersSeen.addAll(agent.getSeen());
     }
 
     public ArrayList<Boundary> getBoundaries()
