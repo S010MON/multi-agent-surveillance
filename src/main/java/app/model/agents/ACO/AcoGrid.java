@@ -8,6 +8,7 @@ import app.model.agents.Cells.PheromoneCell;
 //TODO Use singleton pattern to insist on only one world
 public class AcoGrid extends Grid
 {
+    //TODO Dynamically set map size
     public AcoGrid()
     {
         super(2000, 2000, CellType.PHEROMONE, 20);
@@ -25,7 +26,7 @@ public class AcoGrid extends Grid
     }
 
     //TODO Evaporation needs to be changed into group system, not individual
-    public void updateAgent(AcoAgent agent)
+    public void updateAgent(AcoAgent360Vision agent)
     {
         int row = getCellRow(agent.getPosition());
         int col = getCellCol(agent.getPosition());

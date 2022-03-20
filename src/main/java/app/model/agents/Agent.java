@@ -6,9 +6,7 @@ import app.controller.linAlg.VectorSet;
 import app.model.boundary.Boundary;
 import app.model.Move;
 import app.view.agentView.AgentView;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public interface Agent extends Boundary
 {
@@ -39,6 +37,8 @@ public interface Agent extends Boundary
     double getRadius();
 
     VectorSet getSeen();
+
+    void setMoveFailed(boolean failed);
 
     void updateSeen(Vector vector);
 
