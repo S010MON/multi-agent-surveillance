@@ -15,6 +15,8 @@ public class CoverageTest
     @Test void testCoverageMapEmpty()
     {
         Settings settings = SettingsGenerator.coverageMapTest(10, 10);
+        settings.setNoOfGuards(0);
+        settings.setNoOfIntruders(0);
         Map map = new Map(settings);
         CoverageMap cMap = new CoverageMap(map);
 
@@ -24,6 +26,8 @@ public class CoverageTest
     @Test void testCoverageMapPercent_none()
     {
         Settings settings = SettingsGenerator.coverageMapTest(10, 10);
+        settings.setNoOfGuards(0);
+        settings.setNoOfIntruders(0);
         Map map = new Map(settings);
         CoverageMap cMap = new CoverageMap(map);
         VectorSet seen = new VectorSet();
@@ -33,6 +37,8 @@ public class CoverageTest
     @Test void testCoverageMapPercent_half()
     {
         Settings settings = SettingsGenerator.coverageMapTest(10, 10);
+        settings.setNoOfGuards(0);
+        settings.setNoOfIntruders(0);
         Map map = new Map(settings);
         CoverageMap cMap = new CoverageMap(map);
         VectorSet seen = new VectorSet();
@@ -57,6 +63,8 @@ public class CoverageTest
     @Test void testCoverageMapPercent_full()
     {
         Settings settings = SettingsGenerator.coverageMapTest(10, 10);
+        settings.setNoOfGuards(0);
+        settings.setNoOfIntruders(0);
         Map map = new Map(settings);
         CoverageMap cMap = new CoverageMap(map);
         VectorSet seen = new VectorSet();
