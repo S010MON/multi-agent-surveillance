@@ -62,6 +62,7 @@ public class FileParser
                         Double telportRotation = Double.parseDouble(coords[6]);
                         settings.addTeleport(rectangleOf(coords), teleportTo, telportRotation);
                     }
+                    case "soundSource" -> settings.addSoundSource(new Vector(Double.parseDouble(coords[0]), Double.parseDouble(coords[1])), Double.parseDouble(coords[2]));
                 }
             }
         } catch (Exception e)

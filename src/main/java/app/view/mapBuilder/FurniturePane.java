@@ -1,5 +1,6 @@
 package app.view.mapBuilder;
 
+import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.furniture.FurnitureType;
 import javafx.event.ActionEvent;
@@ -31,11 +32,15 @@ public class FurniturePane extends StackPane
 
     public void getSettings(Settings s)
     {
-        for(MbObject object : displayPane.getObjects())
+        for (MbObject object : displayPane.getObjects())
         {
-            if(object.getType() == FurnitureType.PORTAL)
+            if (object.getType() == FurnitureType.PORTAL)
                 s.addTeleport(object.getRect(), object.getTeleportTo(), object.getRotation());
-            else
+            else if (object.getType() == FurnitureType.SIREN)
+            {
+                Vector pos = new Vector(object.getRect().getMinX(), object.getRect().getMinY());
+                s.addSoundSource(pos, object.getAmplitude());
+            } else
                 s.addFurniture(object.getRect(), object.getType());
         }
     }
@@ -44,12 +49,12 @@ public class FurniturePane extends StackPane
     {
         boolean guard = false;
         boolean intruder = false;
-        for(MbObject object : displayPane.getObjects())
+        for (MbObject object : displayPane.getObjects())
         {
-            if(object.getType() == FurnitureType.GUARD_SPAWN)
+            if (object.getType() == FurnitureType.GUARD_SPAWN || Integer.parseInt(startMenu.getSettingsPane().getNoGuards().getText()) == 0)
                 guard = true;
 
-            if(object.getType() == FurnitureType.INTRUDER_SPAWN)
+            if (object.getType() == FurnitureType.INTRUDER_SPAWN || Integer.parseInt(startMenu.getSettingsPane().getNoIntruders().getText()) == 0)
                 intruder = true;
         }
 

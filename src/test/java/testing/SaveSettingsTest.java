@@ -21,12 +21,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class SaveSettingsTest
 {
 
-    /** Delete any exiting test files and create a new test file*/
+    /**
+     * Delete any exiting test files and create a new test file
+     */
     @BeforeAll void createMapFile()
     {
 
         File oldFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
-        if(oldFile.exists())
+        if (oldFile.exists())
             oldFile.delete();
         Settings testSetting = FileManager.loadSettings("src/test/resources/map_saveSetting_test.txt");
 
@@ -42,8 +44,7 @@ public class SaveSettingsTest
 
             File mapFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
 
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             fail("an exception occured while trying to create/access/delete the file");
@@ -69,8 +70,7 @@ public class SaveSettingsTest
                 act.add(scanner.nextLine());
             }
             scanner.close();
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             fail("error occured while reading files");
@@ -80,17 +80,19 @@ public class SaveSettingsTest
         assertEquals(exp.length, act.size());
 
         // Check each line content
-        for(int i = 0; i < exp.length; i++)
+        for (int i = 0; i < exp.length; i++)
         {
             assertEquals(exp[i], act.get(i));
         }
     }
 
-     /** Clean up */
+    /**
+     * Clean up
+     */
     @AfterAll void deleteMapFile()
     {
         File oldFile = new File(FilePath.get("Save_map_saveSetting_test.txt"));
-        if(oldFile.exists())
+        if (oldFile.exists())
             oldFile.delete();
     }
 
@@ -121,7 +123,8 @@ public class SaveSettingsTest
                         "tower = 0 23 50 63",
                         "tower = 12 40 20 44",
                         "teleport = 20 70 25 75 90 50 0.0",
-                        "shaded = 10 20 20 40"
+                        "shaded = 10 20 20 40",
+                        "soundSource = 20 66 93"
                 };
     }
 }
