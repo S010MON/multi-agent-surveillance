@@ -3,6 +3,7 @@ package testing;
 import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
+import app.model.Map;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
@@ -21,9 +22,9 @@ public class FileParserTest
         // Width
         assertEquals(144, s.getWidth());
         // Number of guards
-        assertEquals(7, s.getNoOfGuards());
+        assertEquals(2, s.getNoOfGuards());
         // Number of intruders
-        assertEquals(4, s.getNoOfIntruders());
+        assertEquals(1, s.getNoOfIntruders());
         // Walk speed guard
         assertEquals(13.0, s.getWalkSpeedGuard());
         // Sprint speed guard
@@ -40,10 +41,10 @@ public class FileParserTest
         assertEquals(new Rectangle2D(20, 40, 5, 5), s.getFurniture().get(0).getRect());
         assertEquals("targetArea", s.getFurniture().get(0).getType().label);
         // Intruder spawn
-        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(1).getRect());
+        assertEquals(new Rectangle2D(20, 20, 20, 30), s.getFurniture().get(1).getRect());
         assertEquals("spawnAreaIntruders", s.getFurniture().get(1).getType().label);
         // Guard spawn
-        assertEquals(new Rectangle2D(2, 2, 18, 8), s.getFurniture().get(2).getRect());
+        assertEquals(new Rectangle2D(50, 50, 90, 80), s.getFurniture().get(2).getRect());
         assertEquals("spawnAreaGuards", s.getFurniture().get(2).getType().label);
         // Wall
         assertEquals(new Rectangle2D(0, 79, 120, 1), s.getFurniture().get(5).getRect());
@@ -62,5 +63,9 @@ public class FileParserTest
         // Glass
         assertEquals(new Rectangle2D(0, 0, 20, 20), s.getFurniture().get(12).getRect());
         assertEquals("glass", s.getFurniture().get(12).getType().label);
+        // SoundSource
+        assertEquals(new Rectangle2D(20, 30, 0, 0), s.getFurniture().get(13).getRect());
+        assertEquals(100, s.getFurniture().get(13).getAmplitude(), 0.0001);
+        assertEquals("soundSource", s.getFurniture().get(13).getType().label);
     }
 }

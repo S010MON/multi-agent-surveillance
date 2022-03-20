@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public abstract class FileSaver
 {
-    private static final String newLn = System.getProperty( "line.separator" );
+    private static final String newLn = System.getProperty("line.separator");
 
     public static void save(File file, Settings settings)
     {
@@ -38,8 +38,7 @@ public abstract class FileSaver
             FileWriter writer = new FileWriter(file);
             writer.write(sb.toString());
             writer.close();
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             System.out.println("An error occurred while creating a map file\n");
             e.printStackTrace();

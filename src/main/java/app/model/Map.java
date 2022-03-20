@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
+import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -21,7 +22,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Map
 {

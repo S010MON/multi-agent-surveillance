@@ -13,6 +13,7 @@ public class TextureFactory
             case WALL -> {return new WallTexture(rectangle);}
             case GLASS -> {return new GlassTexture(rectangle);}
             case PORTAL -> {return new PortalTexture(rectangle);}
+            case SIREN -> {return new SoundSourceTexture(rectangle);}
         }
         return null; // Redundant by design
     }
