@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.Map;
 import app.model.Move;
+import app.model.agents.Team;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -24,7 +25,7 @@ public class WallFollowAgentTest
     GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, 75);
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, 75);
 
     @Test
     void testAgentDirectionAngle()

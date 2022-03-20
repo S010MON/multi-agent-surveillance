@@ -13,6 +13,12 @@ public class Line
         return between(a.getX(), b.getX(), v.getX()) && between(a.getY(), b.getY(), v.getY());
     }
 
+    public double angle()
+    {
+        Vector v = b.sub(a);
+        return v.getAngle();
+    }
+
 
     /**
      * @return true if x lies between a and b

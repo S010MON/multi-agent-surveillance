@@ -11,27 +11,28 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+
 
 public class AgentImp implements Agent
 {
     @Getter @Setter protected double maxWalk = 5;
     @Getter @Setter protected double maxSprint = 10;
-    @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
-    @Getter protected double radius;
     @Getter @Setter protected boolean moveFailed;
+    @Getter protected Team team;
+    @Getter protected Vector position;
+    @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
-    public AgentImp(Vector position, Vector direction, double radius)
+    public AgentImp(Vector position, Vector direction, double radius, Team team)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
+        this.team = team;
         view = new ArrayList<>();
         seen = new VectorSet();
     }
@@ -73,11 +74,18 @@ public class AgentImp implements Agent
     @Override
     public void draw(GraphicsContext gc)
     {
-        gc.setFill(Color.BLACK);
-        gc.fillOval((position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX,
-                    (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY,
-                       radius,
-                       radius);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(3.0);
+        if(team == Team.GUARD)
+            gc.setFill(Color.BLUE);
+        else
+            gc.setFill(Color.RED);
+
+        double x = (position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX;
+        double y = (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY;
+
+        gc.fillOval(x, y, radius, radius);
+        gc.strokeOval(x , y, radius, radius);
     }
 
     @Override

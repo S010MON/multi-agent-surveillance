@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.agents.Team;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
 
-    public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
+    public AcoAgentLimitedVision(Vector position, Vector direction, double radius, Team team)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, team);
         pheromoneSenseDirections();
     }
 

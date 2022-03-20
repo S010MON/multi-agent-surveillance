@@ -6,6 +6,7 @@ import app.controller.soundEngine.*;
 import app.model.Map;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.Team;
 import app.model.furniture.FurnitureType;
 import app.model.soundSource.SoundSource;
 import javafx.geometry.Rectangle2D;
@@ -34,7 +35,7 @@ public class SoundEngineTest
         SoundSource s1 = map.getSoundSources().get(0);
         SoundSource s2 = map.getSoundSources().get(1);
 
-        Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1);
+        Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1, Team.GUARD);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
@@ -67,7 +68,7 @@ public class SoundEngineTest
         SoundSource s1 = map.getSoundSources().get(0);
         SoundSource s2 = map.getSoundSources().get(1);
 
-        Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1);
+        Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1, Team.GUARD);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
@@ -98,7 +99,7 @@ public class SoundEngineTest
 
         SoundSource source = map.getSoundSources().get(0);
 
-        Agent listener = new AgentImp(new Vector(0, 0), new Vector(), 1);
+        Agent listener = new AgentImp(new Vector(0, 0), new Vector(), 1, Team.GUARD);
 
         SoundEngine cornerAimedTracing = new CornerAimedTracing();
 
