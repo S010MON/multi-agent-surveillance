@@ -5,14 +5,14 @@ import app.controller.linAlg.VectorSet;
 import app.model.boundary.Boundary;
 import lombok.Getter;
 
-public class CoverageMap
+public class Coverage
 {
     @Getter private VectorSet vectors;
     private final  double sensitivity = 0.6;
     private double width;
     private double height;
 
-    public CoverageMap(Map map)
+    public Coverage(Map map)
     {
         width = map.getWidth();
         height = map.getHeight();

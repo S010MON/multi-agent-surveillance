@@ -210,6 +210,8 @@ public class Renderer extends Canvas
 
     private void setInitialZoom(double mapHeight,double mapWidth)
     {
+        mapWidth = mapWidth * 1.4;
+
         double dy = ScreenSize.height/mapHeight;
         double dx = ScreenSize.width/mapWidth;
         double padding = 0.05;

@@ -74,11 +74,18 @@ public class AgentImp implements Agent
     @Override
     public void draw(GraphicsContext gc)
     {
-        gc.setFill(Color.BLACK);
-        gc.fillOval((position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX,
-                    (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY,
-                       radius,
-                       radius);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(3.0);
+        if(team == Team.GUARD)
+            gc.setFill(Color.BLUE);
+        else
+            gc.setFill(Color.RED);
+
+        double x = (position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX;
+        double y = (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY;
+
+        gc.fillOval(x, y, radius, radius);
+        gc.strokeOval(x , y, radius, radius);
     }
 
     @Override

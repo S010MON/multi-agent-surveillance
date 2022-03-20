@@ -75,28 +75,26 @@ public class GameEngine
     {
         switch (e.getCharacter())
         {
-            case "W" -> map.sprint(new Vector(0, -1));
-            case "S" -> map.sprint(new Vector(0, 1));
-            case "A" -> map.sprint(new Vector(-1, 0));
-            case "D" -> map.sprint(new Vector(1, 0));
-            case "w" -> map.walk(new Vector(0, -1));
-            case "s" -> map.walk(new Vector(0, 1));
-            case "a" -> map.walk(new Vector(-1, 0));
-            case "d" -> map.walk(new Vector(1, 0));
-            case " " -> pauseOrResume();
+            case "W" -> map.getHuman().sprint(new Vector(0, -1));
+            case "S" -> map.getHuman().sprint(new Vector(0, 1));
+            case "A" -> map.getHuman().sprint(new Vector(-1, 0));
+            case "D" -> map.getHuman().sprint(new Vector(1, 0));
+            case "w" -> map.getHuman().walk(new Vector(0, -1));
+            case "s" -> map.getHuman().walk(new Vector(0, 1));
+            case "a" -> map.getHuman().walk(new Vector(-1, 0));
+            case "d" -> map.getHuman().walk(new Vector(1, 0));
+            case "q" -> map.getHuman().rotateLeft();
+            case "e" -> map.getHuman().rotateRight();
+            case " " -> pausePlay();
         }
     }
 
-    public void pauseOrResume()
+    public void pausePlay()
     {
         if(timeline.getStatus()== Animation.Status.RUNNING)
-        {
             timeline.pause();
-        }
         else
-        {
             timeline.play();
-        }
     }
 
     private Vector checkTeleport(Vector start, Vector end)

@@ -34,9 +34,11 @@ public class Map
     @Getter private Settings settings;
     @Getter private double width;
     @Getter private double height;
+    @Getter private Human human;
+    private Coverage coverage;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
-    private Human human;
+
 
     public Map(Settings settings)
     {
@@ -94,6 +96,7 @@ public class Map
         human.setMaxSprint(settings.getSprintSpeedGuard());
         agents.add(human);
 
+        this.coverage = new Coverage(this);
         System.out.println("done.");
     }
 
@@ -107,16 +110,6 @@ public class Map
 
         furniture = new ArrayList<>();
         furniture.addAll(obstacles);
-    }
-
-    public void walk(Vector v)
-    {
-        human.walk(v);
-    }
-
-    public void sprint(Vector v)
-    {
-        human.sprint(v);
     }
 
     public void addFurniture(SettingsObject obj)
