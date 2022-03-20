@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.PheromoneCell;
+import app.model.agents.Team;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public class AcoAgent360Vision extends AgentImp
     protected int[] cardinalAngles = {0, 90, 180, 270};
     protected double epsilon = 0.3;
 
-    public AcoAgent360Vision(Vector position, Vector direction, double radius)
+    public AcoAgent360Vision(Vector position, Vector direction, double radius, Team team)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, team);
         cellSize = world.getCellSize();
         world.updateAgent(this);
 

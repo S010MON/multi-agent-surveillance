@@ -1,10 +1,12 @@
 package app.view.simulation;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Trail;
 import app.model.agents.Agent;
+import app.model.agents.Team;
 import app.view.ScreenSize;
 import app.view.agentView.AgentView;
 import javafx.geometry.Point2D;
@@ -37,6 +39,7 @@ public class Renderer extends Canvas
         setOnMousePressed(this::mousePressed);
         setOnMouseReleased(this::mouseReleased);
         setOnMouseDragged(this::mouseDragged);
+        setOnMouseMoved(this::mouseMoved);
         setOnScroll(this::handleScroll);
         render();
     }
@@ -46,14 +49,14 @@ public class Renderer extends Canvas
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
 
-        map.drawIntruderSpawn(gc);
-        map.drawGuardSpawn(gc);
+        map.drawIndicatorBoxes(gc);
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
         map.getAgents().forEach(e -> e.draw(gc));
 
-        drawExplored(gc);
+        drawMiniMapGuard(gc);
+        drawMiniMapIntruder(gc);
     }
 
     public void addTrail(Trail t)
@@ -87,7 +90,47 @@ public class Renderer extends Canvas
                 2 * Info.getInfo().getZoom());
     }
 
-    private void drawExplored(GraphicsContext gc)
+
+    private void drawMiniMapGuard(GraphicsContext gc)
+    {
+        final double DIAMETER = 2;
+        final double SCALE = 3;
+        double mapWidth = map.getSettings().getWidth();
+        double mapHeight = map.getSettings().getHeight();
+        double mapWidthScaled = map.getSettings().getWidth() / SCALE;
+        double mapHeightScaled = map.getSettings().getHeight() / SCALE;
+        double xPos = mapWidth + 20;
+        double yPos = 20;
+
+        // Add the label
+        gc.setFill(Color.BLACK);
+        gc.setFont(new Font(20 * Info.getInfo().getZoom()));
+        gc.fillText("Guard Team: " + map.percentageComplete(Team.GUARD) + "%",
+                xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                mapWidthScaled * Info.getInfo().getZoom());
+
+        // Add the rectangle background
+        gc.setFill(Color.WHITE);
+        gc.fillRect((xPos) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                (yPos) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                mapWidthScaled * Info.getInfo().getZoom(),
+                mapHeightScaled * Info.getInfo().getZoom());
+
+        // Add explored vectors
+        gc.setFill(Color.BLUE);
+        for (Vector v : map.getGuardsSeen())
+        {
+            double x = v.getX() - DIAMETER / 2;
+            double y = v.getY() - DIAMETER / 2;
+            gc.fillOval((xPos + (x / SCALE)) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                    (yPos + (y / SCALE)) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                    DIAMETER * Info.getInfo().getZoom(),
+                    DIAMETER * Info.getInfo().getZoom());
+        }
+    }
+
+    private void drawMiniMapIntruder(GraphicsContext gc)
     {
         final double DIAMETER = 2;
         final double SCALE = 3;
@@ -100,8 +143,8 @@ public class Renderer extends Canvas
 
         // Add the label
         gc.setFill(Color.BLACK);
-        gc.setFont(new Font(40 * Info.getInfo().getZoom()));
-        gc.fillText("Current Area Explored:",
+        gc.setFont(new Font(20 * Info.getInfo().getZoom()));
+        gc.fillText("Intruder Team: " + map.percentageComplete(Team.INTRUDER) + "%",
                       xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
                       (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
                       mapWidthScaled * Info.getInfo().getZoom());
@@ -114,8 +157,8 @@ public class Renderer extends Canvas
                     mapHeightScaled * Info.getInfo().getZoom());
 
         // Add explored vectors
-        gc.setFill(Color.GREEN);
-        for (Vector v : map.getAllAgentsSeen())
+        gc.setFill(Color.RED);
+        for (Vector v : map.getIntrudersSeen())
         {
             double x = v.getX() - DIAMETER / 2;
             double y = v.getY() - DIAMETER / 2;
@@ -167,8 +210,23 @@ public class Renderer extends Canvas
         }
     }
 
+    private void mouseMoved(MouseEvent e)
+    {
+        Point2D p = new Point2D(e.getX(), e.getY());
+        Vector mousePsn = convertToMapVector(p);
+        Vector humanPsn = map.getHuman().getPosition();
+
+        if(humanPsn != null)
+        {
+            Line line = new Line(humanPsn, mousePsn);
+            map.getHuman().rotateTo(line.angle());
+        }
+    }
+
     private void setInitialZoom(double mapHeight,double mapWidth)
     {
+        mapWidth = mapWidth * 1.4;
+
         double dy = ScreenSize.height/mapHeight;
         double dx = ScreenSize.width/mapWidth;
         double padding = 0.05;

@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.ACO.AcoGrid;
 import app.model.agents.Cells.PheromoneCell;
+import app.model.agents.Team;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ public class AcoGridTest
         AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10, Team.GUARD);
         AcoGrid grid = AcoAgent360Vision.accessWorld();
 
         PheromoneCell occupiedCell = (PheromoneCell)grid.getCellAt(agentPosition);
@@ -35,7 +36,7 @@ public class AcoGridTest
         AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10.2, 12.3);
-        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10, Team.GUARD);
         AcoGrid grid = AcoAgent360Vision.accessWorld();
 
         PheromoneCell cell = (PheromoneCell) grid.getCellAt(agentPosition);
@@ -54,7 +55,7 @@ public class AcoGridTest
         AcoAgent360Vision.initializeWorld(world);
 
         Vector agentPosition = new Vector(10, 10);
-        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10);
+        AcoAgent360Vision agent = new AcoAgent360Vision(agentPosition, new Vector(1, 0), 10, Team.GUARD);
 
         if(display) AcoAgent360Vision.accessWorld().print();
 

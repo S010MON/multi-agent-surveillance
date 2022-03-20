@@ -6,6 +6,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.BooleanCell;
+import app.model.agents.Team;
 import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.Graphs;
@@ -44,9 +45,9 @@ public class WallFollowAgent extends AgentImp
     private ArrayList<BooleanCell> inaccessibleCells = new ArrayList<>();
     private boolean explorationDone = false;
 
-    public WallFollowAgent(Vector position, Vector direction, double radius)
+    public WallFollowAgent(Vector position, Vector direction, double radius, Team team)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, team);
         cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
         cellGraph.setEdge((int)moveLength);
         BooleanCell agentInitialVertex = new BooleanCell(0,0);
@@ -56,22 +57,10 @@ public class WallFollowAgent extends AgentImp
         noMovesDone = false;
     }
 
-    public WallFollowAgent(Vector position, Vector direction, double radius, int maxViewingDist)
-    {
-        super(position, direction, radius);
-        this.maxViewingDistance = maxViewingDist;
-        cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
-        cellGraph.setEdge((int)moveLength);
-        BooleanCell agentInitialVertex = new BooleanCell(0,0);
-        tempAgentCell = agentInitialVertex;
-        cellGraph.addVertex(agentInitialVertex);
-        updateNeighbouringVertices(agentInitialVertex);
-        noMovesDone = false;
-    }
 
-    public WallFollowAgent(Vector position, Vector direction, double radius, double moveLen)
+    public WallFollowAgent(Vector position, Vector direction, double radius, Team team, double moveLen)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, team);
         this.moveLength = moveLen;
         cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
         cellGraph.setEdge((int)moveLength);
