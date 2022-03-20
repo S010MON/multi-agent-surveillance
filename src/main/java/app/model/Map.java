@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 public class Map
 {
+    private final Boolean HUMAN_ACTIVE = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
@@ -85,18 +86,20 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new AgentImp(srt, dir, 10, Team.INTRUDER);
+            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
         }
 
-        Vector humanStart = randPosition(intruderSpawn);
-        human = new Human(humanStart, new Vector(1,0), 10, Team.INTRUDER);
-        //Assumes the human is a guard
-        human.setMaxWalk(settings.getWalkSpeedGuard());
-        human.setMaxSprint(settings.getSprintSpeedGuard());
-        agents.add(human);
+        if(HUMAN_ACTIVE)
+        {
+            Vector humanStart = randPosition(intruderSpawn);
+            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            human.setMaxWalk(settings.getWalkSpeedGuard());
+            human.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(human);
+        }
 
         this.coverage = new Coverage(this);
         System.out.println("done.");

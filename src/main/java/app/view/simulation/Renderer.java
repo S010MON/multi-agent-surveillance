@@ -214,10 +214,10 @@ public class Renderer extends Canvas
     {
         Point2D p = new Point2D(e.getX(), e.getY());
         Vector mousePsn = convertToMapVector(p);
-        Vector humanPsn = map.getHuman().getPosition();
 
-        if(humanPsn != null)
+        if(map.getHuman() != null)
         {
+            Vector humanPsn = map.getHuman().getPosition();
             Line line = new Line(humanPsn, mousePsn);
             map.getHuman().rotateTo(line.angle());
         }
