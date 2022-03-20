@@ -46,14 +46,11 @@ public class AgentImp implements Agent
     @Override
     public Move move()
     {
-        double x = Math.random() * maxWalk;
-        if(Math.random() > 0.5)
-            x = x * -1;
-        double y = Math.random() * maxWalk;
-        if(Math.random() > 0.5)
-            y = y * -1;
+        int theta = (int) (Math.random() * 360);
+        direction = new Vector(0, 1).rotate(theta);
+        Vector mov = new Vector(maxWalk, maxWalk).rotate(theta);
 
-        return new Move(new Vector(), new Vector(x, y));
+        return new Move(direction, mov);
     }
 
     @Override
