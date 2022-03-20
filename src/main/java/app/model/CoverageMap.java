@@ -29,6 +29,11 @@ public class CoverageMap
         }
     }
 
+    public double percentSeen(VectorSet seen)
+    {
+        return (double) seen.size() / (double) vectors.size();
+    }
+
     private boolean furnitureAt(Map map, Vector vector)
     {
         for(Boundary b: map.getBoundaries())
