@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import lombok.Getter;
 
 public class SettingsPane extends StackPane
 {
@@ -18,8 +19,8 @@ public class SettingsPane extends StackPane
     private TextField mode;
     private TextField w;
     private TextField h;
-    private TextField noGuards;
-    private TextField noIntruders;
+    @Getter private TextField noGuards;
+    @Getter private TextField noIntruders;
     private TextField bGuard;
     private TextField bIntruder;
     private TextField sGuard;

@@ -6,6 +6,7 @@ import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class BoundaryFactory
 {
@@ -17,6 +18,7 @@ public abstract class BoundaryFactory
         objects.add(create(obj.getType(), corner[1], corner[2], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[2], corner[3], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[3], corner[0], obj.getTeleportTo()));
+        objects.removeAll(Collections.singleton(null));
         return objects;
     }
 
@@ -27,9 +29,9 @@ public abstract class BoundaryFactory
             case WALL, TOWER, BORDER -> { return new VisibleBoundary(a, b);}
             case GLASS -> { return  new TransparentBoundary(a, b);}
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
-            case PORTAL -> {return new PortalBoundary(a, b, teleport);}
+            case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }
-        return null; // Redundant by design
+        return null; // Only for SIREN (SoundSource)
     }
 
     private static Vector[] cornersOf(Rectangle2D r)
