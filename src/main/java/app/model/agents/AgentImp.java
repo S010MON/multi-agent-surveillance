@@ -3,15 +3,17 @@ package app.model.agents;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.model.Move;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.HashSet;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AgentImp implements Agent
 {
@@ -20,19 +22,18 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
     @Getter protected double radius;
-    @Setter protected boolean moveFailed;
+    @Getter @Setter protected boolean moveFailed;
     @Getter protected ArrayList<Ray> view;
-    @Getter protected HashSet<Vector> seen;
+    @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
-
 
     public AgentImp(Vector position, Vector direction, double radius)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        this.view = new ArrayList<>();
-        this.seen = new HashSet<>();
+        view = new ArrayList<>();
+        seen = new VectorSet();
     }
 
     @Override
@@ -94,6 +95,12 @@ public class AgentImp implements Agent
     @Override
     public boolean isCrossed(Vector startPoint, Vector endPoint) {
         return false;
+    }
+
+    @Override
+    public boolean isCrossed(Vector centre, double radius)
+    {
+        return position.dist(centre) <= radius;
     }
 
     @Override
