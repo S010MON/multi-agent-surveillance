@@ -72,19 +72,24 @@ public class GameEngine
 
     public void handleKey(KeyEvent e)
     {
-        switch (e.getCharacter())
+        if(e.getCharacter() == " ")
+            pausePlay();
+
+        if(map.getHuman() != null)
         {
-            case "W" -> map.getHuman().sprint(new Vector(0, -1));
-            case "S" -> map.getHuman().sprint(new Vector(0, 1));
-            case "A" -> map.getHuman().sprint(new Vector(-1, 0));
-            case "D" -> map.getHuman().sprint(new Vector(1, 0));
-            case "w" -> map.getHuman().walk(new Vector(0, -1));
-            case "s" -> map.getHuman().walk(new Vector(0, 1));
-            case "a" -> map.getHuman().walk(new Vector(-1, 0));
-            case "d" -> map.getHuman().walk(new Vector(1, 0));
-            case "q" -> map.getHuman().rotateLeft();
-            case "e" -> map.getHuman().rotateRight();
-            case " " -> pausePlay();
+            switch(e.getCharacter())
+            {
+                case "W" -> map.getHuman().sprint(new Vector(0, -1));
+                case "S" -> map.getHuman().sprint(new Vector(0, 1));
+                case "A" -> map.getHuman().sprint(new Vector(-1, 0));
+                case "D" -> map.getHuman().sprint(new Vector(1, 0));
+                case "w" -> map.getHuman().walk(new Vector(0, -1));
+                case "s" -> map.getHuman().walk(new Vector(0, 1));
+                case "a" -> map.getHuman().walk(new Vector(-1, 0));
+                case "d" -> map.getHuman().walk(new Vector(1, 0));
+                case "q" -> map.getHuman().rotateLeft();
+                case "e" -> map.getHuman().rotateRight();
+            }
         }
     }
 

@@ -28,7 +28,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
-    private double maxViewingDistance = 100;
+    private int maxViewingDistance = 10;
     @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
@@ -56,6 +56,7 @@ public class WallFollowAgent extends AgentImp
         updateNeighbouringVertices(agentInitialVertex);
         noMovesDone = false;
     }
+
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Team team, double moveLen)
     {
