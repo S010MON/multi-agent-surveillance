@@ -68,7 +68,6 @@ public class GameEngine
         }
         tics++;
         renderer.render();
-
     }
 
     public void handleKey(KeyEvent e)
