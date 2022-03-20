@@ -100,7 +100,7 @@ public class Renderer extends Canvas
 
         // Add the label
         gc.setFill(Color.BLACK);
-        gc.setFont(new Font(40));
+        gc.setFont(new Font(40 * Info.getInfo().getZoom()));
         gc.fillText("Current Area Explored:",
                       xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
                       (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY);
