@@ -1,38 +1,30 @@
 package app.model;
 
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.model.boundary.Boundary;
 import lombok.Getter;
 
 public class CoverageMap
 {
-    private final double pixelSize = 1d;
+    @Getter private VectorSet vectors;
     private final  double sensitivity = 0.6;
-    @Getter private boolean[][] pixelMap;
-    private double realWidth;
-    private double realHeight;
-    private int pxWidth;
-    private int pxHeight;
+    private double width;
+    private double height;
 
     public CoverageMap(Map map)
     {
-        realWidth = map.getWidth();
-        realHeight = map.getHeight();
+        width = map.getWidth();
+        height = map.getHeight();
+        vectors = new VectorSet();
 
-        pxWidth =  (int) (realWidth / pixelSize);
-        pxHeight = (int) (realHeight / pixelSize);
-        pixelMap = createMap(pxWidth, pxHeight);
-
-        for(int i = 1; i <= pxWidth; i++)
+        for(double x = 0; x <= width; x++)
         {
-            double x = (i * pixelSize) - (pixelSize / 2);
-
-            for(int j = 1; j <= pxHeight; j++)
+            for(double y = 0; y <= height; y++)
             {
-                double y = (j * pixelSize) - (pixelSize / 2);
-
                 Vector v = new Vector(x, y);
-                pixelMap[i -1][j -1] = furnitureAt(map, v);
+                if(furnitureAt(map, v))
+                    vectors.add(v);
             }
         }
     }
@@ -45,18 +37,5 @@ public class CoverageMap
                 return true;
         }
         return false;
-    }
-
-    private  boolean[][] createMap(int pxWidth, int pxHeight)
-    {
-        boolean[][] map = new boolean[pxWidth][pxHeight];
-        for(int i = 0; i < pxWidth; i++)
-        {
-            for(int j = 0; j < pxWidth; j++)
-            {
-                map[i][j] = false;
-            }
-        }
-        return map;
     }
 }

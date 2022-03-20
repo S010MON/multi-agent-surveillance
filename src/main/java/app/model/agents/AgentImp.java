@@ -10,7 +10,6 @@ import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import lombok.Getter;
 import lombok.Setter;
 
