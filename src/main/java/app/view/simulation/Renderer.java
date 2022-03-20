@@ -128,6 +128,13 @@ public class Renderer extends Canvas
                     DIAMETER * Info.getInfo().getZoom(),
                     DIAMETER * Info.getInfo().getZoom());
         }
+
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(2);
+        gc.strokeRect((xPos -2) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                (yPos -2) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                (mapWidthScaled + 4) * Info.getInfo().getZoom(),
+                (mapHeightScaled + 4) * Info.getInfo().getZoom());
     }
 
     private void drawMiniMapIntruder(GraphicsContext gc)
@@ -167,6 +174,13 @@ public class Renderer extends Canvas
                         DIAMETER * Info.getInfo().getZoom(),
                         DIAMETER * Info.getInfo().getZoom());
         }
+
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(2);
+        gc.strokeRect((xPos -2) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                (yPos -2) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                (mapWidthScaled + 4) * Info.getInfo().getZoom(),
+                (mapHeightScaled + 4) * Info.getInfo().getZoom());
     }
 
     private void handleScroll(ScrollEvent e)
