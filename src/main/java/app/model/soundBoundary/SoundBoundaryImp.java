@@ -32,7 +32,7 @@ public class SoundBoundaryImp implements SoundBoundary
     @Override
     public void draw(GraphicsContext gc)
     {
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(Color.GREEN);
         gc.strokeLine(a.getX(), a.getY(), b.getX(), b.getY());
     }
 
