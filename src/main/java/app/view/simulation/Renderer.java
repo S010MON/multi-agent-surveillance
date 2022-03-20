@@ -13,6 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -51,6 +52,8 @@ public class Renderer extends Canvas
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
         map.getAgents().forEach(e -> e.draw(gc));
+
+        drawExplored(gc);
     }
 
     public void addTrail(Trail t)
@@ -82,6 +85,44 @@ public class Renderer extends Canvas
                 t.getLoc().getY() * Info.getInfo().getZoom() + Info.getInfo().offsetY,
                 2 * Info.getInfo().getZoom(),
                 2 * Info.getInfo().getZoom());
+    }
+
+    private void drawExplored(GraphicsContext gc)
+    {
+        final double DIAMETER = 2;
+        final double SCALE = 3;
+        double mapWidth = map.getSettings().getWidth();
+        double mapHeight = map.getSettings().getHeight();
+        double mapWidthScaled = map.getSettings().getWidth() / SCALE;
+        double mapHeightScaled = map.getSettings().getHeight() / SCALE;
+        double xPos = mapWidth + 20;
+        double yPos = mapHeight - mapHeightScaled;
+
+        // Add the label
+        gc.setFill(Color.BLACK);
+        gc.setFont(new Font(40));
+        gc.fillText("Current Area Explored:",
+                      xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                      (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY);
+
+        // Add the rectangle background
+        gc.setFill(Color.WHITE);
+        gc.fillRect((xPos) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                    (yPos) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                    mapWidthScaled * Info.getInfo().getZoom(),
+                    mapHeightScaled * Info.getInfo().getZoom());
+
+        // Add explored vectors
+        gc.setFill(Color.GREEN);
+        for (Vector v : map.getAllAgentsSeen())
+        {
+            double x = v.getX() - DIAMETER / 2;
+            double y = v.getY() - DIAMETER / 2;
+            gc.fillOval((xPos + (x / SCALE)) * Info.getInfo().getZoom() + Info.getInfo().offsetX,
+                        (yPos + (y / SCALE)) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
+                        DIAMETER * Info.getInfo().getZoom(),
+                        DIAMETER * Info.getInfo().getZoom());
+        }
     }
 
     private void handleScroll(ScrollEvent e)

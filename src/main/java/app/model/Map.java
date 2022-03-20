@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Map
 {
@@ -30,6 +31,7 @@ public class Map
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
+    @Getter private HashSet<Vector> allAgentsSeen;
     @Getter private Settings settings;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
@@ -56,6 +58,7 @@ public class Map
         settings.getSoundSources().forEach(e -> addSoundSource(e));
 
         agents = new ArrayList<>();
+        allAgentsSeen = new HashSet<>();
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
@@ -136,6 +139,11 @@ public class Map
     {
         // TODO for now?
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
+    }
+
+    public void updateAllSeen(HashSet<Vector> seen)
+    {
+        this.allAgentsSeen.addAll(seen);
     }
 
     public ArrayList<Boundary> getBoundaries()
