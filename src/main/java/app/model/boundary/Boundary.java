@@ -14,5 +14,7 @@ public interface Boundary
 
     boolean isCrossed(Vector startPoint, Vector endPoint);
 
+    boolean isCrossed(Vector centre, double radius);
+
     Vector getTeleport();
 }

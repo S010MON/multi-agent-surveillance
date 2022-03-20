@@ -1,6 +1,7 @@
 package app.view.agentView;
 
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.model.agents.Agent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +40,7 @@ public class AgentView extends Stage
         canvas.render();
     }
 
-    private void setCanvasWidth(HashSet<Vector> vectors)
+    private void setCanvasWidth(VectorSet vectors)
     {
         double minX = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
@@ -58,7 +59,7 @@ public class AgentView extends Stage
         agentViewWidth = maxX - minX;
     }
 
-    private void setCanvasHeight(HashSet<Vector> vectors)
+    private void setCanvasHeight(VectorSet vectors)
     {
         double minY = Double.MAX_VALUE;
         double maxY = Double.MIN_VALUE;

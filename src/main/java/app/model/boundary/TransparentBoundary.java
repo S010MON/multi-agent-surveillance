@@ -1,6 +1,7 @@
 package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 
 public class TransparentBoundary extends BoundaryImp
@@ -20,6 +21,12 @@ public class TransparentBoundary extends BoundaryImp
     public Vector intersection(Ray ray)
     {
         return null; // Overrides super -> light goes through it
+    }
+
+    @Override
+    public boolean isCrossed(Vector centre, double radius)
+    {
+        return false; // Overrides super -> light goes through it
     }
 
 }
