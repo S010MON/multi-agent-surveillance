@@ -5,6 +5,9 @@ import app.controller.linAlg.VectorSet;
 import app.model.boundary.Boundary;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Coverage
 {
     @Getter private VectorSet vectors;
@@ -31,7 +34,8 @@ public class Coverage
 
     public double percentSeen(VectorSet seen)
     {
-        return (double) seen.size() / (double) vectors.size();
+        double percent = (double) seen.size() / (double) vectors.size();
+        return new BigDecimal(percent).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     private boolean furnitureAt(Map map, Vector vector)
