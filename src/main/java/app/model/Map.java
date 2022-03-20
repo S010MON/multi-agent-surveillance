@@ -72,7 +72,7 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            Vector dir = new Vector(0, 1);
+            Vector dir = randDirection();
             AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
 
             guard.setMaxWalk(settings.getWalkSpeedGuard());
