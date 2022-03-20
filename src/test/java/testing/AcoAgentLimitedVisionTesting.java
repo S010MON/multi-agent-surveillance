@@ -229,7 +229,7 @@ public class AcoAgentLimitedVisionTesting
         // Case 3: Agent makes move based on information extracted
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector(1, 0));
+        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector(0, -1));
     }
 
     @Test
