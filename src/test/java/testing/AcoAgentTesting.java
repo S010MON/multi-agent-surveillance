@@ -10,6 +10,7 @@ import app.model.Map;
 import app.model.agents.Cells.PheromoneCell;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent360Vision;
+import app.model.agents.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +41,7 @@ public class AcoAgentTesting
     void testCardinalAngleDetectionAlteredViewDirection()
     {
         Vector newVisionDirection = new Vector(0, 1);
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, newVisionDirection, radius);
+        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, newVisionDirection, radius, Team.GUARD);
 
         agent_1.updateView(graphicsEngine.compute(map, agent_1));
         Ray[] cardinalRays = agent_1.detectCardinalRays();
@@ -51,7 +52,7 @@ public class AcoAgentTesting
     @Test
     void testAgentClashResolution()
     {
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent_1.updateView(graphicsEngine.compute(map, agent_1));
 
         Move selectedMove = agent_1.move();
@@ -66,7 +67,7 @@ public class AcoAgentTesting
     @Test
     void testAgentClashResolutionShortTermMemoryClearing()
     {
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent_1.updateView(graphicsEngine.compute(map, agent_1));
 
         //Agent not updated to simulate invalid move
@@ -87,8 +88,8 @@ public class AcoAgentTesting
     {
         Vector position_2 = position.add(new Vector(1, 0));
 
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius);
-        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius);
+        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
+        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius, Team.GUARD);
 
         agent_1.updateView(graphicsEngine.compute(map, agent_1));
         agent_2.updateView(graphicsEngine.compute(map, agent_2));
@@ -105,7 +106,7 @@ public class AcoAgentTesting
     {
         position = new Vector(91, 94);
         Vector nextPosition = new Vector(91, 95);
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent.updateLocation(nextPosition);
         assertEquals(agent.getPosition(), nextPosition);
     }
@@ -117,10 +118,10 @@ public class AcoAgentTesting
         Vector position_3 = position.add(new Vector(-1, 0));
         Vector position_4 = position.add(new Vector(0, -1));
 
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius);
-        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius);
-        AcoAgent360Vision agent_3 = new AcoAgent360Vision(position_3, viewDirection, radius);
-        AcoAgent360Vision agent_4 = new AcoAgent360Vision(position_4, viewDirection, radius);
+        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
+        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius, Team.GUARD);
+        AcoAgent360Vision agent_3 = new AcoAgent360Vision(position_3, viewDirection, radius, Team.GUARD);
+        AcoAgent360Vision agent_4 = new AcoAgent360Vision(position_4, viewDirection, radius, Team.GUARD);
 
         agent_1.updateView(graphicsEngine.compute(map, agent_1));
         Move agentMove = agent_1.move();
@@ -130,7 +131,7 @@ public class AcoAgentTesting
     @Test
     void testDetermineEquivalentMoves3D()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         Vector nextPosition = new Vector(14, 13);
@@ -151,7 +152,7 @@ public class AcoAgentTesting
     @Test
     void testAvailablePheromoneValues()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         Vector nextPosition = new Vector(15, 12);
         agent.updateLocation(nextPosition);
@@ -169,7 +170,7 @@ public class AcoAgentTesting
     @Test
     void testAvailablePheromonesDefaultValues()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateView(graphicsEngine.compute(map, agent));
 
@@ -188,7 +189,7 @@ public class AcoAgentTesting
     {
         position = new Vector(20, 19);
 
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         Ray[] cardinalRays = agent.detectCardinalRays();
@@ -201,7 +202,7 @@ public class AcoAgentTesting
     @Test
     void testAvailableMovements()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         Ray[] cardinalRays = agent.detectCardinalRays();
@@ -215,7 +216,7 @@ public class AcoAgentTesting
     @Test
     void testAngleToMovementLink()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         Vector link_0 = agent.angleToGridMovementLink(0);
         Vector link_180 = agent.angleToGridMovementLink(180);
@@ -227,7 +228,7 @@ public class AcoAgentTesting
     @Test
     void testCardinalPointDetection()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         double targetAngle =63;
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -239,7 +240,7 @@ public class AcoAgentTesting
     @Test
     void testCardinalPointNonDetection()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         double targetAngle =-163;
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -251,7 +252,7 @@ public class AcoAgentTesting
     @Test
     void test4CardinalAngles()
     {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius);
+        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateView(graphicsEngine.compute(map, agent));
 

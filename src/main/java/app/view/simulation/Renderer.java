@@ -115,7 +115,7 @@ public class Renderer extends Canvas
 
         // Add explored vectors
         gc.setFill(Color.GREEN);
-        for (Vector v : map.getAllAgentsSeen())
+        for (Vector v : map.getGuardsSeen())
         {
             double x = v.getX() - DIAMETER / 2;
             double y = v.getY() - DIAMETER / 2;

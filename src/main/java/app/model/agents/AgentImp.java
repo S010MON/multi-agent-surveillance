@@ -11,27 +11,28 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+
 
 public class AgentImp implements Agent
 {
     @Getter @Setter protected double maxWalk = 5;
     @Getter @Setter protected double maxSprint = 10;
-    @Getter protected Vector position;
     @Getter @Setter protected Vector direction;
-    @Getter protected double radius;
     @Getter @Setter protected boolean moveFailed;
+    @Getter protected Team team;
+    @Getter protected Vector position;
+    @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
-    public AgentImp(Vector position, Vector direction, double radius)
+    public AgentImp(Vector position, Vector direction, double radius, Team team)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
+        this.team = team;
         view = new ArrayList<>();
         seen = new VectorSet();
     }

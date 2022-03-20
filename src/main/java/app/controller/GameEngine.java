@@ -39,7 +39,7 @@ public class GameEngine
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
-        map.getAgents().forEach(a -> map.updateAllSeen(a.getSeen()));
+        map.getAgents().forEach(a -> map.updateAllSeen(a));
 
         for (Agent a : map.getAgents())
         {

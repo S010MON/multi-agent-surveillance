@@ -1,6 +1,7 @@
 package app.model;
 
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.ACO.AcoAgent360Vision;
@@ -21,9 +22,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Map
 {
@@ -31,7 +30,8 @@ public class Map
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
-    @Getter private HashSet<Vector> allAgentsSeen;
+    @Getter private VectorSet guardsSeen;
+    @Getter private VectorSet intrudersSeen;
     @Getter private Settings settings;
     @Getter private double width;
     @Getter private double height;
@@ -62,14 +62,15 @@ public class Map
         settings.getSoundSources().forEach(e -> addSoundSource(e));
 
         agents = new ArrayList<>();
-        allAgentsSeen = new HashSet<>();
+        guardsSeen = new VectorSet();
+        intrudersSeen = new VectorSet();
 
         // On creation add the right number of guards
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = new Vector(0, 1);
-            AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10);
+            AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
 
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
@@ -81,14 +82,14 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
+            WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
         }
 
         Vector humanStart = randPosition(intruderSpawn);
-        human = new Human(humanStart, new Vector(1,0), 10);
+        human = new Human(humanStart, new Vector(1,0), 10, Team.INTRUDER);
         //Assumes the human is a guard
         human.setMaxWalk(settings.getWalkSpeedGuard());
         human.setMaxSprint(settings.getSprintSpeedGuard());
@@ -145,9 +146,9 @@ public class Map
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
-    public void updateAllSeen(HashSet<Vector> seen)
+    public void updateAllSeen(Agent agent)
     {
-        this.allAgentsSeen.addAll(seen);
+        //if(agent instanceof ) TODO stuff
     }
 
     public ArrayList<Boundary> getBoundaries()
