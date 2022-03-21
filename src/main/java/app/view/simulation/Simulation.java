@@ -42,6 +42,6 @@ public class Simulation extends BorderPane
 
     public void pauseOrResume()
     {
-        gameEngine.pauseOrResume();
+        gameEngine.pausePlay();
     }
 }

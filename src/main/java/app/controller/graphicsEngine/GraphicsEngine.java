@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GraphicsEngine
 {
-    private double angle = 60; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
+    private double angle = 50; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
     public GraphicsEngine(){};
 

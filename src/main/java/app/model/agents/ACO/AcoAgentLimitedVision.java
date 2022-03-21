@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.agents.Team;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -15,10 +16,12 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
     private Vector directionBias = new Vector();
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    private double movementHeuristic = 0.75;
+    private Vector movementContinuity = new Vector();
 
-    public AcoAgentLimitedVision(Vector position, Vector direction, double radius)
+    public AcoAgentLimitedVision(Vector position, Vector direction, double radius, Team team)
     {
-        super(position, direction, radius);
+        super(position, direction, radius, team);
         pheromoneSenseDirections();
     }
 
@@ -90,15 +93,34 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
     public Move makeMove()
     {
-        //Randomly or with bias select move
-        //Take into account agent clash
-        Vector move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
+        Vector move;
+        if(randomGenerator.nextDouble() < movementHeuristic && movementContinuityPossible())
+        {
+            move = movementContinuity;
+        }
+        else
+        {
+            move = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
+        }
+
         move = move.normalise();
 
         previousMove = new Move(position, move.scale(cellSize));
         possibleMovements.clear();
 
         return new Move(position, move.scale(cellSize));
+    }
+
+    private boolean movementContinuityPossible()
+    {
+        for(Vector v: possibleMovements)
+        {
+            if(v.equals(movementContinuity.normalise()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void shortTermMemory(Vector currentPosition)
@@ -108,6 +130,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
         if(!usedMove.equals(new Vector()))
         {
             pheromoneSenseDirections();
+            movementContinuity = previousMove.getDeltaPos();
         }
     }
 

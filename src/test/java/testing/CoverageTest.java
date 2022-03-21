@@ -4,7 +4,7 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsGenerator;
-import app.model.CoverageMap;
+import app.model.Coverage;
 import app.model.Map;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class CoverageTest
         settings.setNoOfGuards(0);
         settings.setNoOfIntruders(0);
         Map map = new Map(settings);
-        CoverageMap cMap = new CoverageMap(map);
+        Coverage cMap = new Coverage(map);
 
         assertEquals(40, cMap.getVectors().size());
     }
@@ -29,7 +29,7 @@ public class CoverageTest
         settings.setNoOfGuards(0);
         settings.setNoOfIntruders(0);
         Map map = new Map(settings);
-        CoverageMap cMap = new CoverageMap(map);
+        Coverage cMap = new Coverage(map);
         VectorSet seen = new VectorSet();
         assertEquals(0d, cMap.percentSeen(seen));
     }
@@ -40,7 +40,7 @@ public class CoverageTest
         settings.setNoOfGuards(0);
         settings.setNoOfIntruders(0);
         Map map = new Map(settings);
-        CoverageMap cMap = new CoverageMap(map);
+        Coverage cMap = new Coverage(map);
         VectorSet seen = new VectorSet();
 
 
@@ -66,7 +66,7 @@ public class CoverageTest
         settings.setNoOfGuards(0);
         settings.setNoOfIntruders(0);
         Map map = new Map(settings);
-        CoverageMap cMap = new CoverageMap(map);
+        Coverage cMap = new Coverage(map);
         VectorSet seen = new VectorSet();
 
         for(double x = 0; x <= 10; x++)

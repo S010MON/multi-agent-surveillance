@@ -1,9 +1,9 @@
 package app.model;
 
 import app.controller.linAlg.Vector;
+import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.ACO.AcoAgent360Vision;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -23,21 +23,25 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Map
 {
+    private final Boolean HUMAN_ACTIVE = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
-    @Getter private HashSet<Vector> allAgentsSeen;
+    @Getter private VectorSet guardsSeen;
+    @Getter private VectorSet intrudersSeen;
     @Getter private Settings settings;
     @Getter private double width;
     @Getter private double height;
+    @Getter private Human human;
+    private Coverage coverage;
     private Rectangle2D guardSpawn;
     private Rectangle2D intruderSpawn;
-    private Human human;
+    private Rectangle2D target;
+
 
     public Map(Settings settings)
     {
@@ -62,17 +66,17 @@ public class Map
         settings.getSoundSources().forEach(e -> addSoundSource(e));
 
         agents = new ArrayList<>();
-        allAgentsSeen = new HashSet<>();
+        guardsSeen = new VectorSet();
+        intrudersSeen = new VectorSet();
 
         // On creation add the right number of guards
-        for (int i = 0; i < settings.getNoOfGuards(); i++)
+        for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
             if (srt != null)
             {
-                Vector dir = new Vector(0, 1);
-                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10);
-
+                Vector dir = randDirection();
+                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
                 guard.setMaxWalk(settings.getWalkSpeedGuard());
                 guard.setMaxSprint(settings.getSprintSpeedGuard());
                 agents.add(guard);
@@ -80,13 +84,13 @@ public class Map
         }
 
         // On creation add the right number of infiltrators
-        for (int i = 0; i < settings.getNoOfIntruders(); i++)
+        for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
             if (srt != null)
             {
                 Vector dir = randDirection();
-                WallFollowAgent intruder = new WallFollowAgent(srt, dir, 10);
+                Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
                 intruder.setMaxWalk(settings.getWalkSpeedIntruder());
                 intruder.setMaxSprint(settings.getSprintSpeedIntruder());
                 agents.add(intruder);
@@ -96,12 +100,12 @@ public class Map
             }
         }
 
-        if (intruderSpawn != null)
+        if (HUMAN_ACTIVE && intruderSpawn != null)
         {
             Vector humanStart = randPosition(intruderSpawn);
             if (humanStart != null)
             {
-                human = new Human(humanStart, new Vector(1, 0), 10);
+                human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
                 //Assumes the human is a guard
                 human.setMaxWalk(settings.getWalkSpeedGuard());
                 human.setMaxSprint(settings.getSprintSpeedGuard());
@@ -109,6 +113,7 @@ public class Map
             }
         }
 
+        this.coverage = new Coverage(this);
         System.out.println("done.");
     }
 
@@ -124,22 +129,13 @@ public class Map
         furniture.addAll(obstacles);
     }
 
-    public void walk(Vector v)
-    {
-        human.walk(v);
-    }
-
-    public void sprint(Vector v)
-    {
-        human.sprint(v);
-    }
-
     public void addFurniture(SettingsObject obj)
     {
         switch (obj.getType())
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
+            case TARGET -> target = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }
@@ -160,9 +156,12 @@ public class Map
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
-    public void updateAllSeen(HashSet<Vector> seen)
+    public void updateAllSeen(Agent agent)
     {
-        this.allAgentsSeen.addAll(seen);
+        if(agent.getTeam() == Team.GUARD)
+            guardsSeen.addAll(agent.getSeen());
+        else
+            intrudersSeen.addAll(agent.getSeen());
     }
 
     public ArrayList<Boundary> getBoundaries()
@@ -172,8 +171,16 @@ public class Map
         return boundaries;
     }
 
-    public void drawGuardSpawn(GraphicsContext gc)
+    public void drawIndicatorBoxes(GraphicsContext gc)
     {
+        if (target != null)
+        {
+            gc.setStroke(Color.GOLD);
+            gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                    target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                    target.getHeight() * Info.getInfo().zoom,
+                    target.getHeight() * Info.getInfo().zoom);
+        }
         if (guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);
@@ -182,10 +189,6 @@ public class Map
                     guardSpawn.getHeight() * Info.getInfo().zoom,
                     guardSpawn.getHeight() * Info.getInfo().zoom);
         }
-    }
-
-    public void drawIntruderSpawn(GraphicsContext gc)
-    {
         if (intruderSpawn != null)
         {
             gc.setStroke(Color.RED);
@@ -194,6 +197,14 @@ public class Map
                     intruderSpawn.getHeight() * Info.getInfo().zoom,
                     intruderSpawn.getHeight() * Info.getInfo().zoom);
         }
+    }
+
+    public double percentageComplete(Team team)
+    {
+        if(team == Team.GUARD)
+            return coverage.percentSeen(guardsSeen);
+        else
+            return coverage.percentSeen(intrudersSeen);
     }
 
     private Vector randDirection()
@@ -238,10 +249,10 @@ public class Map
 
     private boolean clearSpot(Vector v)
     {
-        for (Agent agent : agents)
+        for(Agent agent: agents)
         {
             double dist = agent.getPosition().dist(v);
-            if (dist < 2 * agent.getRadius())
+            if(dist < 2*agent.getRadius())
                 return false;
         }
         return true;

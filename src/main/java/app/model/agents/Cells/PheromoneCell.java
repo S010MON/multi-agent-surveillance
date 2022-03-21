@@ -3,7 +3,7 @@ package app.model.agents.Cells;
 public class PheromoneCell implements Cell
 {
     private double pheromone;
-    private double evaporationConstant = 0.001;
+    private double evaporationConstant = 0.005;
 
     public PheromoneCell()
     {

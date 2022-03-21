@@ -43,4 +43,6 @@ public interface Agent extends Boundary
     void updateSeen(Vector vector);
 
     void addViewWindow(AgentView agentView);
+
+    Team getTeam();
 }

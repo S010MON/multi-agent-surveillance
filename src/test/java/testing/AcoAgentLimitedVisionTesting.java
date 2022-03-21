@@ -8,6 +8,7 @@ import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.ACO.AcoAgentLimitedVision;
 import app.model.agents.ACO.AcoGrid;
+import app.model.agents.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,7 @@ public class AcoAgentLimitedVisionTesting
 
         viewDirection = new Vector(-1, 0);
         position = new Vector(72.4758040349858, 367.0214134418279);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
 
         getAgentStuckAtWindow(agent);
 
@@ -157,7 +158,7 @@ public class AcoAgentLimitedVisionTesting
 
         viewDirection = new Vector(-1, 0);
         position = new Vector(72.4758040349858, 367.0214134418279);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
 
         getAgentStuckAtWindow(agent);
 
@@ -176,7 +177,7 @@ public class AcoAgentLimitedVisionTesting
     void testExplorationToMovementFacingWallEdgeCase()
     {
         position = new Vector(677, 100);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateLocation(new Vector(678, 101));
         agent.updateLocation(new Vector(678, 99));
@@ -205,7 +206,7 @@ public class AcoAgentLimitedVisionTesting
     @Test
     void testBasicMovement()
     {
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         //Case 1: Smelling pheromones
@@ -228,14 +229,14 @@ public class AcoAgentLimitedVisionTesting
         // Case 3: Agent makes move based on information extracted
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector(1, 0));
+        assertEquals(agent.getPreviousMove().getDeltaPos(), new Vector(0, -1));
     }
 
     @Test
     void testMovementAgainstWall()
     {
         position = new Vector(678, 100);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
@@ -253,7 +254,7 @@ public class AcoAgentLimitedVisionTesting
     @Test
     void testDirectionsToVisiblyExplore()
     {
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
@@ -268,7 +269,7 @@ public class AcoAgentLimitedVisionTesting
     {
         viewDirection = new Vector(-1, 0);
         position = new Vector(678, 100);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
 
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.pheromonesDetection();
@@ -284,7 +285,7 @@ public class AcoAgentLimitedVisionTesting
     void testDirectionsToVisiblyExploreAgainstWall()
     {
         position = new Vector(0, 0);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
@@ -303,7 +304,7 @@ public class AcoAgentLimitedVisionTesting
     @Test
     void testPheromoneSenseDirections()
     {
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         ArrayList<Vector> directions = agent.getPheromoneDirections();
@@ -314,7 +315,7 @@ public class AcoAgentLimitedVisionTesting
     void movePossible()
     {
         position = new Vector(678, 100);
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
         double angle = viewDirection.getAngle();
 
@@ -327,7 +328,7 @@ public class AcoAgentLimitedVisionTesting
     @Test
     void testCardinalPointDetection()
     {
-        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius);
+        AcoAgentLimitedVision agent = new AcoAgentLimitedVision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
         double angle = viewDirection.getAngle();
 
