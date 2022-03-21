@@ -92,22 +92,16 @@ public class Map
                 intruder.setMaxWalk(settings.getWalkSpeedIntruder());
                 intruder.setMaxSprint(settings.getSprintSpeedIntruder());
                 agents.add(intruder);
-            } else
-            {
-                i = settings.getNoOfIntruders();
             }
         }
 
-        if (HUMAN_ACTIVE && intruderSpawn != null)
+        if (HUMAN_ACTIVE)
         {
             Vector humanStart = randPosition(intruderSpawn);
-            if (humanStart != null)
-            {
-                human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
-                human.setMaxWalk(settings.getWalkSpeedGuard());
-                human.setMaxSprint(settings.getSprintSpeedGuard());
-                agents.add(human);
-            }
+            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            human.setMaxWalk(settings.getWalkSpeedGuard());
+            human.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(human);
         }
 
         this.coverage = new Coverage(this);

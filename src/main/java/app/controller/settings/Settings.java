@@ -6,7 +6,6 @@ import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
