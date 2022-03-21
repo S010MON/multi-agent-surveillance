@@ -14,7 +14,7 @@ public class Experiments
     {
         AgentType agent_under_test = AgentType.ACO;
         int no_of_agents = 1;
-        int iterations = 2;
+        int iterations = 100;
         int map_start_range = 1;
         int map_end_range = 5;
 
