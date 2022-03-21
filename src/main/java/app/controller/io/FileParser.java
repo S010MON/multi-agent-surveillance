@@ -1,6 +1,7 @@
 package app.controller.io;
 
 import app.controller.settings.Settings;
+import app.controller.settings.SettingsGenerator;
 import app.model.furniture.FurnitureType;
 import app.controller.linAlg.Vector;
 import javafx.geometry.Rectangle2D;
@@ -11,7 +12,7 @@ public class FileParser
 {
     public static Settings parse(Scanner scanner)
     {
-        Settings settings = new Settings();
+        Settings settings = SettingsGenerator.defaultSettings();
         int countLines = 1;
         while (scanner.hasNextLine())
         {
@@ -30,6 +31,8 @@ public class FileParser
             {
                 String id = scan.next();
                 String val = scan.next();
+                val = filterOutComments(val);
+
                 id = id.trim();
                 val = val.trim();
                 String[] coords = val.split(" ");
@@ -75,5 +78,14 @@ public class FileParser
                 Double.parseDouble(coords[1]),
                 Integer.parseInt(coords[2]) - Integer.parseInt(coords[0]),
                 Integer.parseInt(coords[3]) - Integer.parseInt(coords[1]));
+    }
+
+    private static String filterOutComments(String s)
+    {
+        if (s.contains("//"))
+        {
+            return s.split("//")[0];
+        }
+        return s;
     }
 }
