@@ -26,7 +26,7 @@ import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = true;
+    private final Boolean HUMAN_ACTIVE = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
