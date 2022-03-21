@@ -187,7 +187,7 @@ public class Logger
 
             writer.write("\n");
             writer.close();
-            System.out.println(sb);
+            //System.out.println(sb);
         }
         catch (IOException e)
         {
@@ -195,8 +195,6 @@ public class Logger
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * Append a double array to a new line of a {@code .csv} file

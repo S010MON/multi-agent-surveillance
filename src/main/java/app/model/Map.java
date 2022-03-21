@@ -43,7 +43,6 @@ public class Map
 
     public Map(Settings settings)
     {
-        System.out.print("Loading settings ... ");
         this.settings = settings;
         this.width = settings.getWidth();
         this.height = settings.getHeight();
@@ -105,7 +104,6 @@ public class Map
         }
 
         this.coverage = new Coverage(this);
-        System.out.println("done.");
     }
 
     /**
