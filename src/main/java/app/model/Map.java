@@ -5,8 +5,6 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
-import app.model.agents.ACO.AcoAgentLimitedVision;
-import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -76,7 +74,7 @@ public class Map
             if (srt != null)
             {
                 Vector dir = randDirection();
-                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
+                Agent guard = AgentFactory.make(settings.getGuardType(), srt, dir, 10, Team.GUARD);
                 guard.setMaxWalk(settings.getWalkSpeedGuard());
                 guard.setMaxSprint(settings.getSprintSpeedGuard());
                 agents.add(guard);
@@ -90,7 +88,7 @@ public class Map
             if (srt != null)
             {
                 Vector dir = randDirection();
-                Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+                Agent intruder = AgentFactory.make(settings.getIntruderType(), srt, dir, 10, Team.INTRUDER);
                 intruder.setMaxWalk(settings.getWalkSpeedIntruder());
                 intruder.setMaxSprint(settings.getSprintSpeedIntruder());
                 agents.add(intruder);
@@ -106,7 +104,6 @@ public class Map
             if (humanStart != null)
             {
                 human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
-                //Assumes the human is a guard
                 human.setMaxWalk(settings.getWalkSpeedGuard());
                 human.setMaxSprint(settings.getSprintSpeedGuard());
                 agents.add(human);
@@ -223,28 +220,14 @@ public class Map
     private Vector randPosition(Rectangle2D r)
     {
         Vector v;
-        int tries = 0;
-        try
+        do
         {
-            do
-            {
-                tries++;
-                double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
-                double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
-                v = new Vector(x, y);
-                if (tries > 500)
-                {
-                    throw new RuntimeException("SpawnArea not big enough for number of agents");
-                }
-            } while (!clearSpot(v));
+            double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+            double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+            v = new Vector(x, y);
+        } while (!clearSpot(v));
 
-            return v;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        return v;
     }
 
     private boolean clearSpot(Vector v)
