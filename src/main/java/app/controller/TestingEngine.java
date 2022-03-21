@@ -10,14 +10,14 @@ import app.model.Map;
 import app.model.boundary.PortalBoundary;
 import lombok.Getter;
 
-public class GameEngineSansGui
+public class TestingEngine
 {
     @Getter private long tics;
     private Map map;
     private GraphicsEngine graphicsEngine;
     private double prevPercentage = 0;
 
-    public GameEngineSansGui(Map map)
+    public TestingEngine(Map map)
     {
         this.tics = 0;
         this.map = map;

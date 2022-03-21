@@ -1,6 +1,6 @@
 package testing;
 
-import app.controller.GameEngineSansGui;
+import app.controller.TestingEngine;
 import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.model.Map;
@@ -31,7 +31,7 @@ public class Experiments
             for(int i = 0; i < iterations; i++)
             {
                 Map map = new Map((settings));
-                GameEngineSansGui gameEngine = new GameEngineSansGui(map);
+                TestingEngine gameEngine = new TestingEngine(map);
                 boolean complete = gameEngine.run();
             }
         }
