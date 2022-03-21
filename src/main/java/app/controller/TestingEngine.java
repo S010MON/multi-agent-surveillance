@@ -31,7 +31,7 @@ public class TestingEngine
         double currentPercentage;
         int[] times = new int[100];
 
-        while(!complete() && tics < Integer.MAX_VALUE )
+        while(!complete() && tics < 100000 )
         {
             tick();
 
