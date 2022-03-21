@@ -15,11 +15,13 @@ public class TestingEngine
     @Getter private int tics;
     private Map map;
     private GraphicsEngine graphicsEngine;
+    private String test_name;
 
-    public TestingEngine(Map map)
+    public TestingEngine(Map map, String test_name)
     {
         this.tics = 0;
         this.map = map;
+        this.test_name = test_name;
         this.graphicsEngine = new GraphicsEngine();
     }
 
@@ -36,8 +38,7 @@ public class TestingEngine
              currentPercentage = map.percentageComplete(Team.GUARD);
             if(currentPercentage != prevPercentage)
             {
-                System.out.print("\r");
-                System.out.print(currentPercentage + "%");
+                updatePercentageBar(currentPercentage);
 
                 int index = (int) (currentPercentage *  100);
                 times[index] = tics;
@@ -128,5 +129,17 @@ public class TestingEngine
                 return false;
         }
         return true;
+    }
+
+    private void updatePercentageBar(double percent)
+    {
+        StringBuilder bar = new StringBuilder();
+        bar.append(test_name);
+        for(double d = 0; d < percent; d += 0.01)
+        {
+            bar.append("#");
+        }
+        bar.append(" ").append(percent).append("%");
+        System.out.print("\r" + bar);
     }
 }
