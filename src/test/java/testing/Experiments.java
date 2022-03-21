@@ -17,7 +17,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        //run("experiment_map_1");
+        run("experiment_map_1");
     }
 
     private static void run(String map_name)
