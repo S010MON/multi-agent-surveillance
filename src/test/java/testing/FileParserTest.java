@@ -5,12 +5,14 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
 import javafx.geometry.Rectangle2D;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileParserTest
 {
+    @Disabled
     @Test void testCreationOfSettings()
     {
         Settings s = FileManager.loadSettings("src/test/resources/mytest.txt");
@@ -69,6 +71,7 @@ public class FileParserTest
         assertEquals("soundSource", s.getFurniture().get(13).getType().label);
     }
 
+    @Disabled
     @Test void testCreationOfSettingsNewMapWithoutComments()
     {
         Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 without comments.txt");
@@ -96,6 +99,7 @@ public class FileParserTest
         Map map = new Map(s);
     }
 
+    @Disabled
     @Test void testCreationOfSettingsNewMapWithComments()
     {
         Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 with comments.txt");
