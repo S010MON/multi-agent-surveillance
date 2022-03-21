@@ -12,10 +12,9 @@ import lombok.Getter;
 
 public class TestingEngine
 {
-    @Getter private long tics;
+    @Getter private int tics;
     private Map map;
     private GraphicsEngine graphicsEngine;
-    private double prevPercentage = 0;
 
     public TestingEngine(Map map)
     {
@@ -24,14 +23,30 @@ public class TestingEngine
         this.graphicsEngine = new GraphicsEngine();
     }
 
-    public boolean run()
+    public int[] run()
     {
+        double prevPercentage = 0;
+        double currentPercentage;
+        int[] times = new int[100];
+
         while(!complete())
         {
             tick();
-        }
 
-        return true;
+             currentPercentage = map.percentageComplete(Team.GUARD);
+            if(currentPercentage != prevPercentage)
+            {
+                System.out.print("\r");
+                System.out.print(currentPercentage + "%");
+
+                int index = (int) (currentPercentage *  100);
+                times[index] = tics;
+
+                prevPercentage = currentPercentage;
+            }
+        }
+        System.out.println(" done");
+        return times;
     }
 
     public void tick()
@@ -68,13 +83,7 @@ public class TestingEngine
 
     private boolean complete()
     {
-        double currentPercentage = map.percentageComplete(Team.GUARD);
-        if(currentPercentage != prevPercentage)
-        {
-            System.out.println(currentPercentage + "%");
-            prevPercentage = currentPercentage;
-        }
-        return  currentPercentage > 0.80;
+        return  map.percentageComplete(Team.GUARD) > 0.85;
     }
 
     private Vector checkTeleport(Vector start, Vector end)
