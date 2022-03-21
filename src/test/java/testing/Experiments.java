@@ -38,7 +38,8 @@ public class Experiments
 
             for(int n: no_of_agents)
             {
-                System.out.println("Agent Type: " + agent_under_test + " - " + n + " agents");
+                String agent_heading = agent_under_test + " - " + n + " agents ";
+                System.out.println("Agent Type: " + agent_heading);
 
                 for(int i = 0; i < iterations; i++)
                 {
@@ -47,7 +48,7 @@ public class Experiments
                     Map map = new Map((settings));
                     TestingEngine gameEngine = new TestingEngine(map, test_name);
                     int[] data = gameEngine.run();
-                    logger.log(agent_under_test.name(), data);
+                    logger.log(agent_heading + test_name, data);
                 }
             }
         }
