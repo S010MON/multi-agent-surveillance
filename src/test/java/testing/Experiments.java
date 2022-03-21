@@ -11,6 +11,7 @@ public class Experiments
 {
     private static final int iterations = 100;
     private static final int[] no_of_agents = {1, 2, 3, 4 ,5};
+    private static final AgentType[] agents = {AgentType.ACO, AgentType.WALL_FOLLOW, AgentType.RANDOM};
 
     /**
      * Enter a map name and run the Experiments file to run every agent through the map 100 times
@@ -31,7 +32,7 @@ public class Experiments
         Logger logger = new Logger(map_name);
         logger.setOutputCsv();
 
-        for(AgentType agent_under_test: AgentType.values())
+        for(AgentType agent_under_test: agents)
         {
             settings.setGuardType(agent_under_test);
 
