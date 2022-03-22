@@ -40,8 +40,13 @@ public class TestingEngine
             {
                 updatePercentageBar(currentPercentage);
 
+                int prevIndex = (int) (prevPercentage * 100);
                 int index = (int) (currentPercentage *  100);
-                times[index] = tics;
+
+                for(int i = prevIndex + 1; i <= index; i++)
+                {
+                    times[i] = tics;
+                }
 
                 prevPercentage = currentPercentage;
             }
