@@ -210,7 +210,7 @@ public class Map
             return coverage.percentSeen(intrudersSeen);
     }
 
-    public void capture(Agent currentAgent)
+    public void checkForCapture(Agent currentAgent)
     {
         if(currentAgent.getTeam() != Team.GUARD)
             return;
