@@ -45,7 +45,7 @@ public class Map
 
     public Map(Settings settings)
     {
-        System.out.print("Loading settings ... ");
+        System.out.println("Loading settings ... ");
         this.settings = settings;
         this.width = settings.getWidth();
         this.height = settings.getHeight();
@@ -91,31 +91,23 @@ public class Map
             agents.add(intruder);
         }
 
-        if (HUMAN_ACTIVE && intruderSpawn != null)
+        if (HUMAN_ACTIVE)
         {
             Vector humanStart = randPosition(intruderSpawn);
-            if (humanStart != null)
-            {
-                human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
-                //Assumes the human is a guard
-                human.setMaxWalk(settings.getWalkSpeedGuard());
-                human.setMaxSprint(settings.getSprintSpeedGuard());
-                agents.add(human);
-            }
+            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            human.setMaxWalk(settings.getWalkSpeedGuard());
+            human.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(human);
         }
 
         this.coverage = new Coverage(this);
-        System.out.println("done.");
+        System.out.print(" done");
     }
 
-    /**
-     * Only for testing, delete later
-     */
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
         agents = new ArrayList<>();
         agents.add(agent);
-
         furniture = new ArrayList<>();
         furniture.addAll(obstacles);
     }
@@ -143,7 +135,6 @@ public class Map
 
     public void addSoundSource(SettingsObject obj)
     {
-        // TODO for now?
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
