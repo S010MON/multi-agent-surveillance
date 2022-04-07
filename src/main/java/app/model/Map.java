@@ -76,7 +76,7 @@ public class Map
             if (srt != null)
             {
                 Vector dir = randDirection();
-                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
+                Agent guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
                 guard.setMaxWalk(settings.getWalkSpeedGuard());
                 guard.setMaxSprint(settings.getSprintSpeedGuard());
                 agents.add(guard);
@@ -91,6 +91,7 @@ public class Map
             {
                 Vector dir = randDirection();
                 Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+                intruder.setTgtDirection(targetDirection(srt));
                 intruder.setMaxWalk(settings.getWalkSpeedIntruder());
                 intruder.setMaxSprint(settings.getSprintSpeedIntruder());
                 agents.add(intruder);
@@ -256,5 +257,15 @@ public class Map
                 return false;
         }
         return true;
+    }
+
+    private Vector targetDirection(Vector vector)
+    {
+        Vector targetCentre = new Vector(target.getMinX() + (target.getWidth()/2),
+                                        target.getMinY() + (target.getHeight()/2));
+        double dX = targetCentre.getX() - vector.getX();
+        double dY = targetCentre.getY() - vector.getY();
+        Vector direction = new Vector(dX, dY);
+        return direction.normalise();
     }
 }

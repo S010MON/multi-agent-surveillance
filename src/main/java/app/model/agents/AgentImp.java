@@ -20,6 +20,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected double maxSprint = 10;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
+    @Setter protected Vector tgtDirection;
     @Getter protected Team team;
     @Getter protected Vector position;
     @Getter protected double radius;
@@ -33,6 +34,18 @@ public class AgentImp implements Agent
         this.position = position;
         this.radius = radius;
         this.team = team;
+        this.tgtDirection = null;
+        view = new ArrayList<>();
+        seen = new VectorSet();
+    }
+
+    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
+    {
+        this.direction = direction;
+        this.position = position;
+        this.radius = radius;
+        this.team = team;
+        this.tgtDirection = tgtDirection;
         view = new ArrayList<>();
         seen = new VectorSet();
     }
