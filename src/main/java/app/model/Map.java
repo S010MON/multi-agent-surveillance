@@ -223,28 +223,13 @@ public class Map
     private Vector randPosition(Rectangle2D r)
     {
         Vector v;
-        int tries = 0;
-        try
+        do
         {
-            do
-            {
-                tries++;
-                double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
-                double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
-                v = new Vector(x, y);
-                if (tries > 500)
-                {
-                    throw new RuntimeException("SpawnArea not big enough for number of agents");
-                }
-            } while (!clearSpot(v));
-
-            return v;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+            double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+            double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+            v = new Vector(x, y);
+        } while(!clearSpot(v));
+        return v;
     }
 
     private boolean clearSpot(Vector v)
@@ -252,7 +237,7 @@ public class Map
         for(Agent agent: agents)
         {
             double dist = agent.getPosition().dist(v);
-            if(dist < 2*agent.getRadius())
+            if(dist < 2 * agent.getRadius())
                 return false;
         }
         return true;
