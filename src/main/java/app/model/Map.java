@@ -257,4 +257,27 @@ public class Map
         }
         return true;
     }
+
+
+    public void capture(Agent currentAgent)
+    {
+        if(currentAgent.getTeam() == Team.GUARD)
+            for(Agent otherAgent: agents){
+                if (otherAgent.getTeam() !=currentAgent.getTeam()){
+                    double dis = currentAgent.getPosition().dist(otherAgent.getPosition());
+                    if(dis <= currentAgent.getRadius() + otherAgent.getRadius()){
+                        deleteAgent(otherAgent);
+                    }
+                }
+            }
+    }
+
+
+    public void deleteAgent(Agent agent){
+        int index =  this.getAgents().indexOf(agent);
+        agents.remove(index);
+    }
+
+
+
 }
