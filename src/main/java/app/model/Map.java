@@ -69,35 +69,26 @@ public class Map
         guardsSeen = new VectorSet();
         intrudersSeen = new VectorSet();
 
-        // On creation add the right number of guards
+        /* On creation add the right number of guards */
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            if (srt != null)
-            {
-                Vector dir = randDirection();
-                AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
-                guard.setMaxWalk(settings.getWalkSpeedGuard());
-                guard.setMaxSprint(settings.getSprintSpeedGuard());
-                agents.add(guard);
-            }
+            Vector dir = randDirection();
+            AcoAgentLimitedVision guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
+            guard.setMaxWalk(settings.getWalkSpeedGuard());
+            guard.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(guard);
         }
 
-        // On creation add the right number of infiltrators
+        /* On creation add the right number of infiltrators */
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
-            if (srt != null)
-            {
-                Vector dir = randDirection();
-                Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
-                intruder.setMaxWalk(settings.getWalkSpeedIntruder());
-                intruder.setMaxSprint(settings.getSprintSpeedIntruder());
-                agents.add(intruder);
-            } else
-            {
-                i = settings.getNoOfIntruders();
-            }
+            Vector dir = randDirection();
+            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            intruder.setMaxWalk(settings.getWalkSpeedIntruder());
+            intruder.setMaxSprint(settings.getSprintSpeedIntruder());
+            agents.add(intruder);
         }
 
         if (HUMAN_ACTIVE && intruderSpawn != null)
