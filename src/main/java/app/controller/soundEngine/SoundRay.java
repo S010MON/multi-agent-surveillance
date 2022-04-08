@@ -11,5 +11,4 @@ public class SoundRay extends Ray
         super(u, v);
         this.colour = Color.BLUE;
     }
-
 }
