@@ -11,8 +11,6 @@ import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.soundFurniture.SoundFurniture;
-import app.model.soundFurniture.SoundFurnitureFactory;
 import app.model.soundSource.SoundSource;
 import app.model.soundSource.SoundSourceFactory;
 import app.model.soundSource.SoundSourceType;
@@ -28,7 +26,6 @@ public class Map
 {
     private final Boolean HUMAN_ACTIVE = false;
     @Getter private ArrayList<Furniture> furniture;
-    @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
     @Getter private VectorSet guardsSeen;
@@ -56,10 +53,6 @@ public class Map
         SettingsObject border = new SettingsObject(rect, FurnitureType.BORDER);
         addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
-
-        /* Make sound furniture */
-        soundFurniture = new ArrayList<>();
-        settings.getSoundFurniture().forEach(e -> addSoundFurniture(e));
 
         /* Make some sound sources */
         soundSources = new ArrayList<>();
@@ -137,16 +130,6 @@ public class Map
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
             case TARGET -> target = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
-        }
-    }
-
-    public void addSoundFurniture(SettingsObject obj)
-    {
-        switch (obj.getType())
-        {
-            case GUARD_SPAWN -> guardSpawn = obj.getRect();
-            case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            default -> this.soundFurniture.add(SoundFurnitureFactory.make(obj));
         }
     }
 

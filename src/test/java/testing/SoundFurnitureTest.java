@@ -2,15 +2,15 @@ package testing;
 
 import app.controller.linAlg.Vector;
 import app.model.soundFurniture.SoundFurniture;
-import app.model.soundFurniture.SoundFurnitureBase;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SoundFurnitureTest {
     @Test public void isInsideTest(){
-        SoundFurniture soundFurniture = new SoundFurnitureBase(new Rectangle2D(0,0,10,10));
+        SoundFurniture soundFurniture = new SoundFurniture(new Rectangle2D(0,0,10,10));
 
         Vector p1 = new Vector(1,1);
         Vector p2 = new Vector(2,5);
@@ -22,7 +22,7 @@ public class SoundFurnitureTest {
     }
 
     @Test public void notIsInsideTest(){
-        SoundFurniture soundFurniture = new SoundFurnitureBase(new Rectangle2D(0,0,10,10));
+        SoundFurniture soundFurniture = new SoundFurniture(new Rectangle2D(0,0,10,10));
 
         Vector p1 = new Vector(11,1);
         Vector p2 = new Vector(-1,1);
@@ -34,7 +34,7 @@ public class SoundFurnitureTest {
     }
 
     @Test public void onOutlineTest(){
-        SoundFurniture soundFurniture = new SoundFurnitureBase(new Rectangle2D(0,0,10,10));
+        SoundFurniture soundFurniture = new SoundFurniture(new Rectangle2D(0,0,10,10));
 
         Vector p1 = new Vector(0,1);
         Vector p2 = new Vector(1,0);
@@ -51,7 +51,7 @@ public class SoundFurnitureTest {
     }
 
     @Test public void isInsideOutlineTest(){
-        SoundFurniture soundFurniture = new SoundFurnitureBase(new Rectangle2D(0,0,10,10));
+        SoundFurniture soundFurniture = new SoundFurniture(new Rectangle2D(0,0,10,10));
 
         Vector p1 = new Vector(0,1);
         Vector p2 = new Vector(1,0);

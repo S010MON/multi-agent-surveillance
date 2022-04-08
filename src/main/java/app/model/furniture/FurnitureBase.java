@@ -27,6 +27,7 @@ public class FurnitureBase implements Furniture
             texture.draw(gc);
 
         boundaries.forEach(e -> e.draw(gc));
+        soundBoundaries.forEach(e -> e.draw(gc));
     }
 
     public void addBoundaries(ArrayList<Boundary> boundaries)
