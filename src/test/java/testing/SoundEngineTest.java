@@ -37,7 +37,7 @@ public class SoundEngineTest
 
         Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1, Team.GUARD);
 
-        SoundEngine cornerAimedTracing = new CornerAimedTracing();
+        CornerAimedTracing cornerAimedTracing = new CornerAimedTracing();
 
         // 30**2 + 40**2 = 50**2, so we expect the ones with amp 100 to give a remaining amp of 50
 
@@ -70,7 +70,7 @@ public class SoundEngineTest
 
         Agent listener = new AgentImp(new Vector(30, 40), new Vector(), 1, Team.GUARD);
 
-        SoundEngine cornerAimedTracing = new CornerAimedTracing();
+        CornerAimedTracing cornerAimedTracing = new CornerAimedTracing();
 
         HashMap<SoundSource, Sound> soundHashMapBlocked = cornerAimedTracing.compute(map, listener);
 
@@ -101,7 +101,7 @@ public class SoundEngineTest
 
         Agent listener = new AgentImp(new Vector(0, 0), new Vector(), 1, Team.GUARD);
 
-        SoundEngine cornerAimedTracing = new CornerAimedTracing();
+        CornerAimedTracing cornerAimedTracing = new CornerAimedTracing();
 
         HashMap<SoundSource, Sound> soundSourceSoundHashMap = cornerAimedTracing.compute(map, listener);
 

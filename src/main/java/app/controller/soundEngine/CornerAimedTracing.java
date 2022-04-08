@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-public class CornerAimedTracing implements SoundEngine
+public class CornerAimedTracing
 {
     public HashMap<SoundSource, Sound> compute(Map map, Agent agent)
     {
@@ -63,10 +63,11 @@ public class CornerAimedTracing implements SoundEngine
         {
             SoundRay rayToSource = new SoundRay(pos, soundSource.getPosition());
 
-            if(!intersectsAnySoundFurniture(map.getSoundFurniture(), rayToSource))
-            {
-                audible.add(soundSource);
-            }
+            // TODO - Add implementation
+//            if(!intersectsAnySoundFurniture(map.getSoundFurniture(), rayToSource))
+//            {
+//                audible.add(soundSource);
+//            }
         }
 
         return audible;
@@ -74,25 +75,26 @@ public class CornerAimedTracing implements SoundEngine
 
     private ArrayList<Vector> findReachableCorners(Map map, Vector pos)
     {
-        // linked hashset, because order is important
-        LinkedHashSet<Vector> reachable = new LinkedHashSet<>();
-
-        // make sure that each corner can actually hear the source? so maybe store the loudest source in a var
-        for (SoundFurniture soundFurniture: map.getSoundFurniture())
-        {
-            for (SoundBoundary soundBoundary: soundFurniture.getSoundBoundaries())
-            {
-                for (Vector corner: soundBoundary.getCorners())
-                {
-                    SoundRay rayToCorner = new SoundRay(pos, corner);
-                    if(hitsAnyCorner(map.getSoundFurniture(), rayToCorner))
-                    {
-                        reachable.add(corner);
-                    }
-                }
-            }
-        }
-        return new ArrayList<>(reachable);
+//        // linked hashset, because order is important
+//        LinkedHashSet<Vector> reachable = new LinkedHashSet<>();
+//
+//        // make sure that each corner can actually hear the source? so maybe store the loudest source in a var
+//        for (SoundFurniture soundFurniture: map.getSoundFurniture())
+//        {
+//            for (SoundBoundary soundBoundary: soundFurniture.getSoundBoundaries())
+//            {
+//                for (Vector corner: soundBoundary.getCorners())
+//                {
+//                    SoundRay rayToCorner = new SoundRay(pos, corner);
+//                    if(hitsAnyCorner(map.getSoundFurniture(), rayToCorner))
+//                    {
+//                        reachable.add(corner);
+//                    }
+//                }
+//            }
+//        }
+//        return new ArrayList<>(reachable);
+        return null; // TODO - Remove
     }
 
     private boolean hitsAnyCorner(ArrayList<SoundFurniture> soundFurniture, SoundRay soundRay)

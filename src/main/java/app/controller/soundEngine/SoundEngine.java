@@ -5,7 +5,7 @@ import app.model.agents.Agent;
 import app.model.soundSource.SoundSource;
 import java.util.HashMap;
 
-public interface SoundEngine
+public class SoundEngine
 {
-    HashMap<SoundSource, Sound> compute(Map map, Agent agent);
+
 }
