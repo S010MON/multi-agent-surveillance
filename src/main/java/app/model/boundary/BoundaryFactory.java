@@ -4,9 +4,8 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
-
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.function.Predicate;
 
 public abstract class BoundaryFactory
 {
@@ -18,7 +17,7 @@ public abstract class BoundaryFactory
         objects.add(create(obj.getType(), corner[1], corner[2], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[2], corner[3], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[3], corner[0], obj.getTeleportTo()));
-        return objects;
+        return (ArrayList<Boundary>) objects.stream().filter(Predicate.not(null));
     }
 
     private static Boundary create(FurnitureType f, Vector a, Vector b, Vector teleport)
