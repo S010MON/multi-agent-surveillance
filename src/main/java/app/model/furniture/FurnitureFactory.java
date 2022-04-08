@@ -4,7 +4,6 @@ import app.controller.settings.SettingsObject;
 import app.model.boundary.BoundaryFactory;
 import app.model.soundBoundary.SoundBoundaryFactory;
 import app.model.texture.TextureFactory;
-import javafx.geometry.Rectangle2D;
 
 public abstract class FurnitureFactory
 {
