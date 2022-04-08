@@ -16,19 +16,6 @@ public abstract class RayScatter
         return rays;
     }
 
-    public static ArrayList<Ray> angle360(Vector origin, int noOfRays, double maxDist)
-    {
-        ArrayList<Ray> rays = new ArrayList<>();
-        Vector dir = new Vector(0,maxDist);
-        int increment = 360/noOfRays;
-        
-        for(int i = 0; i < 360; i += increment)
-        {
-            rays.add(new Ray(origin, origin.add(dir.rotate(i))));
-        }
-        return rays;
-    }
-
     public static ArrayList<Ray> angle(Vector origin, Vector direction, double angle)
     {
         ArrayList<Ray> rays = new ArrayList<>();
