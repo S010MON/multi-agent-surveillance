@@ -18,7 +18,6 @@ public abstract class BoundaryFactory
         objects.add(create(obj.getType(), corner[1], corner[2], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[2], corner[3], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[3], corner[0], obj.getTeleportTo()));
-        objects.removeAll(Collections.singleton(null));
         return objects;
     }
 
@@ -31,7 +30,7 @@ public abstract class BoundaryFactory
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }
-        return null; // Only for SIREN (SoundSource)
+        return null;
     }
 
     private static Vector[] cornersOf(Rectangle2D r)
