@@ -1,10 +1,8 @@
 package app.controller.soundEngine;
 
-import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Agent;
-import app.model.boundary.Boundary;
 import app.model.soundBoundary.SoundBoundary;
 import java.util.ArrayList;
 
