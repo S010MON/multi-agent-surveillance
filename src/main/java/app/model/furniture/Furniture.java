@@ -17,5 +17,7 @@ public interface Furniture
 
     ArrayList<Boundary> getBoundaries();
 
+    ArrayList<SoundBoundary> getSoundBoundaries();
+
     void setTexture(Texture texture);
 }
