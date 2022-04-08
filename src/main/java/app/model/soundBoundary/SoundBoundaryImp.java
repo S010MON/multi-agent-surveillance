@@ -39,13 +39,13 @@ public class SoundBoundaryImp implements SoundBoundary
     @Override
     public Vector intersection(SoundRay soundRay)
     {
-        return Intersection.findIntersection(a,b,soundRay.getStart(), soundRay.getEnd());
+        return Intersection.findIntersection(a,b,soundRay.getU(), soundRay.getV());
     }
 
     @Override
     public boolean intersects(SoundRay soundRay)
     {
-        return Intersection.hasIntersection(a,b,soundRay.getStart(), soundRay.getEnd());
+        return Intersection.hasIntersection(a,b,soundRay.getU(), soundRay.getV());
     }
 
     @Override

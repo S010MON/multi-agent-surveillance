@@ -123,7 +123,7 @@ public abstract class Intersection
     public static Vector findIntersection(SoundRay r1, SoundRay r2)
     {
         // segment-segment intersection
-        return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
+        return findIntersection(r1.getU(), r1.getV(), r2.getU(), r2.getV());
     }
 
     public static boolean hasIntersection(Vector A, Vector B, Vector center, double radius)

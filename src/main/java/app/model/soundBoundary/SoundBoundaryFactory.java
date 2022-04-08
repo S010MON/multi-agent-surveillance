@@ -7,6 +7,7 @@ import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class SoundBoundaryFactory
 {
@@ -18,16 +19,15 @@ public abstract class SoundBoundaryFactory
         objects.add(create(obj.getType(), corner[1], corner[2]));
         objects.add(create(obj.getType(), corner[2], corner[3]));
         objects.add(create(obj.getType(), corner[3], corner[0]));
+        objects.removeAll(Collections.singleton(null));
         return objects;
     }
 
     private static SoundBoundary create(FurnitureType f, Vector a, Vector b)
     {
-        // right now they all refer to the same boundary type, but this way it allows for more flexibility later on if we decide to implement weirder sound boundaries
         switch (f)
         {
-            case WALL, TOWER -> { return new SoundBoundaryImp(a, b);}
-            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS, PORTAL -> { return new SoundBoundaryImp(a, b);}
+            case WALL, TOWER, SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS, PORTAL-> { return new SoundBoundaryImp(a, b);}
         }
         return null;
     }

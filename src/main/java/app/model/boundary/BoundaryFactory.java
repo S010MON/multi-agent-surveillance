@@ -5,7 +5,7 @@ import app.controller.settings.SettingsObject;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
-import java.util.function.Predicate;
+import java.util.Collections;
 
 public abstract class BoundaryFactory
 {
@@ -17,7 +17,8 @@ public abstract class BoundaryFactory
         objects.add(create(obj.getType(), corner[1], corner[2], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[2], corner[3], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[3], corner[0], obj.getTeleportTo()));
-        return (ArrayList<Boundary>) objects.stream().filter(Predicate.not(null));
+        objects.removeAll(Collections.singleton(null));
+        return objects;
     }
 
     private static Boundary create(FurnitureType f, Vector a, Vector b, Vector teleport)
