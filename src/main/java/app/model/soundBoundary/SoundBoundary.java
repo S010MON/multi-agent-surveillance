@@ -9,7 +9,6 @@ public interface SoundBoundary
 {
     ArrayList<Vector> getCorners();
 
-    // for testing
     void draw(GraphicsContext gc);
 
     Vector intersection(SoundRay soundRay);
