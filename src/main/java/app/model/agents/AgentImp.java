@@ -24,6 +24,7 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
+    @Getter protected ArrayList<Vector> hearing;
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
@@ -60,6 +61,12 @@ public class AgentImp implements Agent
 
         if(agentViewWindow != null)
             agentViewWindow.update();
+    }
+
+    @Override
+    public void updateHeard(ArrayList<Vector> hearing)
+    {
+        this.hearing = hearing;
     }
 
     @Override
