@@ -3,6 +3,7 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.VectorSet;
+import app.controller.soundEngine.SoundRay;
 import app.model.boundary.Boundary;
 import app.model.Move;
 import app.view.agentView.AgentView;
@@ -32,9 +33,9 @@ public interface Agent extends Boundary
 
     void updateView(ArrayList<Ray> view);
 
-    void updateHeard(ArrayList<Vector> points);
+    void updateHeard(ArrayList<SoundRay> points);
 
-    ArrayList<Vector> getHearing();
+    ArrayList<SoundRay> getHearing();
 
     double getRadius();
 

@@ -3,6 +3,7 @@ package app.view.simulation;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
 import app.model.Map;
 import app.model.Trail;
 import app.model.agents.Agent;
@@ -70,12 +71,9 @@ public class Renderer extends Canvas
         rays.forEach(e -> e.draw(gc));
     }
 
-    private void drawSounds(GraphicsContext gc, ArrayList<Vector> vectors)
+    private void drawSounds(GraphicsContext gc, ArrayList<SoundRay> rays)
     {
-        vectors.forEach(v -> {
-            gc.setFill(Color.GREEN);
-            gc.fillOval(v.getX() - 5, v.getY() - 5, 10, 10);
-        });
+        rays.forEach(r -> r.draw(gc));
     }
 
     private void drawBackground(GraphicsContext gc)

@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
+import app.controller.soundEngine.SoundRay;
 import app.model.Move;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -24,7 +25,7 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
-    @Getter protected ArrayList<Vector> hearing;
+    @Getter protected ArrayList<SoundRay> hearing;
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
@@ -65,7 +66,7 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public void updateHeard(ArrayList<Vector> hearing)
+    public void updateHeard(ArrayList<SoundRay> hearing)
     {
         this.hearing = hearing;
     }
