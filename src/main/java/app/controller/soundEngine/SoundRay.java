@@ -22,4 +22,9 @@ public class SoundRay extends Ray
         this.colour = Color.BLUE;
         this.bounces = bounces;
     }
+
+    public String toString()
+    {
+        return "ang:" + angle() + " u:" + getU().toString() + " v:" + getV().toString() + " bouuces:" + bounces;
+    }
 }
