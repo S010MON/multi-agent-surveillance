@@ -27,7 +27,10 @@ public class SoundEngine
             else if(bdyIntersection != null)
             {
                 if(r.getBounces() > 0)
+                {
+                    Vector new_origin = r.getU().add(new Vector(1,1));
                     rays.addAll(SoundRayScatter.angle360(r.getU(), 10, 1000));
+                }
                 output.add(bdyIntersection);
             }
             else if(agentIntersection != null)
