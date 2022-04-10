@@ -1,14 +1,14 @@
 package app.controller.soundEngine;
 
 import app.controller.linAlg.Vector;
-import java.util.ArrayList;
+import java.util.Stack;
 
 public class SoundRayScatter
 {
     private static final int bounces = 2;
-    public static ArrayList<SoundRay> angle360(Vector origin, int noOfRays, double maxDist)
+    public static Stack<SoundRay> angle360(Vector origin, int noOfRays, double maxDist)
     {
-        ArrayList<SoundRay> rays = new ArrayList<>();
+        Stack<SoundRay> rays = new Stack<>();
         Vector dir = new Vector(0,maxDist);
         int increment = 360/noOfRays;
 

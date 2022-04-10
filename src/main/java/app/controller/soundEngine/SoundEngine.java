@@ -5,6 +5,7 @@ import app.model.Map;
 import app.model.agents.Agent;
 import app.model.soundBoundary.SoundBoundary;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class SoundEngine
 {
@@ -12,19 +13,21 @@ public class SoundEngine
     {
         ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<Vector> output = new ArrayList<>();
-        ArrayList<SoundRay> rays = SoundRayScatter.angle360(origin, 10, 5);
+        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, 10, 1000);
 
-        for(SoundRay r: rays)
+        while(!rays.isEmpty())
         {
+            SoundRay r = rays.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
             Vector bdyIntersection = getIntersection(r, boundaries);
 
             if(bdyIntersection != null && agentIntersection != null)
-                output.add(closestPoint(origin, agentIntersection, bdyIntersection));
+                output.add(closestPoint(r.getU(), agentIntersection, bdyIntersection));
 
             else if(bdyIntersection != null)
             {
-                // TODO if the ray has bounces left, spawn more rays
+                if(r.getBounces() > 0)
+                    rays.addAll(SoundRayScatter.angle360(r.getU(), 10, 1000));
                 output.add(bdyIntersection);
             }
             else if(agentIntersection != null)
