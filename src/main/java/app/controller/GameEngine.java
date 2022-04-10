@@ -40,6 +40,7 @@ public class GameEngine
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
+        map.getAgents().forEach(a -> map.checkForCapture(a));
 
         for (Agent a : map.getAgents())
         {
@@ -68,6 +69,7 @@ public class GameEngine
         }
         tics++;
         renderer.render();
+        map.garbageCollection();
     }
 
     public void handleKey(KeyEvent e)
