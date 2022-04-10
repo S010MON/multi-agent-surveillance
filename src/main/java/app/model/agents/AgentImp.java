@@ -36,6 +36,7 @@ public class AgentImp implements Agent
         this.team = team;
         view = new ArrayList<>();
         seen = new VectorSet();
+        hearing = new ArrayList<>();
     }
 
     @Override
@@ -67,12 +68,6 @@ public class AgentImp implements Agent
     public void updateHeard(ArrayList<Vector> hearing)
     {
         this.hearing = hearing;
-    }
-
-    @Override
-    public double getHearing()
-    {
-        return 0;
     }
 
     @Override

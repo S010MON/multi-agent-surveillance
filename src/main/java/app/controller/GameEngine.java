@@ -3,6 +3,7 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundEngine;
 import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
@@ -38,6 +39,7 @@ public class GameEngine
     public void tick()
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
+        map.getAgents().forEach(a -> a.updateHeard(SoundEngine.compute(map, a.getPosition())));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
 

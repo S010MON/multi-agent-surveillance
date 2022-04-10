@@ -53,6 +53,7 @@ public class Renderer extends Canvas
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
+        map.getAgents().forEach(e -> drawSounds(gc, e.getHearing()));
         map.getAgents().forEach(e -> e.draw(gc));
 
         drawMiniMapGuard(gc);
@@ -67,6 +68,14 @@ public class Renderer extends Canvas
     private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
     {
         rays.forEach(e -> e.draw(gc));
+    }
+
+    private void drawSounds(GraphicsContext gc, ArrayList<Vector> vectors)
+    {
+        vectors.forEach(v -> {
+            gc.setFill(Color.GREEN);
+            gc.fillOval(v.getX() - 5, v.getY() - 5, 10, 10);
+        });
     }
 
     private void drawBackground(GraphicsContext gc)

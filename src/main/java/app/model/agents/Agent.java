@@ -34,7 +34,7 @@ public interface Agent extends Boundary
 
     void updateHeard(ArrayList<Vector> points);
 
-    double getHearing();
+    ArrayList<Vector> getHearing();
 
     double getRadius();
 
