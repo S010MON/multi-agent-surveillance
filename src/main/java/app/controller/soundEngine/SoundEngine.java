@@ -13,7 +13,7 @@ public class SoundEngine
     {
         ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
-        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, 10, 1000, 3);
+        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, 11, 1000, 3);
 
         while(!rays.isEmpty())
         {
@@ -24,14 +24,19 @@ public class SoundEngine
             if(bdyIntersection != null && agentIntersection != null)
             {
                 output.add(new SoundRay(r.getU(), bdyIntersection));
+                if(r.getBounces() > 0)
+                {
+                    Vector new_origin = bouncePoint(bdyIntersection, r.getU());
+                    rays.addAll(SoundRayScatter.angle360(new_origin, 11, 1000, r.getBounces()));
+                }
                 output.add(new SoundRay(r.getU(), agentIntersection));
             }
             else if(bdyIntersection != null)
             {
                 if(r.getBounces() > 0)
                 {
-                    Vector new_origin = r.getU().add(new Vector(1,1));
-                    rays.addAll(SoundRayScatter.angle360(new_origin, 10, 1000, r.getBounces()));
+                    Vector new_origin = bouncePoint(bdyIntersection, r.getU());
+                    rays.addAll(SoundRayScatter.angle360(new_origin, 11, 1000, r.getBounces()));
                 }
                 output.add(new SoundRay(r.getU(), bdyIntersection));
             }
@@ -95,5 +100,15 @@ public class SoundEngine
             return a;
         else
             return b;
+    }
+
+    /**
+     * @return the intersection vector with a miniscule shift back to the origin
+     */
+    private static Vector bouncePoint(Vector intersection, Vector origin)
+    {
+        Vector u = intersection.sub(origin);
+        u = u.normalise();
+        return intersection.sub(u);
     }
 }
