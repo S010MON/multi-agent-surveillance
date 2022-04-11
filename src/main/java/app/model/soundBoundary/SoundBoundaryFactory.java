@@ -27,7 +27,8 @@ public abstract class SoundBoundaryFactory
     {
         switch (f)
         {
-            case WALL, TOWER, SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS, PORTAL-> { return new SoundBoundaryImp(a, b);}
+            case WALL, TOWER, SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS, PORTAL, BORDER
+                    -> { return new SoundBoundaryImp(a, b);}
         }
         return null;
     }

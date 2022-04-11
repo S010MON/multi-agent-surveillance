@@ -12,6 +12,7 @@ import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.model.soundSource.SoundSource;
+import app.model.soundSource.SoundSourceBase;
 import app.model.soundSource.SoundSourceFactory;
 import app.model.soundSource.SoundSourceType;
 import app.view.simulation.Info;
@@ -54,9 +55,9 @@ public class Map
         addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
 
-        /* Make some sound sources */
+        /* Make a test sound source */
         soundSources = new ArrayList<>();
-        settings.getSoundSources().forEach(e -> addSoundSource(e));
+        soundSources.add(new SoundSourceBase(new Vector(900, 500)));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();
@@ -131,12 +132,6 @@ public class Map
             case TARGET -> target = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
-    }
-
-    public void addSoundSource(SettingsObject obj)
-    {
-        // TODO for now?
-        this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
     public void updateAllSeen(Agent agent)

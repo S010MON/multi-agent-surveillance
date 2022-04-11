@@ -9,7 +9,7 @@ public abstract class SoundSourceFactory
         // right now they all refer to the same boundary type, but this way it allows for more flexibility later on if we decide to implement weirder sound boundaries
         switch (f)
         {
-            case SIREN -> { return new SoundSourceBase(a, amplitude);}
+            case SIREN -> { return new SoundSourceBase(a);}
         }
         return null;
     }

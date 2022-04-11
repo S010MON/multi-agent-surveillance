@@ -9,11 +9,14 @@ import java.util.Stack;
 
 public class SoundEngine
 {
+    final static int noOfRays = 5;
+    final static int noOfBounces = 5;
+
     public static ArrayList<SoundRay> compute(Map map, Vector origin)
     {
         ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
-        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, 11, 1000, 3);
+        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, noOfRays, 1000, noOfBounces);
 
         while(!rays.isEmpty())
         {
@@ -27,7 +30,7 @@ public class SoundEngine
                 if(r.getBounces() > 0)
                 {
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, 11, 1000, r.getBounces()));
+                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
                 }
                 output.add(new SoundRay(r.getU(), agentIntersection));
             }
@@ -36,7 +39,7 @@ public class SoundEngine
                 if(r.getBounces() > 0)
                 {
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, 11, 1000, r.getBounces()));
+                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
                 }
                 output.add(new SoundRay(r.getU(), bdyIntersection));
             }

@@ -39,7 +39,7 @@ public class GameEngine
     public void tick()
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        map.getAgents().forEach(a -> a.updateHeard(SoundEngine.compute(map, a.getPosition())));
+        map.getSoundSources().forEach(s -> s.setRays(SoundEngine.compute(map, s.getPosition())));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
 

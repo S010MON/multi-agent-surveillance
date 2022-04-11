@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class AgentImp implements Agent
 {
-    @Getter @Setter protected double maxWalk = 5;
-    @Getter @Setter protected double maxSprint = 10;
+    @Getter @Setter protected double maxWalk = 10;
+    @Getter @Setter protected double maxSprint = 30;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
     @Getter protected Team team;

@@ -19,21 +19,9 @@ public class Sound
         this.listenerPos = listenerPos;
 
         direction = origin.sub(listenerPos);
-        amplitude = soundSource.soundLevelFrom(listenerPos, diffractionCount);
+
     }
 
-    // if the new amplitude is higher than the old one update the origin of the sound and the diffractioncount
-    // TODO find more descriptive name
-    public void update(Vector origin, int diffractionCount)
-    {
-        double newAmp = soundSource.soundLevelFrom(listenerPos, diffractionCount);
-
-        if(Double.compare(newAmp, amplitude) > 0)
-        {
-            direction = origin.sub(listenerPos);
-            amplitude = newAmp;
-        }
-    }
 
     @Override
     public boolean equals(Object o)

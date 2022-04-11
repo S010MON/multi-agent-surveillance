@@ -1,22 +1,28 @@
 package app.model.soundSource;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
+import javafx.scene.canvas.GraphicsContext;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+import java.util.ArrayList;
+
+
 public class SoundSourceBase implements SoundSource
 {
     @Getter private Vector position;
-    private double amplitude;
+    @Setter @Getter private ArrayList<SoundRay> rays;
 
-    @Override
-    public double soundLevelFrom(Vector listener, int diffractionCount)
+    public SoundSourceBase(Vector position)
     {
-            // this could be put this input a config
-            double dropOff = 1.0;
-            double diffractionPenalty = 0.05;
-            double dist = listener.dist(this.position);
-            return Math.max(this.amplitude - dist * dropOff,0.0) * Math.pow(1+diffractionPenalty, -diffractionCount);
+        this.position = position;
+        this.rays = new ArrayList<>();
+    }
+
+    public void draw(GraphicsContext gc)
+    {
+        rays.forEach(r -> r.draw(gc));
     }
 }

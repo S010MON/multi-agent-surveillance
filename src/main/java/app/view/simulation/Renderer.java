@@ -8,6 +8,7 @@ import app.model.Map;
 import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.agents.Team;
+import app.model.soundSource.SoundSource;
 import app.view.ScreenSize;
 import app.view.agentView.AgentView;
 import javafx.geometry.Point2D;
@@ -51,10 +52,10 @@ public class Renderer extends Canvas
         drawBackground(gc);
 
         map.drawIndicatorBoxes(gc);
+        map.getSoundSources().forEach(e -> e.draw(gc));
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
-        map.getAgents().forEach(e -> drawSounds(gc, e.getHearing()));
         map.getAgents().forEach(e -> e.draw(gc));
 
         drawMiniMapGuard(gc);
@@ -69,11 +70,6 @@ public class Renderer extends Canvas
     private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)
     {
         rays.forEach(e -> e.draw(gc));
-    }
-
-    private void drawSounds(GraphicsContext gc, ArrayList<SoundRay> rays)
-    {
-        rays.forEach(r -> r.draw(gc));
     }
 
     private void drawBackground(GraphicsContext gc)
