@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
 import javafx.geometry.Rectangle2D;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -92,8 +93,6 @@ public class FileParserTest
         assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
         assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
         assertEquals("teleport", s.getFurniture().get(6).getType().label);
-
-        Map map = new Map(s);
     }
 
     @Test void testCreationOfSettingsNewMapWithComments()
@@ -119,7 +118,5 @@ public class FileParserTest
         assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
         assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
         assertEquals("teleport", s.getFurniture().get(6).getType().label);
-
-        Map map = new Map(s);
     }
 }

@@ -25,28 +25,28 @@ public class WallFollowAgent extends AgentImp
         RIGHT,
         NO_TURN,
     }
+    @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
-    private int maxViewingDistance = 10;
-    @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean wallEncountered = false;
+    private int maxViewingDistance = 10;
     public static Map map;
     @Getter private final app.model.agents.WallFollow.BooleanCellGraph<BooleanCell, DefaultEdge> cellGraph;
     private boolean initialVertexFound = false;  // pheromone 1
     private BooleanCell tempAgentCell;
     private boolean agentNotInitialized = true;
     private boolean noMovesDone = true;
-    private final List<Vector> directions = Arrays.asList(new Vector(0,1),
-                                                    new Vector(1,0),
-                                                    new Vector(0,-1),
-                                                    new Vector(-1,0));
-    private List<BooleanCell> currentPathToNextVertex = null;
-    private BooleanCell currentTargetVertex = null;
-    private ArrayList<BooleanCell> inaccessibleCells = new ArrayList<>();
     private boolean explorationDone = false;
+    private BooleanCell currentTargetVertex = null;
+    private List<BooleanCell> currentPathToNextVertex = null;
+    private ArrayList<BooleanCell> inaccessibleCells = new ArrayList<>();
     private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();  // pheromone 2
     private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();  // pheromone 2
+    private final List<Vector> directions = Arrays.asList(new Vector(0,1),
+            new Vector(1,0),
+            new Vector(0,-1),
+            new Vector(-1,0));
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Team team)
     {
