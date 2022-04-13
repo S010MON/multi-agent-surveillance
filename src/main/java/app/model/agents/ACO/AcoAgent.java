@@ -1,6 +1,55 @@
 package app.model.agents.ACO;
 
-public class AcoAgent
-{
+import app.controller.linAlg.Vector;
+import app.model.Move;
+import app.model.agents.AgentImp;
+import app.model.agents.Cells.GraphCell;
+import app.model.agents.MemoryGraph;
+import app.model.agents.Team;
+import app.model.agents.WallFollow.WfWorld;
+import lombok.Getter;
+import lombok.Setter;
+import org.jgrapht.graph.DefaultEdge;
 
+import java.util.Random;
+
+public class AcoAgent extends AgentImp
+{
+    //General
+    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world = new AcoWorld();
+    @Getter private static int acoAgentCount;
+    @Getter private static int acoMoveCount;
+
+    @Getter private double maxPheromone = 2;
+    private Random randomGenerator = new Random(1);
+    private int[] cardinalAngles = {0, 90, 180, 270};
+
+    private Vector targetDirection;
+
+    public AcoAgent(Vector position, Vector direction, double radius, Team team)
+    {
+        super(position, direction, radius, team);
+        targetDirection = direction;
+
+        world.addVertex(position, false, true, maxPheromone);
+        acoAgentCount ++;
+        acoMoveCount ++;
+    }
+
+    @Override
+    public Move move()
+    {
+        return null;
+    }
+
+    @Override
+    public void updateLocation(Vector endPoint)
+    {
+
+    }
+
+    public void acceptWorld(WfWorld wfWorld)
+    {
+        world = wfWorld;
+    }
 }

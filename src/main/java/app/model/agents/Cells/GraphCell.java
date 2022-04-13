@@ -1,5 +1,6 @@
 package app.model.agents.Cells;
 
+import app.controller.linAlg.Vector;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,32 +9,33 @@ public class GraphCell
     //General
     @Getter private int x;
     @Getter private int y;
-    private String XY;
+    @Getter private String XY;
 
     //WF
     @Getter @Setter Boolean obstacle;
-    private Boolean occupied;
+    @Getter @Setter private Boolean occupied;
 
     //ACO
     @Getter @Setter private double pheromone;
     private double evaporationConstant = 0.001;
 
-    public GraphCell(int x, int y)
+    public GraphCell(Vector position)
     {
-        setGeneralInfo(x, y);
+        setGeneralInfo(position);
     }
 
-    public GraphCell(int x, int y, boolean obstacle, boolean occupied)
+    public GraphCell(Vector position, boolean obstacle, boolean occupied, double pheromone)
     {
-        setGeneralInfo(x, y);
+        setGeneralInfo(position);
         this.obstacle = obstacle;
         this.occupied = occupied;
+        this.pheromone = pheromone;
     }
 
-    public void setGeneralInfo(int x, int y)
+    public void setGeneralInfo(Vector position)
     {
-        this.x = x;
-        this.y = y;
+        this.x = (int)position.getX();
+        this.y = (int)position.getY();
         this.XY = x + " " + y;
     }
 
