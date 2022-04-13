@@ -9,7 +9,6 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Stack;
 
-
 public class AcoAgentLimitedVision extends AcoAgent360Vision
 {
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
