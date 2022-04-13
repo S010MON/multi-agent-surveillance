@@ -21,7 +21,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -72,58 +71,41 @@ public class Map
         guardsSeen = new VectorSet();
         intrudersSeen = new VectorSet();
 
-        // On creation add the right number of guards
+        /* On creation add the right number of guards */
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            if(srt != null)
-            {
-                Vector dir = randDirection();
-                Agent guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
-                guard.setMaxWalk(settings.getWalkSpeedGuard());
-                guard.setMaxSprint(settings.getSprintSpeedGuard());
-                agents.add(guard);
-            }
+            Vector dir = randDirection();
+            Agent guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
+            guard.setMaxWalk(settings.getWalkSpeedGuard());
+            guard.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(guard);
         }
 
-        // On creation add the right number of infiltrators
+        /* On creation add the right number of infiltrators */
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
-            if(srt != null)
-            {
-                Vector dir = randDirection();
-                Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
-                intruder.setTgtDirection(targetDirection(srt));
-                intruder.setMaxWalk(settings.getWalkSpeedIntruder());
-                intruder.setMaxSprint(settings.getSprintSpeedIntruder());
-                agents.add(intruder);
-            } else
-            {
-                i = settings.getNoOfIntruders();
-            }
+            Vector dir = randDirection();
+            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            intruder.setMaxWalk(settings.getWalkSpeedIntruder());
+            intruder.setMaxSprint(settings.getSprintSpeedIntruder());
+            agents.add(intruder);
         }
 
-        if(HUMAN_ACTIVE && intruderSpawn != null)
+        if (HUMAN_ACTIVE)
         {
             Vector humanStart = randPosition(intruderSpawn);
-            if(humanStart != null)
-            {
-                human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
-                //Assumes the human is a guard
-                human.setMaxWalk(settings.getWalkSpeedGuard());
-                human.setMaxSprint(settings.getSprintSpeedGuard());
-                agents.add(human);
-            }
+            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            human.setMaxWalk(settings.getWalkSpeedGuard());
+            human.setMaxSprint(settings.getSprintSpeedGuard());
+            agents.add(human);
         }
 
         this.coverage = new Coverage(this);
-        System.out.println("done.");
+        System.out.print(" done");
     }
 
-    /**
-     * Only for testing, delete later
-     */
     public Map(Agent agent, ArrayList<Furniture> obstacles)
     {
         agents = new ArrayList<>();
@@ -156,7 +138,6 @@ public class Map
 
     public void addSoundSource(SettingsObject obj)
     {
-        // TODO for now?
         this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
@@ -258,33 +239,18 @@ public class Map
     private Vector randPosition(Rectangle2D r)
     {
         Vector v;
-        int tries = 0;
-        try
+        do
         {
-            do
-            {
-                tries++;
-                double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
-                double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
-                v = new Vector(x, y);
-                if(tries > 500)
-                {
-                    throw new RuntimeException("SpawnArea not big enough for number of agents");
-                }
-            } while(!clearSpot(v));
-
-            return v;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+            double x = r.getMinX() + (Math.random() * (r.getMaxX() - r.getMinX()));
+            double y = r.getMinY() + (Math.random() * (r.getMaxY() - r.getMinY()));
+            v = new Vector(x, y);
+        } while(!clearSpot(v));
+        return v;
     }
 
     private boolean clearSpot(Vector v)
     {
-        for(Agent agent : agents)
+        for(Agent agent: agents)
         {
             double dist = agent.getPosition().dist(v);
             if(dist < 2 * agent.getRadius())
