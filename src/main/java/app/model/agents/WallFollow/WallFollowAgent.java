@@ -192,7 +192,6 @@ public class WallFollowAgent extends AgentImp
                 wallEncountered = true;
                 cellGraph.setInitialWallFollowPos(cellGraph.getAgentPos());
             }
-            //if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle()) {
             else
             {
                 if (DEBUG) {
@@ -591,6 +590,7 @@ public class WallFollowAgent extends AgentImp
 
     public void markWallAsCovered()
     {
+        // TODO implement pheromone smell here?
         BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
         if (forwardCell.getX() == cellGraph.getAgentPos().getX())
         {
@@ -695,6 +695,14 @@ public class WallFollowAgent extends AgentImp
         throw new RuntimeException("Checking vertex that is behind agent but cannot actually see behind!");
     }
 
+    /**
+     * Give vertex a direction score for heuristic's algorithm.
+     * If vertex is towards the direction agent is currently facing at, give highest score.
+     * If vertex is to the left or right of agent, give middle score.
+     * If vertex is bbehing agent, give lowest score.
+     * @param targetVertex vertex to give the score to.
+     * @return the direction score (1 or 2 or 3)
+     */
     public int getDirectionScore(BooleanCell targetVertex)
     {
         Vector targetVector = new Vector(targetVertex.getX(),targetVertex.getY());

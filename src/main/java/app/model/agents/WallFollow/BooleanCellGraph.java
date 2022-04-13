@@ -171,15 +171,4 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
         }
         return true;
     }
-
-    public void moveAgentBack()
-    {
-        if (lastPositions.size() >= 3) {
-            agentPos.setObstacle(true);
-            agentPos = prevAgentVertex;
-            lastPositions.remove(lastPositions.size()-1);
-            prevAgentVertex = lastPositions.get(lastPositions.size()-2);
-        }
-
-    }
 }
