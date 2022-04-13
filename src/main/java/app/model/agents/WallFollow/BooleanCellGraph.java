@@ -158,7 +158,7 @@ public class BooleanCellGraph<Object,DefaultEdge> extends SimpleGraph
 
     public boolean agentStuckInVertex()
     {
-        if (lastPositions.size() < 5)
+        if (lastPositions.size() < 8)
         {
             return false;
         }
