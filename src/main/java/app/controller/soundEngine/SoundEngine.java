@@ -9,12 +9,11 @@ import java.util.Stack;
 
 public class SoundEngine
 {
-    final static int noOfRays = 5;
-    final static int noOfBounces = 5;
+    final static int noOfRays = 10;
+    final static int noOfBounces = 4;
 
     public static ArrayList<SoundRay> compute(Map map, Vector origin)
     {
-        ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
         Stack<SoundRay> rays = SoundRayScatter.angle360(origin, noOfRays, 1000, noOfBounces);
 
@@ -22,7 +21,7 @@ public class SoundEngine
         {
             SoundRay r = rays.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
-            Vector bdyIntersection = getIntersection(r, boundaries);
+            Vector bdyIntersection = getIntersection(r, map.getSoundBoundaries());
 
             if(bdyIntersection != null && agentIntersection != null)
             {
@@ -47,6 +46,15 @@ public class SoundEngine
                 output.add(new SoundRay(r.getU(), agentIntersection));
         }
         return output;
+    }
+
+    private static void diffuse(Map map, ArrayList<SoundRay> rays, ArrayList<SoundBoundary> boundaries)
+    {
+        for(SoundRay r: rays)
+        {
+            Vector agentIntersection = getAgentIntersection(r, map.getAgents());
+            Vector bdyIntersection = getIntersection(r, boundaries);
+        }
     }
 
     private static Vector getIntersection(SoundRay r, ArrayList<SoundBoundary> boundaries)
@@ -87,14 +95,6 @@ public class SoundEngine
             }
         }
         return intersection;
-    }
-
-    private static ArrayList<SoundBoundary> collectSoundBoundaries(Map map)
-    {
-        ArrayList<SoundBoundary> soundBoundaries = new ArrayList<>();
-        map.getFurniture()
-           .forEach(furniture -> soundBoundaries.addAll(furniture.getSoundBoundaries()));
-        return soundBoundaries;
     }
 
     private static Vector closestPoint(Vector origin, Vector a, Vector b)

@@ -11,6 +11,7 @@ import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
+import app.model.soundBoundary.SoundBoundary;
 import app.model.soundSource.SoundSource;
 import app.model.soundSource.SoundSourceBase;
 import app.model.soundSource.SoundSourceFactory;
@@ -147,6 +148,13 @@ public class Map
         ArrayList<Boundary> boundaries = new ArrayList<>();
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
+    }
+
+    public ArrayList<SoundBoundary> getSoundBoundaries()
+    {
+        ArrayList<SoundBoundary> soundBoundaries = new ArrayList<>();
+        furniture.forEach(furniture -> soundBoundaries.addAll(furniture.getSoundBoundaries()));
+        return soundBoundaries;
     }
 
     public void drawIndicatorBoxes(GraphicsContext gc)

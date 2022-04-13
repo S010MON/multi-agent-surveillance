@@ -1,45 +1,104 @@
 package app.controller.soundEngine;
 
 import app.controller.linAlg.Vector;
-import app.model.soundSource.SoundSource;
-import java.util.Objects;
+import java.util.ArrayList;
+
+import app.model.Map;
+import app.model.agents.Agent;
+import app.model.soundBoundary.SoundBoundary;
 import lombok.Getter;
 
 public class Sound
 {
-    @Getter private SoundSource soundSource;
+    private final int bounceLimit = 3;
+    private final int noOfRays = 11;
+    private final double maxDist = 1000;
+
+    @Getter private Vector location;
     @Getter private double amplitude;
-    @Getter private Vector direction;
-    private Vector listenerPos;
+    @Getter private int bounces;
+    @Getter private Sound parent;
+    @Getter private ArrayList<Sound> children;
+    private ArrayList<SoundRay> rays;
+    private Map map;
 
-    // origin can either be the position of the sound source or the last diffraction corner
-    public Sound(SoundSource soundSource, Vector listenerPos, Vector origin, int diffractionCount)
+    public Sound(Map map, Vector location, double amplitude, Sound parent)
     {
-        this.soundSource = soundSource;
-        this.listenerPos = listenerPos;
+        this.location = location;
+        this.amplitude = amplitude;
+        this.parent = parent;
+        this.map = map;
+        children = new ArrayList<>();
 
-        direction = origin.sub(listenerPos);
-
+        if(parent == null)
+            this.bounces = 0;
+        else
+            this.bounces = parent.getBounces() + 1;
     }
 
-
-    @Override
-    public boolean equals(Object o)
+    private ArrayList<Sound> scatter()
     {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Sound sound = (Sound) o;
-        return Double.compare(sound.amplitude, amplitude) == 0 &&
-                soundSource.equals(sound.soundSource) &&
-                direction.equals(sound.direction) &&
-                listenerPos.equals(sound.listenerPos);
+        double rand = 360 * Math.random();
+        Vector dir = new Vector(0,maxDist).rotate(rand);
+        int increment = 360/noOfRays;
+
+        for(int i = 0; i < 360; i += increment)
+        {
+            rays.add(new SoundRay(location, location.add(dir.rotate(i))));
+        }
+
+        for(SoundRay ray: rays)
+        {
+            Vector agentIntersection = getAgentIntersection(ray, map.getAgents());
+            Vector bdyIntersection = getIntersection(ray, map.getSoundBoundaries());
+
+            if(agentIntersection != null && bdyIntersection != null)
+            {
+
+            }
+
+        }
+        return null;
     }
 
-    @Override
-    public int hashCode()
+    private static Vector getIntersection(SoundRay r, ArrayList<SoundBoundary> boundaries)
     {
-        return Objects.hash(soundSource, amplitude, direction, listenerPos);
+        Vector intersection = null;
+        double closestDist = Double.MAX_VALUE;
+        for (SoundBoundary obj: boundaries)
+        {
+            if(obj.intersects(r))
+            {
+                Vector currentV = obj.intersection(r);
+                double dist = r.getU().dist(currentV);
+                if(dist < closestDist)
+                {
+                    intersection = currentV;
+                    closestDist = dist;
+                }
+            }
+        }
+        return intersection;
     }
+
+    private static Vector getAgentIntersection(SoundRay r, ArrayList<Agent> agents)
+    {
+        Vector intersection = null;
+        double closestDist = Double.MAX_VALUE;
+        for (Agent agent: agents)
+        {
+            if (agent.isHit(r))
+            {
+                Vector currentV = agent.intersection(r);
+                double dist = r.getU().dist(currentV);
+                if (dist < closestDist && currentV.getAngle() == r.angle())
+                {
+                    intersection = currentV;
+                    closestDist = dist;
+                }
+            }
+        }
+        return intersection;
+    }
+
 }
