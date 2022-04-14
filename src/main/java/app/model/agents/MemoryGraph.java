@@ -4,21 +4,29 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 
 import lombok.Getter;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
+public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGraph
 {
     @Getter private HashMap<String, GraphCell> vertices = new HashMap<>();
-    @Getter private int travelDistance;
+    private int travelDistance;
+    @Getter private ArrayList<Vector> cardinalVectors = new ArrayList<>();
+
 
     public MemoryGraph(int distance)
     {
-        super(org.jgrapht.graph.DefaultEdge.class);
+        super(org.jgrapht.graph.DefaultWeightedEdge.class);
         this.travelDistance = distance;
+        populateCardinalVectors();
     }
 
+    //Modify to create edges between two cells (Do intrinisically without agent input)
+    // Check existance of neighbouring vertex, if they exist, add edge
     public void add_or_adjust_Vertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
     {
         GraphCell cell = getVertexAt(position);
@@ -34,6 +42,7 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
             addVertex(cell);
 
             vertices.put(keyGenerator(position), cell);
+            connectNeighbouringVertices(cell);
         }
     }
 
@@ -42,6 +51,21 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
         cell.setObstacle(obstacle);
         cell.setOccupied(occupied);
         cell.updatePheromone(pheromone);
+    }
+
+    public void connectNeighbouringVertices(GraphCell currentCell)
+    {
+        Vector currentPosition = currentCell.getPosition();
+        for(Vector cardinal: cardinalVectors)
+        {
+            Vector resultingPosition = currentPosition.add(cardinal);
+            GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
+            if(neighbouringCell != null && !containsEdge(currentCell, neighbouringCell))
+            {
+                DefaultWeightedEdge edge = (DefaultWeightedEdge) this.addEdge(currentCell, neighbouringCell);
+                this.setEdgeWeight(edge, travelDistance);
+            }
+        }
     }
 
     public GraphCell getVertexAt(Vector position)
@@ -67,7 +91,21 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
     {
         int centreDistance = travelDistance / 2;
         int axis_start = (int)(axisPosition / travelDistance) * travelDistance;
-        int axis_centre = axis_start + centreDistance;
-        return axis_centre;
+        if(axisPosition >=0)
+        {
+            return axis_start + centreDistance;
+        }
+        else
+        {
+            return axis_start - centreDistance;
+        }
+    }
+
+    public void populateCardinalVectors()
+    {
+        cardinalVectors.add(new Vector(travelDistance, 0));
+        cardinalVectors.add(new Vector(0, travelDistance));
+        cardinalVectors.add(new Vector(-travelDistance, 0));
+        cardinalVectors.add(new Vector(0, -travelDistance));
     }
 }

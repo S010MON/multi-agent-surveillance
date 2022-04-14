@@ -10,6 +10,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MemoryGraphTesting
 {
@@ -52,5 +53,21 @@ public class MemoryGraphTesting
         Set<GraphCell> vertexSet = world.vertexSet();
         assertEquals(vertexSet.size(), 1);
         assertEquals(world.getVertexAt(agentPosition_1).getPheromone(), 3);
+    }
+
+    @Test
+    public void testNeighbourConnections()
+    {
+        MemoryGraph<GraphCell, DefaultEdge> world = new MemoryGraph<>(distance);
+
+        Vector agentPosition_1 = new Vector(37, 78);
+        world.add_or_adjust_Vertex(agentPosition_1, false, false, 2);
+
+        Vector agentPosition_2 = new Vector(17, 74);
+        world.add_or_adjust_Vertex(agentPosition_2, false, true, 1);
+
+        GraphCell cell_1 = world.getVertexAt(agentPosition_1);
+        GraphCell cell_2 = world.getVertexAt(agentPosition_2);
+        assertTrue(world.containsEdge(cell_1, cell_2));
     }
 }

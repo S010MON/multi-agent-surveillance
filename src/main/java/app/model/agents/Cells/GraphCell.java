@@ -49,6 +49,11 @@ public class GraphCell
         pheromone += pheromoneValue;
     }
 
+    public Vector getPosition()
+    {
+        return new Vector(x, y);
+    }
+
     @Override
     public boolean equals(Object obj)
     {

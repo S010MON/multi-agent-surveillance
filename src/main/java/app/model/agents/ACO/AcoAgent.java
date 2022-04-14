@@ -40,6 +40,7 @@ public class AcoAgent extends AgentImp
         super(position, direction, radius, team);
         targetDirection = direction;
 
+
         acoAgentCount ++;
         acoMoveCount ++;
     }
