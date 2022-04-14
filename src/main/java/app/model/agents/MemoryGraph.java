@@ -44,7 +44,6 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
         cell.updatePheromone(pheromone);
     }
 
-
     public GraphCell getVertexAt(Vector position)
     {
         return vertices.get(keyGenerator(position));
@@ -69,6 +68,6 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
         int centreDistance = travelDistance / 2;
         int axis_start = (int)(axisPosition / travelDistance) * travelDistance;
         int axis_centre = axis_start + centreDistance;
-        return (int)axis_centre;
+        return axis_centre;
     }
 }
