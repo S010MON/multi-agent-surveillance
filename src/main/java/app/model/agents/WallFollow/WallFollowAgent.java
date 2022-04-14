@@ -605,13 +605,9 @@ public class WallFollowAgent extends AgentImp
     private boolean foundUnexploredWallToFollow()
     {
         BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
-        if (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle()
+        return (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle()
                 && ((!horizontalWallsCovered.contains(forwardCell.getX()) && direction.getX() == 0)
-                || (!verticalWallsCovered.contains(forwardCell.getY()) && direction.getY() == 0)))
-        {
-            return true;
-        }
-        return false;
+                || (!verticalWallsCovered.contains(forwardCell.getY()) && direction.getY() == 0)));
     }
 
     public Vector rotateAgentLeft()
