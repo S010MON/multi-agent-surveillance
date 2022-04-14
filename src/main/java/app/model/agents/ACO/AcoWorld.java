@@ -9,11 +9,4 @@ public class AcoWorld<Object, DefaultEdge> extends MemoryGraph
     {
         super();
     }
-
-    @Override
-    public void addVertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
-    {
-
-    }
-
 }

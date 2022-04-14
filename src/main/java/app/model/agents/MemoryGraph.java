@@ -2,6 +2,7 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
+
 import lombok.Getter;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleGraph;
@@ -28,6 +29,7 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
     public void addNewVertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
     {
         GraphCell vertice = new GraphCell(position, obstacle, occupied, pheromone);
+        this.addVertex(vertice);
         vertices.put(vertice.getXY(), vertice);
     }
 
@@ -46,6 +48,11 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
             return true;
         }
         return false;
+    }
+
+    public void setEdge(double weight)
+    {
+        this.setEdge((int)weight);
     }
 
     public GraphCell getVertexAt(Vector position)
