@@ -4,7 +4,6 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 
 import lombok.Getter;
-import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.HashMap;
@@ -12,48 +11,39 @@ import java.util.HashMap;
 public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
 {
     @Getter private HashMap<String, GraphCell> vertices = new HashMap<>();
+    @Getter private int travelDistance;
 
-    public MemoryGraph()
+    public MemoryGraph(int distance)
     {
         super(org.jgrapht.graph.DefaultEdge.class);
+        this.travelDistance = distance;
     }
 
-    public void addVertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
-    {
-        if(!adjustVertex(position, obstacle, occupied, pheromone));
-        {
-            addNewVertex(position, obstacle, occupied, pheromone);
-        }
-    }
-
-    public void addNewVertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
-    {
-        GraphCell vertice = new GraphCell(position, obstacle, occupied, pheromone);
-        this.addVertex(vertice);
-        vertices.put(vertice.getXY(), vertice);
-    }
-
-    /*
-     * If a vertex exists, it will be adjusted to new value & return true
-     * If it does not exist, it will return false.
-     */
-    public boolean adjustVertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
+    public void add_or_adjust_Vertex(Vector position, boolean obstacle, boolean occupied, double pheromone)
     {
         GraphCell cell = getVertexAt(position);
+
         if(cell != null)
         {
-            cell.setOccupied(occupied);
-            cell.setObstacle(obstacle);
-            cell.updatePheromone(pheromone);
-            return true;
+            modifyVertex(cell, obstacle, occupied, pheromone);
         }
-        return false;
+        else
+        {
+            Vector vertexCentre = determineVertexCentre(position);
+            cell = new GraphCell(vertexCentre, obstacle, occupied, pheromone);
+            addVertex(cell);
+
+            vertices.put(keyGenerator(position), cell);
+        }
     }
 
-    public void setEdge(double weight)
+    public void modifyVertex(GraphCell cell, boolean obstacle, boolean occupied, double pheromone)
     {
-        this.setEdge((int)weight);
+        cell.setObstacle(obstacle);
+        cell.setOccupied(occupied);
+        cell.updatePheromone(pheromone);
     }
+
 
     public GraphCell getVertexAt(Vector position)
     {
@@ -62,6 +52,23 @@ public class MemoryGraph<Object, DefaultEdge> extends SimpleGraph
 
     public String keyGenerator(Vector position)
     {
-        return position.getX() + " " + position.getY();
+        Vector centrePosition = determineVertexCentre(position);
+        return centrePosition.getX() + " " + centrePosition.getY();
+    }
+
+    public Vector determineVertexCentre(Vector position)
+    {
+        int x_centre = calculateDimensionCentre(position.getX());
+        int y_centre = calculateDimensionCentre(position.getY());
+
+        return new Vector(x_centre, y_centre);
+    }
+
+    public int calculateDimensionCentre(double axisPosition)
+    {
+        int centreDistance = travelDistance / 2;
+        int axis_start = (int)(axisPosition / travelDistance) * travelDistance;
+        int axis_centre = axis_start + centreDistance;
+        return (int)axis_centre;
     }
 }

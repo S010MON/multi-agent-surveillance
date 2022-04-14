@@ -5,8 +5,8 @@ import app.model.agents.MemoryGraph;
 
 public class AcoWorld<Object, DefaultEdge> extends MemoryGraph
 {
-    public AcoWorld()
+    public AcoWorld(int distance)
     {
-        super();
+        super(distance);
     }
 }

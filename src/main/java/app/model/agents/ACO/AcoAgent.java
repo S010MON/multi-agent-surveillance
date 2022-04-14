@@ -20,7 +20,8 @@ import java.util.Stack;
 public class AcoAgent extends AgentImp
 {
     //General
-    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world = new AcoWorld();
+    @Getter @Setter private static int distance = 20;
+    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world = new AcoWorld(distance);
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
 
@@ -39,8 +40,6 @@ public class AcoAgent extends AgentImp
         super(position, direction, radius, team);
         targetDirection = direction;
 
-        world.addVertex(position, false, true, maxPheromone);
-        world.setEdge(maxWalk);
         acoAgentCount ++;
         acoMoveCount ++;
     }
@@ -55,7 +54,6 @@ public class AcoAgent extends AgentImp
     public void updateLocation(Vector endPoint)
     {
         position = endPoint;
-        world.addVertex(position, false, true, maxPheromone);
     }
 
     // Vision //
