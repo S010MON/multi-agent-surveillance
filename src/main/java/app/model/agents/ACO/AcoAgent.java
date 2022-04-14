@@ -12,8 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.graph.DefaultEdge;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 public class AcoAgent extends AgentImp
 {
@@ -25,6 +27,9 @@ public class AcoAgent extends AgentImp
     @Getter private double maxPheromone = 2;
     private Random randomGenerator = new Random(1);
     private int[] cardinalAngles = {0, 90, 180, 270};
+
+    private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -54,7 +59,6 @@ public class AcoAgent extends AgentImp
     }
 
     // Vision //
-
     public void explorationToViableMovement()
     {
         Ray cardinalRay = detectCardinalPoint(direction.getAngle());
