@@ -240,6 +240,8 @@ public class WallFollowAgentTest
         agent.setDEBUG(true);
         agent.updateLocation(initialPosition);
         agent.setDirection(initialDirection);
+        System.out.println("Agent direction: " + agent.getDirection());
+        System.out.println("Agent direction angle: " + agent.getDirection().getAngle());
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
@@ -268,6 +270,7 @@ public class WallFollowAgentTest
         Vector expectedDeltaPos2 = new Vector(moveLength * agent.getDirection().getX(), moveLength * agent.getDirection().getY());
         // move 3
         agent.updateView(graphicsEngine.compute(map, agent));
+        agent.getCellGraph().getVertices().get("0 225").setObstacle(true);
         Move newMove3 = agent.move();
         agent.updateLocation(agent.getPosition().add(newMove3.getDeltaPos()));
         Vector expectedDeltaPos3 = new Vector(0,0);
