@@ -88,4 +88,41 @@ public class MemoryGraphTesting
         //Verify edge does not exist
         assertFalse(world.containsEdge(cell_2, cell_3));
     }
+
+    @Test
+    public void aggregateTesting()
+    {
+        MemoryGraph<GraphCell, DefaultEdge> world = new MemoryGraph<>(distance);
+
+        //Current vertex
+        Vector agentPosition_1 = new Vector(37, 78);
+        world.add_or_adjust_Vertex(agentPosition_1, false, false, 2);
+
+        Vector agentPosition_2 = new Vector(57, 78);
+        world.add_or_adjust_Vertex(agentPosition_2, false, true, 2);
+
+        Vector agentPosition_3 = new Vector(77, 78);
+        world.add_or_adjust_Vertex(agentPosition_3, false, true, 2);
+
+        Vector agentPosition_4 = new Vector(77, 58);
+        world.add_or_adjust_Vertex(agentPosition_4, false, true, 2);
+
+        Vector agentPosition_5 = new Vector(77, 98);
+        world.add_or_adjust_Vertex(agentPosition_5, false, true, 2);
+
+        Vector agentPosition_6 = new Vector(97, 78);
+        world.add_or_adjust_Vertex(agentPosition_6, false, true, 2);
+
+        Vector agentPosition_7 = new Vector(97, 58);
+        world.add_or_adjust_Vertex(agentPosition_7, false, true, 2);
+
+        Vector agentPosition_8 = new Vector(97, 98);
+        world.add_or_adjust_Vertex(agentPosition_8, false, true, 2);
+
+        Vector agentPosition_9 = new Vector(117, 78);
+        world.add_or_adjust_Vertex(agentPosition_9, false, true, 2);
+
+        double aggregatePheromone = world.aggregateCardinalPheromones(agentPosition_1, new Vector(20, 0));
+        assertEquals(aggregatePheromone, 16);
+    }
 }

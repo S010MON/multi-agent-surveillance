@@ -29,8 +29,6 @@ public class AcoAgent extends AgentImp
     private Random randomGenerator = new Random(1);
     private int[] cardinalAngles = {0, 90, 180, 270};
 
-    private Stack<Vector> visualDirectionsToExplore = new Stack<>();
-    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -57,45 +55,29 @@ public class AcoAgent extends AgentImp
         position = endPoint;
     }
 
+
+    /*
+    Smell utilizes concept of diffusion, such that an aggregate pheromone value is determined
+    for cardinal directions
+     */
+    public ArrayList<Double> accessAggregateCellPheromones()
+    {
+        return null;
+    }
+
+
+
+
     // Vision //
-    public void explorationToViableMovement()
-    {
-        Ray cardinalRay = detectCardinalPoint(direction.getAngle());
-        Vector currentDirection = visualDirectionsToExplore.pop();
-        if(movePossible(cardinalRay))
-        {
-            possibleMovements.add(direction);
-        }
-    }
+    /*
+    1. Agent accesses smells in 360 degrees
+    2. Determines directions of lowest pheromones
+    3. Determines if directions are viable through vision ~ (Randomly) (If not viable ...)
+    4. Moves in that direction
+     */
 
-    public Ray detectCardinalPoint(double targetCardinalAngle)
-    {
-        for(Ray ray: view)
-        {
-            if(approximateAngleRange(ray.angle(), targetCardinalAngle))
-            {
-                return ray;
-            }
-        }
-        throw new RuntimeException("Cardinal point not found");
-    }
 
-    public boolean approximateAngleRange(double detectedAngle, double targetAngle)
-    {
-        return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
-    }
-
-    public boolean movePossible(Ray cardinalRay)
-    {
-        return (cardinalRay.rayLength() > maxWalk + epsilon);
-    }
-
-    public void worldEvaporationProcess()
-    {
-        Set<GraphCell> vertexSet = world.vertexSet();
-        vertexSet.forEach((GraphCell cell) -> cell.evaporate());
-    }
-
+    //World (SWARM memory)
     public void acceptWorld(WfWorld wfWorld)
     {
         world = wfWorld;

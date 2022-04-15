@@ -21,7 +21,7 @@ public class AcoTesting_2
     public void testEvaporation()
     {
         AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
-        agent.worldEvaporationProcess();
+        //agent.worldEvaporationProcess();
         Set<GraphCell> vertexSet = AcoAgent.getWorld().vertexSet();
         vertexSet.forEach((GraphCell cell) -> assertNotEquals(cell.getPheromone(), agent.getMaxPheromone()));
     }
