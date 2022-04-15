@@ -4,8 +4,6 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 
 import lombok.Getter;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.ArrayList;

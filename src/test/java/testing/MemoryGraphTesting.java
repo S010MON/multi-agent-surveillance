@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MemoryGraphTesting
@@ -60,14 +60,32 @@ public class MemoryGraphTesting
     {
         MemoryGraph<GraphCell, DefaultEdge> world = new MemoryGraph<>(distance);
 
+        //Add centre vertex
         Vector agentPosition_1 = new Vector(37, 78);
         world.add_or_adjust_Vertex(agentPosition_1, false, false, 2);
 
+        //Add left vertex
         Vector agentPosition_2 = new Vector(17, 74);
         world.add_or_adjust_Vertex(agentPosition_2, false, true, 1);
 
-        GraphCell cell_1 = world.getVertexAt(agentPosition_1);
-        GraphCell cell_2 = world.getVertexAt(agentPosition_2);
-        assertTrue(world.containsEdge(cell_1, cell_2));
+        //Check & verify left edge
+        GraphCell cell_centre = world.getVertexAt(agentPosition_1);
+        GraphCell cell_1 = world.getVertexAt(agentPosition_2);
+        assertTrue(world.containsEdge(cell_centre, cell_1));
+
+        //Add right vertex and verify
+        Vector agentPosition_3 = new Vector(57, 74);
+        world.add_or_adjust_Vertex(agentPosition_3, false, false, 2);
+        GraphCell cell_2 = world.getVertexAt(agentPosition_3);
+        assertTrue(world.containsEdge(cell_centre, cell_2));
+
+        //Add above vertex and verify
+        Vector agentPosition_4 = new Vector(37, 94);
+        world.add_or_adjust_Vertex(agentPosition_4, false, false, 2);
+        GraphCell cell_3 = world.getVertexAt(agentPosition_3);
+        assertTrue(world.containsEdge(cell_centre, cell_3));
+
+        //Verify edge does not exist
+        assertFalse(world.containsEdge(cell_2, cell_3));
     }
 }
