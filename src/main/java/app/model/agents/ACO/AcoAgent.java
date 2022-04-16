@@ -34,6 +34,7 @@ public class AcoAgent extends AgentImp
     private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
     @Getter @Setter private double visionDistance = 100.0;
+    @Getter protected Move previousMove;
 
 
     private Vector targetDirection;
@@ -112,6 +113,15 @@ public class AcoAgent extends AgentImp
     4. Moves in that direction
      */
 
+    public Move visibleExploration()
+    {
+        explorationToViableMovement();
+        nextExplorationVisionDirection();
+
+        previousMove = new Move(position, new Vector());
+        return new Move(position, new Vector());
+    }
+
     public void explorationToViableMovement()
     {
         Ray cardinalRay = detectCardinalPoint(direction.getAngle());
@@ -120,17 +130,17 @@ public class AcoAgent extends AgentImp
         {
             possibleMovements.add(direction);
         }
+    }
 
-        //Agent stuck/frozen handling
-        if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
+    public void nextExplorationVisionDirection()
+    {
+        if(!visualDirectionsToExplore.empty())
         {
-            agentFreezeHandling(direction);
+            Vector directionToExplore = visualDirectionsToExplore.peek();
+            direction = directionToExplore.normalise();
         }
     }
 
-    //TODO Refactor moveEvaluation to determine if:
-    // 1 A move is possible given the movement distance
-    // 2 If further exploration needed or agent can see the end
     public boolean moveEvaluation(Ray cardinalRay)
     {
         double rayLength = cardinalRay.rayLength();
