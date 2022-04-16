@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
+import app.model.agents.Cells.PheromoneCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import app.model.agents.WallFollow.WfWorld;
@@ -29,6 +30,11 @@ public class AcoAgent extends AgentImp
     private Random randomGenerator = new Random(1);
     private int[] cardinalAngles = {0, 90, 180, 270};
 
+    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    @Getter @Setter private double visionDistance = 100.0;
+
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -39,6 +45,7 @@ public class AcoAgent extends AgentImp
         targetDirection = direction;
 
 
+        pheromoneSenseDirections();
         acoAgentCount ++;
         acoMoveCount ++;
     }
@@ -55,17 +62,46 @@ public class AcoAgent extends AgentImp
         position = endPoint;
     }
 
-
-    /*
-    Smell utilizes concept of diffusion, such that an aggregate pheromone value is determined
-    for cardinal directions
-     */
-    public ArrayList<Double> accessAggregateCellPheromones()
+    // Smell //
+    public void smellPheromonesToVisualExplorationDirection()
     {
-        return null;
+        ArrayList<Double> aggregatePheromones = accessAvailableCellAggregatePheromones();
+        minimumPheromonesToDirections(aggregatePheromones);
     }
 
+    public void minimumPheromonesToDirections(ArrayList<Double> pheromoneValues)
+    {
+        double minValue = Double.MAX_VALUE;
+        visualDirectionsToExplore = new Stack<>();
 
+        for(int i = 0; i < pheromoneValues.size(); i++)
+        {
+            Double pheromoneValue = pheromoneValues.get(i);
+
+            if(pheromoneValue == minValue)
+            {
+                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+            }
+            else if(pheromoneValues.get(i) < minValue)
+            {
+                visualDirectionsToExplore.clear();
+                minValue = pheromoneValues.get(i);
+                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+            }
+        }
+    }
+
+    public ArrayList<Double> accessAvailableCellAggregatePheromones()
+    {
+        ArrayList<Double> cellPheromoneValues = new ArrayList<>();
+
+        for(Vector movement : pheromoneDirections)
+        {
+            double aggregatePheromone = world.aggregateCardinalPheromones(position, movement);
+            cellPheromoneValues.add(aggregatePheromone);
+        }
+        return cellPheromoneValues;
+    }
 
 
     // Vision //
@@ -76,10 +112,73 @@ public class AcoAgent extends AgentImp
     4. Moves in that direction
      */
 
+    public void explorationToViableMovement()
+    {
+        Ray cardinalRay = detectCardinalPoint(direction.getAngle());
+        Vector currentDirection = visualDirectionsToExplore.pop();
+        if(moveEvaluation(cardinalRay))
+        {
+            possibleMovements.add(direction);
+        }
+
+        //Agent stuck/frozen handling
+        if(visualDirectionsToExplore.empty() && possibleMovements.isEmpty())
+        {
+            agentFreezeHandling(direction);
+        }
+    }
+
+    //TODO Refactor moveEvaluation to determine if:
+    // 1 A move is possible given the movement distance
+    // 2 If further exploration needed or agent can see the end
+    public boolean moveEvaluation(Ray cardinalRay)
+    {
+        double rayLength = cardinalRay.rayLength();
+        return(rayLength > distance + epsilon && rayLength < visionDistance + epsilon);
+    }
+
+    public Ray detectCardinalPoint(double targetCardinalAngle)
+    {
+        for(Ray ray: view)
+        {
+            if(approximateAngleRange(ray.angle(), targetCardinalAngle))
+            {
+                return ray;
+            }
+        }
+        throw new RuntimeException("Cardinal point not found");
+    }
+
+    public boolean approximateAngleRange(double detectedAngle, double targetAngle)
+    {
+        return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
+    }
+
 
     //World (SWARM memory)
     public void acceptWorld(WfWorld wfWorld)
     {
         world = wfWorld;
+    }
+
+    //Setup
+    public void pheromoneSenseDirections()
+    {
+        for(int cardinalAngle: cardinalAngles)
+        {
+            pheromoneDirections.add(angleToGraphMovementLink(cardinalAngle));
+        }
+    }
+
+    public Vector angleToGraphMovementLink(int angle)
+    {
+        return switch (angle)
+                {
+                    case 0 -> new Vector(0, distance);
+                    case 90 -> new Vector(distance, 0);
+                    case 180 -> new Vector(0, -distance);
+                    case 270 -> new Vector(-distance, 0);
+                    default -> null;
+                };
     }
 }

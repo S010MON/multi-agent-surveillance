@@ -65,7 +65,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
     /*
-Aggregate pattern as follows
+    Aggregate pattern as follows
               c5--c6
                |  |
     |c0|--c1--c2--c3--c4
@@ -87,9 +87,13 @@ Aggregate pattern as follows
         {
             return northSouthAggregate(currentCell, "East");
         }
-        else
+        else if(cardinalDirections.get("West").equals(cardinalMovement))
         {
             return northSouthAggregate(currentCell, "West");
+        }
+        else
+        {
+            throw new RuntimeException("No cell aggregate could be calculated");
         }
     }
 
