@@ -22,6 +22,7 @@ public class AcoAgentLimitedVisionTesting
     private Vector viewDirection = new Vector(1, 0);
     private double radius = 10;
 
+
     Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
     GraphicsEngine graphicsEngine = new GraphicsEngine(90);
     Map map = new Map(settings);

@@ -21,8 +21,8 @@ import java.util.Stack;
 public class AcoAgent extends AgentImp
 {
     //General
-    @Getter @Setter private static int distance = 20;
-    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world = new AcoWorld(distance);
+
+    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world;
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
 
@@ -31,11 +31,13 @@ public class AcoAgent extends AgentImp
     private int[] cardinalAngles = {0, 90, 180, 270};
 
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
-    private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    private double movementHeuristic = 0.75;
+    private Vector movementContinuity = new Vector();
     @Getter @Setter private double visionDistance = 100.0;
+    @Getter @Setter private int distance = 20;
     @Getter protected Move previousMove;
-
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -43,10 +45,20 @@ public class AcoAgent extends AgentImp
     public AcoAgent(Vector position, Vector direction, double radius, Team team)
     {
         super(position, direction, radius, team);
-        targetDirection = direction;
+        initializeWorld();
+    }
 
+    private void initializeWorld()
+    {
+        if(world == null)
+        {
+            world = new AcoWorld<>(distance);
+        }
 
         pheromoneSenseDirections();
+        world.add_or_adjust_Vertex(position);
+        movementContinuity = direction.copy();
+        targetDirection = direction.copy();
         acoAgentCount ++;
         acoMoveCount ++;
     }
@@ -54,16 +66,80 @@ public class AcoAgent extends AgentImp
     @Override
     public Move move()
     {
-        return null;
+        //Detect pheromones and translate to directions to explore
+        if(visualDirectionsToExplore.isEmpty() && possibleMovements.isEmpty())
+        {
+            return smellPheromones();
+        }
+        //Explore areas visually
+        else if(!visualDirectionsToExplore.isEmpty())
+        {
+            return visibleExploration();
+        }
+        else
+        {
+            return makeMove();
+        }
     }
 
     @Override
     public void updateLocation(Vector endPoint)
     {
         position = endPoint;
+
+        //Succesful Movement
+        if(detectChangeInPosition())
+        {
+            world.leaveVertex(previousMove.getEndDir(), maxPheromone);
+            world.add_or_adjust_Vertex(position);
+        }
+
+    }
+
+    private boolean detectChangeInPosition()
+    {
+        return (previousMove.getEndDir().equals(position));
+    }
+
+    //Movement//
+    public Move makeMove()
+    {
+        Vector movement;
+        if(randomGenerator.nextDouble() < movementHeuristic && movementContinuityPossible())
+        {
+            movement = movementContinuity;
+        }
+        else
+        {
+            movement = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
+        }
+
+        previousMove = new Move(position, movement.scale(distance));
+        return new Move(position, movement);
+    }
+
+    private boolean movementContinuityPossible()
+    {
+        for(Vector v: possibleMovements)
+        {
+            if(v.equals(movementContinuity.normalise()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Smell //
+    public Move smellPheromones()
+    {
+        smellPheromonesToVisualExplorationDirection();
+        direction = visualDirectionsToExplore.peek();
+
+        previousMove = new Move(position, new Vector());
+        return new Move(position, new Vector());
+    }
+
     public void smellPheromonesToVisualExplorationDirection()
     {
         ArrayList<Double> aggregatePheromones = accessAvailableCellAggregatePheromones();
@@ -144,7 +220,7 @@ public class AcoAgent extends AgentImp
     public boolean moveEvaluation(Ray cardinalRay)
     {
         double rayLength = cardinalRay.rayLength();
-        return(rayLength > distance + epsilon && rayLength < visionDistance + epsilon);
+        return(rayLength > visionDistance + epsilon);
     }
 
     public Ray detectCardinalPoint(double targetCardinalAngle)

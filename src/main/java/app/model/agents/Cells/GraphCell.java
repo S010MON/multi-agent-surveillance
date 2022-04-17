@@ -19,17 +19,20 @@ public class GraphCell
     @Getter @Setter private double pheromone;
     private double evaporationConstant = 0.001;
 
-    public GraphCell(Vector position)
-    {
-        setGeneralInfo(position);
-    }
-
     public GraphCell(Vector position, boolean obstacle, boolean occupied, double pheromone)
     {
         setGeneralInfo(position);
         this.obstacle = obstacle;
         this.occupied = occupied;
         this.pheromone = pheromone;
+    }
+
+    public GraphCell(Vector position)
+    {
+        setGeneralInfo(position);
+        obstacle = false;
+        occupied = true;
+        pheromone = 0;
     }
 
     public void setGeneralInfo(Vector position)
