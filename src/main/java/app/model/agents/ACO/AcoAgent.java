@@ -5,7 +5,6 @@ import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
-import app.model.agents.Cells.PheromoneCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import app.model.agents.WallFollow.WfWorld;
@@ -13,10 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.graph.DefaultEdge;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class AcoAgent extends AgentImp
 {
@@ -38,6 +34,7 @@ public class AcoAgent extends AgentImp
     @Getter @Setter private double visionDistance = 100.0;
     @Getter @Setter private int distance = 20;
     @Getter protected Move previousMove;
+    private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -76,6 +73,10 @@ public class AcoAgent extends AgentImp
         {
             return visibleExploration();
         }
+        else if(moveFailed)
+        {
+            //Implement short term memory
+        }
         else
         {
             return makeMove();
@@ -87,21 +88,61 @@ public class AcoAgent extends AgentImp
     {
         position = endPoint;
 
-        //Succesful Movement
         if(detectChangeInPosition())
         {
-            world.leaveVertex(previousMove.getEndDir(), maxPheromone);
-            world.add_or_adjust_Vertex(position);
+            successfulMovement();
         }
+    }
 
+    //Memory//
+    public void shortTermMemory()
+    {
+        // Case 1: possibleMoves not empty -> select next move and make it
+        Move moveFromMemory = selectNextPossibleMove();
+
+        //Case 2: possibleMovesEmpty -> Remove this pheromone sensing direction (Condition to be added)
+        Move evaluateSenses = revaluateSenses();
+
+        //Case 3: None of the above has worked. Use short term memory to replace sensing & looking
+
+    }
+
+    public void relyOnMemory()
+    {
+        if(shortTermMemory.size() == pheromoneDirections.size())
+        {
+
+        }
+    }
+
+    private Move selectNextPossibleMove()
+    {
+        possibleMovements.remove(previousMove.getDeltaPos());
+        return makeMove();
+    }
+
+    private Move revaluateSenses()
+    {
+        Vector previousMovement = previousMove.getDeltaPos();
+        shortTermMemory.put(previousMovement.hashCode(), previousMovement);
+        return new Move(position, new Vector());
+    }
+
+    //Movement//
+    public void successfulMovement()
+    {
+        world.leaveVertex(previousMove.getEndDir(), maxPheromone);
+        world.add_or_adjust_Vertex(position);
+
+        movementContinuity = previousMove.getDeltaPos();
+        possibleMovements.clear();
+        shortTermMemory.clear();
     }
 
     private boolean detectChangeInPosition()
     {
         return (previousMove.getEndDir().equals(position));
     }
-
-    //Movement//
     public Move makeMove()
     {
         Vector movement;
@@ -144,6 +185,7 @@ public class AcoAgent extends AgentImp
     {
         ArrayList<Double> aggregatePheromones = accessAvailableCellAggregatePheromones();
         minimumPheromonesToDirections(aggregatePheromones);
+        //TODO Check if visualDirections is empty, if so place memory - Should allow to cycle
     }
 
     public void minimumPheromonesToDirections(ArrayList<Double> pheromoneValues)
@@ -154,16 +196,18 @@ public class AcoAgent extends AgentImp
         for(int i = 0; i < pheromoneValues.size(); i++)
         {
             Double pheromoneValue = pheromoneValues.get(i);
+            Vector pheromoneDirection = pheromoneDirections.get(i);
+            boolean movementInMemory = shortTermMemory.get(pheromoneDirection.hashCode()) != null;
 
-            if(pheromoneValue == minValue)
+            if(!movementInMemory && pheromoneValue == minValue)
             {
-                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+                visualDirectionsToExplore.add(pheromoneDirection);
             }
-            else if(pheromoneValues.get(i) < minValue)
+            else if(!movementInMemory && pheromoneValues.get(i) < minValue)
             {
                 visualDirectionsToExplore.clear();
                 minValue = pheromoneValues.get(i);
-                visualDirectionsToExplore.add(pheromoneDirections.get(i));
+                visualDirectionsToExplore.add(pheromoneDirection);
             }
         }
     }
