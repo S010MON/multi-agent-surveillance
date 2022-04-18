@@ -37,6 +37,64 @@ public class AcoTesting_2
         agent.setVisionDistance(viewingDistance);
     }
 
+    //Bug testing
+    public void agentVisualExploration(AcoAgent agent)
+    {
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+    }
+
+    @Test
+    public void testStuckAtWindow()
+    {
+        position = new Vector(234.88019900183576, 63.27721732577038);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agent.setPreviousMove(new Move(position, new Vector(0, moveDistance)));
+
+        agent.updateLocation(new Vector(234.88019900183576, 83.27721732577038));
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agentVisualExploration(agent);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move moveAfterStuck = agent.move();
+
+        assertNotEquals(moveAfterStuck.getDeltaPos(), new Vector(0, moveDistance));
+    }
+    @Test
+    public void testStuckAtPortal()
+    {
+        position = new Vector(465.148150363186, 343.4177615482815);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+
+        agent.setPreviousMove(new Move(position, new Vector(moveDistance, 0)));
+        agent.updateLocation(new Vector(465.148150363186, 343.4177615482815));
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agentVisualExploration(agent);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+    }
+
     //Test linked capabilities
 
     @Test

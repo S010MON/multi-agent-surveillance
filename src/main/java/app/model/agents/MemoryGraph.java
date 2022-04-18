@@ -6,8 +6,8 @@ import app.model.agents.Cells.GraphCell;
 import lombok.Getter;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGraph
 {
@@ -104,10 +104,11 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
         Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
         GraphCell c2 = getVertexAt(TPosition);
-        GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("East")));
-        GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("West")));
+        GraphCell c3 = getVertexAt(currentPosition.add(aggregateDirection.scale(3)));
+        //GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("East")));
+        //GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("West")));
 
-        GraphCell[] aggregateVertices =  {c1, c2, c3, c4};
+        GraphCell[] aggregateVertices =  {c1, c2};
         return aggregatePheromoneValues(aggregateVertices);
     }
 
@@ -119,10 +120,11 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
         Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
         GraphCell c2 = getVertexAt(TPosition);
-        GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("North")));
-        GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("South")));
+        GraphCell c3 = getVertexAt(currentPosition.add(aggregateDirection.scale(3)));
+        //GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("North")));
+        //GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("South")));
 
-        GraphCell[] aggregateVertices =  {c1, c2, c3, c4};
+        GraphCell[] aggregateVertices =  {c1, c2};
         return aggregatePheromoneValues(aggregateVertices);
     }
 
@@ -190,9 +192,18 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
 
     public void populateCardinalVectors()
     {
-        cardinalDirections.put("North", new Vector(0, travelDistance));
+        cardinalDirections.put("North", new Vector(0, -travelDistance));
         cardinalDirections.put("East", new Vector(travelDistance, 0));
-        cardinalDirections.put("South", new Vector(0, -travelDistance));
+        cardinalDirections.put("South", new Vector(0, travelDistance));
         cardinalDirections.put("West", new Vector(-travelDistance, 0));
+    }
+
+    public void evaporateWorld()
+    {
+        Set<GraphCell> vertexSet = this.vertexSet();
+        for(GraphCell cell: vertexSet)
+        {
+            cell.evaporate();
+        }
     }
 }

@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Trail;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -23,6 +24,7 @@ public class GameEngine
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
     private Timeline timeline;
+    private int count = 0;
 
     public GameEngine(Map map, Renderer renderer)
     {
@@ -45,7 +47,9 @@ public class GameEngine
         for (Agent a : map.getAgents())
         {
             Vector startPoint = a.getPosition();
-            Vector endPoint = startPoint.add(a.move().getDeltaPos());
+            Vector need = a.move().getDeltaPos();
+            Vector endPoint = startPoint.add(need);
+            System.out.println(startPoint.toString() + " " + need.toString());
 
             Vector teleportTo = checkTeleport(startPoint, endPoint);
             if (teleportTo != null)
