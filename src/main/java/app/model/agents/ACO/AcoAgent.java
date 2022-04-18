@@ -33,8 +33,8 @@ public class AcoAgent extends AgentImp
     private Vector movementContinuity = new Vector();
     @Getter @Setter private double visionDistance = 100.0;
     @Getter @Setter private int distance = 20;
-    @Getter protected Move previousMove;
-    private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
+    @Getter @Setter protected Move previousMove;
+    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
 
     private Vector targetDirection;
     protected double epsilon = 0.3;
@@ -63,8 +63,13 @@ public class AcoAgent extends AgentImp
     @Override
     public Move move()
     {
+        //Short term memory after failed move
+        if(moveFailed)
+        {
+            return shortTermMemory();
+        }
         //Detect pheromones and translate to directions to explore
-        if(visualDirectionsToExplore.isEmpty() && possibleMovements.isEmpty())
+        else if(visualDirectionsToExplore.isEmpty() && possibleMovements.isEmpty())
         {
             return smellPheromones();
         }
@@ -72,10 +77,6 @@ public class AcoAgent extends AgentImp
         else if(!visualDirectionsToExplore.isEmpty())
         {
             return visibleExploration();
-        }
-        else if(moveFailed)
-        {
-            //Implement short term memory
         }
         else
         {
@@ -95,30 +96,33 @@ public class AcoAgent extends AgentImp
     }
 
     //Memory//
-    public void shortTermMemory()
+    public Move shortTermMemory()
     {
         // Case 1: possibleMoves not empty -> select next move and make it
-        Move moveFromMemory = selectNextPossibleMove();
-
-        //Case 2: possibleMovesEmpty -> Remove this pheromone sensing direction (Condition to be added)
-        Move evaluateSenses = revaluateSenses();
-
-        //Case 3: None of the above has worked. Use short term memory to replace sensing & looking
-
+        if(selectNextPossibleMove())
+        {
+            return makeMove();
+        }
+        else
+        {
+            //Case 2: possibleMovesEmpty -> Remove this pheromone sensing direction (Condition to be added)
+            return revaluateSenses();
+        }
     }
 
     public void relyOnMemory()
     {
-        if(shortTermMemory.size() == pheromoneDirections.size())
-        {
-
-        }
+        shortTermMemory.forEach((k, v) -> possibleMovements.add(v));
     }
 
-    private Move selectNextPossibleMove()
+    private boolean selectNextPossibleMove()
     {
         possibleMovements.remove(previousMove.getDeltaPos());
-        return makeMove();
+        if(possibleMovements.isEmpty())
+        {
+            return false;
+        }
+        return true;
     }
 
     private Move revaluateSenses()
@@ -175,7 +179,7 @@ public class AcoAgent extends AgentImp
     public Move smellPheromones()
     {
         smellPheromonesToVisualExplorationDirection();
-        direction = visualDirectionsToExplore.peek();
+        direction = visualDirectionsToExplore.peek().normalise();
 
         previousMove = new Move(position, new Vector());
         return new Move(position, new Vector());
@@ -185,7 +189,11 @@ public class AcoAgent extends AgentImp
     {
         ArrayList<Double> aggregatePheromones = accessAvailableCellAggregatePheromones();
         minimumPheromonesToDirections(aggregatePheromones);
-        //TODO Check if visualDirections is empty, if so place memory - Should allow to cycle
+        //TODO Use short term memory
+        if(visualDirectionsToExplore.isEmpty())
+        {
+            relyOnMemory();
+        }
     }
 
     public void minimumPheromonesToDirections(ArrayList<Double> pheromoneValues)
@@ -248,7 +256,7 @@ public class AcoAgent extends AgentImp
         Vector currentDirection = visualDirectionsToExplore.pop();
         if(moveEvaluation(cardinalRay))
         {
-            possibleMovements.add(direction);
+            possibleMovements.add(direction.scale(distance));
         }
     }
 

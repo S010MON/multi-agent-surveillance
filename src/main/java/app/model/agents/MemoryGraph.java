@@ -154,7 +154,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         cell.updatePheromone(pheromoneValue);
     }
 
-
     public GraphCell getVertexAt(Vector position)
     {
         return vertices.get(keyGenerator(position));

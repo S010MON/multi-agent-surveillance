@@ -40,11 +40,47 @@ public class AcoTesting_2
     //Test linked capabilities
 
     @Test
-    public void testActionsAtWindow()
+    public void testActionsAtWindowUsingMemory()
     {
         position = new Vector(677, 100);
         AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
 
+        //Agent smells pheromones
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        //Agent looking around...
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        Vector moveInMemory_1 = new Vector(-20, 0);
+        agent.setPreviousMove(new Move(position, moveInMemory_1));
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move movementFromMemory  = agent.move();
+        assertEquals(movementFromMemory.getDeltaPos(), new Vector(0, 20));
+
+        Vector moveInMemory_2 = new Vector(0, 20);
+        agent.setPreviousMove(new Move(position, moveInMemory_2));
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertTrue(agent.getShortTermMemory().containsKey(moveInMemory_2.hashCode()));
+
+        //Movement using memory
+        agent.setMoveFailed(false);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertEquals(agent.getVisualDirectionsToExplore().size(), 3);
     }
 
     @Test
