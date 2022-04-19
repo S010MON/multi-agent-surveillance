@@ -8,7 +8,7 @@ public abstract class SettingsGenerator
     public static Settings mockSettings()
     {
         Settings settings = new Settings();
-        settings.setName("bestMap");
+        settings.setName("best_Map");
         settings.setGameMode(1);
         settings.setWidth(800);
         settings.setHeight(600);
