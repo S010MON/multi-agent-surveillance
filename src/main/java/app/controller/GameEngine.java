@@ -24,7 +24,6 @@ public class GameEngine
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
     private Timeline timeline;
-    private int count = 0;
 
     public GameEngine(Map map, Renderer renderer)
     {
