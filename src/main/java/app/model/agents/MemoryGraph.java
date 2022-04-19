@@ -15,7 +15,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
     private int travelDistance;
 
-
     public MemoryGraph(int distance)
     {
         super(org.jgrapht.graph.DefaultWeightedEdge.class);
@@ -62,14 +61,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    /*
-    Aggregate pattern as follows
-              c5
-               |
-    |c0|--c1--c2
-               |
-              c7
-     */
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
     {
         GraphCell currentCell = getVertexAt(currentPosition);
@@ -95,7 +86,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    //Refactor into sustainable way
+    //TODO Refactor aggregates depending on best discussed solution
     public double northSouthAggregate(GraphCell currentCell, String direction)
     {
         Vector currentPosition = currentCell.getPosition();
@@ -104,9 +95,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
         Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
         GraphCell c2 = getVertexAt(TPosition);
-        GraphCell c3 = getVertexAt(currentPosition.add(aggregateDirection.scale(3)));
-        //GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("East")));
-        //GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("West")));
 
         GraphCell[] aggregateVertices =  {c1, c2};
         return aggregatePheromoneValues(aggregateVertices);
@@ -120,14 +108,10 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
         Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
         GraphCell c2 = getVertexAt(TPosition);
-        GraphCell c3 = getVertexAt(currentPosition.add(aggregateDirection.scale(3)));
-        //GraphCell c3 = getVertexAt(TPosition.add(cardinalDirections.get("North")));
-        //GraphCell c4 = getVertexAt(TPosition.add(cardinalDirections.get("South")));
 
         GraphCell[] aggregateVertices =  {c1, c2};
         return aggregatePheromoneValues(aggregateVertices);
     }
-
 
     public double aggregatePheromoneValues(GraphCell[] aggregateVertices)
     {
@@ -160,7 +144,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     {
         return vertices.get(keyGenerator(position));
     }
-
 
     public String keyGenerator(Vector position)
     {

@@ -47,9 +47,7 @@ public class GameEngine
         for (Agent a : map.getAgents())
         {
             Vector startPoint = a.getPosition();
-            Vector need = a.move().getDeltaPos();
-            Vector endPoint = startPoint.add(need);
-            System.out.println(startPoint.toString() + " " + need.toString());
+            Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
             Vector teleportTo = checkTeleport(startPoint, endPoint);
             if (teleportTo != null)

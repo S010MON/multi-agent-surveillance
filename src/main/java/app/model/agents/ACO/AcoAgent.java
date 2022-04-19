@@ -16,28 +16,25 @@ import java.util.*;
 
 public class AcoAgent extends AgentImp
 {
-    //General
-
-    @Getter private static MemoryGraph<GraphCell, DefaultEdge> world;
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
 
-    @Getter private double maxPheromone = 2;
+    @Getter private final double maxPheromone = 2;
+    private final double epsilon = 0.3;
     private static Random randomGenerator = new Random(1);
-    private int[] cardinalAngles = {0, 90, 180, 270};
+    private final int[] cardinalAngles = {0, 90, 180, 270};
 
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    //TODO Discuss dynamic movement heuristic value
     @Setter private double movementHeuristic = 0.95;
     @Setter private Vector movementContinuity = new Vector();
+    //TODO Discuss variable visionDistance heuristic
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
     @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
-
-    private Vector targetDirection;
-    protected double epsilon = 0.3;
 
     public AcoAgent(Vector position, Vector direction, double radius, Team team)
     {
@@ -55,7 +52,8 @@ public class AcoAgent extends AgentImp
         pheromoneSenseDirections();
         world.add_or_adjust_Vertex(position);
         movementContinuity = direction.scale(distance);
-        targetDirection = direction.copy();
+        //TODO Implement heuristic using targetVector
+        tgtDirection = direction.copy();
         previousMove = new Move(position, new Vector());
         acoAgentCount ++;
     }
@@ -78,6 +76,7 @@ public class AcoAgent extends AgentImp
         {
             return visibleExploration();
         }
+        //Make move
         else
         {
             return makeMove();
@@ -148,6 +147,7 @@ public class AcoAgent extends AgentImp
     {
         return (!previousMove.getEndDir().equals(position));
     }
+
     public Move makeMove()
     {
         Vector movement;
@@ -167,21 +167,13 @@ public class AcoAgent extends AgentImp
 
     private boolean movementContinuityPossible()
     {
-        for(Vector v: possibleMovements)
-        {
-            if(v.equals(movementContinuity))
-            {
-                return true;
-            }
-        }
-        return false;
+        return possibleMovements.contains(movementContinuity);
     }
 
     // Smell //
     public Move smellPheromones()
     {
         smellPheromonesToVisualExplorationDirection();
-
         previousMove = new Move(position, new Vector());
         return new Move(position, new Vector());
     }
@@ -228,21 +220,12 @@ public class AcoAgent extends AgentImp
         for(Vector movement : pheromoneDirections)
         {
             double aggregatePheromone = world.aggregateCardinalPheromones(position, movement);
-            System.out.println(movement.toString() + " Pheromone value: " + aggregatePheromone);
             cellPheromoneValues.add(aggregatePheromone);
         }
         return cellPheromoneValues;
     }
 
-
     // Vision //
-    /*
-    1. Agent accesses smells in 360 degrees
-    2. Determines directions of lowest pheromones
-    3. Determines if directions are viable through vision ~ (Randomly) (If not viable ...)
-    4. Moves in that direction
-     */
-
     public Move visibleExploration()
     {
         explorationToViableMovement();
@@ -265,14 +248,12 @@ public class AcoAgent extends AgentImp
 
     public void nextBestOptionHandling(Vector currentDirectionExplored)
     {
-        // Add explored directions to short term memory
         shortTermMemory.put(currentDirectionExplored.hashCode(), currentDirectionExplored);
 
         if(!possibleMovements.isEmpty())
         {
             shortTermMemory.clear();
         }
-
     }
 
     public void nextExplorationVisionDirection()
@@ -307,13 +288,7 @@ public class AcoAgent extends AgentImp
         return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
     }
 
-
     //World (SWARM memory)
-    public void acceptWorld(WfWorld wfWorld)
-    {
-        world = wfWorld;
-    }
-
     public void evaporateProcess()
     {
         acoMoveCount ++;
