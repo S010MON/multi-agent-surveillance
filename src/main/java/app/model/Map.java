@@ -13,8 +13,6 @@ import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.model.soundSource.SoundSource;
 import app.model.soundSource.SoundSourceBase;
-import app.model.soundSource.SoundSourceFactory;
-import app.model.soundSource.SoundSourceType;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
