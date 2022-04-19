@@ -75,7 +75,7 @@ public class Map
         for(int i = 0; i < settings.getNoOfGuards(); i++)
         {
             Vector srt = randPosition(guardSpawn);
-            Vector dir = new Vector(1, 0);
+            Vector dir = randDirection();
             Agent guard = new AcoAgent(srt, dir, 10, Team.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
