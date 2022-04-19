@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
-
 public class SoundSourceBase implements SoundSource
 {
     @Getter private Vector position;

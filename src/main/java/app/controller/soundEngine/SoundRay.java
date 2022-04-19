@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class SoundRay extends Ray
 {
     @Setter private boolean visible = true;
+    @Getter private SoundRay parent;
     @Getter private int bounces;
     private ArrayList<SoundRay> children;
 
@@ -22,6 +23,7 @@ public class SoundRay extends Ray
         this.colour = Color.rgb(0,0,255, 0.07);
         this.bounces = 0;
         this.children = new ArrayList<>();
+        this.parent = null;
     }
 
     public SoundRay(Vector u, Vector v, int bounces)
@@ -30,6 +32,16 @@ public class SoundRay extends Ray
         this.colour = Color.rgb(0,0,255, 0.07);
         this.bounces = bounces;
         this.children = new ArrayList<>();
+        this.parent = null;
+    }
+
+    public SoundRay(Vector u, Vector v, int bounces, SoundRay parent)
+    {
+        super(u, v);
+        this.colour = Color.rgb(0,0,255, 0.07);
+        this.bounces = bounces;
+        this.children = new ArrayList<>();
+        this.parent = parent;
     }
 
     @Override
@@ -48,6 +60,6 @@ public class SoundRay extends Ray
 
     public String toString()
     {
-        return "ang:" + angle() + " u:" + getU().toString() + " v:" + getV().toString() + " bouuces:" + bounces;
+        return "ang:" + angle() + " u:" + getU().toString() + " v:" + getV().toString() + " bounces:" + bounces;
     }
 }

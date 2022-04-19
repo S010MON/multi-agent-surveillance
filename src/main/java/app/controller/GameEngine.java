@@ -39,7 +39,8 @@ public class GameEngine
     public void tick()
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        map.getSoundSources().forEach(s -> s.setRays(SoundEngine.compute(map, s.getPosition())));
+        // TODO add sound source decay here
+        map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
 
@@ -74,7 +75,7 @@ public class GameEngine
 
     public void handleKey(KeyEvent e)
     {
-        if(e.getCharacter() == " ")
+        if(e.getCharacter().equals(" "))
             pausePlay();
 
         if(map.getHuman() != null)

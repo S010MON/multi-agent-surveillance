@@ -40,7 +40,6 @@ public class Map
     private Rectangle2D intruderSpawn;
     private Rectangle2D target;
 
-
     public Map(Settings settings)
     {
         System.out.print("Loading settings ... ");
