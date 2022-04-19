@@ -5,13 +5,11 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
-import app.model.agents.ACO.AcoGrid;
 import app.model.Map;
-import app.model.agents.Cells.PheromoneCell;
 import app.model.Move;
-import app.model.agents.ACO.AcoAgent360Vision;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Team;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,248 +18,214 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AcoAgentTesting
 {
-    private Vector position = new Vector(14, 12);
-    private Vector viewDirection = new Vector(0, 1);
-    private double radius = 10;
-
-    Settings settings = FileManager.loadSettings("src/main/resources/map_2_original.txt");
-    GraphicsEngine graphicsEngine = new GraphicsEngine(181);
+    private Vector position = new Vector(250, 350);
+    private Vector direction = new Vector(1, 0);
+    private int radius = 10;
+    private double viewingDistance = 100;
+    private int moveDistance = 20;
+    GraphicsEngine graphicsEngine = new GraphicsEngine(80);
+    Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
     Map map = new Map(settings);
 
-    @BeforeEach
-    void init()
+    public void agentSetup(AcoAgent agent)
     {
-        AcoGrid world = new AcoGrid(settings.getWidth(), settings.getHeight(), 1);
-        AcoAgent360Vision.initializeWorld(world);
-        AcoAgent360Vision.clearAcoCounts();
+        agent.setDistance(moveDistance);
+        agent.setVisionDistance(viewingDistance);
     }
 
-    @Test
-    //TODO alter to Vector(1, 0)
-    void testCardinalAngleDetectionAlteredViewDirection()
+    //Bug testing
+    public void agentVisualExploration(AcoAgent agent)
     {
-        Vector newVisionDirection = new Vector(0, 1);
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, newVisionDirection, radius, Team.GUARD);
-
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-        Ray[] cardinalRays = agent_1.detectCardinalRays();
-
-        assertEquals(cardinalRays.length, 4);
-    }
-
-    @Test
-    void testAgentClashResolution()
-    {
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-
-        Move selectedMove = agent_1.move();
-
-        //No agent update as simulating an invalid move.
-        Move alternativeSelectedMove = agent_1.move();
-
-        assertNotEquals(selectedMove.getDeltaPos(), alternativeSelectedMove.getDeltaPos());
-        assertEquals(selectedMove.getEndDir(), alternativeSelectedMove.getEndDir());
-    }
-
-    @Test
-    void testAgentClashResolutionShortTermMemoryClearing()
-    {
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-
-        //Agent not updated to simulate invalid move
-        Move selectedMove = agent_1.move();
-        Move alternativeSelectedMove = agent_1.move();
-        assertEquals(agent_1.accessShortTermMemory().size(), 2);
-
-        //Update agent and request a new move to refresh short term memory
-        agent_1.updateLocation(new Vector(16, 16));
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-
-        Move nextMove = agent_1.move();
-        assertEquals(agent_1.accessShortTermMemory().size(), 0);
-    }
-
-    @Test
-    void testEvaporationProcess()
-    {
-        Vector position_2 = position.add(new Vector(1, 0));
-
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius, Team.GUARD);
-
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-        agent_2.updateView(graphicsEngine.compute(map, agent_2));
-
-        agent_1.updateLocation(new Vector(20, 30));
-        agent_2.updateLocation(new Vector(40, 50));
-
-        PheromoneCell cell = (PheromoneCell) AcoAgent360Vision.accessWorld().getCellAt(position);
-        assertTrue(cell.currentPheromoneValue() < agent_1.releaseMaxPheromone());
-    }
-
-    @Test
-    void testBoundaryMovementEdgeCase()
-    {
-        position = new Vector(91, 94);
-        Vector nextPosition = new Vector(91, 95);
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        agent.updateLocation(nextPosition);
-        assertEquals(agent.getPosition(), nextPosition);
-    }
-
-    @Test
-    void testMove()
-    {
-        Vector position_2 = position.add(new Vector(1, 0));
-        Vector position_3 = position.add(new Vector(-1, 0));
-        Vector position_4 = position.add(new Vector(0, -1));
-
-        AcoAgent360Vision agent_1 = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        AcoAgent360Vision agent_2 = new AcoAgent360Vision(position_2, viewDirection, radius, Team.GUARD);
-        AcoAgent360Vision agent_3 = new AcoAgent360Vision(position_3, viewDirection, radius, Team.GUARD);
-        AcoAgent360Vision agent_4 = new AcoAgent360Vision(position_4, viewDirection, radius, Team.GUARD);
-
-        agent_1.updateView(graphicsEngine.compute(map, agent_1));
-        Move agentMove = agent_1.move();
-        assertEquals(agentMove.getDeltaPos(), new Vector(0, 1));
-    }
-
-    @Test
-    void testDetermineEquivalentMoves3D()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
-
-        Vector nextPosition = new Vector(14, 13);
-        agent.updateLocation(nextPosition);
-
-        Ray[] cardinalRays = agent.detectCardinalRays();
-        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
-        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
-
-
-        ArrayList<Vector> equivalentMoves = agent.determineEquivalentMinMoves(pheromoneValues, availableMovements);
-
-        //Agent moves one cell from original position, therefore 3 x 0-values remain
-        int expectedEquivalentMoves = 3;
-        assertEquals(equivalentMoves.size(), expectedEquivalentMoves);
-    }
-
-    @Test
-    void testAvailablePheromoneValues()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-
-        Vector nextPosition = new Vector(15, 12);
-        agent.updateLocation(nextPosition);
+        agent.move();
 
         agent.updateView(graphicsEngine.compute(map, agent));
-
-        Ray[] cardinalRays = agent.detectCardinalRays();
-        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
-
-        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
-        int indexOfLastValue = pheromoneValues.size() - 1;
-        assertTrue(pheromoneValues.get(indexOfLastValue) < agent.releaseMaxPheromone());
-    }
-
-    @Test
-    void testAvailablePheromonesDefaultValues()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
+        agent.move();
 
         agent.updateView(graphicsEngine.compute(map, agent));
-
-        Ray[] cardinalRays = agent.detectCardinalRays();
-        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
-
-        ArrayList<Double> pheromoneValues = agent.accessAvaliableCellPheromones(availableMovements);
-        for(Double pheromoneValue : pheromoneValues)
-        {
-            assertEquals(pheromoneValue, 0);
-        }
+        agent.move();
     }
 
     @Test
-    void testAvaliableMovementsWithObstacle()
+    public void testStuckAtWindow()
     {
-        position = new Vector(20, 19);
+        position = new Vector(234.88019900183576, 63.27721732577038);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agent.setPreviousMove(new Move(position, new Vector(0, moveDistance)));
 
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-        agent.updateView(graphicsEngine.compute(map, agent));
-
-        Ray[] cardinalRays = agent.detectCardinalRays();
-        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
-
-        //One dimension (North of agent) is blocked by a wall
-        assertEquals(availableMovements.size(), 3);
-    }
-
-    @Test
-    void testAvailableMovements()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
+        agent.updateLocation(new Vector(234.88019900183576, 83.27721732577038));
 
         agent.updateView(graphicsEngine.compute(map, agent));
-        Ray[] cardinalRays = agent.detectCardinalRays();
+        agent.move();
 
-        ArrayList<Vector> availableMovements = agent.determineAvailableMovements(cardinalRays);
-
-        //Within the map there are 4 available movements. Vector position link already tested
-        assertEquals(availableMovements.size(), cardinalRays.length);
-    }
-
-    @Test
-    void testAngleToMovementLink()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-
-        Vector link_0 = agent.angleToGridMovementLink(0);
-        Vector link_180 = agent.angleToGridMovementLink(180);
-
-        assertEquals(link_0, new Vector(0, 1));
-        assertEquals(link_180, new Vector(0, -1));
-    }
-
-    @Test
-    void testCardinalPointDetection()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-
-        double targetAngle =63;
-        agent.updateView(graphicsEngine.compute(map, agent));
-
-        Ray cardinalRay = agent.detectCardinalPoint(targetAngle);
-        assertTrue(agent.approximateAngleRange(cardinalRay.angle(), targetAngle));
-    }
-
-    @Test
-    void testCardinalPointNonDetection()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
-
-        double targetAngle =-163;
-        agent.updateView(graphicsEngine.compute(map, agent));
-
-        Ray cardinalRay = agent.detectCardinalPoint(targetAngle);
-        assertNull(cardinalRay);
-    }
-
-    @Test
-    void test4CardinalAngles()
-    {
-        AcoAgent360Vision agent = new AcoAgent360Vision(position, viewDirection, radius, Team.GUARD);
+        agentVisualExploration(agent);
 
         agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
 
-        Ray[] cardinalRays = agent.detectCardinalRays();
-        int[] cardinalAngles = agent.getCardinalAngles();
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move moveAfterStuck = agent.move();
 
-        assertTrue(agent.approximateAngleRange(cardinalRays[0].angle(), cardinalAngles[0]));
-        assertTrue(agent.approximateAngleRange(cardinalRays[1].angle(), cardinalAngles[1]));
-        assertTrue(agent.approximateAngleRange(cardinalRays[2].angle(), cardinalAngles[2]));
-        assertTrue(agent.approximateAngleRange(cardinalRays[3].angle(), cardinalAngles[3]));
+        assertNotEquals(moveAfterStuck.getDeltaPos(), new Vector(0, moveDistance));
     }
+    @Test
+    public void testStuckAtPortal()
+    {
+        position = new Vector(465.148150363186, 343.4177615482815);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+
+        agent.setPreviousMove(new Move(position, new Vector(moveDistance, 0)));
+        agent.updateLocation(new Vector(465.148150363186, 343.4177615482815));
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agentVisualExploration(agent);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+    }
+
+    //Test linked capabilities
+
+    @Test
+    public void testActionsAtWindowUsingMemory()
+    {
+        position = new Vector(677, 100);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+
+        //Agent smells pheromones
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        //Agent looking around...
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        Vector moveInMemory_1 = new Vector(-20, 0);
+        agent.setPreviousMove(new Move(position, moveInMemory_1));
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move movementFromMemory  = agent.move();
+        assertEquals(movementFromMemory.getDeltaPos(), new Vector(0, 20));
+
+        Vector moveInMemory_2 = new Vector(0, 20);
+        agent.setPreviousMove(new Move(position, moveInMemory_2));
+        agent.setMoveFailed(true);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertTrue(agent.getShortTermMemory().containsKey(moveInMemory_2.hashCode()));
+
+        //Movement using memory
+        agent.setMoveFailed(false);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertEquals(agent.getVisualDirectionsToExplore().size(), 3);
+    }
+
+    @Test
+    public void testPheromoneToMovement()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agentSetup(agent);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        //Detect pheromones
+        agent.move();
+        assertEquals(agent.getVisualDirectionsToExplore().size(), 4);
+
+        //Visually explore
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+        assertEquals(agent.getPossibleMovements().size(), 3);
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        Move move = agent.move();
+        assertNotEquals(move.getDeltaPos(), new Vector(0,0));
+
+    }
+
+    //Test vision capabilities
+    @Test
+    public void testCardinalPointDetection()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        assertNotNull(agent.detectCardinalPoint(90));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {throw new RuntimeException("Indicator");});
+        assertEquals("Indicator", exception.getMessage());
+    }
+
+    @Test
+    void testDirectionsToVisiblyExplore()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
+        ArrayList<Double> pheromones = agent.accessAvailableCellAggregatePheromones();
+
+        assertEquals(pheromones.size(), pheromoneDirections.size());
+        assertEquals(0.0, pheromones.get(0));
+    }
+
+    @Test
+    void movePossible()
+    {
+        position = new Vector(678, 100);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agent.updateView(graphicsEngine.compute(map, agent));
+        double angle = direction.getAngle();
+
+        Ray ray = agent.detectCardinalPoint(angle);
+        boolean movePossible =  agent.moveEvaluation(ray);
+
+        assertFalse(movePossible);
+    }
+
+    //Test smell capabilities
+    @Test
+    public void testPheromoneSenseDirections()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agentSetup(agent);
+
+        ArrayList<Vector> pheromoneSenseDirections = agent.getPheromoneDirections();
+        assertEquals(pheromoneSenseDirections.get(0), new Vector (0, moveDistance));
+        assertEquals(pheromoneSenseDirections.get(3), new Vector(-moveDistance, 0));
+    }
+
+    @Test
+    public void testAgentUpdateReflectingToWorld()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agentSetup(agent);
+
+
+    }
+
 }
