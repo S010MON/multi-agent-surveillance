@@ -1,4 +1,4 @@
-package app.model.soundSource;
+package app.model.sound;
 
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
@@ -18,9 +18,11 @@ public class SoundSource
     @Getter private double frequency;                                                 /** The sound's frequency in hz */
     @Setter @Getter private ArrayList<SoundRay> rays;
 
-    public SoundSource(Vector position)
+    public SoundSource(Vector position, double amplitude, double frequency)
     {
         this.position = position;
+        this.amplitude = amplitude;
+        this.frequency = frequency;
         this.rays = new ArrayList<>();
     }
 

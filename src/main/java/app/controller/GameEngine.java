@@ -39,8 +39,8 @@ public class GameEngine
     public void tick()
     {
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        // TODO add sound source decay here
         map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
+        map.getSoundSources().forEach(s -> s.decay());
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         map.getAgents().forEach(a -> map.checkForCapture(a));

@@ -1,7 +1,7 @@
 package app.model.furniture;
 
 import app.model.boundary.Boundary;
-import app.model.soundBoundary.SoundBoundary;
+import app.model.sound.SoundBoundary;
 import app.model.texture.Texture;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;

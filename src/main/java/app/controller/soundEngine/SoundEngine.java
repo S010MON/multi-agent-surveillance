@@ -3,8 +3,8 @@ package app.controller.soundEngine;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Agent;
-import app.model.soundBoundary.SoundBoundary;
-import app.model.soundSource.SoundSource;
+import app.model.sound.SoundBoundary;
+import app.model.sound.SoundSource;
 
 import java.util.ArrayList;
 import java.util.Stack;

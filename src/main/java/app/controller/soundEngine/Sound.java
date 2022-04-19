@@ -1,7 +1,7 @@
 package app.controller.soundEngine;
 
 import app.controller.linAlg.Vector;
-import app.model.soundSource.SoundSource;
+import app.model.sound.SoundSource;
 import java.util.Objects;
 import lombok.Getter;
 
