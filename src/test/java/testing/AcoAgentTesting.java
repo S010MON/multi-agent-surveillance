@@ -1,5 +1,6 @@
 package testing;
 
+import app.controller.GameEngine;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
 import app.controller.io.FileManager;
@@ -10,6 +11,7 @@ import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Team;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -25,7 +27,9 @@ public class AcoAgentTesting
     private int moveDistance = 20;
     GraphicsEngine graphicsEngine = new GraphicsEngine(80);
     Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+    Settings teleportSettings = FileManager.loadSettings("src/main/resources/teleportMap.txt");
     Map map = new Map(settings);
+    Map teleportMap = new Map(teleportSettings);
 
     public void agentSetup(AcoAgent agent)
     {
@@ -34,6 +38,55 @@ public class AcoAgentTesting
     }
 
     //Bug testing
+    public void completeVisualInspection(AcoAgent agent)
+    {
+        //Sense pheromones
+        agent.updateView(graphicsEngine.compute(teleportMap, agent));
+        agent.move();
+
+        //Explore direction 1
+        agent.updateView(graphicsEngine.compute(teleportMap, agent));
+        agent.move();
+
+        //Explore direction 2
+        agent.updateView(graphicsEngine.compute(teleportMap, agent));
+        agent.move();
+
+        //Explore direction 3
+        agent.updateView(graphicsEngine.compute(teleportMap, agent));
+        agent.move();
+
+        //Explore direction 4
+        agent.updateView(graphicsEngine.compute(teleportMap, agent));
+        agent.move();
+    }
+    @Test
+    public void testTeleportation()
+    {
+        //Guard spawn positioning
+        Vector upperSpawn = new Vector(770, 18);
+        Vector middleSpawn = new Vector(770, 58);
+        Vector lowerSpawn = new Vector(770, 98);
+        Vector[] spawnLocations = {middleSpawn};
+
+        Vector moveContinuity = new Vector(moveDistance, 0);
+        Vector expectedMove = new Vector(moveDistance, 0);
+
+        for(Vector spawnLocation: spawnLocations)
+        {
+            System.out.println("Spawn: " + spawnLocation.toString());
+            AcoAgent agent_1 = new AcoAgent(spawnLocation, direction, radius, Team.GUARD);
+            agentSetup(agent_1);
+            agent_1.setMovementContinuity(moveContinuity);
+            agent_1.setMovementHeuristic(1);
+
+            completeVisualInspection(agent_1);
+
+            Vector movement_1 = agent_1.move().getDeltaPos();
+            assertEquals(movement_1, expectedMove);
+        }
+    }
+
     public void agentVisualExploration(AcoAgent agent)
     {
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -51,6 +104,7 @@ public class AcoAgentTesting
     {
         position = new Vector(234.88019900183576, 63.27721732577038);
         AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        agentSetup(agent);
         agent.setPreviousMove(new Move(position, new Vector(0, moveDistance)));
 
         agent.updateLocation(new Vector(234.88019900183576, 83.27721732577038));

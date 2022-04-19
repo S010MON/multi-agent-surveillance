@@ -29,7 +29,7 @@ public class AcoAgent extends AgentImp
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
-    private double movementHeuristic = 0.95;
+    @Setter private double movementHeuristic = 0.95;
     @Setter private Vector movementContinuity = new Vector();
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;

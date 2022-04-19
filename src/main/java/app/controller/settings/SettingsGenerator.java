@@ -1,6 +1,5 @@
 package app.controller.settings;
 
-import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
@@ -9,7 +8,7 @@ public abstract class SettingsGenerator
     public static Settings mockSettings()
     {
         Settings settings = new Settings();
-        settings.setName("best_map");
+        settings.setName("bestMap");
         settings.setGameMode(1);
         settings.setWidth(800);
         settings.setHeight(600);
