@@ -48,4 +48,6 @@ public interface Agent extends Boundary
     void addViewWindow(AgentView agentView);
 
     Team getTeam();
+
+    void setTgtDirection(Vector tgtDirection);
 }

@@ -43,6 +43,7 @@ public class GameEngine
         map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
+        map.getAgents().forEach(a -> map.checkForCapture(a));
 
         for (Agent a : map.getAgents())
         {
@@ -71,6 +72,7 @@ public class GameEngine
         }
         tics++;
         renderer.render();
+        map.garbageCollection();
     }
 
     public void handleKey(KeyEvent e)
