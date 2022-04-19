@@ -138,6 +138,6 @@ public class MemoryGraphTesting
         world.leaveVertex(agentPosition_9, 2);
 
         double aggregatePheromone = world.aggregateCardinalPheromones(agentPosition_1, new Vector(20, 0));
-        assertEquals(aggregatePheromone, 8);
+        assertEquals(aggregatePheromone, 4);
     }
 }
