@@ -15,7 +15,7 @@ public class SoundRay extends Ray
     @Setter private boolean visible = true;
     @Getter private SoundRay parent;
     @Getter private int bounces;
-    private ArrayList<SoundRay> children;
+    @Getter private ArrayList<SoundRay> children;
 
     public SoundRay(Vector u, Vector v)
     {
@@ -56,6 +56,11 @@ public class SoundRay extends Ray
                     getV().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
                     getV().getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
         }
+    }
+
+    public boolean hasParent()
+    {
+        return parent != null;
     }
 
     public String toString()

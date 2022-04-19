@@ -210,7 +210,7 @@ public class AcoAgentLimitedVision extends AcoAgent360Vision
 
     public boolean movePossible(Ray cardinalRay)
     {
-        return (cardinalRay.rayLength() > cellSize + epsilon);
+        return (cardinalRay.length() > cellSize + epsilon);
     }
 
     @Override

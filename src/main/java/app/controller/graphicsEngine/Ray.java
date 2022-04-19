@@ -32,11 +32,16 @@ public class Ray
         return new Ray(this.u, b);
     }
 
-    public double rayLength()
+    public double length()
     {
         double yValue = u.getY() - v.getY();
         double xValue = u.getX() - v.getX();
         return Math.sqrt(Math.pow(yValue, 2) + Math.pow(xValue, 2));
+    }
+
+    public Vector direction()
+    {
+        return v.sub(u);
     }
 
     public void draw(GraphicsContext gc)
