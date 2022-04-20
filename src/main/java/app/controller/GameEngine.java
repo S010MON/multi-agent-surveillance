@@ -4,11 +4,13 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundEngine;
+import app.controller.soundEngine.SoundVector;
 import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
 import app.model.boundary.PortalBoundary;
+import app.model.sound.SoundSource;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -38,9 +40,22 @@ public class GameEngine
 
     public void tick()
     {
-        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
-        map.getSoundSources().forEach(s -> s.decay());
+        // map.getSoundSources().forEach(s -> s.decay());
+        for(Agent agent: map.getAgents())
+        {
+            agent.clearHeard();
+            for(SoundSource source: map.getSoundSources())
+            {
+                SoundVector heard = source.isHeard(agent);
+                if(heard != null)
+                {
+                    agent.addHeard(heard);
+                }
+            }
+        }
+
+        map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         map.getAgents().forEach(a -> map.checkForCapture(a));

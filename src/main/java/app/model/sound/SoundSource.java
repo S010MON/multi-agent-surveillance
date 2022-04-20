@@ -1,5 +1,6 @@
 package app.model.sound;
 
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
 import app.controller.soundEngine.SoundVector;
@@ -10,6 +11,9 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SoundSource
 {
@@ -35,19 +39,20 @@ public class SoundSource
      */
     public SoundVector isHeard(Agent agent)
     {
-        PriorityQueue<SoundRay> Q = new PriorityQueue<>();
-        Q.addAll(rays);
+        Queue<SoundRay> queue = new ConcurrentLinkedQueue<>();
+        queue.addAll(rays);
 
-        while(!Q.isEmpty())
+        while(!queue.isEmpty())
         {
-            SoundRay ray = Q.poll();
+            SoundRay ray = queue.poll();
 
-            if(agent.isCrossed(ray.getU(), ray.getV()))
+            if(Intersection.hasIntersection(ray.getU(), ray.getV(), agent.getPosition(), agent.getRadius()))
             {
-                double amplitude = this.amplitude / collectDistances(ray, agent);;
-                return new SoundVector(ray.direction(), amplitude, this.frequency);
+                double amplitude = this.amplitude / collectDistances(ray, agent);
+                Vector direction = ray.direction().normalise().scale(100);
+                return new SoundVector(direction, amplitude, this.frequency);
             }
-            Q.addAll(ray.getChildren());
+            queue.addAll(ray.getChildren());
         }
         return null;
     }

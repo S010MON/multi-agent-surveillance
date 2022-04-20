@@ -11,8 +11,8 @@ import java.util.Stack;
 
 public class SoundEngine
 {
-    final static int noOfRays = 36;
-    final static int noOfBounces = 3;
+    final static int noOfRays = 2;
+    final static int noOfBounces = 4;
 
     public static ArrayList<SoundRay> buildTree(Map map, SoundSource source)
     {
@@ -25,16 +25,20 @@ public class SoundEngine
             SoundRay r = rays.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
             Vector bdyIntersection = getIntersection(r, boundaries);
+            Vector origin = source.getPosition();
 
             if(bdyIntersection != null && agentIntersection != null)
             {
-                output.add(new SoundRay(r.getU(), bdyIntersection));
-                if(r.getBounces() > 0)
+                if(agentIntersection.dist(origin) < bdyIntersection.dist(origin))
+                    output.add(new SoundRay(r.getU(), agentIntersection));
+                else if(r.getBounces() > 0)
                 {
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
                     rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces(), r));
+                    output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
                 }
-                output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
+                else
+                    output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
             }
             else if(bdyIntersection != null)
             {

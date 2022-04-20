@@ -22,7 +22,7 @@ import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = false;
+    private final Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -56,7 +56,7 @@ public class Map
 
         /* Make a test sound source */
         soundSources = new ArrayList<>();
-        soundSources.add(new SoundSource(new Vector(900, 500), 10, 1000));
+        soundSources.add(new SoundSource(new Vector(300, 300), 10, 1000));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();
