@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Trail;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;

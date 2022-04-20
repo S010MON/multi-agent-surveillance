@@ -5,12 +5,15 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Move;
+import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.graph.DefaultEdge;
+
 import java.util.ArrayList;
 
 
@@ -27,6 +30,8 @@ public class AgentImp implements Agent
     @Getter protected ArrayList<Ray> view;
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
+
+    @Getter protected static MemoryGraph<GraphCell, DefaultEdge> world;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {
