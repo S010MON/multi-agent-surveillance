@@ -24,21 +24,24 @@ public class SoundEngine
         {
             SoundRay r = rays.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
+
+            if(agentIntersection != null)
+                System.out.println("Yay");
+
             Vector bdyIntersection = getIntersection(r, boundaries);
             Vector origin = source.getPosition();
 
             if(bdyIntersection != null && agentIntersection != null)
             {
                 if(agentIntersection.dist(origin) < bdyIntersection.dist(origin))
+                {
                     output.add(new SoundRay(r.getU(), agentIntersection));
+                }
                 else if(r.getBounces() > 0)
                 {
-                    Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces(), r));
-                    output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
+                    Vector bouncePoint = bouncePoint(bdyIntersection, r.getU());
+                    rays.addAll(SoundRayScatter.angle360(bouncePoint, noOfRays, 1000, r.getBounces(), r));
                 }
-                else
-                    output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
             }
             else if(bdyIntersection != null)
             {
