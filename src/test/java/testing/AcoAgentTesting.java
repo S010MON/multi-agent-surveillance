@@ -8,6 +8,7 @@ import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 
 import org.junit.jupiter.api.Test;
@@ -207,7 +208,26 @@ public class AcoAgentTesting
         agent.move();
 
         //Visually explore marking obstacles and viable directions
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
 
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        GraphCell obstacleCell_1 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
+        GraphCell obstacleCell_2 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
+
+        assertTrue(obstacleCell_1.getObstacle());
+        assertTrue(obstacleCell_2.getObstacle());
     }
 
     //Test smell capabilities

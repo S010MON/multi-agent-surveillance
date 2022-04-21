@@ -83,6 +83,8 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
+    //TODO Refactor to check for cells with obstacle set -> Set pheromones to max
+    //TODO Refactor aggregate to single pheromone detection
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
     {
         GraphCell currentCell = getVertexAt(currentPosition);

@@ -245,6 +245,10 @@ public class AcoAgent extends AgentImp
         {
             possibleMovements.add(direction.scale(distance));
         }
+        else
+        {
+            world.setVertexAsObstacle(position, currentDirection);
+        }
         nextBestOptionHandling(currentDirection);
     }
 

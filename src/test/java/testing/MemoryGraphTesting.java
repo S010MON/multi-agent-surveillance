@@ -156,4 +156,10 @@ public class MemoryGraphTesting
         GraphCell obstacle = world.getVertexAt(agentPosition.add(movement));
         assertTrue(obstacle.getObstacle());
     }
+
+    //TODO fill in this test -> Code in aggregate fetching
+    public void testAggregateWithObstacle()
+    {
+
+    }
 }
