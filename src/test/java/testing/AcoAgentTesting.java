@@ -8,8 +8,10 @@ import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,6 +38,12 @@ public class AcoAgentTesting
     {
         agent.setDistance(moveDistance);
         agent.setVisionDistance(viewingDistance);
+    }
+
+    @BeforeEach
+    public void clearMemoryAndWorld()
+    {
+        AcoAgent.resetWorld(moveDistance);
     }
 
     //Bug testing
@@ -124,7 +132,7 @@ public class AcoAgentTesting
         agent.setMoveFailed(false);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-        assertEquals(agent.getVisualDirectionsToExplore().size(), 3);
+        assertEquals(agent.getVisualDirectionsToExplore().size(), 2);
     }
 
     @Test
@@ -193,6 +201,40 @@ public class AcoAgentTesting
         Ray ray = agent.detectCardinalPoint(angle);
         boolean movePossible =  agent.moveEvaluation(ray);
         assertFalse(movePossible);
+    }
+
+    @Test
+    public void testObstacleLabelling()
+    {
+        //Should detect obstacles on movement (distance, 0) and (o, distance)
+        Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
+        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Team.GUARD);
+
+        //Smell pheromones
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        //Visually explore marking obstacles and viable directions
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        GraphCell obstacleCell_1 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
+        GraphCell obstacleCell_2 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
+
+        assertTrue(obstacleCell_1.getObstacle());
+        assertTrue(obstacleCell_2.getObstacle());
     }
 
     //Test smell capabilities

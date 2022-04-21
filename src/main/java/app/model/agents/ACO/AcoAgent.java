@@ -18,23 +18,22 @@ public class AcoAgent extends AgentImp
 {
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
+    private static Random randomGenerator = new Random(1);
 
     @Getter private final double maxPheromone = 2;
     private final double epsilon = 0.3;
-    private static Random randomGenerator = new Random(1);
     private final int[] cardinalAngles = {0, 90, 180, 270};
 
-    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
-    @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
-    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
-    //TODO Discuss dynamic movement heuristic value
-    @Setter private double movementHeuristic = 0.95;
+    @Setter private double movementHeuristic = 1.0;
     @Setter private Vector movementContinuity = new Vector();
-    //TODO Discuss variable visionDistance heuristic
+    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<>();
+    @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
-    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
+
 
     public AcoAgent(Vector position, Vector direction, double radius, Team team)
     {
@@ -42,41 +41,25 @@ public class AcoAgent extends AgentImp
         initializeWorld();
     }
 
-    private void initializeWorld()
-    {
-        if(world == null)
-        {
-            world = new AcoWorld<>(distance);
-        }
-
-        pheromoneSenseDirections();
-        world.add_or_adjust_Vertex(position);
-        movementContinuity = direction.scale(distance);
-        //TODO Implement heuristic using targetVector
-        tgtDirection = direction.copy();
-        previousMove = new Move(position, new Vector());
-        acoAgentCount ++;
-    }
-
     @Override
     public Move move()
     {
-        //Short term memory after failed move
+        /*Short term memory after failed move*/
         if(moveFailed)
         {
             return shortTermMemory();
         }
-        //Detect pheromones and translate to directions to explore
+        /*Detect pheromones and translate to directions to explore*/
         else if(visualDirectionsToExplore.isEmpty() && possibleMovements.isEmpty())
         {
             return smellPheromones();
         }
-        //Explore areas visually
+        /*Explore areas visually*/
         else if(!visualDirectionsToExplore.isEmpty())
         {
             return visibleExploration();
         }
-        //Make move
+        /*Make move*/
         else
         {
             return makeMove();
@@ -95,8 +78,49 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    //Memory//
-    public Move shortTermMemory()
+    /* Setup */
+    private void pheromoneSenseDirections()
+    {
+        for(int cardinalAngle: cardinalAngles)
+        {
+            pheromoneDirections.add(angleToGraphMovementLink(cardinalAngle));
+        }
+    }
+
+    private Vector angleToGraphMovementLink(int angle)
+    {
+        return switch (angle)
+                {
+                    case 0 -> new Vector(0, -distance);
+                    case 90 -> new Vector(distance, 0);
+                    case 180 -> new Vector(0, distance);
+                    case 270 -> new Vector(-distance, 0);
+                    default -> null;
+                };
+    }
+
+    public static void resetWorld(int distance)
+    {
+        world = new AcoWorld<>(distance);
+    }
+
+    private void initializeWorld()
+    {
+        if(world == null)
+        {
+            world = new AcoWorld<>(distance);
+        }
+
+        pheromoneSenseDirections();
+        world.add_or_adjust_Vertex(position);
+        movementContinuity = direction.scale(distance);
+        tgtDirection = direction.copy();
+        previousMove = new Move(position, new Vector());
+        acoAgentCount ++;
+    }
+
+    /* Memory */
+    private Move shortTermMemory()
     {
         // Case 1: possibleMoves not empty -> select next move and make it
         if(selectNextPossibleMove())
@@ -110,7 +134,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public void relyOnMemory()
+    private void relyOnMemory()
     {
         shortTermMemory.forEach((k, v) -> possibleMovements.add(v));
     }
@@ -118,11 +142,7 @@ public class AcoAgent extends AgentImp
     private boolean selectNextPossibleMove()
     {
         possibleMovements.remove(previousMove.getDeltaPos());
-        if(possibleMovements.isEmpty())
-        {
-            return false;
-        }
-        return true;
+        return !possibleMovements.isEmpty();
     }
 
     private Move revaluateSenses()
@@ -132,8 +152,8 @@ public class AcoAgent extends AgentImp
         return new Move(position, new Vector());
     }
 
-    //Movement//
-    public void successfulMovement()
+    /* Movement */
+    private void successfulMovement()
     {
         world.leaveVertex(previousMove.getEndDir(), maxPheromone);
         world.add_or_adjust_Vertex(position);
@@ -170,7 +190,7 @@ public class AcoAgent extends AgentImp
         return possibleMovements.contains(movementContinuity);
     }
 
-    // Smell //
+    /* Smell */
     public Move smellPheromones()
     {
         smellPheromonesToVisualExplorationDirection();
@@ -225,7 +245,7 @@ public class AcoAgent extends AgentImp
         return cellPheromoneValues;
     }
 
-    // Vision //
+    /* Vision */
     public Move visibleExploration()
     {
         explorationToViableMovement();
@@ -243,10 +263,14 @@ public class AcoAgent extends AgentImp
         {
             possibleMovements.add(direction.scale(distance));
         }
+        else
+        {
+            world.setVertexAsObstacle(position, currentDirection);
+        }
         nextBestOptionHandling(currentDirection);
     }
 
-    public void nextBestOptionHandling(Vector currentDirectionExplored)
+    private void nextBestOptionHandling(Vector currentDirectionExplored)
     {
         shortTermMemory.put(currentDirectionExplored.hashCode(), currentDirectionExplored);
 
@@ -256,7 +280,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public void nextExplorationVisionDirection()
+    private void nextExplorationVisionDirection()
     {
         if(!visualDirectionsToExplore.empty())
         {
@@ -283,13 +307,13 @@ public class AcoAgent extends AgentImp
         throw new RuntimeException("Cardinal point not found");
     }
 
-    public boolean approximateAngleRange(double detectedAngle, double targetAngle)
+    private boolean approximateAngleRange(double detectedAngle, double targetAngle)
     {
         return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
     }
 
     //World (SWARM memory)
-    public void evaporateProcess()
+    private void evaporateProcess()
     {
         acoMoveCount ++;
         if(acoMoveCount >= acoAgentCount)
@@ -297,26 +321,5 @@ public class AcoAgent extends AgentImp
             world.evaporateWorld();
             acoMoveCount = acoMoveCount - acoAgentCount;
         }
-    }
-
-    //Setup
-    public void pheromoneSenseDirections()
-    {
-        for(int cardinalAngle: cardinalAngles)
-        {
-            pheromoneDirections.add(angleToGraphMovementLink(cardinalAngle));
-        }
-    }
-
-    public Vector angleToGraphMovementLink(int angle)
-    {
-        return switch (angle)
-                {
-                    case 0 -> new Vector(0, -distance);
-                    case 90 -> new Vector(distance, 0);
-                    case 180 -> new Vector(0, distance);
-                    case 270 -> new Vector(-distance, 0);
-                    default -> null;
-                };
     }
 }
