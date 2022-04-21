@@ -143,4 +143,10 @@ public class AgentImp implements Agent
     {
         agentViewWindow = agentView;
     }
+
+    @Override
+    public Agent nextState()
+    {
+        return this;
+    }
 }

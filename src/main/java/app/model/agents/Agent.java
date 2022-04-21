@@ -47,4 +47,6 @@ public interface Agent extends Boundary
     Team getTeam();
 
     void setTgtDirection(Vector tgtDirection);
+
+    Agent nextState();
 }

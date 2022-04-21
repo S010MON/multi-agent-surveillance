@@ -210,6 +210,16 @@ public class Map
         }
     }
 
+    public void updateStates()
+    {
+        ArrayList<Agent> new_states = new ArrayList<>();
+        for(Agent a: agents)
+        {
+            new_states.add(a.nextState());
+        }
+        agents = new_states;
+    }
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
