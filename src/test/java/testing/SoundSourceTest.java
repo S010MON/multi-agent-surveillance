@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class SoundSourceTest
 {
-    @Test public void isHeard()
+    @Test void isHeard()
     {
         Vector a_pos = new Vector(10,0);
         Vector a_dir = new Vector();
@@ -34,6 +34,7 @@ public class SoundSourceTest
         SoundVector exp = new SoundVector(1,0, s_amp, s_freq);
         ArrayList<SoundVector> act = soundSource.heard(agent);
         assertEquals(exp, act);
-
     }
+
+
 }
