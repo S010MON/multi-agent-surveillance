@@ -41,40 +41,25 @@ public class AcoAgent extends AgentImp
         initializeWorld();
     }
 
-    private void initializeWorld()
-    {
-        if(world == null)
-        {
-            world = new AcoWorld<>(distance);
-        }
-
-        pheromoneSenseDirections();
-        world.add_or_adjust_Vertex(position);
-        movementContinuity = direction.scale(distance);
-        tgtDirection = direction.copy();
-        previousMove = new Move(position, new Vector());
-        acoAgentCount ++;
-    }
-
     @Override
     public Move move()
     {
-        //Short term memory after failed move
+        /*Short term memory after failed move*/
         if(moveFailed)
         {
             return shortTermMemory();
         }
-        //Detect pheromones and translate to directions to explore
+        /*Detect pheromones and translate to directions to explore*/
         else if(visualDirectionsToExplore.isEmpty() && possibleMovements.isEmpty())
         {
             return smellPheromones();
         }
-        //Explore areas visually
+        /*Explore areas visually*/
         else if(!visualDirectionsToExplore.isEmpty())
         {
             return visibleExploration();
         }
-        //Make move
+        /*Make move*/
         else
         {
             return makeMove();
@@ -93,7 +78,48 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    //Memory//
+    /* Setup */
+    private void pheromoneSenseDirections()
+    {
+        for(int cardinalAngle: cardinalAngles)
+        {
+            pheromoneDirections.add(angleToGraphMovementLink(cardinalAngle));
+        }
+    }
+
+    private Vector angleToGraphMovementLink(int angle)
+    {
+        return switch (angle)
+                {
+                    case 0 -> new Vector(0, -distance);
+                    case 90 -> new Vector(distance, 0);
+                    case 180 -> new Vector(0, distance);
+                    case 270 -> new Vector(-distance, 0);
+                    default -> null;
+                };
+    }
+
+    public static void resetWorld(int distance)
+    {
+        world = new AcoWorld<>(distance);
+    }
+
+    private void initializeWorld()
+    {
+        if(world == null)
+        {
+            world = new AcoWorld<>(distance);
+        }
+
+        pheromoneSenseDirections();
+        world.add_or_adjust_Vertex(position);
+        movementContinuity = direction.scale(distance);
+        tgtDirection = direction.copy();
+        previousMove = new Move(position, new Vector());
+        acoAgentCount ++;
+    }
+
+    /* Memory */
     private Move shortTermMemory()
     {
         // Case 1: possibleMoves not empty -> select next move and make it
@@ -126,7 +152,7 @@ public class AcoAgent extends AgentImp
         return new Move(position, new Vector());
     }
 
-    //Movement//
+    /* Movement */
     private void successfulMovement()
     {
         world.leaveVertex(previousMove.getEndDir(), maxPheromone);
@@ -164,7 +190,7 @@ public class AcoAgent extends AgentImp
         return possibleMovements.contains(movementContinuity);
     }
 
-    // Smell //
+    /* Smell */
     public Move smellPheromones()
     {
         smellPheromonesToVisualExplorationDirection();
@@ -219,7 +245,7 @@ public class AcoAgent extends AgentImp
         return cellPheromoneValues;
     }
 
-    // Vision //
+    /* Vision */
     public Move visibleExploration()
     {
         explorationToViableMovement();
@@ -295,31 +321,5 @@ public class AcoAgent extends AgentImp
             world.evaporateWorld();
             acoMoveCount = acoMoveCount - acoAgentCount;
         }
-    }
-
-    //Setup
-    private void pheromoneSenseDirections()
-    {
-        for(int cardinalAngle: cardinalAngles)
-        {
-            pheromoneDirections.add(angleToGraphMovementLink(cardinalAngle));
-        }
-    }
-
-    private Vector angleToGraphMovementLink(int angle)
-    {
-        return switch (angle)
-                {
-                    case 0 -> new Vector(0, -distance);
-                    case 90 -> new Vector(distance, 0);
-                    case 180 -> new Vector(0, distance);
-                    case 270 -> new Vector(-distance, 0);
-                    default -> null;
-                };
-    }
-
-    public static void resetWorld(int distance)
-    {
-        world = new AcoWorld<>(distance);
     }
 }
