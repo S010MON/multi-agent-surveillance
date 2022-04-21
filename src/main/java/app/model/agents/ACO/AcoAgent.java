@@ -26,7 +26,7 @@ public class AcoAgent extends AgentImp
 
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
-    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<>();
     @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
     @Setter private double movementHeuristic = 1.0;
     @Setter private Vector movementContinuity = new Vector();
