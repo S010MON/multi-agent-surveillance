@@ -28,11 +28,8 @@ public class AcoAgent extends AgentImp
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
     @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
-
-    //TODO Discuss dynamic movement heuristic value
     @Setter private double movementHeuristic = 1.0;
     @Setter private Vector movementContinuity = new Vector();
-    //TODO Discuss variable visionDistance heuristic
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
