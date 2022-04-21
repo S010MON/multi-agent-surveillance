@@ -25,6 +25,8 @@ public class GameEngine
     private GraphicsEngine graphicsEngine;
     private Timeline timeline;
 
+    private boolean captureEnabled = false;
+
     public GameEngine(Map map, Renderer renderer)
     {
         this.tics = 0;
@@ -41,7 +43,11 @@ public class GameEngine
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
-        map.getAgents().forEach(a -> map.checkForCapture(a));
+        if(captureEnabled)
+        {
+            map.getAgents().forEach(a -> map.checkForCapture(a));
+        }
+
 
         for (Agent a : map.getAgents())
         {
