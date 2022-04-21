@@ -28,7 +28,7 @@ public class DirectionFollowAgent extends AgentImp
     }
 
     private Ray targetRay;
-    private InternalState internalState;
+    @Getter private InternalState internalState;
     private boolean DEBUG = false;
     @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
@@ -77,7 +77,24 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followRay()
     {
-        return null;
+        // followRay assumes the start point is on the ray itself
+
+        double dist = distanceToObstacle(targetRay.angle());
+
+        if(dist < 0.0){
+            // means there are no obstacles so just go straight to the target
+            internalState = InternalState.goToTarget;
+            return move();
+        }
+
+        if(dist >= moveLength){
+            return new Move(targetRay.getU(), targetRay.getU().scale(moveLength));
+        }
+
+        // means we moved all the way up to the target
+        internalState = InternalState.followWall;
+
+        return new Move(targetRay.getU(), targetRay.getU().scale(dist));
     }
 
     private Move followWall()
@@ -112,6 +129,22 @@ public class DirectionFollowAgent extends AgentImp
             System.out.println("No wall detected with ray of angle: " + rayAngle);
         return true;
     }
+
+    private double distanceToObstacle(double rayAngle){
+        for (Ray r : view)
+        {
+            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
+            {
+                if (DEBUG)
+                    System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
+                return r.rayLength();
+            }
+        }
+        if (DEBUG)
+            System.out.println("No wall detected with ray of angle: " + rayAngle);
+        return -1.0;
+    }
+
 
     /** Pseudocode for simple wall following algorithm:
          if (turned wallTurn previously and forward no wall)
