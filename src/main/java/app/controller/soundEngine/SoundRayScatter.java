@@ -9,7 +9,7 @@ public class SoundRayScatter
     {
         Stack<SoundRay> rays = new Stack<>();
 
-        double rand = 45; //TODO - replace: 360 * Math.random();
+        double rand = 360 * Math.random();
         Vector dir = new Vector(0,maxDist).rotate(rand);
         int increment = 360/noOfRays;
 
@@ -24,7 +24,7 @@ public class SoundRayScatter
     {
         Stack<SoundRay> rays = new Stack<>();
 
-        double rand = 15; //TODO - replace: 360 * Math.random();
+        double rand = 360 * Math.random();
         Vector dir = new Vector(0,maxDist).rotate(rand);
         int increment = 360/noOfRays;
 

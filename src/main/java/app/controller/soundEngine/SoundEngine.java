@@ -11,49 +11,51 @@ import java.util.Stack;
 
 public class SoundEngine
 {
-    final static int noOfRays = 2;
-    final static int noOfBounces = 4;
+    final static int noOfRays = 10;
+    final static int noOfBounces = 3;
 
     public static ArrayList<SoundRay> buildTree(Map map, SoundSource source)
     {
         ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
-        Stack<SoundRay> rays = SoundRayScatter.angle360(source.getPosition(), noOfRays, 1000, noOfBounces);
+        Stack<SoundRay> stack = SoundRayScatter.angle360(source.getPosition(), noOfRays, 1000, noOfBounces);
 
-        while(!rays.isEmpty())
+        while(!stack.isEmpty())
         {
-            SoundRay r = rays.pop();
+            SoundRay r = stack.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
-
-            if(agentIntersection != null)
-                System.out.println("Yay");
-
             Vector bdyIntersection = getIntersection(r, boundaries);
             Vector origin = source.getPosition();
 
             if(bdyIntersection != null && agentIntersection != null)
             {
-                if(agentIntersection.dist(origin) < bdyIntersection.dist(origin))
+                if(origin.dist(agentIntersection) <= origin.dist(bdyIntersection))
                 {
                     output.add(new SoundRay(r.getU(), agentIntersection));
                 }
-                else if(r.getBounces() > 0)
+                else
                 {
-                    Vector bouncePoint = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(bouncePoint, noOfRays, 1000, r.getBounces(), r));
+                    output.add(new SoundRay(r.getU(), bdyIntersection));
+                    if(r.getBounces() > 0)
+                    {
+                        Vector new_origin = bouncePoint(bdyIntersection, r.getU());
+                        stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
+                    }
                 }
+            }
+            else if(agentIntersection != null)
+            {
+                output.add(new SoundRay(r.getU(), agentIntersection));
             }
             else if(bdyIntersection != null)
             {
                 if(r.getBounces() > 0)
                 {
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces(), r));
+                    stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
                 }
-                output.add(new SoundRay(r.getU(), bdyIntersection, r.getBounces(), r));
+                output.add(new SoundRay(r.getU(), bdyIntersection));
             }
-            else if(agentIntersection != null)
-                output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
         }
         return output;
     }
@@ -81,18 +83,11 @@ public class SoundEngine
     private static Vector getAgentIntersection(SoundRay r, ArrayList<Agent> agents)
     {
         Vector intersection = null;
-        double closestDist = Double.MAX_VALUE;
         for (Agent agent: agents)
         {
             if (agent.isHit(r))
             {
-                Vector currentV = agent.intersection(r);
-                double dist = r.getU().dist(currentV);
-                if (dist < closestDist && currentV.getAngle() == r.angle())
-                {
-                    intersection = currentV;
-                    closestDist = dist;
-                }
+                intersection = agent.intersection(r);
             }
         }
         return intersection;
