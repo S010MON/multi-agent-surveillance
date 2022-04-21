@@ -1,6 +1,5 @@
 package app.controller.settings;
 
-import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 
@@ -75,7 +74,6 @@ public abstract class SettingsGenerator
         settings.setTimeStep(11);
         settings.addFurniture(new Rectangle2D(10, 10,100,100), FurnitureType.GUARD_SPAWN);
         settings.addFurniture(new Rectangle2D(10, 10,100,100), FurnitureType.INTRUDER_SPAWN);
-
         return settings;
     }
 
