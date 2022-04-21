@@ -24,12 +24,12 @@ public class AcoAgent extends AgentImp
     private final double epsilon = 0.3;
     private final int[] cardinalAngles = {0, 90, 180, 270};
 
-    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
-    @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
-    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<>();
-    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
     @Setter private double movementHeuristic = 1.0;
     @Setter private Vector movementContinuity = new Vector();
+    @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
+    @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<>();
+    @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
+    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
