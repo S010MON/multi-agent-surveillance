@@ -7,12 +7,15 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundRay;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
+import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.graph.DefaultEdge;
+
 import java.util.ArrayList;
 
 
@@ -30,6 +33,8 @@ public class AgentImp implements Agent
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
+
+    @Getter protected static MemoryGraph<GraphCell, DefaultEdge> world;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {

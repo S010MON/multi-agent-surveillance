@@ -5,7 +5,7 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
-import app.model.agents.ACO.AcoAgentLimitedVision;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
@@ -67,7 +67,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoAgentLimitedVision(srt, dir, 10, Team.GUARD);
+            Agent guard = new AcoAgent(srt, dir, 10, Team.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);

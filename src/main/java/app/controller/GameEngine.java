@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundEngine;
 import app.controller.soundEngine.SoundVector;
 import app.model.Trail;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
