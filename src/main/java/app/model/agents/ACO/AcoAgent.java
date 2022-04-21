@@ -54,7 +54,6 @@ public class AcoAgent extends AgentImp
         pheromoneSenseDirections();
         world.add_or_adjust_Vertex(position);
         movementContinuity = direction.scale(distance);
-        //TODO Implement heuristic using targetVector
         tgtDirection = direction.copy();
         previousMove = new Move(position, new Vector());
         acoAgentCount ++;
@@ -98,7 +97,7 @@ public class AcoAgent extends AgentImp
     }
 
     //Memory//
-    public Move shortTermMemory()
+    private Move shortTermMemory()
     {
         // Case 1: possibleMoves not empty -> select next move and make it
         if(selectNextPossibleMove())
@@ -112,7 +111,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public void relyOnMemory()
+    private void relyOnMemory()
     {
         shortTermMemory.forEach((k, v) -> possibleMovements.add(v));
     }
@@ -135,7 +134,7 @@ public class AcoAgent extends AgentImp
     }
 
     //Movement//
-    public void successfulMovement()
+    private void successfulMovement()
     {
         world.leaveVertex(previousMove.getEndDir(), maxPheromone);
         world.add_or_adjust_Vertex(position);
@@ -252,7 +251,7 @@ public class AcoAgent extends AgentImp
         nextBestOptionHandling(currentDirection);
     }
 
-    public void nextBestOptionHandling(Vector currentDirectionExplored)
+    private void nextBestOptionHandling(Vector currentDirectionExplored)
     {
         shortTermMemory.put(currentDirectionExplored.hashCode(), currentDirectionExplored);
 
@@ -262,7 +261,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public void nextExplorationVisionDirection()
+    private void nextExplorationVisionDirection()
     {
         if(!visualDirectionsToExplore.empty())
         {
@@ -289,13 +288,13 @@ public class AcoAgent extends AgentImp
         throw new RuntimeException("Cardinal point not found");
     }
 
-    public boolean approximateAngleRange(double detectedAngle, double targetAngle)
+    private boolean approximateAngleRange(double detectedAngle, double targetAngle)
     {
         return detectedAngle < (targetAngle + epsilon) && detectedAngle > (targetAngle - epsilon);
     }
 
     //World (SWARM memory)
-    public void evaporateProcess()
+    private void evaporateProcess()
     {
         acoMoveCount ++;
         if(acoMoveCount >= acoAgentCount)
@@ -306,7 +305,7 @@ public class AcoAgent extends AgentImp
     }
 
     //Setup
-    public void pheromoneSenseDirections()
+    private void pheromoneSenseDirections()
     {
         for(int cardinalAngle: cardinalAngles)
         {
@@ -314,7 +313,7 @@ public class AcoAgent extends AgentImp
         }
     }
 
-    public Vector angleToGraphMovementLink(int angle)
+    private Vector angleToGraphMovementLink(int angle)
     {
         return switch (angle)
                 {
@@ -324,5 +323,10 @@ public class AcoAgent extends AgentImp
                     case 270 -> new Vector(-distance, 0);
                     default -> null;
                 };
+    }
+
+    public static void resetWorld(int distance)
+    {
+        world = new AcoWorld<>(distance);
     }
 }

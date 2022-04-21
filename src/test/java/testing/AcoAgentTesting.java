@@ -11,6 +11,7 @@ import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -37,6 +38,12 @@ public class AcoAgentTesting
     {
         agent.setDistance(moveDistance);
         agent.setVisionDistance(viewingDistance);
+    }
+
+    @BeforeEach
+    public void clearMemoryAndWorld()
+    {
+        AcoAgent.resetWorld(moveDistance);
     }
 
     //Bug testing
@@ -125,7 +132,7 @@ public class AcoAgentTesting
         agent.setMoveFailed(false);
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
-        assertEquals(agent.getVisualDirectionsToExplore().size(), 3);
+        assertEquals(agent.getVisualDirectionsToExplore().size(), 2);
     }
 
     @Test
