@@ -1,10 +1,10 @@
-package app.model.soundBoundary;
+package app.model.sound;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 public class SoundBoundaryImp implements SoundBoundary

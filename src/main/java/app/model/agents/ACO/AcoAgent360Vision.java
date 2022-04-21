@@ -172,7 +172,7 @@ public class AcoAgent360Vision extends AgentImp
 
         for(int i = 0; i < cardinalRays.length; i++)
         {
-            if(cardinalRays[i].rayLength() > cellSize + epsilon)
+            if(cardinalRays[i].length() > cellSize + epsilon)
             {
                 possibleMovements.add(angleToGridMovementLink(cardinalAngles[i]));
             }

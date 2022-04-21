@@ -5,6 +5,7 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundRay;
+import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -21,13 +22,14 @@ public class AgentImp implements Agent
     @Getter @Setter protected double maxSprint = 30;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
+    @Setter protected Vector tgtDirection;
     @Getter protected Team team;
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
-    @Getter protected ArrayList<SoundRay> hearing;
+    @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
-    protected AgentView agentViewWindow;
+    @Getter protected AgentView agentViewWindow;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {
@@ -35,9 +37,22 @@ public class AgentImp implements Agent
         this.position = position;
         this.radius = radius;
         this.team = team;
+        this.tgtDirection = null;
         view = new ArrayList<>();
         seen = new VectorSet();
-        hearing = new ArrayList<>();
+        heard = new ArrayList<>();
+    }
+
+    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
+    {
+        this.direction = direction;
+        this.position = position;
+        this.radius = radius;
+        this.team = team;
+        this.tgtDirection = tgtDirection;
+        view = new ArrayList<>();
+        seen = new VectorSet();
+        heard = new ArrayList<>();
     }
 
     @Override
@@ -66,14 +81,10 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public void updateHeard(ArrayList<SoundRay> hearing)
-    {
-        this.hearing = hearing;
-    }
-
-    @Override
     public void draw(GraphicsContext gc)
     {
+        heard.forEach(h -> h.draw(gc, this.position));
+
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(3.0);
         if(team == Team.GUARD)
@@ -89,6 +100,18 @@ public class AgentImp implements Agent
     }
 
     @Override
+    public void clearHeard()
+    {
+        heard = new ArrayList<>();
+    }
+
+    @Override
+    public void addHeard(SoundVector soundVector)
+    {
+        heard.add(soundVector);
+    }
+
+    @Override
     public boolean isHit(Ray ray)
     {
         return Intersection.hasIntersection(ray, position, radius);
@@ -101,7 +124,8 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public boolean isCrossed(Vector startPoint, Vector endPoint) {
+    public boolean isCrossed(Vector startPoint, Vector endPoint)
+    {
         return false;
     }
 

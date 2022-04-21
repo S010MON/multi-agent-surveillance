@@ -1,8 +1,7 @@
-package app.model.soundBoundary;
+package app.model.sound;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
-import app.model.boundary.*;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 

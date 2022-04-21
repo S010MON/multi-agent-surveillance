@@ -3,58 +3,59 @@ package app.controller.soundEngine;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Agent;
-import app.model.soundBoundary.SoundBoundary;
+import app.model.sound.SoundBoundary;
+import app.model.sound.SoundSource;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class SoundEngine
 {
-    final static int noOfRays = 10;
+    final static int noOfRays = 2;
     final static int noOfBounces = 4;
 
-    public static ArrayList<SoundRay> compute(Map map, Vector origin)
+    public static ArrayList<SoundRay> buildTree(Map map, SoundSource source)
     {
+        ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
-        Stack<SoundRay> rays = SoundRayScatter.angle360(origin, noOfRays, 1000, noOfBounces);
+        Stack<SoundRay> rays = SoundRayScatter.angle360(source.getPosition(), noOfRays, 1000, noOfBounces);
 
         while(!rays.isEmpty())
         {
             SoundRay r = rays.pop();
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
-            Vector bdyIntersection = getIntersection(r, map.getSoundBoundaries());
+
+            if(agentIntersection != null)
+                System.out.println("Yay");
+
+            Vector bdyIntersection = getIntersection(r, boundaries);
+            Vector origin = source.getPosition();
 
             if(bdyIntersection != null && agentIntersection != null)
             {
-                output.add(new SoundRay(r.getU(), bdyIntersection));
-                if(r.getBounces() > 0)
+                if(agentIntersection.dist(origin) < bdyIntersection.dist(origin))
                 {
-                    Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
+                    output.add(new SoundRay(r.getU(), agentIntersection));
                 }
-                output.add(new SoundRay(r.getU(), agentIntersection));
+                else if(r.getBounces() > 0)
+                {
+                    Vector bouncePoint = bouncePoint(bdyIntersection, r.getU());
+                    rays.addAll(SoundRayScatter.angle360(bouncePoint, noOfRays, 1000, r.getBounces(), r));
+                }
             }
             else if(bdyIntersection != null)
             {
                 if(r.getBounces() > 0)
                 {
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
+                    rays.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces(), r));
                 }
-                output.add(new SoundRay(r.getU(), bdyIntersection));
+                output.add(new SoundRay(r.getU(), bdyIntersection, r.getBounces(), r));
             }
             else if(agentIntersection != null)
-                output.add(new SoundRay(r.getU(), agentIntersection));
+                output.add(new SoundRay(r.getU(), agentIntersection, r.getBounces(), r));
         }
         return output;
-    }
-
-    private static void diffuse(Map map, ArrayList<SoundRay> rays, ArrayList<SoundBoundary> boundaries)
-    {
-        for(SoundRay r: rays)
-        {
-            Vector agentIntersection = getAgentIntersection(r, map.getAgents());
-            Vector bdyIntersection = getIntersection(r, boundaries);
-        }
     }
 
     private static Vector getIntersection(SoundRay r, ArrayList<SoundBoundary> boundaries)
@@ -95,6 +96,14 @@ public class SoundEngine
             }
         }
         return intersection;
+    }
+
+    private static ArrayList<SoundBoundary> collectSoundBoundaries(Map map)
+    {
+        ArrayList<SoundBoundary> soundBoundaries = new ArrayList<>();
+        map.getFurniture()
+           .forEach(furniture -> soundBoundaries.addAll(furniture.getSoundBoundaries()));
+        return soundBoundaries;
     }
 
     private static Vector closestPoint(Vector origin, Vector a, Vector b)
