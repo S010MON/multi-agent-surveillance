@@ -5,13 +5,12 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
 import app.model.agents.AgentImp;
-import app.model.agents.Cells.BooleanCell;
+import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,32 +24,35 @@ public class WallFollowAgent extends AgentImp
         RIGHT,
         NO_TURN,
     }
-    @Setter private boolean DEBUG = false;
+    @Setter private boolean DEBUG = true;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
     @Getter @Setter private boolean wallEncountered = false;
-    private int maxViewingDistance = 10;
+    //private int maxViewingDistance = 10;
     public static Map map;
-    @Getter private final app.model.agents.WallFollow.BooleanCellGraph<BooleanCell, DefaultEdge> cellGraph;
+    //@Getter private final app.model.agents.WallFollow.BooleanCellGraph<BooleanCell, DefaultEdge> cellGraph;
     private boolean initialVertexFound = false;  // pheromone 1
-    private BooleanCell tempAgentCell;
-    private boolean agentNotInitialized = true;
+    private GraphCell tempAgentCell;
+    //private boolean agentNotInitialized = true;
     private boolean noMovesDone = true;
     private boolean explorationDone = false;
-    private BooleanCell currentTargetVertex = null;
-    private List<BooleanCell> currentPathToNextVertex = null;
-    private ArrayList<BooleanCell> inaccessibleCells = new ArrayList<>();
+    private GraphCell currentTargetVertex = null;
+    private List<GraphCell> currentPathToNextVertex = null;
+    private ArrayList<GraphCell> inaccessibleCells = new ArrayList<>();
     private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();  // pheromone 2
     private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();  // pheromone 2
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
             new Vector(-1,0));
+    private ArrayList<GraphCell> lastPositions = new ArrayList<>();
+    @Getter private GraphCell prevAgentVertex = null;
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Team team)
     {
         super(position, direction, radius, team);
+        /*
         cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
         cellGraph.setEdge((int)moveLength);
         BooleanCell agentInitialVertex = new BooleanCell(0,0);
@@ -58,20 +60,34 @@ public class WallFollowAgent extends AgentImp
         cellGraph.getVertices().put(agentInitialVertex.toString(),agentInitialVertex);
         updateNeighbouringVertices(agentInitialVertex);
         agentNotInitialized = false;
+         */
+        initializeWorld();
     }
-
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Team team, double moveLen)
     {
         super(position, direction, radius, team);
         this.moveLength = moveLen;
-        cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
+        /* cellGraph = new app.model.agents.WallFollow.BooleanCellGraph<>();
         cellGraph.setEdge((int)moveLength);
         BooleanCell agentInitialVertex = new BooleanCell(0,0);
         tempAgentCell = agentInitialVertex;
         cellGraph.addVertex(agentInitialVertex);
         updateNeighbouringVertices(agentInitialVertex);
-        agentNotInitialized = false;
+         */
+        initializeWorld();
+    }
+
+    private void initializeWorld()
+    {
+        if(world == null)
+        {
+            world = new WfWorld<>((int)moveLength);
+        }
+        world.add_or_adjust_Vertex(position);
+        lastPositions.add(world.getVertexAt(position));
+        prevAgentVertex = world.getVertexAt(position);
+        checkIfNeighboursAreObstacles();
     }
 
     /**
@@ -105,7 +121,7 @@ public class WallFollowAgent extends AgentImp
         }
         if (!noMovesDone && !isMoveFailed())
         {
-            updateGraph();
+            updateGraphAfterSuccessfulMove();
         }
 
         if (isMoveFailed())
@@ -119,12 +135,14 @@ public class WallFollowAgent extends AgentImp
             currentTargetVertex = null;
             currentPathToNextVertex = null;
         }
-        else if (wallEncountered && cellGraph.agentStuckInVertex())
+        else if (wallEncountered && agentStuckInVertex(position))
         {
             if (DEBUG) {
                 System.out.println("Agent stuck in vertex.");
             }
-            BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
+            //GraphCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
+            GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                    world.getDirectionStr(direction.getAngle()));
             if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
             {
                 deltaPos = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
@@ -160,10 +178,11 @@ public class WallFollowAgent extends AgentImp
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
         }
-        else if (initialVertexFound || cellGraph.agentInStuckMovement())
+        else if (initialVertexFound || agentInStuckMovement())
         {
             if (DEBUG) {
-                System.out.println("Found initial vertex or got stuck, following heuristics now.");
+                if (initialVertexFound) System.out.println("Found initial vertex");
+                if (agentInStuckMovement()) System.out.println("Agent stuck in movement");
             }
             Move heuristicsMove = runHeuristicsAlgorithm();
             deltaPos = heuristicsMove.getDeltaPos();
@@ -171,8 +190,10 @@ public class WallFollowAgent extends AgentImp
             wallEncountered = false;
         }
         else if (!wallEncountered) {
-            BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
-            BooleanCell leftCell = getAgentNeighbourBasedOnAngle(getAngleOfLeftRay());
+            GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                    world.getDirectionStr(direction.getAngle()));
+            GraphCell leftCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                    world.getDirectionStr(getAngleOfLeftRay()));
             if (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle())
             {
                 if (DEBUG) {
@@ -182,7 +203,7 @@ public class WallFollowAgent extends AgentImp
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
                 wallEncountered = true;
-                cellGraph.setInitialWallFollowPos(cellGraph.getAgentPos());
+                world.setInitialWallFollowPos(world.getVertexAt(position));
             }
             else if (!noWallDetected(getAngleOfLeftRay()) && leftCell.getObstacle())
             {
@@ -190,7 +211,7 @@ public class WallFollowAgent extends AgentImp
                     System.out.println("ALGORITHM CASE 0: wall encountered on left!");
                 }
                 wallEncountered = true;
-                cellGraph.setInitialWallFollowPos(cellGraph.getAgentPos());
+                world.setInitialWallFollowPos(world.getVertexAt(position));
             }
             else
             {
@@ -211,6 +232,7 @@ public class WallFollowAgent extends AgentImp
         Move nextMove = new Move(newDirection, deltaPos);
         direction = nextMove.getEndDir();
         noMovesDone = false;
+        //System.out.println("Doing move: " + deltaPos);
         return nextMove;
     }
 
@@ -230,8 +252,10 @@ public class WallFollowAgent extends AgentImp
     {
         Vector newMove = new Vector(0,0);
         Vector newDirection = direction;
-        BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
-        BooleanCell leftCell = getAgentNeighbourBasedOnAngle(rotateAgentLeft().getAngle());
+        GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                world.getDirectionStr(direction.getAngle()));
+        GraphCell leftCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                world.getDirectionStr(getAngleOfLeftRay()));
         if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
@@ -241,7 +265,8 @@ public class WallFollowAgent extends AgentImp
         }
         else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle())
         {
-            if (DEBUG) { System.out.println("Angle of left ray: " + getAngleOfLeftRay()); ; }
+            // TODO sth weird happens when having moved forward after making a turn
+            if (DEBUG) { System.out.println("Obstacle on left: " + leftCell.getObstacle()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentLeft();
             lastTurn = TurnType.LEFT;
@@ -275,7 +300,7 @@ public class WallFollowAgent extends AgentImp
     {
         Vector newMove = new Vector(0,0);
         Vector newDirection = direction;
-        ArrayList<BooleanCell> unexploredVertices = cellGraph.getVerticesWithUnexploredNeighbours();
+        ArrayList<GraphCell> unexploredVertices = world.getVerticesWithUnexploredNeighbours();
         if (unexploredVertices.size() == 0)
         {
             explorationDone = true;
@@ -283,8 +308,8 @@ public class WallFollowAgent extends AgentImp
         else
         {
             double minScore = 0;
-            BooleanCell minScoreVertex = null;
-            for (BooleanCell vertex : unexploredVertices)
+            GraphCell minScoreVertex = null;
+            for (GraphCell vertex : unexploredVertices)
             {
                 if (!inaccessibleCells.contains(vertex))
                 {
@@ -299,8 +324,8 @@ public class WallFollowAgent extends AgentImp
             if (minScoreVertex != null)
             {
                 currentTargetVertex = minScoreVertex;
-                currentPathToNextVertex = DijkstraShortestPath.findPathBetween(cellGraph,
-                        cellGraph.getAgentPos(), currentTargetVertex).getVertexList();
+                currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world,
+                        world.getVertexAt(position), currentTargetVertex).getVertexList();
                 return getMoveBasedOnPath();
             }
             else
@@ -333,18 +358,18 @@ public class WallFollowAgent extends AgentImp
         return new Move(newDirection, deltaPos);
     }
 
-    public double getVertexScore(BooleanCell vertex)
+    public double getVertexScore(GraphCell vertex)
     {
         // currently takes into account shortest path length, direction relative to agent's and
         // how many neighbours also have unexplored cells
         // TODO add weights to score components?
         double score;
-        int shortestPathLength = DijkstraShortestPath.findPathBetween(cellGraph, cellGraph.getAgentPos(), vertex).getLength();
+        int shortestPathLength = DijkstraShortestPath.findPathBetween(world, world.getVertexAt(position), vertex).getLength();
         int neighboursOnUnexploredFrontier = 0;
-        List<BooleanCell> neighbours = Graphs.neighborListOf(cellGraph,vertex);
-        for (BooleanCell neighbour : neighbours)
+        List<GraphCell> neighbours = Graphs.neighborListOf(world,vertex);
+        for (GraphCell neighbour : neighbours)
         {
-            if (!neighbour.getObstacle() && cellGraph.edgesOf(vertex).size() < 4)
+            if (!neighbour.getObstacle() && world.edgesOf(vertex).size() < 4)
             {
                 neighboursOnUnexploredFrontier++;
             }
@@ -361,17 +386,17 @@ public class WallFollowAgent extends AgentImp
 
     public Move getMoveBasedOnPath()
     {
-        BooleanCell nextVertex = currentPathToNextVertex.get(0);
-        if (nextVertex.equals(cellGraph.getAgentPos()))
+        GraphCell nextVertex = currentPathToNextVertex.get(0);
+        if (nextVertex.equals(world.getVertexAt(position)))
         {
             currentPathToNextVertex.remove(nextVertex);
             nextVertex = currentPathToNextVertex.get(0);
         }
-        Vector nextDir = cellGraph.getNeighbourDir(nextVertex);
+        Vector nextDir = world.getNeighbourDir(world.getVertexAt(position), nextVertex);
         if (nextDir.equals(direction))
         {
-            double deltaX = nextVertex.getX() - cellGraph.getAgentPos().getX();
-            double deltaY = nextVertex.getY() - cellGraph.getAgentPos().getY();
+            double deltaX = nextVertex.getX() - world.getVertexAt(position).getX();
+            double deltaY = nextVertex.getY() - world.getVertexAt(position).getY();
             currentPathToNextVertex.remove(nextVertex);
             if (currentPathToNextVertex.isEmpty())
             {
@@ -405,15 +430,116 @@ public class WallFollowAgent extends AgentImp
         }
     }
 
+    public void updateGraphAfterSuccessfulMove()
+    {
+        updateLastPositions(world.getVertexAt(position));
+        //System.out.println("Current agent vertex: " + world.getVertexAt(position));
+        //System.out.println("Previous agent vertex: " + prevAgentVertex);
+        world.leaveVertex(prevAgentVertex.getPosition());
+        world.add_or_adjust_Vertex(position);
+        checkIfNeighboursAreObstacles();
+    }
+
+    public void checkIfNeighboursAreObstacles()
+    {
+        GraphCell agentCell = world.getVertexAt(position);
+        for (String dir : world.getCardinalDirections().keySet())
+        {
+            GraphCell neighbour = world.getVertexFromCurrent(agentCell,dir);
+            if (!noWallDetected(world.getCardinalDirections().get(dir).getAngle()))
+            {
+                neighbour.setObstacle(true);
+            }
+        }
+    }
+
+    public boolean agentStuckInVertex(Vector currentPos)
+    {
+        if (lastPositions.size() < 8)
+        {
+            return false;
+        }
+        for (GraphCell vertex : lastPositions)
+        {
+            if (vertex != world.getVertexAt(currentPos))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean agentInStuckMovement()
+    {
+        System.out.println("Last positions before checking stuck movement: " + lastPositions);
+        ArrayList<GraphCell> diffVertices = new ArrayList<>();
+        if (lastPositions.size() >= 24)
+        {
+            for (int i=0; i<lastPositions.size(); i++)
+            {
+                if(!diffVertices.contains(lastPositions.get(i)))
+                {
+                    diffVertices.add(lastPositions.get(i));
+                }
+                if(i == lastPositions.size() - 1 && diffVertices.size() < 5)
+                {
+                    //System.out.println("Last positions are: " + lastPositions);
+                    return true;
+                }
+            }
+            /*for (GraphCell vertex : lastPositions)
+            {
+                for (GraphCell other: lastPositions)
+                {
+                    if (!diffVertices.contains(other))
+                    {
+                        diffVertices.add(other);
+                        if (diffVertices.indexOf(other) == lastPositions.size()-1 && diffVertices.size() < 5)
+                        {
+                            System.out.println("Last positions are: " + lastPositions);
+                            return true;
+                        }
+                    }
+                    if (!vertex.equals(other))
+                    {
+                        if (Math.abs(vertex.getX() - other.getX()) > moveLength
+                                || Math.abs(vertex.getY() - other.getY()) > moveLength)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            //System.out.println("Stuck movement: problem with distance between vertices");
+            //System.out.println("The last vertices were: " + lastPositions);
+            //return true;*/
+        }
+        System.out.println("Different vertices: " + diffVertices);
+        return false;
+    }
+
+    public void updateLastPositions(GraphCell currentAgentCell)
+    {
+        if (lastPositions.size() >= 24) {
+            lastPositions.remove(0);
+        }
+        if (lastPositions.size() > 0)
+        {
+            prevAgentVertex = lastPositions.get(lastPositions.size()-1);
+        }
+        lastPositions.add(currentAgentCell);
+    }
+
+    /*
     public void updateGraph()
     {
-        int agentX = cellGraph.getAgentPos().getX();
-        int agentY = cellGraph.getAgentPos().getY();
+        int agentX = world.getVertexAt(position).getX();
+        int agentY = world.getVertexAt(position).getY();
 
         if (getLastTurn() != TurnType.NO_TURN && !movedForwardLast)
         {
-            cellGraph.updateLastPositions();
-            BooleanCell cellToUpdate = null;
+            world.updateLastPositions();
+            GraphCell cellToUpdate = null;
             if (lastTurn == TurnType.LEFT)
             {
                 cellToUpdate = getNeighbourVertex((agentX + rotateAgentLeft().getX() * moveLength),
@@ -437,21 +563,24 @@ public class WallFollowAgent extends AgentImp
         }
         else if (movedForwardLast)
         {
-            BooleanCell newAgentCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
+            GraphCell newAgentCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                    world.getDirectionStr(direction.getAngle()));;
             updateNeighbouringVertices(newAgentCell);
         }
     }
+     */
 
-    public BooleanCell getNeighbourVertex(int neighbourX,
+    /*
+    public GraphCell getNeighbourVertex(int neighbourX,
                                           int neighbourY,
                                           double rayAngle,
                                           boolean exploring,
                                           int distFromAgentVertex)
     {
-        BooleanCell neighbour;
-        if (!cellGraph.getVertices().containsKey(neighbourX + " " + neighbourY))
+        GraphCell neighbour;
+        if (!world.getVertices().containsKey(neighbourX + " " + neighbourY))
         {
-            neighbour = new BooleanCell(neighbourX, neighbourY);
+            neighbour = new GraphCell(neighbourX, neighbourY);  // TODO need to fix this or memorygraph already has this?
             // TODO differentiate between obstacle and occupied cell?
             if (!exploring && !noWallDetected(rayAngle))
             {
@@ -464,48 +593,53 @@ public class WallFollowAgent extends AgentImp
         }
         else
         {
-            neighbour = cellGraph.getVertices().get(neighbourX + " " + neighbourY);
-            if (cellGraph.getInitialWallFollowPos() != null &&
+            neighbour = world.getVertices().get(neighbourX + " " + neighbourY);
+            if (world.getInitialWallFollowPos() != null &&
                     rayAngle == direction.getAngle() &&
-                    !tempAgentCell.equals(cellGraph.getAgentPos()) &&
-                    neighbour.equals(cellGraph.getInitialWallFollowPos()))
+                    !tempAgentCell.equals(world.getVertexAt(position)) &&
+                    neighbour.equals(world.getInitialWallFollowPos()))
             {
                 initialVertexFound = true;
             }
         }
         return neighbour;
     }
+     */
 
-    public void updateNeighbouringVertices(BooleanCell agentCell)
+    /*
+    public void updateNeighbouringVertices(GraphCell agentCell)
     {
         tempAgentCell = agentCell;
-        BooleanCell forwardCell = getNeighbourVertex((agentCell.getX() + direction.getX() * moveLength),
+        GraphCell forwardCell = getNeighbourVertex((agentCell.getX() + direction.getX() * moveLength),
                                                      (agentCell.getY() + direction.getY() * moveLength),
                                                      direction.getAngle(),
                                                     false,
                                                     1);
 
-        BooleanCell leftCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft().getX() * moveLength),
+        GraphCell leftCell = getNeighbourVertex((agentCell.getX() + rotateAgentLeft().getX() * moveLength),
                                                   (agentCell.getY() + rotateAgentLeft().getY() * moveLength),
                                                   rotateAgentLeft().getAngle(),
                                                   false,
                                                   1);
 
-        BooleanCell rightCell = getNeighbourVertex((agentCell.getX() + rotateAgentRight().getX() * moveLength),
+        GraphCell rightCell = getNeighbourVertex((agentCell.getX() + rotateAgentRight().getX() * moveLength),
                                                    (agentCell.getY() + rotateAgentRight().getY() * moveLength),
                                                     rotateAgentRight().getAngle(),
                                                    false,
                                                    1);
 
-        cellGraph.updateAgentPos(agentCell,forwardCell,leftCell,rightCell);
+        //cellGraph.updateAgentPos(agentCell,forwardCell,leftCell,rightCell);
+        world.add_or_adjust_Vertex(position);
+        // TODO not exploring further than direct neighbours in shared graph
         if (!agentNotInitialized)
         {
             exploreVerticesUntilObstacle(forwardCell, direction, 1);
             exploreVerticesUntilObstacle(leftCell, rotateAgentLeft(), 1);
             exploreVerticesUntilObstacle(rightCell, rotateAgentRight(), 1);
         }
-    }
+    }*/
 
+    // TODO we don't explore further than one vertex in the shared graph?
     /**
      * Explore all vertices in a direction until an object is encountered.
      * Explore here means agent sees the vertices (space in room) but does not actually move to them.
@@ -513,6 +647,7 @@ public class WallFollowAgent extends AgentImp
      * @param dir direction in which vertices are checked
      * @param distFromAgentVertex n-th vertex from agent's position vertex (e.g. neighbour of agent has dist = 1)
      */
+    /*
     public void exploreVerticesUntilObstacle(BooleanCell initVertex, Vector dir, int distFromAgentVertex)
     {
         BooleanCell nextCell = getNeighbourVertex((initVertex.getX() + dir.getX() * moveLength),
@@ -526,11 +661,13 @@ public class WallFollowAgent extends AgentImp
             exploreVerticesUntilObstacle(nextCell, dir, distFromAgentVertex+1);
         }
     }
+     */
 
     /**
      * Overloads {@code getNeighbourVertex()} with double values cast to int
      */
-    public  BooleanCell getNeighbourVertex(double neighbourX,
+    /*
+    public  GraphCell getNeighbourVertex(double neighbourX,
                                            double neighbourY,
                                            double rayAngle,
                                            boolean exploring,
@@ -538,6 +675,7 @@ public class WallFollowAgent extends AgentImp
     {
         return getNeighbourVertex((int) neighbourX, (int) neighbourY, rayAngle, exploring, distFromAgentVertex);
     }
+     */
 
 
 
@@ -564,6 +702,7 @@ public class WallFollowAgent extends AgentImp
         return true;
     }
 
+    /*
     /**
      * Method for checking for walls/obstacles in a certain direction when exploring by "seeing",
      * i.e agent is not on next to that vertex but further away.
@@ -572,7 +711,7 @@ public class WallFollowAgent extends AgentImp
      * @param rayAngle angle of the direction to be checked.
      * @param distFromAgentVertex n-th vertex from agent's position vertex (e.g. neighbour of agent has dist = 1)
      * @return true if no obstacle detected; false if obstacle detected
-     */
+
     public boolean noObstacleDetectedFromPos(double rayAngle, int distFromAgentVertex)
     {
         for (Ray r : view)
@@ -586,17 +725,18 @@ public class WallFollowAgent extends AgentImp
             }
         }
         return true;
-    }
+    }*/
 
     public void markWallAsCovered()
     {
         // TODO implement pheromone smell here?
-        BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
-        if (forwardCell.getX() == cellGraph.getAgentPos().getX())
+        GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                world.getDirectionStr(direction.getAngle()));
+        if (forwardCell.getX() == world.getVertexAt(position).getX())
         {
             horizontalWallsCovered.add(forwardCell.getX());
         }
-        if (forwardCell.getY() == cellGraph.getAgentPos().getY())
+        if (forwardCell.getY() == world.getVertexAt(position).getY())
         {
             verticalWallsCovered.add(forwardCell.getY());
         }
@@ -604,7 +744,8 @@ public class WallFollowAgent extends AgentImp
 
     private boolean foundUnexploredWallToFollow()
     {
-        BooleanCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
+        GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
+                world.getDirectionStr(direction.getAngle()));
         return (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle()
                 && ((!horizontalWallsCovered.contains(forwardCell.getX()) && direction.getX() == 0)
                 || (!verticalWallsCovered.contains(forwardCell.getY()) && direction.getY() == 0)));
@@ -661,9 +802,11 @@ public class WallFollowAgent extends AgentImp
         }
     }
 
-    public BooleanCell getAgentNeighbourBasedOnAngle(double rayAngle)
+    /*
+    public GraphCell getAgentNeighbourBasedOnAngle(double rayAngle)
     {
-        BooleanCell agentCell = cellGraph.getAgentPos();
+        GraphCell agentCell = world.getVertexAt(position);
+
         if (rayAngle == direction.getAngle())
         {
             return getNeighbourVertex((agentCell.getX() + direction.getX() * moveLength),
@@ -690,6 +833,7 @@ public class WallFollowAgent extends AgentImp
         }
         throw new RuntimeException("Checking vertex that is behind agent but cannot actually see behind!");
     }
+     */
 
     /**
      * Give vertex a direction score for heuristic's algorithm.
@@ -699,7 +843,7 @@ public class WallFollowAgent extends AgentImp
      * @param targetVertex vertex to give the score to.
      * @return the direction score (1 or 2 or 3)
      */
-    public int getDirectionScore(BooleanCell targetVertex)
+    public int getDirectionScore(GraphCell targetVertex)
     {
         Vector targetVector = new Vector(targetVertex.getX(),targetVertex.getY());
         double angle = targetVector.sub(position).getAngle();

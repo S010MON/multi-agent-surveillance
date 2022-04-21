@@ -2,11 +2,13 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
-
 import lombok.Getter;
+import lombok.Setter;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGraph
@@ -14,6 +16,8 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private HashMap<String, GraphCell> vertices = new HashMap<>();
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
     private int travelDistance;
+
+    @Getter @Setter private GraphCell initialWallFollowPos;
 
     public MemoryGraph(int distance)
     {
@@ -35,10 +39,10 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
             Vector vertexCentre = determineVertexCentre(position);
             cell = new GraphCell(vertexCentre);
             addVertex(cell);
-
             vertices.put(keyGenerator(position), cell);
-            connectNeighbouringVertices(cell);
+
         }
+        connectNeighbouringVertices(cell);
     }
 
     public void modifyVertex(GraphCell cell)
@@ -51,8 +55,21 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         Vector currentPosition = currentCell.getPosition();
         for(Vector cardinal: cardinalDirections.values())
         {
+            GraphCell neighbouringCell;
             Vector resultingPosition = currentPosition.add(cardinal);
-            GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
+            String neighbourKey = keyGenerator(resultingPosition);
+            if (vertices.containsKey(neighbourKey))
+            {
+                neighbouringCell = vertices.get(neighbourKey);
+            }
+            else
+            {
+                neighbouringCell = new GraphCell(resultingPosition);
+                vertices.put(neighbourKey,neighbouringCell);
+                addVertex(neighbouringCell);
+            }
+            //GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
+
             if(neighbouringCell != null && !containsEdge(currentCell, neighbouringCell))
             {
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) this.addEdge(currentCell, neighbouringCell);
@@ -140,6 +157,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         cell.updatePheromone(pheromoneValue);
     }
 
+    // TODO get neighbour from direction? position = agent vertex + direction * movelength
     public GraphCell getVertexAt(Vector position)
     {
         return vertices.get(keyGenerator(position));
@@ -188,5 +206,64 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         {
             cell.evaporate();
         }
+    }
+
+    public ArrayList<GraphCell> getVerticesWithUnexploredNeighbours()
+    {
+        // TODO currently checking if vertex has less than 4 neighbours
+        //  but should also check if they're direct neighbours or neighbours through portals?
+        ArrayList<GraphCell> unexploredFrontier = new ArrayList<>();
+        for (String v : vertices.keySet())
+        {
+            GraphCell vertex = vertices.get(v);
+            if (!vertex.getObstacle() && edgesOf(vertex).size() < 4)
+            {
+                unexploredFrontier.add(vertex);
+            }
+        }
+        return unexploredFrontier;
+    }
+
+    public Vector getNeighbourDir(GraphCell agentCell, GraphCell neighbour)
+    {
+        if (agentCell.getX() == neighbour.getX() && neighbour.getY() == agentCell.getY())
+        {
+            return new Vector(0,0);
+        }
+        else if (agentCell.getX() == neighbour.getX() && neighbour.getY() < agentCell.getY())
+        {
+            return new Vector(0,-1);  // north of agent
+        }
+        else if (agentCell.getX() == neighbour.getX() && neighbour.getY() > agentCell.getY())
+        {
+            return new Vector(0,1);  // south of agent
+        }
+        else if (agentCell.getY() == neighbour.getY() && neighbour.getX() < agentCell.getX())
+        {
+            return new Vector(-1,0);  // west of agent
+        }
+        else if (agentCell.getY() == neighbour.getY() && neighbour.getX() > agentCell.getX())
+        {
+            return new Vector(1,0);  // east of agent
+        }
+        return new Vector();
+    }
+
+    public void leaveVertex(Vector position)
+    {
+        GraphCell cell = getVertexAt(position);
+        cell.setOccupied(false);
+    }
+
+    public String getDirectionStr(double directionAngle)
+    {
+        for (Map.Entry<String,Vector> dir : cardinalDirections.entrySet())
+        {
+            if (dir.getValue().getAngle() == directionAngle)
+            {
+                return dir.getKey();
+            }
+        }
+        throw new RuntimeException("No cardinal direction matches given angle.");
     }
 }
