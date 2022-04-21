@@ -22,8 +22,8 @@ public class AcoAgent extends AgentImp
 
     @Getter private final double maxPheromone = 2;
     private final double epsilon = 0.3;
-
     private final int[] cardinalAngles = {0, 90, 180, 270};
+
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
