@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     protected AgentView agentViewWindow;
 
-    @Getter protected static MemoryGraph<GraphCell, DefaultEdge> world;
+    @Getter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {

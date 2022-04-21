@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -139,5 +140,20 @@ public class MemoryGraphTesting
 
         double aggregatePheromone = world.aggregateCardinalPheromones(agentPosition_1, new Vector(20, 0));
         assertEquals(aggregatePheromone, 4);
+    }
+
+    @Test
+    public void testObstacleLabelling()
+    {
+        Vector agentPosition = new Vector(37, 78);
+        Vector movement = new Vector(0, 20);
+
+        MemoryGraph<GraphCell, DefaultWeightedEdge> world = new MemoryGraph<>(distance);
+        world.add_or_adjust_Vertex(agentPosition);
+
+        world.setVertexAsObstacle(agentPosition, movement);
+
+        GraphCell obstacle = world.getVertexAt(agentPosition.add(movement));
+        assertTrue(obstacle.getObstacle());
     }
 }

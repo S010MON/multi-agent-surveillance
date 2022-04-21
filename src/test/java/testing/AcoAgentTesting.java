@@ -195,6 +195,21 @@ public class AcoAgentTesting
         assertFalse(movePossible);
     }
 
+    @Test
+    public void testObstacleLabelling()
+    {
+        //Should detect obstacles on movement (distance, 0) and (o, distance)
+        Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
+        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Team.GUARD);
+
+        //Smell pheromones
+        agent.updateView(graphicsEngine.compute(map, agent));
+        agent.move();
+
+        //Visually explore marking obstacles and viable directions
+
+    }
+
     //Test smell capabilities
     @Test
     public void testPheromoneSenseDirections()

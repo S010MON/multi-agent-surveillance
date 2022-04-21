@@ -18,23 +18,25 @@ public class AcoAgent extends AgentImp
 {
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
+    private static Random randomGenerator = new Random(1);
 
     @Getter private final double maxPheromone = 2;
     private final double epsilon = 0.3;
-    private static Random randomGenerator = new Random(1);
-    private final int[] cardinalAngles = {0, 90, 180, 270};
 
+    private final int[] cardinalAngles = {0, 90, 180, 270};
     @Getter private ArrayList<Vector> possibleMovements = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<Vector>();
+    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
+
     //TODO Discuss dynamic movement heuristic value
-    @Setter private double movementHeuristic = 0.95;
+    @Setter private double movementHeuristic = 1.0;
     @Setter private Vector movementContinuity = new Vector();
     //TODO Discuss variable visionDistance heuristic
     @Getter @Setter private double visionDistance = 30.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
-    @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
+
 
     public AcoAgent(Vector position, Vector direction, double radius, Team team)
     {

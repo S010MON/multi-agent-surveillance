@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 
 import lombok.Getter;
+import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.HashMap;
@@ -32,12 +33,33 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
         else
         {
-            Vector vertexCentre = determineVertexCentre(position);
-            cell = new GraphCell(vertexCentre);
-            addVertex(cell);
+            addNewVertex(position);
+        }
+    }
 
-            vertices.put(keyGenerator(position), cell);
-            connectNeighbouringVertices(cell);
+    public GraphCell addNewVertex(Vector position)
+    {
+        Vector vertexCentre = determineVertexCentre(position);
+        GraphCell cell = new GraphCell(vertexCentre);
+        addVertex(cell);
+
+        vertices.put(keyGenerator(position), cell);
+        connectNeighbouringVertices(cell);
+        return cell;
+    }
+
+    public void setVertexAsObstacle(Vector currentPosition, Vector movement)
+    {
+        Vector obstaclePosition = currentPosition.add(movement);
+        GraphCell obstacleVertex = getVertexAt(obstaclePosition);
+        if(obstacleVertex != null)
+        {
+            obstacleVertex.setObstacle(true);
+        }
+        else
+        {
+            GraphCell cell = addNewVertex(obstaclePosition);
+            cell.setObstacle(true);
         }
     }
 
