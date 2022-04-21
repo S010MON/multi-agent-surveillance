@@ -16,6 +16,8 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
     private int travelDistance;
 
+    @Getter private double obstaclePheromoneValue = 1000.0;
+
     public MemoryGraph(int distance)
     {
         super(org.jgrapht.graph.DefaultWeightedEdge.class);
@@ -58,9 +60,10 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
         else
         {
-            GraphCell cell = addNewVertex(obstaclePosition);
-            cell.setObstacle(true);
+            obstacleVertex = addNewVertex(obstaclePosition);
+            obstacleVertex.setObstacle(true);
         }
+        obstacleVertex.setPheromone(obstaclePheromoneValue);
     }
 
     public void modifyVertex(GraphCell cell)
@@ -83,60 +86,15 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    //TODO Refactor to check for cells with obstacle set -> Set pheromones to max
-    //TODO Refactor aggregate to single pheromone detection
+    //Possibly scale for aggregate values
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
     {
-        GraphCell currentCell = getVertexAt(currentPosition);
-        if(cardinalDirections.get("North").equals(cardinalMovement))
-        {
-            return northSouthAggregate(currentCell, "North");
-        }
-        else if(cardinalDirections.get("South").equals(cardinalMovement))
-        {
-            return northSouthAggregate(currentCell, "South");
-        }
-        else if(cardinalDirections.get("East").equals(cardinalMovement))
-        {
-            return eastWestAggregate(currentCell, "East");
-        }
-        else if(cardinalDirections.get("West").equals(cardinalMovement))
-        {
-            return eastWestAggregate(currentCell, "West");
-        }
-        else
-        {
-            throw new RuntimeException("No cell aggregate could be calculated");
-        }
+        GraphCell neighbour = getVertexAt(currentPosition.add(cardinalMovement));
+        GraphCell[] aggregateCells = {neighbour};
+        return aggregatePheromoneValues(aggregateCells);
     }
 
-    //TODO Refactor aggregates depending on best discussed solution
-    public double northSouthAggregate(GraphCell currentCell, String direction)
-    {
-        Vector currentPosition = currentCell.getPosition();
-        Vector aggregateDirection = cardinalDirections.get(direction);
-
-        GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
-        Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
-        GraphCell c2 = getVertexAt(TPosition);
-
-        GraphCell[] aggregateVertices =  {c1, c2};
-        return aggregatePheromoneValues(aggregateVertices);
-    }
-
-    public double eastWestAggregate(GraphCell currentCell, String direction)
-    {
-        Vector currentPosition = currentCell.getPosition();
-        Vector aggregateDirection = cardinalDirections.get(direction);
-
-        GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
-        Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
-        GraphCell c2 = getVertexAt(TPosition);
-
-        GraphCell[] aggregateVertices =  {c1, c2};
-        return aggregatePheromoneValues(aggregateVertices);
-    }
-
+    //Depreciated, however still necessary in case of calculating aggregate pheromone values
     public double aggregatePheromoneValues(GraphCell[] aggregateVertices)
     {
         double pheromoneSum = 0;
