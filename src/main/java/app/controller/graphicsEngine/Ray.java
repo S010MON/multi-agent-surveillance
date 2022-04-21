@@ -10,8 +10,8 @@ public class Ray
 {
     @Getter private Vector u;
     @Getter private Vector v;
-    private Color colour = Color.rgb(255,191,0, 0.5);
-    private final double LINE_WIDTH = 1;
+    protected Color colour = Color.rgb(255,191,0, 0.5);
+    protected final double LINE_WIDTH = 1;
 
     public Ray(Vector u, Vector v)
     {
@@ -32,11 +32,16 @@ public class Ray
         return new Ray(this.u, b);
     }
 
-    public double rayLength()
+    public double length()
     {
         double yValue = u.getY() - v.getY();
         double xValue = u.getX() - v.getX();
         return Math.sqrt(Math.pow(yValue, 2) + Math.pow(xValue, 2));
+    }
+
+    public Vector direction()
+    {
+        return v.sub(u);
     }
 
     public void draw(GraphicsContext gc)

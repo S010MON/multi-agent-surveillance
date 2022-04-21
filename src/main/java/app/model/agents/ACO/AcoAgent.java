@@ -291,7 +291,7 @@ public class AcoAgent extends AgentImp
 
     public boolean moveEvaluation(Ray cardinalRay)
     {
-        double rayLength = cardinalRay.rayLength();
+        double rayLength = cardinalRay.length();
         return(rayLength > visionDistance + epsilon);
     }
 

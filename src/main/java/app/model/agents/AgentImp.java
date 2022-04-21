@@ -4,6 +4,8 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
+import app.controller.soundEngine.SoundRay;
+import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
@@ -20,8 +22,8 @@ import java.util.ArrayList;
 
 public class AgentImp implements Agent
 {
-    @Getter @Setter protected double maxWalk = 5;
-    @Getter @Setter protected double maxSprint = 10;
+    @Getter @Setter protected double maxWalk = 10;
+    @Getter @Setter protected double maxSprint = 30;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
     @Setter protected Vector tgtDirection;
@@ -29,8 +31,9 @@ public class AgentImp implements Agent
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
+    @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
-    protected AgentView agentViewWindow;
+    @Getter protected AgentView agentViewWindow;
 
     @Getter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
 
@@ -43,6 +46,7 @@ public class AgentImp implements Agent
         this.tgtDirection = null;
         view = new ArrayList<>();
         seen = new VectorSet();
+        heard = new ArrayList<>();
     }
 
     public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
@@ -54,6 +58,7 @@ public class AgentImp implements Agent
         this.tgtDirection = tgtDirection;
         view = new ArrayList<>();
         seen = new VectorSet();
+        heard = new ArrayList<>();
     }
 
     @Override
@@ -82,14 +87,10 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public double getHearing()
-    {
-        return 0;
-    }
-
-    @Override
     public void draw(GraphicsContext gc)
     {
+        heard.forEach(h -> h.draw(gc, this.position));
+
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(3.0);
         if(team == Team.GUARD)
@@ -105,6 +106,18 @@ public class AgentImp implements Agent
     }
 
     @Override
+    public void clearHeard()
+    {
+        heard = new ArrayList<>();
+    }
+
+    @Override
+    public void addHeard(ArrayList<SoundVector> soundVectors)
+    {
+        heard.addAll(soundVectors);
+    }
+
+    @Override
     public boolean isHit(Ray ray)
     {
         return Intersection.hasIntersection(ray, position, radius);
@@ -117,7 +130,8 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public boolean isCrossed(Vector startPoint, Vector endPoint) {
+    public boolean isCrossed(Vector startPoint, Vector endPoint)
+    {
         return false;
     }
 

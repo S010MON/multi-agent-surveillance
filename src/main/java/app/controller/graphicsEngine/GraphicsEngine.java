@@ -1,6 +1,7 @@
 package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
 import app.model.agents.Agent;
 import app.model.Map;
 import app.model.boundary.Boundary;
@@ -30,16 +31,7 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-            {
-                if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
-                {
-                    output.add(new Ray(origin, bdyIntersection));
-                }
-                else
-                {
-                    output.add(new Ray(origin, agentIntersection));
-                }
-            }
+                output.add(closestRay(origin, bdyIntersection, agentIntersection));
             else if(bdyIntersection != null)
                 output.add(new Ray(origin, bdyIntersection));
             else if(agentIntersection != null)
@@ -97,5 +89,13 @@ public class GraphicsEngine
         map.getFurniture()
                 .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
         return boundaries;
+    }
+
+    private Ray closestRay(Vector origin, Vector a, Vector b)
+    {
+        if(a.dist(origin) <= b.dist(origin))
+            return new Ray(origin, a);
+        else
+            return new Ray(origin, b);
     }
 }
