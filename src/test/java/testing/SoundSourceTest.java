@@ -31,7 +31,8 @@ public class SoundSourceTest
         rays.add(new SoundRay(u, v));
         soundSource.setRays(rays);
 
-        SoundVector exp = new SoundVector(1,0, s_amp, s_freq);
+        ArrayList<SoundVector> exp = new ArrayList<>();
+        exp.add(new SoundVector(1,0, s_amp, s_freq));
         ArrayList<SoundVector> act = soundSource.heard(agent);
         assertEquals(exp, act);
     }
