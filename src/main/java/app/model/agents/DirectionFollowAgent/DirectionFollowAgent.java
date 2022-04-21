@@ -47,6 +47,7 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followRay()
     {
+        // followRay assumes the start point is on the ray itself
         return null;
     }
 
@@ -59,4 +60,5 @@ public class DirectionFollowAgent extends AgentImp
     {
         return null;
     }
+
 }
