@@ -11,11 +11,12 @@ import java.util.ArrayList;
 
 public class Capture extends AgentImp
 {
-
+    private final int MAX_TICS_WITHOUT_SIGHT = 100;
     Agent intruder;
     VectorSet beliefSet;
     ArrayList<Vector> positionHistory;
     int counter;
+
 
 
 
@@ -25,11 +26,21 @@ public class Capture extends AgentImp
         this.intruder = intruder;
         this.beliefSet.add(intruder.getPosition());
         this.positionHistory.add(intruder.getPosition());
+
+        initializeCapturing();
     }
 
-    //mah
-    public void findPossiblePosition(){
+    //Both - work as if this method exists (Implement each method separately!)
+    public void initializeCapturing()
+    {
+        // This method loops in capture until end state is reached (Intruder captured or tics maxed)
+    }
 
+
+    //mah
+    public void findAllPossiblePositions()
+    {
+        // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
     }
 
     public void addPositionHistory(Vector vector){
@@ -37,31 +48,39 @@ public class Capture extends AgentImp
     }
 
     //matt
-    public Vector findTarget(){
+    public Vector findTarget()
+    {
+        //Using heuristics decides on target for next move.
         return null;
     }
 
     //matt
-    public Vector nextMove (Vector target){
+    public Vector nextMove (Vector target)
+    {
+        //Decides on the best next move towards the target position. (Use A* or dijkstra etc.)
         Vector nextMove = null;
         return nextMove;
     }
 
 
 
-    public boolean isCompelete(){
-        return (counter > 1000);
+    public boolean isCompelete()
+    {
+        return (counter > MAX_TICS_WITHOUT_SIGHT);
     }
 
-
-    public void nullCounter(){
+    //Matt
+    public void updateCounter()
+    {
         counter = 0;
     }
 
 
     //mahshid
-    public boolean isVisible(){
-//        access to view
+    public boolean isVisible()
+    {
+        //This method checks if we still see the intruder. (One of the rays intersects with it)
+        //Access the view (array of rays)
         return false;
     }
 
