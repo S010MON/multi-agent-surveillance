@@ -1,6 +1,7 @@
 package app.model.agents.DirectionFollowAgent;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
@@ -9,6 +10,9 @@ import app.model.agents.Team;
 import app.model.agents.WallFollow.WallFollowAgent;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DirectionFollowAgent extends AgentImp
@@ -33,6 +37,10 @@ public class DirectionFollowAgent extends AgentImp
     @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
     private TurnType wallTurn;
+    private final List<Vector> directions = Arrays.asList(new Vector(0,1),
+            new Vector(1,0),
+            new Vector(0,-1),
+            new Vector(-1,0));
 
     public DirectionFollowAgent(Vector position, Vector direction, double radius, Team team, Vector targetDirection)
     {
@@ -99,7 +107,13 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followWall()
     {
-        return null;
+        Move move = runWallFollowAlgorithm();
+        Vector newPosition = position.add(move.getDeltaPos());
+        if(onDirectionRay(newPosition))
+        {
+            internalState = InternalState.followRay;
+        }
+        return move;
     }
 
     private Move goToTarget()
@@ -159,7 +173,7 @@ public class DirectionFollowAgent extends AgentImp
      * based on: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
      */
 
-    /*
+
     public Move runWallFollowAlgorithm()
     {
         Vector newMove = new Vector(0,0);
@@ -170,34 +184,42 @@ public class DirectionFollowAgent extends AgentImp
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
             lastTurn = TurnType.NO_TURN;
         }
-        else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle())
+        else if (noWallDetected(getAngleOfWallTurnRay()))
         {
             if (DEBUG) { System.out.println("Angle of left ray: " + getAngleOfLeftRay()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
-            // TODO: make rotateAgent(TurnType turn) method and use here
-            newDirection = rotateAgentLeft();
-            lastTurn = WallFollowAgent.TurnType.LEFT;
-            movedForwardLast = false;
+            newDirection = rotateAgentAsWallTurn();
+            lastTurn = wallTurn;
         }
-        else if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
+        else if (noWallDetected(direction.getAngle()))
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
-            movedForwardLast = true;
-            lastTurn = WallFollowAgent.TurnType.NO_TURN;
-            markWallAsCovered();
+            lastTurn = TurnType.NO_TURN;
         }
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
             newDirection = rotateAgentRight();
-            lastTurn = WallFollowAgent.TurnType.RIGHT;
-            movedForwardLast = false;
+            lastTurn = TurnType.RIGHT;
         }
         return new Move(newDirection,newMove);
     }
 
-     */
+    private boolean onDirectionRay(Vector position)
+    {
+        return Intersection.hasIntersection(targetRay, position, moveLength/2);
+    }
+
+    public double getAngleOfWallTurnRay()
+    {
+        switch(wallTurn)
+        {
+            case LEFT -> {return getAngleOfLeftRay();}
+            case RIGHT -> {return getAngleOfRightRay();}
+        }
+        return 0;
+    }
 
     public double getAngleOfLeftRay()
     {
@@ -210,5 +232,78 @@ public class DirectionFollowAgent extends AgentImp
         {
             return currentAngle + 90 - 360;
         }
+    }
+
+    public double getAngleOfRightRay()
+    {
+        double currentAngle = direction.getAngle();
+        if (currentAngle > 90)
+        {
+            return currentAngle - 90;
+        }
+        else
+        {
+            return currentAngle - 90 + 360;
+        }
+    }
+
+    public Vector rotateAgentAsWallTurn()
+    {
+        switch(wallTurn)
+        {
+            case LEFT -> {return rotateAgentLeft();}
+            case RIGHT -> {return rotateAgentRight();}
+        }
+        // redundant by design
+        return null;
+    }
+
+    public Vector rotateAgentAsOppositeWallTurn()
+    {
+        switch(wallTurn)
+        {
+            case RIGHT -> {return rotateAgentLeft();}
+            case LEFT -> {return rotateAgentRight();}
+        }
+        // redundant by design
+        return null;
+    }
+
+    public Vector rotateAgentLeft()
+    {
+        for (int i = 0; i <= directions.size(); i++)
+        {
+            if (direction.equals(directions.get(i)))
+            {
+                if (i == directions.size()-1)
+                {
+                    return directions.get(0);
+                }
+                else
+                {
+                    return directions.get(i+1);
+                }
+            }
+        }
+        throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
+    }
+
+    public Vector rotateAgentRight()
+    {
+        for (int i = 0; i <= directions.size(); i++)
+        {
+            if (direction.equals(directions.get(i)))
+            {
+                if (i == 0)
+                {
+                    return directions.get(3);
+                }
+                else
+                {
+                    return directions.get(i-1);
+                }
+            }
+        }
+        throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
     }
 }
