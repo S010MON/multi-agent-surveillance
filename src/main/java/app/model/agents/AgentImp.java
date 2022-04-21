@@ -23,13 +23,13 @@ public class AgentImp implements Agent
     @Getter @Setter protected double maxSprint = 10;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
-    @Setter protected Vector tgtDirection;
+    @Getter @Setter protected Vector tgtDirection;
     @Getter protected Team team;
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
     @Getter protected VectorSet seen;
-    protected AgentView agentViewWindow;
+    @Getter protected AgentView agentViewWindow;
 
     @Getter protected static MemoryGraph<GraphCell, DefaultEdge> world;
 
@@ -53,6 +53,21 @@ public class AgentImp implements Agent
         this.tgtDirection = tgtDirection;
         view = new ArrayList<>();
         seen = new VectorSet();
+    }
+
+    public AgentImp(Agent other)
+    {
+        this.direction = other.getDirection();
+        this.position = other.getPosition();
+        this.radius = other.getRadius();
+        this.team = other.getTeam();
+        this.tgtDirection = other.getTgtDirection();
+        this.view = other.getView();
+        this.seen = other.getSeen();
+        this.maxSprint = other.getMaxSprint();
+        this.maxWalk = other.getMaxWalk();
+        this.agentViewWindow = other.getAgentViewWindow();
+        // TODO add hearing after SoundEngine refactor merged
     }
 
     @Override

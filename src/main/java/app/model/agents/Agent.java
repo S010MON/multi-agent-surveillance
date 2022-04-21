@@ -48,5 +48,9 @@ public interface Agent extends Boundary
 
     void setTgtDirection(Vector tgtDirection);
 
+    Vector getTgtDirection();
+
     Agent nextState();
+
+    AgentView getAgentViewWindow();
 }
