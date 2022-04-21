@@ -10,9 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SoundSource
@@ -37,8 +35,9 @@ public class SoundSource
      * @return a {@code SoundVector} which gives direction, amplitude and frequency of any sounds heard.  Returns
      * {@code null} if no intersection is found.
      */
-    public SoundVector isHeard(Agent agent)
+    public ArrayList<SoundVector> heard(Agent agent)
     {
+        ArrayList<SoundVector> output = new ArrayList<>();
         Queue<SoundRay> queue = new ConcurrentLinkedQueue<>();
         queue.addAll(rays);
 
@@ -50,11 +49,11 @@ public class SoundSource
             {
                 double amplitude = this.amplitude / collectDistances(ray, agent);
                 Vector direction = ray.direction().normalise().scale(100);
-                return new SoundVector(direction, amplitude, this.frequency);
+                output.add(new SoundVector(direction, amplitude, this.frequency));
             }
             queue.addAll(ray.getChildren());
         }
-        return null;
+        return output;
     }
 
     public void draw(GraphicsContext gc)

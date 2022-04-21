@@ -16,6 +16,9 @@ public class SoundVector extends Vector
     public SoundVector(double x, double y, double amplitude, double frequency)
     {
         super(x, y);
+        Vector v = new Vector(x, y).normalise();
+        super.x = v.getX();
+        super.y = v.getY();
         this.amplitude = amplitude;
         this.frequency = frequency;
     }
@@ -23,6 +26,9 @@ public class SoundVector extends Vector
     public SoundVector(Vector direction, double amplitude, double frequency)
     {
         super(direction.getX(), direction.getY());
+        Vector v = new Vector(direction.getX(), direction.getY()).normalise();
+        x = v.getX();
+        y = v.getY();
         this.amplitude = amplitude;
         this.frequency = frequency;
     }
@@ -30,7 +36,7 @@ public class SoundVector extends Vector
     public void draw(GraphicsContext gc, Vector position)
     {
         Vector u = position;
-        Vector v = u.sub(this);
+        Vector v = u.add(this.scale(100));
 
         gc.setStroke(colour);
         gc.setLineWidth(LINE_WIDTH);

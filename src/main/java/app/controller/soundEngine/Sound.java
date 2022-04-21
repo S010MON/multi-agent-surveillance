@@ -19,9 +19,7 @@ public class Sound
         this.listenerPos = listenerPos;
 
         direction = origin.sub(listenerPos);
-
     }
-
 
     @Override
     public boolean equals(Object o)

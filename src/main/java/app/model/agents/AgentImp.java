@@ -106,9 +106,9 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public void addHeard(SoundVector soundVector)
+    public void addHeard(ArrayList<SoundVector> soundVectors)
     {
-        heard.add(soundVector);
+        heard.addAll(soundVectors);
     }
 
     @Override

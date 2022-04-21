@@ -19,6 +19,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import lombok.Getter;
 
+import java.util.ArrayList;
+
 public class GameEngine
 {
     @Getter private long tics;
@@ -45,14 +47,7 @@ public class GameEngine
         for(Agent agent: map.getAgents())
         {
             agent.clearHeard();
-            for(SoundSource source: map.getSoundSources())
-            {
-                SoundVector heard = source.isHeard(agent);
-                if(heard != null)
-                {
-                    agent.addHeard(heard);
-                }
-            }
+            map.getSoundSources().forEach(s -> agent.addHeard(s.heard(agent)));
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));

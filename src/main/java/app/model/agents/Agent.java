@@ -35,7 +35,7 @@ public interface Agent extends Boundary
 
     void clearHeard();
 
-    void addHeard(SoundVector soundVector);
+    void addHeard(ArrayList<SoundVector> soundVectors);
 
     ArrayList<SoundVector> getHeard();
 
