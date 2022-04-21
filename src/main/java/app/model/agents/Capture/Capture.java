@@ -12,20 +12,20 @@ import java.util.ArrayList;
 public class Capture extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
-    Agent intruder;
     VectorSet beliefSet;
     ArrayList<Vector> positionHistory;
+    Vector direction;
     int counter;
 
 
 
 
-    public Capture(Vector position, Vector direction, double radius, Team team, Agent intruder)
+    public Capture(Vector position, Vector direction, double radius, Team team)
     {
         super(position, direction, radius, team);
-        this.intruder = intruder;
-        this.beliefSet.add(intruder.getPosition());
-        this.positionHistory.add(intruder.getPosition());
+        this.beliefSet.add(direction);
+        this.positionHistory.add(direction);
+        this.direction = direction;
 
         initializeCapturing();
     }
@@ -33,14 +33,24 @@ public class Capture extends AgentImp
     //Both - work as if this method exists (Implement each method separately!)
     public void initializeCapturing()
     {
+
         // This method loops in capture until end state is reached (Intruder captured or tics maxed)
     }
 
 
     //mah
+    // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
     public void findAllPossiblePositions()
     {
-        // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
+//        double offset = intruder.getMaxWalk();
+        double offset = this.getMaxWalk();
+
+        Vector original = direction;
+
+        beliefSet.add(new Vector(original.getX() , original.getY() + offset));
+        beliefSet.add(new Vector(original.getX() + offset, original.getY()));
+        beliefSet.add(new Vector(original.getX() , original.getY() - offset));
+        beliefSet.add(new Vector(original.getX() - offset, original.getY()));
     }
 
     public void addPositionHistory(Vector vector){
