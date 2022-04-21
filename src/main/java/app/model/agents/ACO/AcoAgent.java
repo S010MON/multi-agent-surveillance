@@ -119,11 +119,7 @@ public class AcoAgent extends AgentImp
     private boolean selectNextPossibleMove()
     {
         possibleMovements.remove(previousMove.getDeltaPos());
-        if(possibleMovements.isEmpty())
-        {
-            return false;
-        }
-        return true;
+        return !possibleMovements.isEmpty();
     }
 
     private Move revaluateSenses()

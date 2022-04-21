@@ -15,7 +15,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private HashMap<String, GraphCell> vertices = new HashMap<>();
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
     private int travelDistance;
-
     @Getter private double obstaclePheromoneValue = 1000.0;
 
     public MemoryGraph(int distance)
@@ -39,7 +38,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    public GraphCell addNewVertex(Vector position)
+    private GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);
@@ -66,12 +65,12 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         obstacleVertex.setPheromone(obstaclePheromoneValue);
     }
 
-    public void modifyVertex(GraphCell cell)
+    private void modifyVertex(GraphCell cell)
     {
         cell.setOccupied(true);
     }
 
-    public void connectNeighbouringVertices(GraphCell currentCell)
+    private void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
         for(Vector cardinal: cardinalDirections.values())
@@ -127,13 +126,13 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return vertices.get(keyGenerator(position));
     }
 
-    public String keyGenerator(Vector position)
+    private String keyGenerator(Vector position)
     {
         Vector centrePosition = determineVertexCentre(position);
         return centrePosition.getX() + " " + centrePosition.getY();
     }
 
-    public Vector determineVertexCentre(Vector position)
+    private Vector determineVertexCentre(Vector position)
     {
         int x_centre = calculateDimensionCentre(position.getX());
         int y_centre = calculateDimensionCentre(position.getY());
@@ -141,7 +140,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return new Vector(x_centre, y_centre);
     }
 
-    public int calculateDimensionCentre(double axisPosition)
+    private int calculateDimensionCentre(double axisPosition)
     {
         int centreDistance = travelDistance / 2;
         int axis_start = (int)(axisPosition / travelDistance) * travelDistance;
@@ -155,7 +154,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    public void populateCardinalVectors()
+    private void populateCardinalVectors()
     {
         cardinalDirections.put("North", new Vector(0, -travelDistance));
         cardinalDirections.put("East", new Vector(travelDistance, 0));

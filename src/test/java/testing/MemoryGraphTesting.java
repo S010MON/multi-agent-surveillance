@@ -21,10 +21,11 @@ public class MemoryGraphTesting
     public void testVertexCenters()
     {
         MemoryGraph<GraphCell, DefaultEdge> world = new MemoryGraph<>(distance);
-
         Vector agentPosition_1 = new Vector(37, 78);
-        Vector vertexCentre = world.determineVertexCentre(agentPosition_1);
-        assertEquals(vertexCentre, new Vector(30, 70));
+        world.add_or_adjust_Vertex(agentPosition_1);
+        GraphCell currentVertex = world.getVertexAt(agentPosition_1);
+
+        assertEquals(currentVertex.getPosition(), new Vector(30, 70));
     }
 
     @Test
