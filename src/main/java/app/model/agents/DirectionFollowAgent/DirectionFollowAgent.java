@@ -159,6 +159,7 @@ public class DirectionFollowAgent extends AgentImp
      * based on: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
      */
 
+    /*
     public Move runWallFollowAlgorithm()
     {
         Vector newMove = new Vector(0,0);
@@ -195,6 +196,8 @@ public class DirectionFollowAgent extends AgentImp
         }
         return new Move(newDirection,newMove);
     }
+
+     */
 
     public double getAngleOfLeftRay()
     {
