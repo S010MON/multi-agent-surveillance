@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class Ray
 {
-    @Getter private Team agentTeam;
+    @Getter private Team agentTeam = null;
     @Getter private Vector u;
     @Getter private Vector v;
     protected Color colour = Color.rgb(255,191,0, 0.5);
