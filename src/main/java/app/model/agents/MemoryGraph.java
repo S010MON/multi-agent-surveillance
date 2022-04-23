@@ -15,7 +15,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
 {
     @Getter private HashMap<String, GraphCell> vertices = new HashMap<>();
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
-    private int travelDistance;
+    @Getter private int travelDistance;
 
     @Getter @Setter private GraphCell initialWallFollowPos;
 
@@ -157,7 +157,12 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         cell.updatePheromone(pheromoneValue);
     }
 
-    // TODO get neighbour from direction? position = agent vertex + direction * movelength
+    public void leaveVertex(Vector position)
+    {
+        GraphCell cell = getVertexAt(position);
+        cell.setOccupied(false);
+    }
+
     public GraphCell getVertexAt(Vector position)
     {
         return vertices.get(keyGenerator(position));
@@ -247,12 +252,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
             return new Vector(1,0);  // east of agent
         }
         return new Vector();
-    }
-
-    public void leaveVertex(Vector position)
-    {
-        GraphCell cell = getVertexAt(position);
-        cell.setOccupied(false);
     }
 
     public String getDirectionStr(double directionAngle)
