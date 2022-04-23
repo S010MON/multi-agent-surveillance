@@ -4,20 +4,20 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Agent;
 import app.model.boundary.SoundBoundary;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class SoundEngine
 {
     final static int noOfRays = 10;
-    final static int noOfBounces = 3;
+    final static int noOfBounces = 2;
+    final static int maxDist = 1000;
 
     public static ArrayList<SoundRay> buildTree(Map map, SoundSource source)
     {
         ArrayList<SoundBoundary> boundaries = collectSoundBoundaries(map);
         ArrayList<SoundRay> output = new ArrayList<>();
-        Stack<SoundRay> stack = SoundRayScatter.angle360(source.getPosition(), noOfRays, 1000, noOfBounces);
+        Stack<SoundRay> stack = SoundRayScatter.angle360(source.getPosition(), noOfRays, maxDist, noOfBounces);
 
         while(!stack.isEmpty())
         {
@@ -28,27 +28,25 @@ public class SoundEngine
             Vector endPoint = null;
 
             if(bdyIntersection != null && agentIntersection != null)
-            {
                 endPoint = closestPoint(origin, agentIntersection, bdyIntersection);
-            }
+
             else if(agentIntersection != null)
-            {
                 endPoint = agentIntersection;
-            }
+
             else if(bdyIntersection != null)
-            {
                 endPoint = bdyIntersection;
-            }
+
 
             if(r.getBounces() > 0)
             {
                 Vector new_origin = bouncePoint(endPoint, r.getU());
-                stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
+                stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, maxDist, r.getBounces()));
             }
             output.add(new SoundRay(r.getU(), endPoint));
         }
         return output;
     }
+
 
     private static Vector getIntersection(SoundRay r, ArrayList<SoundBoundary> boundaries)
     {
@@ -70,6 +68,7 @@ public class SoundEngine
         return intersection;
     }
 
+
     private static Vector getAgentIntersection(SoundRay r, ArrayList<Agent> agents)
     {
         Vector intersection = null;
@@ -83,6 +82,7 @@ public class SoundEngine
         return intersection;
     }
 
+
     private static ArrayList<SoundBoundary> collectSoundBoundaries(Map map)
     {
         ArrayList<SoundBoundary> soundBoundaries = new ArrayList<>();
@@ -90,6 +90,7 @@ public class SoundEngine
            .forEach(furniture -> soundBoundaries.addAll(furniture.getSoundBoundaries()));
         return soundBoundaries;
     }
+
 
     private static Vector closestPoint(Vector origin, Vector a, Vector b)
     {

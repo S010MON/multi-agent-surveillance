@@ -46,8 +46,8 @@ public class SoundSource
 
             if(Intersection.hasLimitedIntersection(ray.getU(), ray.getV(), agent.getPosition(), agent.getRadius()))
             {
-                double amplitude = this.amplitude / (0.1 * collectDistances(ray, agent));
-                Vector direction = ray.direction().normalise().scale(100);
+                double amplitude = this.amplitude / Math.log(collectDistances(ray, agent));
+                Vector direction = ray.direction().normalise().scale(-1);
                 output.add(new SoundVector(direction, amplitude, this.frequency));
             }
             queue.addAll(ray.getChildren());

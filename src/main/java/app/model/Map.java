@@ -56,7 +56,7 @@ public class Map
 
         /* Make a test sound source */
         soundSources = new ArrayList<>();
-        soundSources.add(new SoundSource(new Vector(300, 300), 1000, 1000));
+        soundSources.add(new SoundSource(new Vector(300, 300), 200, 1000));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();
