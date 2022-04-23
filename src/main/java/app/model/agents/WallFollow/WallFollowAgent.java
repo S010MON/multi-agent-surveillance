@@ -78,7 +78,7 @@ public class WallFollowAgent extends AgentImp
         initializeWorld();
     }
 
-    private void initializeWorld()
+    public void initializeWorld()
     {
         if(world == null)
         {

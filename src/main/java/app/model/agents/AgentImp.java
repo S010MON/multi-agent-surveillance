@@ -4,7 +4,6 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
-import app.controller.soundEngine.SoundRay;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.agents.Cells.GraphCell;
@@ -14,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
 
-    @Getter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
+    @Getter @Setter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {
