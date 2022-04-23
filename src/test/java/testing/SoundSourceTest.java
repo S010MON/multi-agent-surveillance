@@ -7,7 +7,7 @@ import app.controller.soundEngine.SoundVector;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Team;
-import app.model.sound.SoundSource;
+import app.controller.soundEngine.SoundSource;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 

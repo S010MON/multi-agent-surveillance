@@ -36,7 +36,7 @@ public class SoundVector extends Vector
     public void draw(GraphicsContext gc, Vector position)
     {
         Vector u = position;
-        Vector v = u.add(this.scale(100));
+        Vector v = u.add(this.scale(amplitude));
 
         gc.setStroke(colour);
         gc.setLineWidth(LINE_WIDTH);

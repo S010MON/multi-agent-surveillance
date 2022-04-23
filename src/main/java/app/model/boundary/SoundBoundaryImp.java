@@ -1,4 +1,4 @@
-package app.model.sound;
+package app.model.boundary;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
