@@ -29,19 +29,7 @@ public class SoundEngine
 
             if(bdyIntersection != null && agentIntersection != null)
             {
-                if(origin.dist(agentIntersection) <= origin.dist(bdyIntersection))
-                {
-                    endPoint = agentIntersection;
-                }
-                else
-                {
-                    endPoint = bdyIntersection;
-                    if(r.getBounces() > 0)
-                    {
-                        Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                        stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
-                    }
-                }
+                endPoint = closestPoint(origin, agentIntersection, bdyIntersection);
             }
             else if(agentIntersection != null)
             {
@@ -49,12 +37,13 @@ public class SoundEngine
             }
             else if(bdyIntersection != null)
             {
-                if(r.getBounces() > 0)
-                {
-                    Vector new_origin = bouncePoint(bdyIntersection, r.getU());
-                    stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
-                }
                 endPoint = bdyIntersection;
+            }
+
+            if(r.getBounces() > 0)
+            {
+                Vector new_origin = bouncePoint(endPoint, r.getU());
+                stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
             }
             output.add(new SoundRay(r.getU(), endPoint));
         }
