@@ -33,28 +33,26 @@ public class Capture extends AgentImp
     //Both - work as if this method exists (Implement each method separately!)
     public void initializeCapturing()
     {
-
         // This method loops in capture until end state is reached (Intruder captured or tics maxed)
+        while(this.isComplete()){
+            this.addPositionHistory();
+            this.findAllPossiblePositions(direction, this.getMaxWalk());
+        }
     }
 
 
     //mah
     // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
-    public void findAllPossiblePositions()
+    public void findAllPossiblePositions(Vector centerPoint , double offset)
     {
-//        double offset = intruder.getMaxWalk();
-        double offset = this.getMaxWalk();
-
-        Vector original = direction;
-
-        beliefSet.add(new Vector(original.getX() , original.getY() + offset));
-        beliefSet.add(new Vector(original.getX() + offset, original.getY()));
-        beliefSet.add(new Vector(original.getX() , original.getY() - offset));
-        beliefSet.add(new Vector(original.getX() - offset, original.getY()));
+        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() + offset));
+        beliefSet.add(new Vector(centerPoint.getX() + offset, centerPoint.getY()));
+        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() - offset));
+        beliefSet.add(new Vector(centerPoint.getX() - offset, centerPoint.getY()));
     }
 
-    public void addPositionHistory(Vector vector){
-        positionHistory.add(vector);
+    public void addPositionHistory(){
+        positionHistory.add(direction);
     }
 
     //matt
@@ -74,9 +72,9 @@ public class Capture extends AgentImp
 
 
 
-    public boolean isCompelete()
+    public boolean isComplete()
     {
-        return (counter > MAX_TICS_WITHOUT_SIGHT);
+        return (counter > MAX_TICS_WITHOUT_SIGHT && this.getPosition().equals(direction));
     }
 
     //Matt
@@ -89,8 +87,17 @@ public class Capture extends AgentImp
     //mahshid
     public boolean isVisible()
     {
+
+        this.getSeen()
+                .forEach(object -> {
+//                    if(this.isAgent(object)){
+//                        return true;
+//                    }
+                });
+
         //This method checks if we still see the intruder. (One of the rays intersects with it)
         //Access the view (array of rays)
+
         return false;
     }
 
