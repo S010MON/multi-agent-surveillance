@@ -52,4 +52,10 @@ public interface Agent extends Boundary
     Team getTeam();
 
     void setTgtDirection(Vector tgtDirection);
+
+    Vector getTgtDirection();
+
+    Agent nextState();
+
+    AgentView getAgentViewWindow();
 }
