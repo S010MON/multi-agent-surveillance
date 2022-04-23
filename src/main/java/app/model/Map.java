@@ -106,6 +106,15 @@ public class Map
         furniture.addAll(obstacles);
     }
 
+    public Map(ArrayList<Agent> agents, ArrayList<Furniture> obstacles)
+    {
+        this.agents = new ArrayList<>();
+        this.agents.addAll(agents);
+
+        furniture = new ArrayList<>();
+        furniture.addAll(obstacles);
+    }
+
     public void addFurniture(SettingsObject obj)
     {
         switch(obj.getType())
