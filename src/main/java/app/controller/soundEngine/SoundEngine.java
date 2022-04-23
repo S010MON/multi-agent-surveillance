@@ -25,16 +25,17 @@ public class SoundEngine
             Vector agentIntersection = getAgentIntersection(r, map.getAgents());
             Vector bdyIntersection = getIntersection(r, boundaries);
             Vector origin = source.getPosition();
+            Vector endPoint = null;
 
             if(bdyIntersection != null && agentIntersection != null)
             {
                 if(origin.dist(agentIntersection) <= origin.dist(bdyIntersection))
                 {
-                    output.add(new SoundRay(r.getU(), agentIntersection));
+                    endPoint = agentIntersection;
                 }
                 else
                 {
-                    output.add(new SoundRay(r.getU(), bdyIntersection));
+                    endPoint = bdyIntersection;
                     if(r.getBounces() > 0)
                     {
                         Vector new_origin = bouncePoint(bdyIntersection, r.getU());
@@ -44,7 +45,7 @@ public class SoundEngine
             }
             else if(agentIntersection != null)
             {
-                output.add(new SoundRay(r.getU(), agentIntersection));
+                endPoint = agentIntersection;
             }
             else if(bdyIntersection != null)
             {
@@ -53,8 +54,9 @@ public class SoundEngine
                     Vector new_origin = bouncePoint(bdyIntersection, r.getU());
                     stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, 1000, r.getBounces()));
                 }
-                output.add(new SoundRay(r.getU(), bdyIntersection));
+                endPoint = bdyIntersection;
             }
+            output.add(new SoundRay(r.getU(), endPoint));
         }
         return output;
     }
