@@ -2,10 +2,8 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
-
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.ArrayList;
@@ -43,7 +41,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    private GraphCell addNewVertex(Vector position)
+    protected GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);
@@ -70,12 +68,12 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         obstacleVertex.setPheromone(obstaclePheromoneValue);
     }
 
-    private void modifyVertex(GraphCell cell)
+    protected void modifyVertex(GraphCell cell)
     {
         cell.setOccupied(true);
     }
 
-    private void connectNeighbouringVertices(GraphCell currentCell)
+    protected void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
         for(Vector cardinal: cardinalDirections.values())
@@ -137,13 +135,13 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return vertices.get(keyGenerator(position));
     }
 
-    private String keyGenerator(Vector position)
+    protected String keyGenerator(Vector position)
     {
         Vector centrePosition = determineVertexCentre(position);
         return centrePosition.getX() + " " + centrePosition.getY();
     }
 
-    private Vector determineVertexCentre(Vector position)
+    protected Vector determineVertexCentre(Vector position)
     {
         int x_centre = calculateDimensionCentre(position.getX());
         int y_centre = calculateDimensionCentre(position.getY());

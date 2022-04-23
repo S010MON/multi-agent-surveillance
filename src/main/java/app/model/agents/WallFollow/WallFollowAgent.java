@@ -364,7 +364,16 @@ public class WallFollowAgent extends AgentImp
         // how many neighbours also have unexplored cells
         // TODO add weights to score components?
         double score;
-        int shortestPathLength = DijkstraShortestPath.findPathBetween(world, world.getVertexAt(position), vertex).getLength();
+        int shortestPathLength;
+        List<GraphCell> shortestPath = DijkstraShortestPath.findPathBetween(world, world.getVertexAt(position), vertex).getVertexList();
+        if (shortestPath != null)
+        {
+            shortestPathLength = shortestPath.size();
+        }
+        else
+        {
+            return 100000;
+        }
         int neighboursOnUnexploredFrontier = 0;
         List<GraphCell> neighbours = Graphs.neighborListOf(world,vertex);
         for (GraphCell neighbour : neighbours)

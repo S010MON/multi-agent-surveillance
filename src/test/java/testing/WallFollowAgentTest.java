@@ -270,7 +270,6 @@ public class WallFollowAgentTest
         Vector expectedDeltaPos2 = new Vector(moveLength * agent.getDirection().getX(), moveLength * agent.getDirection().getY());
         // move 3
         agent.updateView(graphicsEngine.compute(map, agent));
-        WallFollowAgent.getWorld().getVertices().get("0 225").setObstacle(true);
         Move newMove3 = agent.move();
         agent.updateLocation(agent.getPosition().add(newMove3.getDeltaPos()));
         Vector expectedDeltaPos3 = new Vector(0,0);

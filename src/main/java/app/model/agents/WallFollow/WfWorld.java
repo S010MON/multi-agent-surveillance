@@ -15,19 +15,25 @@ public class WfWorld<Object, DefaultWeightedEdge> extends MemoryGraph
     public void add_or_adjust_Vertex(Vector position)
     {
         GraphCell cell = getVertexAt(position);
-
         if(cell != null)
         {
             modifyVertex(cell);
         }
         else
         {
-            Vector vertexCentre = determineVertexCentre(position);
-            cell = new GraphCell(vertexCentre);
-            addVertex(cell);
-            super.getVertices().put(keyGenerator(position), cell);
+            cell = addNewVertex(position);
         }
         connectNeighbouringVertices(cell);
+    }
+
+    @Override
+    protected GraphCell addNewVertex(Vector position)
+    {
+        Vector vertexCentre = determineVertexCentre(position);
+        GraphCell cell = new GraphCell(vertexCentre);
+        super.addVertex(cell);
+        super.getVertices().put(keyGenerator(position), cell);
+        return cell;
     }
 
     @Override
@@ -48,14 +54,13 @@ public class WfWorld<Object, DefaultWeightedEdge> extends MemoryGraph
             {
                 neighbouringCell = new GraphCell(resultingPosition);
                 super.getVertices().put(neighbourKey,neighbouringCell);
-                addVertex(neighbouringCell);
+                super.addVertex(neighbouringCell);
             }
-            //GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
 
             if(neighbouringCell != null && !containsEdge(currentCell, neighbouringCell))
             {
-                DefaultWeightedEdge edge = (DefaultWeightedEdge) this.addEdge(currentCell, neighbouringCell);
-                this.setEdgeWeight(edge, super.getTravelDistance());
+                DefaultWeightedEdge edge = (DefaultWeightedEdge) super.addEdge(currentCell, neighbouringCell);
+                super.setEdgeWeight(edge, super.getTravelDistance());
             }
         }
     }
