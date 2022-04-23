@@ -1,9 +1,11 @@
 package app.controller.graphicsEngine;
 
+import app.controller.linAlg.AgentIntersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
 import app.model.agents.Agent;
 import app.model.Map;
+import app.model.agents.Team;
 import app.model.boundary.Boundary;
 import java.util.ArrayList;
 
@@ -28,14 +30,17 @@ public class GraphicsEngine
         for(Ray r: rays)
         {
             Vector bdyIntersection = getIntersection(r, boundaries);
-            Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
+            AgentIntersection agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-                output.add(closestRay(origin, bdyIntersection, agentIntersection));
+                output.add( closestRay(origin, bdyIntersection,
+                            agentIntersection.getIntersection(),
+                            agentIntersection.getAgentTeam()));
             else if(bdyIntersection != null)
                 output.add(new Ray(origin, bdyIntersection));
             else if(agentIntersection != null)
-                output.add(new Ray(origin, agentIntersection));
+                output.add(new Ray( origin, agentIntersection.getIntersection(),
+                                    agentIntersection.getAgentTeam()));
         }
         return output;
     }
@@ -60,9 +65,9 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
+    private AgentIntersection getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
     {
-        Vector intersection = null;
+        AgentIntersection agentIntersection = null;
         double closestDist = Double.MAX_VALUE;
         for (Agent agent: agents)
         {
@@ -74,13 +79,13 @@ public class GraphicsEngine
                     double dist = r.getU().dist(currentV);
                     if (dist < closestDist && currentV.getAngle() == r.angle())
                     {
-                        intersection = currentV;
+                        agentIntersection = new AgentIntersection(currentV, agent.getTeam());
                         closestDist = dist;
                     }
                 }
             }
         }
-        return intersection;
+        return agentIntersection;
     }
 
     private ArrayList<Boundary> collectBoundaries(Map map)
@@ -91,11 +96,11 @@ public class GraphicsEngine
         return boundaries;
     }
 
-    private Ray closestRay(Vector origin, Vector a, Vector b)
+    private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Team agentTeam)
     {
-        if(a.dist(origin) <= b.dist(origin))
-            return new Ray(origin, a);
+        if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
+            return new Ray(origin, bdyIntersection);
         else
-            return new Ray(origin, b);
+            return new Ray(origin, agentIntersection, agentTeam);
     }
 }
