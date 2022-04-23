@@ -1,4 +1,4 @@
-package app.model.sound;
+package app.controller.soundEngine;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
@@ -38,8 +38,7 @@ public class SoundSource
     public ArrayList<SoundVector> heard(Agent agent)
     {
         ArrayList<SoundVector> output = new ArrayList<>();
-        Queue<SoundRay> queue = new ConcurrentLinkedQueue<>();
-        queue.addAll(rays);
+        Queue<SoundRay> queue = new ConcurrentLinkedQueue<>(rays);
 
         while(!queue.isEmpty())
         {
@@ -47,8 +46,8 @@ public class SoundSource
 
             if(Intersection.hasLimitedIntersection(ray.getU(), ray.getV(), agent.getPosition(), agent.getRadius()))
             {
-                double amplitude = this.amplitude / collectDistances(ray, agent);
-                Vector direction = ray.direction().normalise().scale(100);
+                double amplitude = this.amplitude / Math.log(collectDistances(ray, agent));
+                Vector direction = ray.direction().normalise().scale(-1);
                 output.add(new SoundVector(direction, amplitude, this.frequency));
             }
             queue.addAll(ray.getChildren());

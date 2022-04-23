@@ -7,7 +7,7 @@ import app.controller.soundEngine.SoundVector;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Team;
-import app.model.sound.SoundSource;
+import app.controller.soundEngine.SoundSource;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
@@ -32,10 +32,8 @@ public class SoundSourceTest
         soundSource.setRays(rays);
 
         ArrayList<SoundVector> exp = new ArrayList<>();
-        exp.add(new SoundVector(1,0, s_amp, s_freq));
+        exp.add(new SoundVector(-1,-0, s_amp, s_freq));
         ArrayList<SoundVector> act = soundSource.heard(agent);
         assertEquals(exp, act);
     }
-
-
 }

@@ -11,7 +11,7 @@ import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.sound.SoundSource;
+import app.controller.soundEngine.SoundSource;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -56,7 +56,7 @@ public class Map
 
         /* Make a test sound source */
         soundSources = new ArrayList<>();
-        soundSources.add(new SoundSource(new Vector(300, 300), 10, 1000));
+        soundSources.add(new SoundSource(new Vector(300, 300), 200, 1000));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();

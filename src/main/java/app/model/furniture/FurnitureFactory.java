@@ -2,7 +2,7 @@ package app.model.furniture;
 
 import app.controller.settings.SettingsObject;
 import app.model.boundary.BoundaryFactory;
-import app.model.sound.SoundBoundaryFactory;
+import app.model.boundary.SoundBoundaryFactory;
 import app.model.texture.TextureFactory;
 
 public abstract class FurnitureFactory

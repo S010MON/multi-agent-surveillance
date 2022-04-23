@@ -1,4 +1,4 @@
-package app.model.sound;
+package app.model.boundary;
 
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;

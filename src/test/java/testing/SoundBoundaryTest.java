@@ -1,8 +1,8 @@
 package testing;
 
 import app.controller.linAlg.Vector;
-import app.model.sound.SoundBoundaryImp;
-import app.model.sound.SoundBoundary;
+import app.model.boundary.SoundBoundaryImp;
+import app.model.boundary.SoundBoundary;
 import app.controller.soundEngine.SoundRay;
 import org.junit.jupiter.api.Test;
 
