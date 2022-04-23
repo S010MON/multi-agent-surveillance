@@ -2,8 +2,10 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
+
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private int travelDistance;
 
     @Getter @Setter private GraphCell initialWallFollowPos;
+    @Getter private double obstaclePheromoneValue = 1000.0;
 
     public MemoryGraph(int distance)
     {
@@ -36,40 +39,49 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
         else
         {
-            Vector vertexCentre = determineVertexCentre(position);
-            cell = new GraphCell(vertexCentre);
-            addVertex(cell);
-            vertices.put(keyGenerator(position), cell);
-
+            addNewVertex(position);
         }
-        connectNeighbouringVertices(cell);
     }
 
-    public void modifyVertex(GraphCell cell)
+    private GraphCell addNewVertex(Vector position)
+    {
+        Vector vertexCentre = determineVertexCentre(position);
+        GraphCell cell = new GraphCell(vertexCentre);
+        addVertex(cell);
+
+        vertices.put(keyGenerator(position), cell);
+        connectNeighbouringVertices(cell);
+        return cell;
+    }
+
+    public void setVertexAsObstacle(Vector currentPosition, Vector movement)
+    {
+        Vector obstaclePosition = currentPosition.add(movement);
+        GraphCell obstacleVertex = getVertexAt(obstaclePosition);
+        if(obstacleVertex != null)
+        {
+            obstacleVertex.setObstacle(true);
+        }
+        else
+        {
+            obstacleVertex = addNewVertex(obstaclePosition);
+            obstacleVertex.setObstacle(true);
+        }
+        obstacleVertex.setPheromone(obstaclePheromoneValue);
+    }
+
+    private void modifyVertex(GraphCell cell)
     {
         cell.setOccupied(true);
     }
 
-    public void connectNeighbouringVertices(GraphCell currentCell)
+    private void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
         for(Vector cardinal: cardinalDirections.values())
         {
-            GraphCell neighbouringCell;
             Vector resultingPosition = currentPosition.add(cardinal);
-            String neighbourKey = keyGenerator(resultingPosition);
-            if (vertices.containsKey(neighbourKey))
-            {
-                neighbouringCell = vertices.get(neighbourKey);
-            }
-            else
-            {
-                neighbouringCell = new GraphCell(resultingPosition);
-                vertices.put(neighbourKey,neighbouringCell);
-                addVertex(neighbouringCell);
-            }
-            //GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
-
+            GraphCell neighbouringCell = vertices.get(keyGenerator(resultingPosition));
             if(neighbouringCell != null && !containsEdge(currentCell, neighbouringCell))
             {
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) this.addEdge(currentCell, neighbouringCell);
@@ -78,58 +90,15 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
+    //Possibly scale for aggregate values
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
     {
-        GraphCell currentCell = getVertexAt(currentPosition);
-        if(cardinalDirections.get("North").equals(cardinalMovement))
-        {
-            return northSouthAggregate(currentCell, "North");
-        }
-        else if(cardinalDirections.get("South").equals(cardinalMovement))
-        {
-            return northSouthAggregate(currentCell, "South");
-        }
-        else if(cardinalDirections.get("East").equals(cardinalMovement))
-        {
-            return eastWestAggregate(currentCell, "East");
-        }
-        else if(cardinalDirections.get("West").equals(cardinalMovement))
-        {
-            return eastWestAggregate(currentCell, "West");
-        }
-        else
-        {
-            throw new RuntimeException("No cell aggregate could be calculated");
-        }
+        GraphCell neighbour = getVertexAt(currentPosition.add(cardinalMovement));
+        GraphCell[] aggregateCells = {neighbour};
+        return aggregatePheromoneValues(aggregateCells);
     }
 
-    //TODO Refactor aggregates depending on best discussed solution
-    public double northSouthAggregate(GraphCell currentCell, String direction)
-    {
-        Vector currentPosition = currentCell.getPosition();
-        Vector aggregateDirection = cardinalDirections.get(direction);
-
-        GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
-        Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
-        GraphCell c2 = getVertexAt(TPosition);
-
-        GraphCell[] aggregateVertices =  {c1, c2};
-        return aggregatePheromoneValues(aggregateVertices);
-    }
-
-    public double eastWestAggregate(GraphCell currentCell, String direction)
-    {
-        Vector currentPosition = currentCell.getPosition();
-        Vector aggregateDirection = cardinalDirections.get(direction);
-
-        GraphCell c1 = getVertexAt(currentPosition.add(aggregateDirection));
-        Vector TPosition = currentPosition.add(aggregateDirection.scale(2));
-        GraphCell c2 = getVertexAt(TPosition);
-
-        GraphCell[] aggregateVertices =  {c1, c2};
-        return aggregatePheromoneValues(aggregateVertices);
-    }
-
+    //Depreciated, however still necessary in case of calculating aggregate pheromone values
     public double aggregatePheromoneValues(GraphCell[] aggregateVertices)
     {
         double pheromoneSum = 0;
@@ -168,13 +137,13 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return vertices.get(keyGenerator(position));
     }
 
-    public String keyGenerator(Vector position)
+    private String keyGenerator(Vector position)
     {
         Vector centrePosition = determineVertexCentre(position);
         return centrePosition.getX() + " " + centrePosition.getY();
     }
 
-    public Vector determineVertexCentre(Vector position)
+    private Vector determineVertexCentre(Vector position)
     {
         int x_centre = calculateDimensionCentre(position.getX());
         int y_centre = calculateDimensionCentre(position.getY());
@@ -182,7 +151,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return new Vector(x_centre, y_centre);
     }
 
-    public int calculateDimensionCentre(double axisPosition)
+    private int calculateDimensionCentre(double axisPosition)
     {
         int centreDistance = travelDistance / 2;
         int axis_start = (int)(axisPosition / travelDistance) * travelDistance;
@@ -196,7 +165,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         }
     }
 
-    public void populateCardinalVectors()
+    private void populateCardinalVectors()
     {
         cardinalDirections.put("North", new Vector(0, -travelDistance));
         cardinalDirections.put("East", new Vector(travelDistance, 0));

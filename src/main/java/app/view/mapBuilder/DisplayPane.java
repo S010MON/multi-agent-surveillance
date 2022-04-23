@@ -6,20 +6,16 @@ import java.util.Optional;
 
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
-import app.model.soundSource.SoundSource;
 import app.view.ScreenSize;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import lombok.Setter;
 
 public class DisplayPane extends Canvas
 {

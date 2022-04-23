@@ -2,8 +2,8 @@ package app.model.furniture;
 
 import app.controller.settings.SettingsObject;
 import app.model.boundary.BoundaryFactory;
+import app.model.sound.SoundBoundaryFactory;
 import app.model.texture.TextureFactory;
-import javafx.geometry.Rectangle2D;
 
 public abstract class FurnitureFactory
 {
@@ -11,6 +11,7 @@ public abstract class FurnitureFactory
     {
         Furniture furniture = new FurnitureBase();
         furniture.addBoundaries(BoundaryFactory.make(object));
+        furniture.addSoundBoundaries(SoundBoundaryFactory.make(object));
         furniture.setTexture(TextureFactory.make(object.getType(), object.getRect()));
         return furniture;
     }
