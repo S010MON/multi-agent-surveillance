@@ -50,7 +50,7 @@ public class Ray
 
     public Vector direction()
     {
-        return v.sub(u);
+        return v.sub(u).normalise();
     }
 
     public void draw(GraphicsContext gc)

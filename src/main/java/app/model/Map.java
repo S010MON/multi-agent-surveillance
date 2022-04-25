@@ -79,8 +79,8 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
-            //Agent intruder = new DirectionFollowAgent(srt, dir, 10, Team.INTRUDER, targetDirection(srt));
+            //Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            Agent intruder = new DirectionFollowAgent(srt, dir, 10, Team.INTRUDER, targetDirection(srt));
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);

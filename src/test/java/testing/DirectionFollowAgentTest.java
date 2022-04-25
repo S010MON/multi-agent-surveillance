@@ -242,6 +242,12 @@ public class DirectionFollowAgentTest
         assertEquals(expectedDir, agent.getDirection());
     }
 
+    @Test
+    void stateFollowRight()
+    {
+
+    }
+
 
 
 

@@ -94,7 +94,7 @@ public class DirectionFollowAgent extends AgentImp
             return new Move(targetRay.direction(), new Vector(0,0));
         }
 
-        double dist = distanceToObstacle(targetRay.angle());
+        double dist = Math.abs(distanceToObstacle(targetRay.angle()) - radius);
 
         if(dist < 0.0){
             // means there are no obstacles so just go straight to the target
@@ -198,6 +198,38 @@ public class DirectionFollowAgent extends AgentImp
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentAsWallTurn();
             lastTurn = wallTurn;
+        }
+        else if (noWallDetected(direction.getAngle()))
+        {
+            if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
+            newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
+            lastTurn = TurnType.NO_TURN;
+        }
+        else
+        {
+            if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
+            newDirection = rotateAgentRight();
+            lastTurn = TurnType.RIGHT;
+        }
+        return new Move(newDirection,newMove);
+    }
+
+    public Move runLeftWallFollowAlgorithm()
+    {
+        Vector newMove = new Vector(0,0);
+        Vector newDirection = direction;
+        if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
+        {
+            if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
+            newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
+            lastTurn = TurnType.NO_TURN;
+        }
+        else if (noWallDetected(getAngleOfLeftRay()))
+        {
+            if (DEBUG) { System.out.println("Angle of left ray: " + getAngleOfLeftRay()); ; }
+            if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
+            newDirection = rotateAgentLeft();
+            lastTurn = TurnType.LEFT;
         }
         else if (noWallDetected(direction.getAngle()))
         {
