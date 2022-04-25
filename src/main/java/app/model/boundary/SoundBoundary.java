@@ -1,4 +1,4 @@
-package app.model.soundBoundary;
+package app.model.boundary;
 
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
@@ -9,7 +9,6 @@ public interface SoundBoundary
 {
     ArrayList<Vector> getCorners();
 
-    // for testing
     void draw(GraphicsContext gc);
 
     Vector intersection(SoundRay soundRay);

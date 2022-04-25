@@ -3,8 +3,8 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundEngine;
 import app.model.Trail;
-import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
@@ -38,10 +38,19 @@ public class GameEngine
 
     public void tick()
     {
+        map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
+        // map.getSoundSources().forEach(s -> s.decay());
+        for(Agent agent: map.getAgents())
+        {
+            agent.clearHeard();
+            map.getSoundSources().forEach(s -> agent.addHeard(s.heard(agent)));
+        }
+
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         map.getAgents().forEach(a -> map.checkForCapture(a));
+        map.updateStates();
 
         for (Agent a : map.getAgents())
         {
@@ -75,7 +84,7 @@ public class GameEngine
 
     public void handleKey(KeyEvent e)
     {
-        if(e.getCharacter() == " ")
+        if(e.getCharacter().equals(" "))
             pausePlay();
 
         if(map.getHuman() != null)

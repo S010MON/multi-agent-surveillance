@@ -2,9 +2,14 @@ package testing;
 
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.controller.soundEngine.SoundRay;
+import app.model.agents.Agent;
+import app.model.agents.AgentImp;
+import app.model.agents.Team;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -30,7 +35,6 @@ public class IntersectionTest
 
         assertFalse(Intersection.hasIntersection(p1, p2, p3, p4));
     }
-
 
     @Test void findIntersectionTest_boundaryCheck_inOneLine()
     {
@@ -60,5 +64,33 @@ public class IntersectionTest
         Vector p4 = new Vector(3, 4);
 
         assertTrue(Intersection.hasIntersection(p1, p2, p3, p4));
+    }
+
+    @Test void testLimitedIntersectionTrue()
+    {
+        Vector u = new Vector(0,0);
+        Vector v = new Vector(0, 10);
+        Vector a_pos = new Vector(0, 5);
+
+        Agent agent = new AgentImp(a_pos, new Vector(), 1, Team.GUARD);
+        SoundRay soundRay = new SoundRay(u, v);
+
+        assertTrue(Intersection.hasLimitedIntersection(soundRay, agent.getPosition(), agent.getRadius()));
+        Vector intersection = Intersection.findIntersection(soundRay, agent.getPosition(), agent.getRadius());
+
+        assertEquals(0, intersection.getX(), 0.1);
+        assertEquals(4, intersection.getY(), 0.1);
+    }
+
+    @Test void testLimitedIntersectionFalse()
+    {
+        Vector u = new Vector(0,0);
+        Vector v = new Vector(0, 10);
+        Vector a_pos = new Vector(0, 15);
+
+        Agent agent = new AgentImp(a_pos, new Vector(), 1, Team.GUARD);
+        SoundRay soundRay = new SoundRay(u, v);
+
+        assertFalse(Intersection.hasLimitedIntersection(soundRay, agent.getPosition(), agent.getRadius()));
     }
 }
