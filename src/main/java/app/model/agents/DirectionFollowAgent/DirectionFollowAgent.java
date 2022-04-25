@@ -89,6 +89,10 @@ public class DirectionFollowAgent extends AgentImp
     private Move followRay()
     {
         // followRay assumes the start point is on the ray itself
+        if(!direction.equals(targetRay.direction()))
+        {
+            return new Move(targetRay.direction(), new Vector(0,0));
+        }
 
         double dist = distanceToObstacle(targetRay.angle());
 
@@ -97,15 +101,16 @@ public class DirectionFollowAgent extends AgentImp
             internalState = InternalState.goToTarget;
             return move();
         }
-
-        if(dist >= moveLength){
-            return new Move(targetRay.getU(), targetRay.getU().scale(moveLength));
+        else if(dist >= moveLength){
+            return new Move(targetRay.direction(), targetRay.direction().scale(moveLength));
+        }
+        else
+        {
+            internalState = InternalState.followWall;
+            return new Move(targetRay.direction(), targetRay.direction().scale(dist));
         }
 
-        // means we moved all the way up to the target
-        internalState = InternalState.followWall;
-
-        return new Move(targetRay.getU(), targetRay.getU().scale(dist));
+        //return new Move(targetRay.getU(), targetRay.getU().scale(dist));
     }
 
     private Move followWall()

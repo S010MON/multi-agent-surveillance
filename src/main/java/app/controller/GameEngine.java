@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundEngine;
+import app.model.Move;
 import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
@@ -55,12 +56,14 @@ public class GameEngine
         for (Agent a : map.getAgents())
         {
             Vector startPoint = a.getPosition();
-            Vector endPoint = startPoint.add(a.move().getDeltaPos());
+            Move move = a.move();
+            Vector endPoint = startPoint.add(move.getDeltaPos());
 
             Vector teleportTo = checkTeleport(startPoint, endPoint);
             if (teleportTo != null)
             {
                 a.updateLocation(teleportTo);
+                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
                 renderer.addTrail(new Trail(teleportTo, tics));
             }
@@ -69,6 +72,7 @@ public class GameEngine
                     legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
             {
                 a.updateLocation(endPoint);
+                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
                 renderer.addTrail(new Trail(endPoint, tics));
             }

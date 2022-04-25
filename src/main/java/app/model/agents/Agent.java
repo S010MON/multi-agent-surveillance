@@ -21,6 +21,8 @@ public interface Agent extends Boundary
 
     Vector getDirection();
 
+    void setDirection(Vector direction);
+
     ArrayList<Ray> getView();
 
     double getMaxWalk();
