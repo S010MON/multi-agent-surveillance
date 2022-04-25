@@ -42,6 +42,8 @@ public class DirectionFollowAgent extends AgentImp
             new Vector(0,-1),
             new Vector(-1,0));
 
+    //TODO: rescale targetRay if agent goes beyond it
+
     public DirectionFollowAgent(Vector position, Vector direction, double radius, Team team, Vector targetDirection)
     {
         super(position, direction, radius, team);
@@ -49,7 +51,8 @@ public class DirectionFollowAgent extends AgentImp
         {
             throw new RuntimeException("no targetDirection provided for intruder");
         }
-        targetRay = new Ray(position, targetDirection);
+
+        targetRay = new Ray(position, position.add(targetDirection.scale(10000)));
 
         internalState = InternalState.followRay;
         lastTurn = TurnType.NO_TURN;
@@ -128,11 +131,11 @@ public class DirectionFollowAgent extends AgentImp
      * @param rayAngle angle of the direction to be checked.
      * @return true if no obstacle detected; false if obstacle detected
      */
-    private boolean noWallDetected(double rayAngle)
+    public boolean noWallDetected(double rayAngle)
     {
         for (Ray r : view)
         {
-            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.rayLength() <= moveLength)
+            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
             {
                 if (DEBUG)
                     System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
@@ -151,7 +154,7 @@ public class DirectionFollowAgent extends AgentImp
             {
                 if (DEBUG)
                     System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
-                return r.rayLength();
+                return r.length();
             }
         }
         if (DEBUG)
