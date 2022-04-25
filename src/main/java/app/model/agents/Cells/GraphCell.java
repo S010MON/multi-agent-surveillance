@@ -66,4 +66,10 @@ public class GraphCell
         }
         return false;
     }
+
+    @Override
+    public String toString()
+    {
+        return XY;
+    }
 }
