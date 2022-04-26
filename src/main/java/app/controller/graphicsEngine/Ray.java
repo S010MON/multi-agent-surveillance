@@ -53,6 +53,16 @@ public class Ray
         return v.sub(u).normalise();
     }
 
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof Ray r)
+        {
+            return this.u.equals(r.getU()) && this.v.equals(r.getV());
+        }
+        return false;
+    }
+
     public void draw(GraphicsContext gc)
     {
         gc.setStroke(colour);
@@ -61,5 +71,11 @@ public class Ray
                       getU().getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
                       getV().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
                       getV().getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new String("Ray: "+ u.toString() +", " + v.toString());
     }
 }
