@@ -114,7 +114,10 @@ public class DirectionFollowAgent extends AgentImp
             Vector newDirection = getDirectionToWall(targetRay.direction());
             if(DEBUG)
             {
-
+                System.out.println("\n--------------");
+                System.out.println("going into followWall state");
+                System.out.println("newDirection: " +newDirection.toString());
+                System.out.println("--------------");
             }
 
             return new Move(newDirection, targetRay.direction().scale(dist));
@@ -131,9 +134,17 @@ public class DirectionFollowAgent extends AgentImp
         }
         Move move = runWallFollowAlgorithm();
         Vector newPosition = position.add(move.getDeltaPos());
+
+        // TODO: add check so that not immediately goes into followRay state again if movement too small
         if(onDirectionRay(newPosition))
         {
             internalState = InternalState.followRay;
+            if(DEBUG)
+            {
+                System.out.println("\n--------------");
+                System.out.println("going into followRay state");
+                System.out.println("--------------");
+            }
         }
         return move;
     }
