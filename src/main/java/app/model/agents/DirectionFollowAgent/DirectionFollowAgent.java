@@ -86,6 +86,7 @@ public class DirectionFollowAgent extends AgentImp
         return null;
     }
 
+    // TODO: set direction to one of 4 directions when going into wallfollowPart
     private Move followRay()
     {
         // followRay assumes the start point is on the ray itself
@@ -107,7 +108,13 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             internalState = InternalState.followWall;
-            return new Move(targetRay.direction(), targetRay.direction().scale(dist));
+            //TODO: make wallTurn dependent on angle between wall and path
+            wallTurn = TurnType.LEFT;
+            //wallTurn = TurnType.RIGHT;
+
+            Vector newDirection = getDirectionToWall(targetRay.direction());
+
+            return new Move(newDirection, targetRay.direction().scale(dist));
         }
 
         //return new Move(targetRay.getU(), targetRay.getU().scale(dist));
@@ -152,6 +159,22 @@ public class DirectionFollowAgent extends AgentImp
         return true;
     }
 
+    public Vector getDirectionToWall(Vector diagonalDirection)
+    {
+        //TODO: set direction straight to wall
+        // right now just takes direction with smallest angle
+        // need to check if ray in front is wall
+        for(Vector dir: directions)
+        {
+            if(Math.abs(diagonalDirection.getAngle()-dir.getAngle())<=45)
+            {
+                return dir;
+            }
+        }
+        // redundant by design
+        return null;
+    }
+
     private double distanceToObstacle(double rayAngle){
         for (Ray r : view)
         {
@@ -194,7 +217,7 @@ public class DirectionFollowAgent extends AgentImp
         }
         else if (noWallDetected(getAngleOfWallTurnRay()))
         {
-            if (DEBUG) { System.out.println("Angle of left ray: " + getAngleOfLeftRay()); ; }
+            if (DEBUG) { System.out.println("Angle of wallTurn ray: " + getAngleOfWallTurnRay()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentAsWallTurn();
             lastTurn = wallTurn;
@@ -208,8 +231,11 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            newDirection = rotateAgentRight();
-            lastTurn = TurnType.RIGHT;
+            newDirection = rotateAgentAsOppositeWallTurn();
+            if(wallTurn==TurnType.LEFT)
+                lastTurn = TurnType.RIGHT;
+            else
+                lastTurn = TurnType.LEFT;
         }
         return new Move(newDirection,newMove);
     }

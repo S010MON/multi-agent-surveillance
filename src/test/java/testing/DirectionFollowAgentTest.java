@@ -248,7 +248,7 @@ public class DirectionFollowAgentTest
 
     }
 
-
+    // TODO: set direction to one of 4 directions when going into wallfollowPart
 
 
 
