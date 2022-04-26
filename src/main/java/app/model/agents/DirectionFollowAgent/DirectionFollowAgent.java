@@ -144,8 +144,8 @@ public class DirectionFollowAgent extends AgentImp
         {
             throw new RuntimeException("Agent is in followingWall state, but direction isn't cardinal");
         }
-        Move move = runLeftWallFollowAlgorithm();
-        //Move move = runWallFollowAlgorithm();
+        //Move move = runLeftWallFollowAlgorithm();
+        Move move = runWallFollowAlgorithm();
         Vector newPosition = position.add(move.getDeltaPos());
 
         // TODO: add check so that not immediately goes into followRay state again if movement too small
@@ -159,6 +159,7 @@ public class DirectionFollowAgent extends AgentImp
                 System.out.println("--------------");
             }
         }
+        if (DEBUG) { System.out.println("Move: " +move.toString()); }
         return move;
     }
 
@@ -176,17 +177,19 @@ public class DirectionFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
+        if (DEBUG)
+            System.out.println("noWallDetected method:");
         for (Ray r : view)
         {
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
             {
                 if (DEBUG)
-                    System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
+                    System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle + ",  position: "+position.toString());
                 return false;
             }
         }
         if (DEBUG)
-            System.out.println("No wall detected with ray of angle: " + rayAngle);
+            System.out.println("     No wall detected with ray of angle: " + rayAngle + ",  position: "+position.toString());
         return true;
     }
 
@@ -204,14 +207,14 @@ public class DirectionFollowAgent extends AgentImp
             }
         }
         // redundant by design
-        if(wallTurn==TurnType.LEFT)
+        if(wallTurn==TurnType.RIGHT)
         {
             if(indexDirection==directions.size()-1)
                 return directions.get(0);
             else
                 return directions.get(indexDirection+1);
         }
-        if(wallTurn==TurnType.RIGHT)
+        if(wallTurn==TurnType.LEFT)
         {
             if(indexDirection==0)
                 return directions.get(directions.size()-1);
@@ -222,17 +225,20 @@ public class DirectionFollowAgent extends AgentImp
     }
 
     private double distanceToObstacle(double rayAngle){
+        if (DEBUG)
+            System.out.println("distanceToObstacle method:");
         for (Ray r : view)
         {
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
             {
                 if (DEBUG)
-                    System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
+                    System.out.println("     WALL DETECTED! Distance: "+r.length()+", Ray Angle: " + rayAngle);
                 return r.length();
             }
         }
         if (DEBUG)
-            System.out.println("No wall detected with ray of angle: " + rayAngle);
+            System.out.println("     No wall detected with ray of angle: " + rayAngle);
+
         return -1.0;
     }
 
@@ -250,6 +256,15 @@ public class DirectionFollowAgent extends AgentImp
      * based on: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
      */
 
+    // TODO: Right now, it sometimes doesn't detect a wall even if it is there
+    //  The problem is (most likely) in the "noWallDetected method", as that is responsible for detecting walls
+    // this results in it
+    // - going into turning head-first to the wall in ALGORITHM CASE 2
+    // - noticing the wall when running the algorithm again (how???)
+    //    - ending up in ALGORITHM CASE 1
+    //    - which makes it go into the wrong direction
+    // - and than looping in CASE 2, CASE 1, CASE 2, CASE 1, etc. indefinitely
+    //
 
     public Move runWallFollowAlgorithm()
     {
@@ -260,12 +275,14 @@ public class DirectionFollowAgent extends AgentImp
             if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
             lastTurn = TurnType.NO_TURN;
+            if (DEBUG) { System.out.println("Position change: " +newMove.toString()); }
         }
         else if (noWallDetected(getAngleOfWallTurnRay()))
         {
             if (DEBUG) { System.out.println("Angle of wallTurn ("+wallTurn+") ray: " + getAngleOfWallTurnRay()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentAsWallTurn();
+            if (DEBUG) { System.out.println("new direction: " +newDirection.toString()); }
             lastTurn = wallTurn;
         }
         else if (noWallDetected(direction.getAngle()))
@@ -273,6 +290,7 @@ public class DirectionFollowAgent extends AgentImp
             if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
             lastTurn = TurnType.NO_TURN;
+            if (DEBUG) { System.out.println("Position change: " +newMove.toString()); }
         }
         else
         {
@@ -282,6 +300,7 @@ public class DirectionFollowAgent extends AgentImp
                 lastTurn = TurnType.RIGHT;
             else
                 lastTurn = TurnType.LEFT;
+            if (DEBUG) { System.out.println("new direction: " +newDirection.toString()); }
         }
         return new Move(newDirection,newMove);
     }
