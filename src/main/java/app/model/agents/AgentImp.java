@@ -7,6 +7,8 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.agents.Cells.GraphCell;
+import app.model.boundary.Boundary;
+import app.model.furniture.Furniture;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,6 +34,7 @@ public class AgentImp implements Agent
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
+    @Setter protected Furniture target;
 
     @Getter @Setter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
 
@@ -47,13 +50,14 @@ public class AgentImp implements Agent
         heard = new ArrayList<>();
     }
 
-    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
+    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection, Furniture target)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
         this.team = team;
         this.tgtDirection = tgtDirection;
+        this.target = target;
         view = new ArrayList<>();
         seen = new VectorSet();
         heard = new ArrayList<>();
@@ -176,5 +180,23 @@ public class AgentImp implements Agent
     public Agent nextState()
     {
         return this;
+    }
+
+    @Override
+    public boolean seesTarget(){
+        // if there is no target, it just can't be seen (if necessary could also throw an error?)
+        if(target == null)
+            return false;
+
+        // if any of the view rays intersect any of the target boundaries, we see the target
+        for(Ray ray: view)
+        {
+            for(Boundary boundary: target.getBoundaries())
+            {
+                if(boundary.isHit(ray))
+                    return true;
+            }
+        }
+        return false;
     }
 }

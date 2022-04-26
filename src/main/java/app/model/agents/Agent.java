@@ -6,6 +6,7 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.boundary.Boundary;
 import app.model.Move;
+import app.model.furniture.Furniture;
 import app.view.agentView.AgentView;
 import java.util.ArrayList;
 
@@ -51,11 +52,15 @@ public interface Agent extends Boundary
 
     Team getTeam();
 
+    void setTarget(Furniture target);
+
     void setTgtDirection(Vector tgtDirection);
 
     Vector getTgtDirection();
 
     Agent nextState();
+
+    boolean seesTarget();
 
     AgentView getAgentViewWindow();
 }
