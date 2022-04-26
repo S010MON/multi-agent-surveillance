@@ -33,7 +33,7 @@ public class DirectionFollowAgent extends AgentImp
 
     private Ray targetRay;
     @Getter private InternalState internalState;
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
     private TurnType wallTurn;
@@ -108,11 +108,14 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             internalState = InternalState.followWall;
-            //TODO: make wallTurn dependent on angle between wall and path
+            //TODO: make wallTurn dependent on angle between wall and path or signals of other agents
             wallTurn = TurnType.LEFT;
-            //wallTurn = TurnType.RIGHT;
 
             Vector newDirection = getDirectionToWall(targetRay.direction());
+            if(DEBUG)
+            {
+
+            }
 
             return new Move(newDirection, targetRay.direction().scale(dist));
         }
@@ -122,6 +125,10 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followWall()
     {
+        if(!directions.contains(direction))
+        {
+            throw new RuntimeException("Agent is in followingWall state, but direction isn't cardinal");
+        }
         Move move = runWallFollowAlgorithm();
         Vector newPosition = position.add(move.getDeltaPos());
         if(onDirectionRay(newPosition))
@@ -163,7 +170,7 @@ public class DirectionFollowAgent extends AgentImp
     {
         //TODO: set direction straight to wall
         // right now just takes direction with smallest angle
-        // need to check if ray in front is wall
+        // need to check if with new direction, wall in front
         for(Vector dir: directions)
         {
             if(Math.abs(diagonalDirection.getAngle()-dir.getAngle())<=45)
@@ -207,6 +214,7 @@ public class DirectionFollowAgent extends AgentImp
 
     public Move runWallFollowAlgorithm()
     {
+        if(DEBUG) { System.out.println("\n\n new agent:"); }
         Vector newMove = new Vector(0,0);
         Vector newDirection = direction;
         if (lastTurn == wallTurn && noWallDetected(direction.getAngle()))
@@ -217,7 +225,7 @@ public class DirectionFollowAgent extends AgentImp
         }
         else if (noWallDetected(getAngleOfWallTurnRay()))
         {
-            if (DEBUG) { System.out.println("Angle of wallTurn ray: " + getAngleOfWallTurnRay()); ; }
+            if (DEBUG) { System.out.println("Angle of wallTurn ("+wallTurn+") ray: " + getAngleOfWallTurnRay()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentAsWallTurn();
             lastTurn = wallTurn;
@@ -231,7 +239,7 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            newDirection = rotateAgentAsOppositeWallTurn();
+            newDirection = rotateAgentRight();
             if(wallTurn==TurnType.LEFT)
                 lastTurn = TurnType.RIGHT;
             else
@@ -266,8 +274,11 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            newDirection = rotateAgentRight();
-            lastTurn = TurnType.RIGHT;
+            newDirection = rotateAgentAsOppositeWallTurn();
+            if(wallTurn== TurnType.LEFT)
+                lastTurn = TurnType.RIGHT;
+            else
+                lastTurn = TurnType.LEFT;
         }
         return new Move(newDirection,newMove);
     }
@@ -337,7 +348,7 @@ public class DirectionFollowAgent extends AgentImp
 
     public Vector rotateAgentLeft()
     {
-        for (int i = 0; i <= directions.size(); i++)
+        for (int i = 0; i < directions.size(); i++)
         {
             if (direction.equals(directions.get(i)))
             {
