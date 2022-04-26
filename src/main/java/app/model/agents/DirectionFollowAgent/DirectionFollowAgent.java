@@ -117,7 +117,10 @@ public class DirectionFollowAgent extends AgentImp
         {
             internalState = InternalState.followWall;
             //TODO: make wallTurn dependent on angle between wall and path or signals of other agents
-            wallTurn = TurnType.LEFT;
+            if(Math.random()>0.5)
+                wallTurn = TurnType.LEFT;
+            else
+                wallTurn = TurnType.RIGHT;
             lastTurn = TurnType.NO_TURN;
 
             Vector newDirection = getDirectionStartWallFollowing(targetRay.direction());
@@ -320,7 +323,7 @@ public class DirectionFollowAgent extends AgentImp
                 indexDirection = i;
             }
         }
-        // redundant by design
+
         if(wallTurn==TurnType.RIGHT)
         {
             if(indexDirection==directions.size()-1)
@@ -335,6 +338,7 @@ public class DirectionFollowAgent extends AgentImp
             else
                 return directions.get(indexDirection-1);
         }
+
         throw new RuntimeException("wallTurn type not specified while in WallFollow state");
     }
 
@@ -415,41 +419,6 @@ public class DirectionFollowAgent extends AgentImp
             else
                 lastTurn = TurnType.LEFT;
             if (DEBUG) { System.out.println("new direction: " +newDirection.toString()); }
-        }
-        return new Move(newDirection,newMove);
-    }
-
-    public Move runLeftWallFollowAlgorithm()
-    {
-        Vector newMove = new Vector(0,0);
-        Vector newDirection = direction;
-        if (lastTurn == TurnType.LEFT && noWallDetected(direction.getAngle()))
-        {
-            if (DEBUG) { System.out.println("ALGORITHM CASE 1"); }
-            newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
-            lastTurn = TurnType.NO_TURN;
-        }
-        else if (noWallDetected(getAngleOfLeftRay()))
-        {
-            if (DEBUG) { System.out.println("Angle of left ray: " + getAngleOfLeftRay()); ; }
-            if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
-            newDirection = rotateAgentLeft();
-            lastTurn = TurnType.LEFT;
-        }
-        else if (noWallDetected(direction.getAngle()))
-        {
-            if (DEBUG) { System.out.println("ALGORITHM CASE 3"); }
-            newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
-            lastTurn = TurnType.NO_TURN;
-        }
-        else
-        {
-            if (DEBUG) { System.out.println("ALGORITHM CASE 4"); }
-            newDirection = rotateAgentAsOppositeWallTurn();
-            if(wallTurn== TurnType.LEFT)
-                lastTurn = TurnType.RIGHT;
-            else
-                lastTurn = TurnType.LEFT;
         }
         return new Move(newDirection,newMove);
     }
