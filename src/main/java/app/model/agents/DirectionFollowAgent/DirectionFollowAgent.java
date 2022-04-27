@@ -35,6 +35,10 @@ public class DirectionFollowAgent extends AgentImp
     @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
     private TurnType wallTurn;
+
+    private Move previousMove;
+
+
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
@@ -74,14 +78,20 @@ public class DirectionFollowAgent extends AgentImp
     @Override
     public Move move()
     {
-        switch(internalState)
+        if(moveFailed)
         {
-            case followRay -> { return followRay(); }
-            case followWall -> { return followWall(); }
-            case goToTarget -> { return goToTarget(); }
+            return previousMove;
         }
 
-        return null;
+        switch(internalState)
+        {
+            case followRay -> { previousMove = followRay();}
+            case followWall -> { previousMove = followWall(); }
+            case goToTarget -> { previousMove = goToTarget(); }
+            default -> { previousMove = null;}
+        }
+
+        return previousMove;
     }
 
     // TODO: set direction to one of 4 directions when going into wallfollowPart
@@ -145,11 +155,9 @@ public class DirectionFollowAgent extends AgentImp
         {
             throw new RuntimeException("Agent is in followingWall state, but direction isn't cardinal");
         }
-        //Move move = runLeftWallFollowAlgorithm();
         Move move = runWallFollowAlgorithm();
         Vector newPosition = position.add(move.getDeltaPos());
 
-        // TODO: add check so that not immediately goes into followRay state again if movement too small
         if(onDirectionRay(newPosition) && !onDirectionRay(position))
         {
             internalState = InternalState.followRay;
@@ -171,7 +179,6 @@ public class DirectionFollowAgent extends AgentImp
     }
 
 
-    // TODO: check if rays stay the same
 
     private List<Ray> previousView;
     /**
@@ -288,22 +295,6 @@ public class DirectionFollowAgent extends AgentImp
                 }
             }
         }
-        /*
-        for(Ray r : view)
-        {
-            if((r.angle() <= rayAngle + anglePrecision && r.angle() >= rayAngle - anglePrecision))
-            {
-                if(DEBUG) { System.out.println("ray with angle " + rayAngle + " exists in view");}
-                if(r.length() <= moveLength)
-                {
-                    if(DEBUG)
-                        System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle + ",  position: " + position.toString());
-                    return false;
-                }
-            }
-        }
-
-         */
 
         if (DEBUG)
             System.out.println("     No wall detected with ray of angle: " + rayAngle + ",  position: "+position.toString());
