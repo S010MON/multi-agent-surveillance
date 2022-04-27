@@ -79,6 +79,8 @@ public class DirectionFollowAgent extends AgentImp
         if(DEBUG) { System.out.println("\n\n new agent:" +this); }
         if(moveFailed)
         {
+
+            if(DEBUG) { System.out.println("previous move failed");}
             return previousMove;
         }
         if(position.dist(targetRay.getV())>targetRay.length())
@@ -107,9 +109,9 @@ public class DirectionFollowAgent extends AgentImp
             return new Move(targetRay.direction(), new Vector(0,0));
         }
 
-        double dist = Math.abs(distanceToObstacle(targetRay.angle()) - radius);
+        double dist = distanceToObstacle(targetRay.angle()) - radius;
 
-        if(dist < 0.0){
+        if(dist < 0.0 || Double.compare(dist, -1)==0){
             // means there are no obstacles so just go straight to the target
             internalState = InternalState.goToTarget;
             if(DEBUG)
@@ -120,7 +122,7 @@ public class DirectionFollowAgent extends AgentImp
             }
             return move();
         }
-        else if(dist >= moveLength){
+        else if(Math.abs(dist) >= moveLength){
             if(DEBUG)
             {
                 System.out.println("No wall, keep following ray to target");
