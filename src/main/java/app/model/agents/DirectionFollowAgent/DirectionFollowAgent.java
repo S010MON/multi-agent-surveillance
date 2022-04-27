@@ -44,8 +44,6 @@ public class DirectionFollowAgent extends AgentImp
             new Vector(0,-1),
             new Vector(-1,0));
 
-    //TODO: rescale targetRay if agent goes beyond it
-
     public DirectionFollowAgent(Vector position, Vector direction, double radius, Team team, Vector targetDirection)
     {
         super(position, direction, radius, team);
@@ -78,9 +76,16 @@ public class DirectionFollowAgent extends AgentImp
     @Override
     public Move move()
     {
+        if(DEBUG) { System.out.println("\n\n new agent:" +this); }
         if(moveFailed)
         {
             return previousMove;
+        }
+        if(position.dist(targetRay.getV())>targetRay.length())
+        {
+            if(DEBUG) { System.out.println("direction old targetRay: " +targetRay.direction().toString());}
+            targetRay = new Ray(targetRay.getU(), targetRay.direction().scale(10000).add(targetRay.getV()));
+            if(DEBUG) { System.out.println("direction new targetRay: " +targetRay.direction().toString());}
         }
 
         switch(internalState)
@@ -94,7 +99,6 @@ public class DirectionFollowAgent extends AgentImp
         return previousMove;
     }
 
-    // TODO: set direction to one of 4 directions when going into wallfollowPart
     private Move followRay()
     {
         // followRay assumes the start point is on the ray itself
@@ -150,7 +154,6 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followWall()
     {
-        if(DEBUG) { System.out.println("\n\n new agent:"); }
         if(!directions.contains(direction))
         {
             throw new RuntimeException("Agent is in followingWall state, but direction isn't cardinal");
@@ -191,27 +194,6 @@ public class DirectionFollowAgent extends AgentImp
     public boolean noWallDetected(double rayAngle)
     {
         double anglePrecision = 1;
-        // if made a turn, the position shouldn't have changed, so the view should be the same for all rays with same angle
-        if(DEBUG && false)
-        {
-            if(lastTurn==TurnType.LEFT || lastTurn==TurnType.RIGHT)
-            {
-                for(int i=0; i<view.size(); i++)
-                {
-                    for(int j=0; j<previousView.size(); j++)
-                    {
-                        if(Double.compare(view.get(i).angle(), previousView.get(j).angle())==0)
-                        {
-                            if(!view.get(i).equals(previousView.get(j)))
-                            {
-                                System.out.println("ray " + i + " changed from " + previousView.get(i).toString() + " to " + view.get(i).toString());
-                                throw new RuntimeException("view changed even though position didn't");
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         // check that all rays start at the right position
         if (DEBUG)
@@ -364,16 +346,6 @@ public class DirectionFollowAgent extends AgentImp
 
      * based on: https://blogs.ntu.edu.sg/scemdp-201718s1-g14/exploration-algorithm/
      */
-
-    // TODO: Right now, it sometimes doesn't detect a wall even if it is there
-    //  The problem is (most likely) in the "noWallDetected method", as that is responsible for detecting walls
-    // this results in it
-    // - going into turning head-first to the wall in ALGORITHM CASE 2
-    // - noticing the wall when running the algorithm again (how???)
-    //    - ending up in ALGORITHM CASE 1
-    //    - which makes it go into the wrong direction
-    // - and than looping in CASE 2, CASE 1, CASE 2, CASE 1, etc. indefinitely
-    //
 
     public Move runWallFollowAlgorithm()
     {
