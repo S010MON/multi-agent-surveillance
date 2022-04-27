@@ -241,15 +241,4 @@ public class DirectionFollowAgentTest
         expectedDir = new Vector(0,-1);
         assertEquals(expectedDir, agent.getDirection());
     }
-
-    @Test
-    void stateFollowRight()
-    {
-
-    }
-
-    // TODO: set direction to one of 4 directions when going into wallfollowPart
-
-
-
 }
