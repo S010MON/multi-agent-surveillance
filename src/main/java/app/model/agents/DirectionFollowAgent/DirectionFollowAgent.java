@@ -31,7 +31,7 @@ public class DirectionFollowAgent extends AgentImp
 
     private Ray targetRay;
     @Getter private InternalState internalState;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
     private TurnType wallTurn;
@@ -171,7 +171,6 @@ public class DirectionFollowAgent extends AgentImp
             }
         }
         if (DEBUG) { System.out.println("Move: " +move.toString()); }
-        previousView = view;
         return move;
     }
 
@@ -182,7 +181,6 @@ public class DirectionFollowAgent extends AgentImp
 
 
 
-    private List<Ray> previousView;
     /**
      * Method for checking for walls/obstacles for getting next move in the wall following algorithm.
      * Walls/obstacles are checked in the direction of the given rayAngle by checking if that ray detects
