@@ -284,15 +284,21 @@ public class DirectionFollowAgent extends AgentImp
 
     public Vector getDirectionStartWallFollowing(Vector diagonalDirection)
     {
-        //TODO: set direction straight to wall
-        // right now just takes direction with smallest angle and rotates according to wallTurn
-        // need to check if with first direction, wall in front
+        // the default case should never happen, since this function should only be called if one of the directions has a wall in front of it
         int indexDirection = 0;
+        double prevDelta = 400.0; // some number too big to be reached
         for(int i=0; i<directions.size(); i++)
         {
-            if(Math.abs(diagonalDirection.getAngle()-directions.get(i).getAngle())<=45)
+            Vector dir = directions.get(i);
+            double directionDelta = Math.abs(diagonalDirection.getAngle()-dir.getAngle());
+
+            // should noWallDetected be run from the viewpoint of the agent already hitting?
+            if(!noWallDetected(dir.getAngle()))
             {
-                indexDirection = i;
+                if(directionDelta < prevDelta){
+                    indexDirection = i;
+                    prevDelta = directionDelta;
+                }
             }
         }
 
