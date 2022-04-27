@@ -130,7 +130,6 @@ public class DirectionFollowAgent extends AgentImp
         else
         {
             internalState = InternalState.followWall;
-            //TODO: make wallTurn dependent on angle between wall and path or signals of other agents
             if(Math.random()>0.5)
                 wallTurn = TurnType.LEFT;
             else
