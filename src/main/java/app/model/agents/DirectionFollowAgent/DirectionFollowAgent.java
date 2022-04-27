@@ -95,7 +95,7 @@ public class DirectionFollowAgent extends AgentImp
             case goToTarget -> { previousMove = goToTarget(); }
             default -> { previousMove = null;}
         }
-
+        if (DEBUG) { System.out.println("Move: " +previousMove.toString()); }
         return previousMove;
     }
 
@@ -198,16 +198,14 @@ public class DirectionFollowAgent extends AgentImp
         if (DEBUG)
         {
             System.out.println("noWallDetected method:");
-//            System.out.println("     AgentPosition: " +position.toString());
-//            System.out.println("     StartRay: " + view.get(0).getU().toString());
             for(Ray r: view)
             {
                 if(!r.getU().equals(position))
                 {
-                    throw new RuntimeException("not all rays start at the right position!");
+                    System.out.println("not all rays start at the right position!");
                 }
             }
-//            System.out.println("all "+view.size()+ " rays start at the right position");
+            System.out.println("all "+view.size()+ " rays start at the right position");
         }
 
 
@@ -216,14 +214,14 @@ public class DirectionFollowAgent extends AgentImp
         {
             if(DEBUG)
             {
-                System.out.println("rayAngle-"+anglePrecision+" < 0");
+                System.out.println("     rayAngle-"+anglePrecision+" < 0");
             }
             for (Ray r : view)
             {
                 //System.out.println("r.angle ="+ r.angle());
                 if((r.angle() <= rayAngle + anglePrecision || r.angle() >= rayAngle - anglePrecision + 360))
                 {
-                    if(DEBUG) { System.out.println("ray with angle " +rayAngle+ " exists in view");}
+                    if(DEBUG) { System.out.println("     ray with angle " +r.angle()+ " exists in view");}
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
@@ -239,13 +237,13 @@ public class DirectionFollowAgent extends AgentImp
         {
             if(DEBUG)
             {
-                System.out.println("rayAngle+"+anglePrecision+" > 360");
+                System.out.println("     rayAngle+"+anglePrecision+" > 360");
             }
             for (Ray r : view)
             {
                 if((r.angle() <= rayAngle + anglePrecision-360 || r.angle() >= rayAngle - anglePrecision))
                 {
-                    if(DEBUG) { System.out.println("ray with angle " +rayAngle+ " exists in view");}
+                    if(DEBUG) { System.out.println("     ray with angle " +r.angle()+ " exists in view");}
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
@@ -263,7 +261,7 @@ public class DirectionFollowAgent extends AgentImp
             {
                 if((r.angle() <= rayAngle + anglePrecision && r.angle() >= rayAngle - anglePrecision))
                 {
-                    if(DEBUG) { System.out.println("ray with angle " + rayAngle + " exists in view");}
+                    if(DEBUG) { System.out.println("     ray with angle " + r.angle() + " exists in view");}
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
