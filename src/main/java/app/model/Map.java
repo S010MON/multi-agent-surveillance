@@ -126,6 +126,21 @@ public class Map
         }
     }
 
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @returns type: an enum of the type of furniture at Vector v, returns null if nothing is found
+     */
+    public FurnitureType furnitureAt(Vector v)
+    {
+        for(Furniture f: furniture)
+        {
+            if(f.contains(v))
+                return f.getType();
+        }
+        return null;
+    }
+
     public void updateAllSeen(Agent agent)
     {
         if(agent.getTeam() == Team.GUARD)
