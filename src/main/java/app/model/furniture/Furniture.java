@@ -1,5 +1,6 @@
 package app.model.furniture;
 
+import app.controller.linAlg.Vector;
 import app.model.boundary.Boundary;
 import app.model.boundary.SoundBoundary;
 import app.model.texture.Texture;
@@ -14,6 +15,10 @@ public interface Furniture
     void addBoundaries(ArrayList<Boundary> boundaries);
 
     void addSoundBoundaries(ArrayList<SoundBoundary> soundBoundaries);
+
+    boolean contains(Vector v);
+
+    FurnitureType getType();
 
     ArrayList<Boundary> getBoundaries();
 
