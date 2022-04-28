@@ -1,6 +1,7 @@
 package app.model.texture;
 
 import app.controller.linAlg.Vector;
+import app.view.simulation.Info;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +19,14 @@ public class TextureImp implements Texture
     }
 
     @Override
-    public void draw(GraphicsContext gc) {}
+    public void draw(GraphicsContext gc)
+    {
+        gc.setFill(color);
+        gc.fillRect(rectangle.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                rectangle.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                rectangle.getWidth() * Info.getInfo().zoom,
+                rectangle.getHeight() * Info.getInfo().zoom);
+    }
 
     @Override
     public boolean contains(Vector v)
