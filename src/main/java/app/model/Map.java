@@ -135,7 +135,7 @@ public class Map
     {
         for(Furniture f: furniture)
         {
-            if(f.contains(v))
+            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
                 return f.getType();
         }
         return null;

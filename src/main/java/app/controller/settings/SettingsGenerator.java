@@ -40,7 +40,6 @@ public abstract class SettingsGenerator
         return settings;
     }
 
-
     public static Settings defaultSettings()
     {
         Settings settings = new Settings();
@@ -78,4 +77,18 @@ public abstract class SettingsGenerator
         return settings;
     }
 
+    public static Settings furnitureTypeTest()
+    {
+        Settings settings = new Settings();
+        settings.setName("furniture_type_test");
+        settings.setGameMode(1);
+        settings.setHeight(100);
+        settings.setWidth(100);
+        settings.setNoOfGuards(0);
+        settings.setNoOfIntruders(0);
+        settings.addFurniture(new Rectangle2D(90, 90,100,100), FurnitureType.GUARD_SPAWN);
+        settings.addFurniture(new Rectangle2D(90, 90,100,100), FurnitureType.INTRUDER_SPAWN);
+        settings.addFurniture(new Rectangle2D(50, 50,50,50), FurnitureType.WALL);
+        return settings;
+    }
 }

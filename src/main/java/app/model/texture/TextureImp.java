@@ -17,8 +17,10 @@ public class TextureImp implements Texture
         this.color = Color.WHITE;
     }
 
+    @Override
     public void draw(GraphicsContext gc) {}
 
+    @Override
     public boolean contains(Vector v)
     {
         return rectangle.contains(new Point2D(v.getX(), v.getY()));
