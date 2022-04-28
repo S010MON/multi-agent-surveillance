@@ -3,6 +3,7 @@ package testing;
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsGenerator;
 import app.model.Map;
+import app.model.agents.Team;
 import app.model.furniture.FurnitureType;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +32,8 @@ public class MapTest
     @Test void TestGetAgentTypeInside()
     {
         Map map = new Map(SettingsGenerator.mapTest());
-        FurnitureType exp = FurnitureType.WALL;
-        FurnitureType act = map.furnitureAt(new Vector(70, 70));
+        Team exp = Team.INTRUDER;
+        Team act = map.agentAt(new Vector(100, 100));
         assertEquals(exp, act);
     }
 
@@ -40,7 +41,7 @@ public class MapTest
     @Test void TestGetAgentTypeOutside()
     {
         Map map = new Map(SettingsGenerator.mapTest());
-        FurnitureType act = map.furnitureAt(new Vector(25, 25));
+        Team act = map.agentAt(new Vector(10, 10));
         assertNull(act);
     }
 }

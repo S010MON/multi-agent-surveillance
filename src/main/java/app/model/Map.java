@@ -17,12 +17,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = true;
+    @Setter private final Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -86,7 +88,7 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = randPosition(intruderSpawn);
+            Vector humanStart = new Vector(100,100);
             human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
