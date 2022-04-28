@@ -499,7 +499,7 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 1;
+        double anglePrecision = 2;
 
         // check that all rays start at the right position
         if (DEBUG)
