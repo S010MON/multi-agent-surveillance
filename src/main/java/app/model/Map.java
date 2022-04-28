@@ -141,6 +141,7 @@ public class Map
         return null;
     }
 
+
     public void updateAllSeen(Agent agent)
     {
         if(agent.getTeam() == Team.GUARD)
@@ -149,12 +150,14 @@ public class Map
             intrudersSeen.addAll(agent.getSeen());
     }
 
+
     public ArrayList<Boundary> getBoundaries()
     {
         ArrayList<Boundary> boundaries = new ArrayList<>();
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
+
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
@@ -184,6 +187,7 @@ public class Map
         }
     }
 
+
     public double percentageComplete(Team team)
     {
         if(team == Team.GUARD)
@@ -191,6 +195,7 @@ public class Map
         else
             return coverage.percentSeen(intrudersSeen);
     }
+
 
     public void checkForCapture(Agent currentAgent)
     {
@@ -210,6 +215,7 @@ public class Map
         }
     }
 
+
     public void updateStates()
     {
         ArrayList<Agent> new_states = new ArrayList<>();
@@ -220,9 +226,25 @@ public class Map
         agents = new_states;
     }
 
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
+    }
+
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @returns Team: an enum of the team of the agent at Vector v, returns null if nothing is found
+     */
+    public Team agentAt(Vector v)
+    {
+        for(Agent a: agents)
+        {
+            if(a.getPosition().dist(v) <= a.getRadius())
+                return a.getTeam();
+        }
+        return null;
     }
 
     public void garbageCollection()
