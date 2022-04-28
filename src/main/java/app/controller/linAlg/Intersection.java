@@ -165,8 +165,16 @@ public abstract class Intersection
         return findIntersection(r1, r2) != null;
     }
 
+    public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
+    {
+        return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
+    }
+
     public static boolean hasLimitedIntersection(Vector A, Vector B, Vector center, double radius)
     {
+        if(A.dist(center) <= radius || B.dist(center) <= radius)
+            return true;
+
         double baX = B.getX() - A.getX();
         double baY = B.getY() - A.getY();
         double caX = center.getX() - A.getX();
@@ -191,11 +199,6 @@ public abstract class Intersection
             return false;
     }
 
-    public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
-    {
-        return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
-    }
-
     public static boolean hasDirectionIntersect(Vector start,
                                                 Vector end,
                                                 double radius,
@@ -216,7 +219,8 @@ public abstract class Intersection
         if(otherRotate.getX() >= recBL_rotate.getX() &&
                 otherRotate.getX() <= recTR_rotate.getX() &&
                 otherRotate.getY() >= recBL_rotate.getY() &&
-                otherRotate.getY() <= recTR_rotate.getY()){
+                otherRotate.getY() <= recTR_rotate.getY())
+        {
             return true;
         }
 
