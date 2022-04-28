@@ -7,12 +7,15 @@ import app.model.Move;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Team;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 public class Capture extends AgentImp
+
 {
-    private final int MAX_TICS_WITHOUT_SIGHT = 100;
+    @Getter @Setter private int MAX_TICS_WITHOUT_SIGHT = 100;
     private VectorSet beliefSet;
     private ArrayList<Vector> positionHistory;
     int counter;
@@ -32,17 +35,24 @@ public class Capture extends AgentImp
     public void initializeCapturing()
     {
         // This method loops in capture until end state is reached (Intruder captured or tics maxed)
+        while(this.isComplete()){
+            addPositionHistory();
+            findAllPossiblePositions(this.getDirection(), this.getMaxWalk());
+        }
     }
 
 
     //mah
-    public void findAllPossiblePositions()
+    public void findAllPossiblePositions(Vector centerPoint , double offset)
     {
-        // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
+        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() + offset));
+        beliefSet.add(new Vector(centerPoint.getX() + offset, centerPoint.getY()));
+        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() - offset));
+        beliefSet.add(new Vector(centerPoint.getX() - offset, centerPoint.getY()));
     }
 
-    public void addPositionHistory(Vector vector){
-        this.positionHistory.add(vector);
+    public void addPositionHistory(){
+        positionHistory.add(direction);
     }
 
     //matt
