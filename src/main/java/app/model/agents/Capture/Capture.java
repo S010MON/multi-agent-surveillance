@@ -3,6 +3,7 @@ package app.model.agents.Capture;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
+import app.model.Move;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Team;
@@ -12,20 +13,17 @@ import java.util.ArrayList;
 public class Capture extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
-    VectorSet beliefSet;
-    ArrayList<Vector> positionHistory;
-    Vector direction;
+    private VectorSet beliefSet;
+    private ArrayList<Vector> positionHistory;
     int counter;
 
-
-
-
-    public Capture(Vector position, Vector direction, double radius, Team team)
+    public Capture(Vector position, Vector direction, double radius, Team team, Vector intruderPos)
     {
         super(position, direction, radius, team);
-        this.beliefSet.add(direction);
-        this.positionHistory.add(direction);
-        this.direction = direction;
+        this.beliefSet = new VectorSet();
+        this.beliefSet.add(intruderPos);
+        this.positionHistory = new ArrayList<>();
+        this.positionHistory.add(intruderPos);
 
         initializeCapturing();
     }
@@ -34,70 +32,72 @@ public class Capture extends AgentImp
     public void initializeCapturing()
     {
         // This method loops in capture until end state is reached (Intruder captured or tics maxed)
-        while(this.isComplete()){
-            this.addPositionHistory();
-            this.findAllPossiblePositions(direction, this.getMaxWalk());
-        }
     }
 
 
     //mah
-    // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
-    public void findAllPossiblePositions(Vector centerPoint , double offset)
+    public void findAllPossiblePositions()
     {
-        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() + offset));
-        beliefSet.add(new Vector(centerPoint.getX() + offset, centerPoint.getY()));
-        beliefSet.add(new Vector(centerPoint.getX() , centerPoint.getY() - offset));
-        beliefSet.add(new Vector(centerPoint.getX() - offset, centerPoint.getY()));
+        // This method goes through the belief set and adds any vectors which the intruder could reach after the next move.
     }
 
-    public void addPositionHistory(){
-        positionHistory.add(direction);
+    public void addPositionHistory(Vector vector){
+        this.positionHistory.add(vector);
     }
 
     //matt
     public Vector findTarget()
     {
         //Using heuristics decides on target for next move.
-        return null;
+        // If our belief set is size 1, then we have our target.
+        if(this.beliefSet.size() == 1)
+            return this.beliefSet.get(0);
+
+        double shortestDist = Double.MAX_VALUE;
+        Vector closestPoint = null;
+        for(Vector location : this.beliefSet)
+        {
+            if(location.dist(this.position) < shortestDist)
+            {
+                shortestDist = location.dist(this.position);
+                closestPoint = location;
+            }
+        }
+
+        // Currently returning the closest point in the belief set to us. (Will improve this and add more heuristics)
+        return closestPoint;
     }
 
     //matt
-    public Vector nextMove (Vector target)
+    public Move nextMove(Vector target)
     {
         //Decides on the best next move towards the target position. (Use A* or dijkstra etc.)
-        Vector nextMove = null;
-        return nextMove;
+        return null;
     }
 
 
 
     public boolean isComplete()
     {
-        return (counter > MAX_TICS_WITHOUT_SIGHT && this.getPosition().equals(direction));
+        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT);
     }
 
     //Matt
     public void updateCounter()
     {
-        counter = 0;
+        // Increases the counter if the size of the belief set is greater than 1. (a tic has passed without seeing the intruder).
+        if(this.beliefSet.size() > 1)
+            this.counter++;
+        else if(this.beliefSet.size() == 1)
+            counter = 0; // Reset counter when we see the intruder.
     }
 
 
     //mahshid
     public boolean isVisible()
     {
-
-        this.getSeen()
-                .forEach(object -> {
-//                    if(this.isAgent(object)){
-//                        return true;
-//                    }
-                });
-
         //This method checks if we still see the intruder. (One of the rays intersects with it)
         //Access the view (array of rays)
-
         return false;
     }
 

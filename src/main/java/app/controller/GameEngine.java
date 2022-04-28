@@ -50,11 +50,7 @@ public class GameEngine
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         map.getAgents().forEach(a -> map.checkForCapture(a));
-<<<<<<< HEAD
-//        map.getAgents().forEach(a -> System.out.println(a.getView().);//////
-=======
         map.updateStates();
->>>>>>> 19984044a873e387beff20ce7104200c82302192
 
         for (Agent a : map.getAgents())
         {
