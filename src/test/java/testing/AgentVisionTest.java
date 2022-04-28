@@ -5,7 +5,7 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
-import app.model.agents.Team;
+import app.model.Type;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +17,7 @@ public class AgentVisionTest
         Vector pos = new Vector(0,0);
         Vector dir = new Vector(0,1);
         double radius = 10;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(11, 11);
         Vector b = new Vector(11, 12);
@@ -31,7 +31,7 @@ public class AgentVisionTest
         Vector pos = new Vector(0,0);
         Vector dir = new Vector(0,1);
         double radius = 10;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(0, -11);
         Vector b = new Vector(0, 11);
@@ -45,7 +45,7 @@ public class AgentVisionTest
         Vector pos = new Vector(0,0);
         Vector dir = new Vector(0,1);
         double radius = 10;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(0, 11);
         Vector b = new Vector(0, 12);
@@ -59,7 +59,7 @@ public class AgentVisionTest
         Vector pos = new Vector(0,5);
         Vector dir = new Vector(0,1);
         double radius = 5;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(0, -10);
         Vector b = new Vector(0, 0);
@@ -76,7 +76,7 @@ public class AgentVisionTest
         Vector pos = new Vector(5,0);
         Vector dir = new Vector(0,1);
         double radius = 5;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(-10, 0);
         Vector b = new Vector(0, 0);
@@ -93,7 +93,7 @@ public class AgentVisionTest
         Vector pos = new Vector(0,5);
         Vector dir = new Vector(0,1);
         double radius = 5;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(0, -10);
         Vector b = new Vector(0, -5);
@@ -110,7 +110,7 @@ public class AgentVisionTest
         Vector pos = new Vector(5,0);
         Vector dir = new Vector(0,1);
         double radius = 5;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(-10, 0);
         Vector b = new Vector(-5, 0);
@@ -127,7 +127,7 @@ public class AgentVisionTest
         Vector pos = new Vector(5,0);
         Vector dir = new Vector(0,1);
         double radius = 5;
-        Agent agent = new AgentImp(pos, dir, radius, Team.GUARD);
+        Agent agent = new AgentImp(pos, dir, radius, Type.GUARD);
 
         Vector a = new Vector(5, 15);
         Vector b = new Vector(5, 10);

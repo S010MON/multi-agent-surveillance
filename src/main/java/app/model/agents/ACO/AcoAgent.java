@@ -4,13 +4,9 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
-import app.model.agents.Cells.GraphCell;
-import app.model.agents.MemoryGraph;
-import app.model.agents.Team;
-import app.model.agents.WallFollow.WfWorld;
+import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.util.*;
 
@@ -35,9 +31,9 @@ public class AcoAgent extends AgentImp
     @Getter @Setter protected Move previousMove;
 
 
-    public AcoAgent(Vector position, Vector direction, double radius, Team team)
+    public AcoAgent(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         initializeWorld();
     }
 

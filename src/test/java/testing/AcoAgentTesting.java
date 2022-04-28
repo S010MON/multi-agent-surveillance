@@ -9,7 +9,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.GraphCell;
-import app.model.agents.Team;
+import app.model.Type;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ public class AcoAgentTesting
     public void testStuckAtWindow()
     {
         position = new Vector(234.88019900183576, 63.27721732577038);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
         agent.setPreviousMove(new Move(position, new Vector(0, moveDistance)));
 
@@ -89,7 +89,7 @@ public class AcoAgentTesting
     public void testActionsAtWindowUsingMemory()
     {
         position = new Vector(677, 100);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
 
         //Agent smells pheromones
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -138,7 +138,7 @@ public class AcoAgentTesting
     @Test
     public void testPheromoneToMovement()
     {
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
         agent.updateView(graphicsEngine.compute(map, agent));
 
@@ -169,7 +169,7 @@ public class AcoAgentTesting
     @Test
     public void testCardinalPointDetection()
     {
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         assertNotNull(agent.detectCardinalPoint(90));
@@ -180,7 +180,7 @@ public class AcoAgentTesting
     @Test
     void testDirectionsToVisiblyExplore()
     {
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         ArrayList<Vector> pheromoneDirections = agent.getPheromoneDirections();
@@ -194,7 +194,7 @@ public class AcoAgentTesting
     void movePossible()
     {
         position = new Vector(678, 100);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
         double angle = direction.getAngle();
 
@@ -208,7 +208,7 @@ public class AcoAgentTesting
     {
         //Should detect obstacles on movement (distance, 0) and (o, distance)
         Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
-        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Type.GUARD);
 
         //Smell pheromones
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -241,7 +241,7 @@ public class AcoAgentTesting
     @Test
     public void testPheromoneSenseDirections()
     {
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         ArrayList<Vector> pheromoneSenseDirections = agent.getPheromoneDirections();
