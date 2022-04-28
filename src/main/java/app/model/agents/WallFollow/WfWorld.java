@@ -3,18 +3,20 @@ package app.model.agents.WallFollow;
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
+import app.model.agents.World;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class WfWorld<Object, DefaultWeightedEdge> extends MemoryGraph
+public class WfWorld extends World
 {
-    public WfWorld(int distance)
+    public WfWorld(MemoryGraph G)
     {
-        super(distance);
+        super(G);
     }
 
     @Override
     public void add_or_adjust_Vertex(Vector position)
     {
-        GraphCell cell = getVertexAt(position);
+        GraphCell cell = G.getVertexAt(position);
         if(cell != null)
         {
             modifyVertex(cell);
@@ -29,10 +31,10 @@ public class WfWorld<Object, DefaultWeightedEdge> extends MemoryGraph
     @Override
     protected GraphCell addNewVertex(Vector position)
     {
-        Vector vertexCentre = determineVertexCentre(position);
+        Vector vertexCentre = G.determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);
-        super.addVertex(cell);
-        super.getVertices().put(keyGenerator(position), cell);
+        G.addVertex(cell);
+        G.vertices.put(G.keyGenerator(position), cell);
         return cell;
     }
 
@@ -40,27 +42,27 @@ public class WfWorld<Object, DefaultWeightedEdge> extends MemoryGraph
     public void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
-        for(java.lang.Object cardinalObject: super.getCardinalDirections().values())
+        for(java.lang.Object cardinalObject: G.cardinalDirections.values())
         {
             Vector cardinal = (Vector) cardinalObject;
             GraphCell neighbouringCell;
             Vector resultingPosition = currentPosition.add(cardinal);
-            String neighbourKey = keyGenerator(resultingPosition);
-            if (super.getVertices().containsKey(neighbourKey))
+            String neighbourKey = G.keyGenerator(resultingPosition);
+            if (G.vertices.containsKey(neighbourKey))
             {
-                neighbouringCell = (GraphCell) super.getVertices().get(neighbourKey);
+                neighbouringCell = (GraphCell) G.vertices.get(neighbourKey);
             }
             else
             {
                 neighbouringCell = new GraphCell(resultingPosition);
-                super.getVertices().put(neighbourKey,neighbouringCell);
-                super.addVertex(neighbouringCell);
+                G.vertices.put(neighbourKey,neighbouringCell);
+                G.addVertex(neighbouringCell);
             }
 
-            if(neighbouringCell != null && !containsEdge(currentCell, neighbouringCell))
+            if(neighbouringCell != null && !G.containsEdge(currentCell, neighbouringCell))
             {
-                DefaultWeightedEdge edge = (DefaultWeightedEdge) super.addEdge(currentCell, neighbouringCell);
-                super.setEdgeWeight(edge, super.getTravelDistance());
+                DefaultWeightedEdge edge = (DefaultWeightedEdge) G.addEdge(currentCell, neighbouringCell);
+                G.setEdgeWeight(edge, G.travelDistance);
             }
         }
     }
