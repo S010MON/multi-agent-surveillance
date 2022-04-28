@@ -17,12 +17,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = true;
+    @Setter private final Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -86,7 +88,7 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = randPosition(intruderSpawn);
+            Vector humanStart = new Vector(100,100);
             human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
@@ -126,6 +128,22 @@ public class Map
         }
     }
 
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @returns type: an enum of the type of furniture at Vector v, returns null if nothing is found
+     */
+    public FurnitureType furnitureAt(Vector v)
+    {
+        for(Furniture f: furniture)
+        {
+            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
+                return f.getType();
+        }
+        return null;
+    }
+
+
     public void updateAllSeen(Agent agent)
     {
         if(agent.getTeam() == Team.GUARD)
@@ -134,12 +152,14 @@ public class Map
             intrudersSeen.addAll(agent.getSeen());
     }
 
+
     public ArrayList<Boundary> getBoundaries()
     {
         ArrayList<Boundary> boundaries = new ArrayList<>();
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
+
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
@@ -169,6 +189,7 @@ public class Map
         }
     }
 
+
     public double percentageComplete(Team team)
     {
         if(team == Team.GUARD)
@@ -176,6 +197,7 @@ public class Map
         else
             return coverage.percentSeen(intrudersSeen);
     }
+
 
     public void checkForCapture(Agent currentAgent)
     {
@@ -195,6 +217,7 @@ public class Map
         }
     }
 
+
     public void updateStates()
     {
         ArrayList<Agent> new_states = new ArrayList<>();
@@ -205,10 +228,27 @@ public class Map
         agents = new_states;
     }
 
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
     }
+
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @returns Team: an enum of the team of the agent at Vector v, returns null if nothing is found
+     */
+    public Team agentAt(Vector v)
+    {
+        for(Agent a: agents)
+        {
+            if(a.getPosition().dist(v) <= a.getRadius())
+                return a.getTeam();
+        }
+        return null;
+    }
+
 
     public void garbageCollection()
     {
