@@ -24,7 +24,7 @@ public class WallFollowAgent extends AgentImp
         RIGHT,
         NO_TURN,
     }
-    @Setter private boolean DEBUG = true;
+    @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
@@ -458,7 +458,8 @@ public class WallFollowAgent extends AgentImp
 
     public boolean agentInStuckMovement()
     {
-        System.out.println("Last positions before checking stuck movement: " + lastPositions);
+        if(DEBUG)
+            System.out.println("Last positions before checking stuck movement: " + lastPositions);
         ArrayList<GraphCell> diffVertices = new ArrayList<>();
         if (lastPositions.size() >= 24)
         {
@@ -474,7 +475,8 @@ public class WallFollowAgent extends AgentImp
                 }
             }
         }
-        System.out.println("Different vertices: " + diffVertices);
+        if(DEBUG)
+            System.out.println("Different vertices: " + diffVertices);
         return false;
     }
 
@@ -499,7 +501,7 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 2;
+        double anglePrecision = 1;
 
         // check that all rays start at the right position
         if (DEBUG)
@@ -573,7 +575,6 @@ public class WallFollowAgent extends AgentImp
                 }
             }
         }
-
         if(DEBUG && wallDetected) { System.out.println("     ray with angle " +rayAngle+ " exists in view and no wall detected");}
         else if(DEBUG) { System.out.println("     No ray with Ray angle: " + rayAngle + " detected,  position: "+position.toString() +
                 "\n       position: " + position.toString() +
