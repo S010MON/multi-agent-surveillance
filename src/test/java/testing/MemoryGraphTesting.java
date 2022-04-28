@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -20,10 +21,11 @@ public class MemoryGraphTesting
     public void testVertexCenters()
     {
         MemoryGraph<GraphCell, DefaultEdge> world = new MemoryGraph<>(distance);
-
         Vector agentPosition_1 = new Vector(37, 78);
-        Vector vertexCentre = world.determineVertexCentre(agentPosition_1);
-        assertEquals(vertexCentre, new Vector(30, 70));
+        world.add_or_adjust_Vertex(agentPosition_1);
+        GraphCell currentVertex = world.getVertexAt(agentPosition_1);
+
+        assertEquals(currentVertex.getPosition(), new Vector(30, 70));
     }
 
     @Test
@@ -138,6 +140,22 @@ public class MemoryGraphTesting
         world.leaveVertex(agentPosition_9, 2);
 
         double aggregatePheromone = world.aggregateCardinalPheromones(agentPosition_1, new Vector(20, 0));
-        assertEquals(aggregatePheromone, 4);
+        assertEquals(aggregatePheromone, 2);
+    }
+
+    @Test
+    public void testObstacleLabelling()
+    {
+        Vector agentPosition = new Vector(37, 78);
+        Vector movement = new Vector(0, 20);
+
+        MemoryGraph<GraphCell, DefaultWeightedEdge> world = new MemoryGraph<>(distance);
+        world.add_or_adjust_Vertex(agentPosition);
+
+        world.setVertexAsObstacle(agentPosition, movement);
+
+        GraphCell obstacle = world.getVertexAt(agentPosition.add(movement));
+        assertTrue(obstacle.getObstacle());
+        assertEquals(obstacle.getPheromone(), world.getObstaclePheromoneValue());
     }
 }

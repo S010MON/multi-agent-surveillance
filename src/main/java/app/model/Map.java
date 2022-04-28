@@ -11,11 +11,7 @@ import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.soundFurniture.SoundFurniture;
-import app.model.soundFurniture.SoundFurnitureFactory;
-import app.model.soundSource.SoundSource;
-import app.model.soundSource.SoundSourceFactory;
-import app.model.soundSource.SoundSourceType;
+import app.controller.soundEngine.SoundSource;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,7 +24,6 @@ public class Map
 {
     private final Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
-    @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
     @Getter private VectorSet guardsSeen;
@@ -59,13 +54,9 @@ public class Map
         addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
 
-        /* Make sound furniture */
-        soundFurniture = new ArrayList<>();
-        settings.getSoundFurniture().forEach(e -> addSoundFurniture(e));
-
-        /* Make some sound sources */
+        /* Make a test sound source */
         soundSources = new ArrayList<>();
-        settings.getSoundSources().forEach(e -> addSoundSource(e));
+        soundSources.add(new SoundSource(new Vector(300, 300), 200, 1000));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();
@@ -115,6 +106,15 @@ public class Map
         furniture.addAll(obstacles);
     }
 
+    public Map(ArrayList<Agent> agents, ArrayList<Furniture> obstacles)
+    {
+        this.agents = new ArrayList<>();
+        this.agents.addAll(agents);
+
+        furniture = new ArrayList<>();
+        furniture.addAll(obstacles);
+    }
+
     public void addFurniture(SettingsObject obj)
     {
         switch(obj.getType())
@@ -124,21 +124,6 @@ public class Map
             case TARGET -> target = obj.getRect();
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
-    }
-
-    public void addSoundFurniture(SettingsObject obj)
-    {
-        switch(obj.getType())
-        {
-            case GUARD_SPAWN -> guardSpawn = obj.getRect();
-            case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            default -> this.soundFurniture.add(SoundFurnitureFactory.make(obj));
-        }
-    }
-
-    public void addSoundSource(SettingsObject obj)
-    {
-        this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
     }
 
     public void updateAllSeen(Agent agent)
@@ -210,6 +195,16 @@ public class Map
         }
     }
 
+    public void updateStates()
+    {
+        ArrayList<Agent> new_states = new ArrayList<>();
+        for(Agent a: agents)
+        {
+            new_states.add(a.nextState());
+        }
+        agents = new_states;
+    }
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
@@ -221,6 +216,14 @@ public class Map
         {
             agents.remove(a);
         }
+
+        ArrayList<SoundSource> delete = new ArrayList<>();
+        for(SoundSource soundSource: soundSources)
+        {
+            if(soundSource.getAmplitude() < 0.1)
+                delete.add(soundSource);
+        }
+        soundSources.removeAll(delete);
     }
 
     private Vector randDirection()

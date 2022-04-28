@@ -50,6 +50,7 @@ public class Renderer extends Canvas
         drawBackground(gc);
 
         map.drawIndicatorBoxes(gc);
+        map.getSoundSources().forEach(e -> e.draw(gc));
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));

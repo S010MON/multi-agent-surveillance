@@ -1,5 +1,6 @@
 package app.controller.linAlg;
 
+import app.model.agents.Agent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
