@@ -24,7 +24,7 @@ import java.util.Stack;
 
 public class Map
 {
-    @Setter private final Boolean HUMAN_ACTIVE = true;
+    @Setter private Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -88,7 +88,7 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = new Vector(100,100);
+            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
             human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
@@ -222,7 +222,7 @@ public class Map
 
     /**
      * @param v: a vector in R^2 on the map
-     * @returns Type: an enum of the team of the agent or furniture at Vector v,
+     * @return Type: an enum of the team of the agent or furniture at Vector v,
      * returns null if nothing is found.
      */
     public Type objectAt(Vector v)
