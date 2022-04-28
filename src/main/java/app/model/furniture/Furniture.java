@@ -1,6 +1,7 @@
 package app.model.furniture;
 
 import app.model.boundary.Boundary;
+import app.model.boundary.SoundBoundary;
 import app.model.texture.Texture;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -12,7 +13,11 @@ public interface Furniture
 
     void addBoundaries(ArrayList<Boundary> boundaries);
 
+    void addSoundBoundaries(ArrayList<SoundBoundary> soundBoundaries);
+
     ArrayList<Boundary> getBoundaries();
+
+    ArrayList<SoundBoundary> getSoundBoundaries();
 
     void setTexture(Texture texture);
 }

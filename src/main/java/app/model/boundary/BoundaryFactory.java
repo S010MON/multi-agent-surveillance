@@ -4,7 +4,6 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -31,7 +30,7 @@ public abstract class BoundaryFactory
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }
-        return null; // Only for SIREN (SoundSource)
+        return null;
     }
 
     private static Vector[] cornersOf(Rectangle2D r)

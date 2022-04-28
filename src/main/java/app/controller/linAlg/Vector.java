@@ -13,8 +13,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Vector
 {
-    @Getter private double x = 0d;
-    @Getter private double y = 0d;
+    @Getter protected double x = 0d;
+    @Getter protected double y = 0d;
 
     public Vector add(Vector other)
     {

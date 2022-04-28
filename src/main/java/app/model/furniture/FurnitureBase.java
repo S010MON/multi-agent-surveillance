@@ -1,19 +1,23 @@
 package app.model.furniture;
 
 import app.model.boundary.Boundary;
+import app.model.boundary.SoundBoundary;
 import app.model.texture.Texture;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
 public class FurnitureBase implements Furniture
 {
-    private ArrayList<Boundary> boundaries;
+    @Getter private ArrayList<Boundary> boundaries;
+    @Getter private ArrayList<SoundBoundary> soundBoundaries;
     private Texture texture;
 
     public FurnitureBase()
     {
         boundaries = new ArrayList<>();
+        soundBoundaries = new ArrayList<>();
         texture = null;
     }
 
@@ -23,6 +27,7 @@ public class FurnitureBase implements Furniture
             texture.draw(gc);
 
         boundaries.forEach(e -> e.draw(gc));
+        soundBoundaries.forEach(e -> e.draw(gc));
     }
 
     public void addBoundaries(ArrayList<Boundary> boundaries)
@@ -30,9 +35,9 @@ public class FurnitureBase implements Furniture
         this.boundaries.addAll(boundaries);
     }
 
-    public ArrayList<Boundary> getBoundaries()
+    public void addSoundBoundaries(ArrayList<SoundBoundary> soundBoundaries)
     {
-        return boundaries;
+        this.soundBoundaries.addAll(soundBoundaries);
     }
 
     public void setTexture(Texture texture)

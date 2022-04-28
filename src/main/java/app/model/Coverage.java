@@ -17,7 +17,6 @@ public class Coverage
 
     public Coverage(Map map)
     {
-        System.out.println("Build coverage map ...");
         width = map.getWidth();
         height = map.getHeight();
         vectors = new VectorSet();
@@ -31,7 +30,6 @@ public class Coverage
                     vectors.add(v);
             }
         }
-        System.out.print(" done");
     }
 
     public double percentSeen(VectorSet seen)
