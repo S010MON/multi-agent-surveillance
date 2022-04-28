@@ -77,7 +77,7 @@ public abstract class SettingsGenerator
         return settings;
     }
 
-    public static Settings furnitureTypeTest()
+    public static Settings mapTest()
     {
         Settings settings = new Settings();
         settings.setName("furniture_type_test");

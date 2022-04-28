@@ -247,6 +247,7 @@ public class Map
         return null;
     }
 
+
     public void garbageCollection()
     {
         for(Agent a: deletion)
