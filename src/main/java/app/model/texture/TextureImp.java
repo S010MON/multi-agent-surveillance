@@ -21,6 +21,9 @@ public class TextureImp implements Texture
     @Override
     public void draw(GraphicsContext gc)
     {
+        if(color == Color.WHITE)
+            return;
+
         gc.setFill(color);
         gc.fillRect(rectangle.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
                 rectangle.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
