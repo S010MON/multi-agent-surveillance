@@ -16,28 +16,24 @@ public class Capture extends AgentImp
 
 {
     @Getter @Setter private int MAX_TICS_WITHOUT_SIGHT = 100;
-    private VectorSet beliefSet;
-    private ArrayList<Vector> positionHistory;
+    private VectorSet beliefSet = new VectorSet();
+    private Vector intruderPos;
+    private ArrayList<Vector> positionHistory = new ArrayList<>();
     int counter;
 
     public Capture(Vector position, Vector direction, double radius, Team team, Vector intruderPos)
     {
         super(position, direction, radius, team);
-        this.beliefSet = new VectorSet();
-        this.beliefSet.add(intruderPos);
-        this.positionHistory = new ArrayList<>();
-        this.positionHistory.add(intruderPos);
-
         initializeCapturing();
     }
 
     //Both - work as if this method exists (Implement each method separately!)
     public void initializeCapturing()
     {
-        // This method loops in capture until end state is reached (Intruder captured or tics maxed)
         while(this.isComplete()){
+            beliefSet.add(intruderPos);
             addPositionHistory();
-            findAllPossiblePositions(this.getDirection(), this.getMaxWalk());
+            findAllPossiblePositions(intruderPos, this.getMaxWalk());
         }
     }
 
@@ -52,7 +48,7 @@ public class Capture extends AgentImp
     }
 
     public void addPositionHistory(){
-        positionHistory.add(direction);
+        positionHistory.add(intruderPos);
     }
 
     //matt
@@ -89,7 +85,7 @@ public class Capture extends AgentImp
 
     public boolean isComplete()
     {
-        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT);
+        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT && this.getPosition().equals(intruderPos));
     }
 
     //Matt
