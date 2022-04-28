@@ -92,6 +92,7 @@ public class WallFollowAgent extends AgentImp
     @Override
     public Move move()
     {
+        if(DEBUG) {System.out.println("\n\n");}
         Vector deltaPos = new Vector(0,0);
         Vector newDirection = direction;
 
@@ -498,17 +499,86 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        for (Ray r : view)
+        double anglePrecision = 1;
+
+        // check that all rays start at the right position
+        if (DEBUG)
         {
-            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
+            System.out.println("noWallDetected method:");
+            for(Ray r: view)
             {
-                if (DEBUG)
-                    System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
-                return false;
+                if(!r.getU().equals(position))
+                {
+                    System.out.println("not all rays start at the right position!");
+                }
+            }
+            System.out.println("all "+view.size()+ " rays start at the right position");
+        }
+
+        boolean wallDetected = false;
+        // checks if rayAngle becomes >360 or <0 when adding/subtracting anglePrecision
+        if(rayAngle-anglePrecision<0)
+        {
+            if(DEBUG)
+            {
+                System.out.println("     rayAngle-"+anglePrecision+" < 0");
+            }
+            for (Ray r : view)
+            {
+                if((r.angle() <= rayAngle + anglePrecision || r.angle() >= rayAngle - anglePrecision + 360))
+                {
+                    wallDetected = true;
+                    if(r.length() <= moveLength)
+                    {
+                        if(DEBUG)
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        return false;
+                    }
+                }
             }
         }
-        if (DEBUG)
-            System.out.println("No wall detected with ray of angle: " + rayAngle);
+        else if(rayAngle+anglePrecision>360)
+        {
+            if(DEBUG)
+            {
+                System.out.println("     rayAngle+"+anglePrecision+" > 360");
+            }
+            for (Ray r : view)
+            {
+                if((r.angle() <= rayAngle + anglePrecision-360 || r.angle() >= rayAngle - anglePrecision))
+                {
+                    wallDetected = true;
+                    if(r.length() <= moveLength)
+                    {
+                        if(DEBUG)
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(Ray r : view)
+            {
+                if((r.angle() <= rayAngle + anglePrecision && r.angle() >= rayAngle - anglePrecision))
+                {
+                    wallDetected = true;
+                    if(r.length() <= moveLength)
+                    {
+                        if(DEBUG)
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if(DEBUG && wallDetected) { System.out.println("     ray with angle " +rayAngle+ " exists in view and no wall detected");}
+        else if(DEBUG) { System.out.println("     No ray with Ray angle: " + rayAngle + " detected,  position: "+position.toString() +
+                "\n       position: " + position.toString() +
+                "\n       direction angle: " + direction.getAngle()); }
+
         return true;
     }
 
