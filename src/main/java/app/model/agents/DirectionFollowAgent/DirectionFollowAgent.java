@@ -76,13 +76,13 @@ public class DirectionFollowAgent extends AgentImp
     @Override
     public Move move()
     {
+        System.out.println("\n\n");
         if(DEBUG) { System.out.println("\n\n new agent:" +this); }
         if(moveFailed)
         {
-            DEBUG = true;
-            if(DEBUG) { System.out.println("previous move failed, state: " +internalState);}
-            if(DEBUG) { System.out.println("Move: " +previousMove.toString()); }
-            DEBUG = false;
+            if(DEBUG) {
+                System.out.println("previous move failed, state: " +internalState);
+                System.out.println("Move: " +previousMove.toString()); }
             return previousMove;
         }
         if(position.dist(targetRay.getV())>targetRay.length())
@@ -194,7 +194,6 @@ public class DirectionFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        DEBUG = true;
         double anglePrecision = 1;
 
         // check that all rays start at the right position
@@ -211,7 +210,7 @@ public class DirectionFollowAgent extends AgentImp
             System.out.println("all "+view.size()+ " rays start at the right position");
         }
 
-
+        boolean wallDetected = false;
         // checks if rayAngle becomes >360 or <0 when adding/subtracting anglePrecision
         if(rayAngle-anglePrecision<0)
         {
@@ -221,18 +220,15 @@ public class DirectionFollowAgent extends AgentImp
             }
             for (Ray r : view)
             {
-                //System.out.println("r.angle ="+ r.angle());
                 if((r.angle() <= rayAngle + anglePrecision || r.angle() >= rayAngle - anglePrecision + 360))
                 {
-                    if(DEBUG) { System.out.println("     ray with angle " +r.angle()+ " exists in view");}
+                    wallDetected = true;
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle + ",  position: " + position.toString()+ ",  endPoint: " + r.getV().toString());
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
                     }
-                    else if(DEBUG)
-                        System.out.println("     No wall detected Ray angle: " + r.angle() + ",  position: "+position.toString()+ ",  endPoint: " + r.getV().toString());
                 }
             }
         }
@@ -246,15 +242,13 @@ public class DirectionFollowAgent extends AgentImp
             {
                 if((r.angle() <= rayAngle + anglePrecision-360 || r.angle() >= rayAngle - anglePrecision))
                 {
-                    if(DEBUG) { System.out.println("     ray with angle " +r.angle()+ " exists in view");}
+                    wallDetected = true;
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle + ",  position: " + position.toString()+ ",  endPoint: " + r.getV().toString());
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
                     }
-                    else if(DEBUG)
-                        System.out.println("     No wall detected Ray angle: " + r.angle() + ",  position: "+position.toString()+ ",  endPoint: " + r.getV().toString());
                 }
             }
         }
@@ -264,28 +258,27 @@ public class DirectionFollowAgent extends AgentImp
             {
                 if((r.angle() <= rayAngle + anglePrecision && r.angle() >= rayAngle - anglePrecision))
                 {
-                    if(DEBUG) { System.out.println("     ray with angle " + r.angle() + " exists in view");}
+                    wallDetected = true;
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle + ",  position: " + position.toString()+ ",  endPoint: " + r.getV().toString());
+                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
                     }
-                    else if(DEBUG)
-                        System.out.println("     No wall detected Ray angle: " + r.angle() + ",  position: "+position.toString()+ ",  endPoint: " + r.getV().toString());
-
                 }
             }
         }
+        if(DEBUG && wallDetected) { System.out.println("     ray with angle " +rayAngle+ " exists in view and no wall detected");}
+        else if(DEBUG) { System.out.println("     No ray with Ray angle: " + rayAngle + " detected,  position: "+position.toString() +
+                "\n       position: " + position.toString() +
+                "\n       direction angle: " + direction.getAngle()); }
 
-        if (DEBUG)
-            System.out.println("     No wall detected with ray of angle: " + rayAngle + ",  position: "+position.toString());
-        DEBUG = false;
         return true;
     }
 
     public Vector getDirectionStartWallFollowing(Vector diagonalDirection)
     {
+        if(DEBUG) { System.out.println("in getDirectionStartWallFollowing-method");}
         // the default case should never happen, since this function should only be called if one of the directions has a wall in front of it
         int indexDirection = 0;
         double prevDelta = 400.0; // some number too big to be reached
