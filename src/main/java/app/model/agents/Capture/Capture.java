@@ -20,7 +20,9 @@ public class Capture extends AgentImp
     public Capture(Vector position, Vector direction, double radius, Team team, Vector intruderPos)
     {
         super(position, direction, radius, team);
+        this.beliefSet = new VectorSet();
         this.beliefSet.add(intruderPos);
+        this.positionHistory = new ArrayList<>();
         this.positionHistory.add(intruderPos);
 
         initializeCapturing();
@@ -75,7 +77,7 @@ public class Capture extends AgentImp
 
 
 
-    public boolean isCompelete()
+    public boolean isComplete()
     {
         return (this.counter > this.MAX_TICS_WITHOUT_SIGHT);
     }
