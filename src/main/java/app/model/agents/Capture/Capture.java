@@ -3,6 +3,7 @@ package app.model.agents.Capture;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
+import app.model.Move;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Team;
@@ -39,35 +40,54 @@ public class Capture extends AgentImp
     }
 
     public void addPositionHistory(Vector vector){
-        positionHistory.add(vector);
+        this.positionHistory.add(vector);
     }
 
     //matt
     public Vector findTarget()
     {
         //Using heuristics decides on target for next move.
-        return null;
+        // If our belief set is size 1, then we have our target.
+        if(this.beliefSet.size() == 1)
+            return this.beliefSet.get(0);
+
+        double shortestDist = Double.MAX_VALUE;
+        Vector closestPoint = null;
+        for(Vector location : this.beliefSet)
+        {
+            if(location.dist(this.position) < shortestDist)
+            {
+                shortestDist = location.dist(this.position);
+                closestPoint = location;
+            }
+        }
+
+        // Currently returning the closest point in the belief set to us. (Will improve this and add more heuristics)
+        return closestPoint;
     }
 
     //matt
-    public Vector nextMove (Vector target)
+    public Move nextMove(Vector target)
     {
         //Decides on the best next move towards the target position. (Use A* or dijkstra etc.)
-        Vector nextMove = null;
-        return nextMove;
+        return null;
     }
 
 
 
     public boolean isCompelete()
     {
-        return (counter > MAX_TICS_WITHOUT_SIGHT);
+        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT);
     }
 
     //Matt
     public void updateCounter()
     {
-        counter = 0;
+        // Increases the counter if the size of the belief set is greater than 1. (a tic has passed without seeing the intruder).
+        if(this.beliefSet.size() > 1)
+            this.counter++;
+        else if(this.beliefSet.size() == 1)
+            counter = 0; // Reset counter when we see the intruder.
     }
 
 
