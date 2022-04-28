@@ -23,4 +23,9 @@ public class VectorSet extends HashSet<Vector>
         double y  = new BigDecimal(v.getY()).setScale(0, RoundingMode.HALF_UP).doubleValue();
         return super.add(new Vector(x, y));
     }
+
+    public Vector get(int index)
+    {
+        return this.get(index);
+    }
 }
