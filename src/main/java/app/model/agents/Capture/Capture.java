@@ -85,7 +85,7 @@ public class Capture extends AgentImp
 
     public boolean isComplete()
     {
-        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT && this.getPosition().equals(intruderPos));
+        return (this.counter > this.MAX_TICS_WITHOUT_SIGHT || this.getPosition().equals(intruderPos));
     }
 
     //Matt
