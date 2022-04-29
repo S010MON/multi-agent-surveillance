@@ -2,11 +2,12 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 
 public abstract class World
 {
-    protected MemoryGraph G;
+    protected MemoryGraph<GraphCell, DefaultWeightedEdge> G;
 
     public World(MemoryGraph G)
     {
