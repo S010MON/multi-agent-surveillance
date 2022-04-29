@@ -76,7 +76,6 @@ public class DirectionFollowAgent extends AgentImp
     @Override
     public Move move()
     {
-        System.out.println("\n\n");
         if(DEBUG) { System.out.println("\n\n new agent:" +this); }
         if(moveFailed)
         {
@@ -126,7 +125,7 @@ public class DirectionFollowAgent extends AgentImp
             }
             return move();
         }
-        else if(Math.abs(dist) >= moveLength){
+        else if(Math.abs(dist) >= moveLength || dist<0){
             if(DEBUG)
             {
                 System.out.println("No wall, keep following ray to target");

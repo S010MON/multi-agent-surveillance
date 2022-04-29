@@ -38,7 +38,7 @@ public class DirectionFollowAgentTest
         DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, new Vector(0,1));
 
         agent.move();
-        assertEquals(DirectionFollowAgent.InternalState.goToTarget, agent.getInternalState());
+        assertEquals(DirectionFollowAgent.InternalState.followRay, agent.getInternalState());
     }
 
     @Test public void obstacleHit(){
