@@ -6,7 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Agent;
 import app.model.agents.Human;
-import app.model.agents.Team;
+import app.model.Type;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,24 +22,24 @@ public class RayFeedbackTest
     Vector agent2Pos = new Vector(10, 20);
     Vector agent2Dir = new Vector(-1, 0);
 
-    Human agent1 = new Human(agent1Pos, agent1Dir, 1, Team.GUARD);
-    Human agent2 = new Human(agent2Pos, agent2Dir, 1, Team.INTRUDER);
+    Human agent1 = new Human(agent1Pos, agent1Dir, 1, Type.GUARD);
+    Human agent2 = new Human(agent2Pos, agent2Dir, 1, Type.INTRUDER);
 
 
     @Test void rayWithGuard()
     {
         Vector start = new Vector();
         Vector end = new Vector(10,10);
-        Ray r = new Ray(start, end, Team.GUARD);
-        assertEquals(Team.GUARD, r.getAgentTeam());
+        Ray r = new Ray(start, end, Type.GUARD);
+        assertEquals(Type.GUARD, r.getType());
     }
 
     @Test void rayWithIntruder()
     {
         Vector start = new Vector();
         Vector end = new Vector(10,10);
-        Ray r = new Ray(start, end, Team.INTRUDER);
-        assertEquals(Team.INTRUDER, r.getAgentTeam());
+        Ray r = new Ray(start, end, Type.INTRUDER);
+        assertEquals(Type.INTRUDER, r.getType());
     }
 
     @Test void rayWithNull()
@@ -47,7 +47,7 @@ public class RayFeedbackTest
         Vector start = new Vector();
         Vector end = new Vector(10,10);
         Ray r = new Ray(start, end);
-        assertNull(r.getAgentTeam());
+        assertNull(r.getType());
     }
 
     @Test void seeIntruder()
@@ -62,9 +62,9 @@ public class RayFeedbackTest
         agent1.updateView(ge.compute(map, agent1));
         for(Ray r : agent1.getView())
         {
-            if(r.getAgentTeam() != null)
+            if(r.getType() != null)
             {
-                assertEquals(Team.INTRUDER, r.getAgentTeam());
+                assertEquals(Type.INTRUDER, r.getType());
             }
         }
     }
@@ -81,9 +81,9 @@ public class RayFeedbackTest
         agent2.updateView(ge.compute(map, agent2));
         for(Ray r : agent2.getView())
         {
-            if(r.getAgentTeam() != null)
+            if(r.getType() != null)
             {
-                assertEquals(Team.GUARD, r.getAgentTeam());
+                assertEquals(Type.GUARD, r.getType());
             }
         }
     }
@@ -96,7 +96,7 @@ public class RayFeedbackTest
         agent1.updateView(ge.compute(map, agent1));
         for(Ray r : agent1.getView())
         {
-            assertNull(r.getAgentTeam());
+            assertNull(r.getType());
         }
     }
 }

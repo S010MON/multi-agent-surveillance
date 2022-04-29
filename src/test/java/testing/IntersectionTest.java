@@ -5,7 +5,7 @@ import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundRay;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
-import app.model.agents.Team;
+import app.model.Type;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,7 +72,7 @@ public class IntersectionTest
         Vector v = new Vector(0, 10);
         Vector a_pos = new Vector(0, 5);
 
-        Agent agent = new AgentImp(a_pos, new Vector(), 1, Team.GUARD);
+        Agent agent = new AgentImp(a_pos, new Vector(), 1, Type.GUARD);
         SoundRay soundRay = new SoundRay(u, v);
 
         assertTrue(Intersection.hasLimitedIntersection(soundRay, agent.getPosition(), agent.getRadius()));
@@ -88,7 +88,7 @@ public class IntersectionTest
         Vector v = new Vector(0, 10);
         Vector a_pos = new Vector(0, 15);
 
-        Agent agent = new AgentImp(a_pos, new Vector(), 1, Team.GUARD);
+        Agent agent = new AgentImp(a_pos, new Vector(), 1, Type.GUARD);
         SoundRay soundRay = new SoundRay(u, v);
 
         assertFalse(Intersection.hasLimitedIntersection(soundRay, agent.getPosition(), agent.getRadius()));
