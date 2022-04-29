@@ -4,8 +4,8 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.Type;
 import app.model.agents.AgentImp;
-import app.model.agents.Team;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,7 +44,7 @@ public class DirectionFollowAgent extends AgentImp
             new Vector(0,-1),
             new Vector(-1,0));
 
-    public DirectionFollowAgent(Vector position, Vector direction, double radius, Team team, Vector targetDirection)
+    public DirectionFollowAgent(Vector position, Vector direction, double radius, Type team, Vector targetDirection)
     {
         super(position, direction, radius, team);
         if(targetDirection == null)
@@ -58,7 +58,7 @@ public class DirectionFollowAgent extends AgentImp
         lastTurn = TurnType.NO_TURN;
     }
 
-    public DirectionFollowAgent(Vector position, Vector direction, double radius, Team team, Vector targetDirection, double moveLen)
+    public DirectionFollowAgent(Vector position, Vector direction, double radius, Type team, Vector targetDirection, double moveLen)
     {
         super(position, direction, radius, team);
         if(targetDirection == null)

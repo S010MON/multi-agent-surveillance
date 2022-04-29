@@ -5,9 +5,8 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.Map;
+import app.model.Type;
 import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
-import app.model.agents.Team;
-import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
@@ -29,13 +28,13 @@ public class DirectionFollowAgentTest
     Vector initialDirection = new Vector(0,1);
     Vector targetLocation = new Vector(100, 100);
 
-    DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, targetLocation.sub(initialPosition), 75);
+    DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, targetLocation.sub(initialPosition), 75);
 
     @Test public void noObstacleTest(){
         Vector initialPosition = new Vector(0, 0);
         Vector initialDirection = new Vector(0,1);
 
-        DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, new Vector(0,1));
+        DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, new Vector(0,1));
 
         agent.move();
         assertEquals(DirectionFollowAgent.InternalState.followRay, agent.getInternalState());
@@ -47,7 +46,7 @@ public class DirectionFollowAgentTest
         Vector initialPosition = new Vector(0, 0);
         Vector initialDirection = new Vector(0,1);
 
-        DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, new Vector(0,1));
+        DirectionFollowAgent agent = new DirectionFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, new Vector(0,1));
 
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(-10, 10, 20, 2);
