@@ -2,14 +2,15 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.Type;
 
 public class Human extends AgentImp
 {
     private Vector nextMove;
 
-    public Human(Vector position, Vector direction, double radius, Team team)
+    public Human(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         nextMove = new Vector();
     }
 

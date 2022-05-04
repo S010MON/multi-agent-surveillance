@@ -17,12 +17,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = true;
+    @Setter private Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -67,7 +69,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoAgent(srt, dir, 10, Team.GUARD);
+            Agent guard = new AcoAgent(srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -78,7 +80,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            Agent intruder = new WallFollowAgent(srt, dir, 10, Type.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -86,8 +88,8 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = randPosition(intruderSpawn);
-            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
+            human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(human);
@@ -126,13 +128,15 @@ public class Map
         }
     }
 
+
     public void updateAllSeen(Agent agent)
     {
-        if(agent.getTeam() == Team.GUARD)
+        if(agent.getType() == Type.GUARD)
             guardsSeen.addAll(agent.getSeen());
         else
             intrudersSeen.addAll(agent.getSeen());
     }
+
 
     public ArrayList<Boundary> getBoundaries()
     {
@@ -140,6 +144,7 @@ public class Map
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
+
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
@@ -169,22 +174,24 @@ public class Map
         }
     }
 
-    public double percentageComplete(Team team)
+
+    public double percentageComplete(Type type)
     {
-        if(team == Team.GUARD)
+        if(type == Type.GUARD)
             return coverage.percentSeen(guardsSeen);
         else
             return coverage.percentSeen(intrudersSeen);
     }
 
+
     public void checkForCapture(Agent currentAgent)
     {
-        if(currentAgent.getTeam() != Team.GUARD)
+        if(currentAgent.getType() != Type.GUARD)
             return;
 
         for(Agent otherAgent : agents)
         {
-            if(otherAgent.getTeam() != currentAgent.getTeam())
+            if(otherAgent.getType() != currentAgent.getType())
             {
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
                 if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
@@ -194,6 +201,7 @@ public class Map
             }
         }
     }
+
 
     public void updateStates()
     {
@@ -205,10 +213,34 @@ public class Map
         agents = new_states;
     }
 
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
     }
+
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @return Type: an enum of the team of the agent or furniture at Vector v,
+     * returns null if nothing is found.
+     */
+    public Type objectAt(Vector v)
+    {
+        for(Agent a: agents)
+        {
+            if(a.getPosition().dist(v) <= a.getRadius())
+                return a.getType();
+        }
+
+        for(Furniture f: furniture)
+        {
+            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
+                return Type.of(f.getType());
+        }
+        return null;
+    }
+
 
     public void garbageCollection()
     {

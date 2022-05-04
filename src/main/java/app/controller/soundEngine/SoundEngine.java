@@ -37,7 +37,7 @@ public class SoundEngine
                 endPoint = bdyIntersection;
 
 
-            if(r.getBounces() > 0)
+            if(r.getBounces() > 0 && endPoint.dist(r.getU()) > 0.01)
             {
                 Vector new_origin = bouncePoint(endPoint, r.getU());
                 stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, maxDist, r.getBounces()));

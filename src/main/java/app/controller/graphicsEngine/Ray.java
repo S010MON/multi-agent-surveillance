@@ -1,7 +1,8 @@
 package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
-import app.model.agents.Team;
+import app.model.Type;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -9,9 +10,9 @@ import lombok.Getter;
 
 public class Ray
 {
-    @Getter private Team agentTeam = null;
     @Getter private Vector u;
     @Getter private Vector v;
+    @Getter private Type type = null;
     protected Color colour = Color.rgb(255,191,0, 0.5);
     protected final double LINE_WIDTH = 1;
 
@@ -21,11 +22,11 @@ public class Ray
         this.v = v;
     }
 
-    public Ray(Vector u, Vector v, Team agentTeam)
+    public Ray(Vector u, Vector v, Type type)
     {
         this.u = u;
         this.v = v;
-        this.agentTeam = agentTeam;
+        this.type = type;
     }
 
     public double angle()
