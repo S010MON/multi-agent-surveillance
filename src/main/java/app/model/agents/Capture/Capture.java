@@ -7,6 +7,7 @@ import app.model.Move;
 import app.model.Type;
 import app.model.agents.AgentImp;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class Capture extends AgentImp
 
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
-    @Getter private VectorSet beliefSet = new VectorSet();
+    @Getter @Setter private VectorSet beliefSet = new VectorSet();
     private Vector intruderPos;
     private ArrayList<Vector> positionHistory = new ArrayList<>();
     private int counter;
@@ -33,6 +34,12 @@ public class Capture extends AgentImp
         super(position, direction, radius, type);
         this.intruderPos = intruderPos;
         initializeCapturing();
+    }
+
+    /* Constructor for testing */
+    public Capture(Vector position, Vector direction, double radius, Type type)
+    {
+        super(position, direction, radius, type);
     }
 
     /**
@@ -63,12 +70,12 @@ public class Capture extends AgentImp
      *
      * @return True/False if we see intruder or not.
      */
-    private boolean isIntruderSeen()
+    public boolean isIntruderSeen()
     {
         boolean seen = false;
         for(Ray r : view)
         {
-            if(r.getType().equals(Type.INTRUDER))
+            if(r.getType() == Type.INTRUDER)
             {
                 seen = true;
                 intruderPos = r.getV();
@@ -88,7 +95,7 @@ public class Capture extends AgentImp
      * Will loop through belief set and add all the next possible positions to the set.
      * Only unique positions are stored.
      */
-    private void findAllPossiblePositions()
+    public void findAllPossiblePositions()
     {
         VectorSet newLocations = new VectorSet();
         for(Vector location : beliefSet)
@@ -111,20 +118,21 @@ public class Capture extends AgentImp
      *
      * @return the vector location to target.
      */
-    private Vector findTarget()
+    public Vector findTarget()
     {
         //Using heuristics decides on target for next move.
         // If our belief set is size 1, then we have our target.
-        if(this.beliefSet.size() == 1)
-            return this.beliefSet.get(0);
+        if(beliefSet.size() == 1)
+            for(Vector v : beliefSet)
+                return v;
 
         double shortestDist = Double.MAX_VALUE;
         Vector closestPoint = null;
-        for(Vector location : this.beliefSet)
+        for(Vector location : beliefSet)
         {
-            if(location.dist(this.position) < shortestDist)
+            if(location.dist(position) < shortestDist)
             {
-                shortestDist = location.dist(this.position);
+                shortestDist = location.dist(position);
                 closestPoint = location;
             }
         }
