@@ -65,8 +65,7 @@ public class GameEngine
             if (teleportTo != null)
             {
                 a.updateLocation(teleportTo);
-                if(!(a instanceof AcoAgent))
-                    a.setDirection(move.getEndDir());
+                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
                 renderer.addTrail(new Trail(teleportTo, tics));
             }
@@ -75,8 +74,7 @@ public class GameEngine
                     legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
             {
                 a.updateLocation(endPoint);
-                if(!(a instanceof AcoAgent))
-                    a.setDirection(move.getEndDir());
+                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
                 renderer.addTrail(new Trail(endPoint, tics));
             }

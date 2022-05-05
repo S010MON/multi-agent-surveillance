@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class Move
 {
-    // Splits the move into a change in direction of the agent (endDir) and a change in physical position (deltaPos)
+    // Splits the move into the direction of the agent (endDir) and a change in physical position (deltaPos)
     private Vector endDir;
     private Vector deltaPos;
 }
