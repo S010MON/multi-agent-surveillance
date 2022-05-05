@@ -19,7 +19,6 @@ public class DirectionFollowAgent extends AgentImp
     {
         followWall,
         followRay,
-        goToTarget,
     }
 
     public enum TurnType
@@ -95,7 +94,6 @@ public class DirectionFollowAgent extends AgentImp
         {
             case followRay -> { previousMove = followRay();}
             case followWall -> { previousMove = followWall(); }
-            case goToTarget -> { previousMove = goToTarget(); }
             default -> { previousMove = null;}
         }
         if (DEBUG) { System.out.println("Move: " +previousMove.toString()); }
@@ -112,20 +110,8 @@ public class DirectionFollowAgent extends AgentImp
 
         double dist = distanceToObstacle(targetRay.angle()) - radius;
 
-        // TODO: enter this if you see target without obstacle
-        //  target not visible yet, so not able to detect yet
-        if(false){
-            // means there are no obstacles so just go straight to the target
-            internalState = InternalState.goToTarget;
-            if(DEBUG)
-            {
-                System.out.println("\n--------------");
-                System.out.println("going into goToTarget state");
-                System.out.println("--------------");
-            }
-            return move();
-        }
-        else if(Math.abs(dist) >= moveLength || dist<0){
+
+        if(Math.abs(dist) >= moveLength || dist<0){
             if(DEBUG)
             {
                 System.out.println("No wall, keep following ray to target");
@@ -175,11 +161,6 @@ public class DirectionFollowAgent extends AgentImp
         }
         if (DEBUG) { System.out.println("Move: " +move.toString()); }
         return move;
-    }
-
-    private Move goToTarget()
-    {
-        return new Move(targetRay.direction(), targetRay.direction().scale(moveLength));
     }
 
 
