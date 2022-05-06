@@ -6,6 +6,7 @@ import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
@@ -80,7 +81,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Type.INTRUDER);
+            Agent intruder = new DirectionFollowAgent(srt, dir, 10, Type.INTRUDER, targetDirection(srt));
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
