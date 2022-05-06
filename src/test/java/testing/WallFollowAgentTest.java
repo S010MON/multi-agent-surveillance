@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.Map;
 import app.model.Move;
+import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
@@ -30,7 +31,7 @@ public class WallFollowAgentTest
     Vector initialDirection = new Vector(0,1);
     double moveLen = 75.0;
     WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, moveLen);
-    private app.model.agents.WallFollow.WfWorld tempWfWorld = new WfWorld((int)moveLen);
+    private app.model.agents.WallFollow.WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test
     void testAgentDirectionAngle()
@@ -241,7 +242,7 @@ public class WallFollowAgentTest
          */
         if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
         {
-            agent.setWorld(new WfWorld((int)moveLen));
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
             agent.initializeWorld();
         }
         agent.setDEBUG(true);
@@ -306,7 +307,7 @@ public class WallFollowAgentTest
         //      go forward
         if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
         {
-            agent.setWorld(new WfWorld((int)moveLen));
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
             agent.initializeWorld();
         }
         agent.setWallEncountered(true);
@@ -358,7 +359,7 @@ public class WallFollowAgentTest
 
         if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
         {
-            agent.setWorld(new WfWorld((int)moveLen));
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
             agent.initializeWorld();
         }
 
@@ -401,7 +402,7 @@ public class WallFollowAgentTest
 
         if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
         {
-            agent.setWorld(new WfWorld((int)moveLen));
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
             agent.initializeWorld();
         }
         agent.setWallEncountered(true);
@@ -445,7 +446,7 @@ public class WallFollowAgentTest
 
         if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
         {
-            agent.setWorld(new WfWorld((int)moveLen));
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
             agent.initializeWorld();
         }
         agent.setWallEncountered(true);

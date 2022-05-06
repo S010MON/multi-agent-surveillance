@@ -592,7 +592,7 @@ public class WallFollowAgent extends AgentImp
      * Give vertex a direction score for heuristic's algorithm.
      * If vertex is towards the direction agent is currently facing at, give highest score.
      * If vertex is to the left or right of agent, give middle score.
-     * If vertex is bbehing agent, give lowest score.
+     * If vertex is behind agent, give lowest score.
      * @param targetVertex vertex to give the score to.
      * @return the direction score (1 or 2 or 3)
      */
