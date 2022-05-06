@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Getter @Setter
 public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGraph
 {
+    public GraphCell initialWallFollowPos;
+    public int travelDistance;
+    public double obstaclePheromoneValue = 1000.0;
     public HashMap<String, GraphCell> vertices = new HashMap<>();
     public HashMap<String, Vector> cardinalDirections = new HashMap<>();
-    public int travelDistance;
-
-    public GraphCell initialWallFollowPos;
-    public double obstaclePheromoneValue = 1000.0;
 
     public MemoryGraph(int distance)
     {

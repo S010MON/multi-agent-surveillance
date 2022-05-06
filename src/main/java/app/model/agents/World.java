@@ -4,9 +4,12 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public abstract class World
 {
-    protected MemoryGraph<GraphCell, DefaultWeightedEdge> G;
+    public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
 
     public World(MemoryGraph G)
     {
@@ -42,7 +45,50 @@ public abstract class World
         return G.getDirectionStr(directionAngle);
     }
 
-    public void setInitialWallFollowPos
+    public void setInitialWallFollowPos(GraphCell graphCell)
+    {
+        G.setInitialWallFollowPos(graphCell);
+    }
+
+    public GraphCell getInitialWallFollowPos()
+    {
+        return G.getInitialWallFollowPos();
+    }
+
+    public ArrayList<GraphCell> getVerticesWithUnexploredNeighbours()
+    {
+        return G.getVerticesWithUnexploredNeighbours();
+    }
+
+    public HashMap<String, Vector> getCardinalDirections()
+    {
+        return G.cardinalDirections;
+    }
+
+    public void leaveVertex(Vector position, double pheromoneValue)
+    {
+        G.leaveVertex(position, pheromoneValue);
+    }
+
+    public void leaveVertex(Vector position)
+    {
+        G.leaveVertex(position);
+    }
+
+    public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
+    {
+        return G.aggregateCardinalPheromones(currentPosition, cardinalMovement);
+    }
+
+    public void setVertexAsObstacle(Vector currentPosition, Vector movement)
+    {
+        G.setVertexAsObstacle(currentPosition, movement);
+    }
+
+    public void evaporateWorld()
+    {
+        G.evaporateWorld();
+    }
 
 
 }

@@ -101,14 +101,14 @@ public class AcoAgent extends AgentImp
 
     public static void resetWorld(int distance)
     {
-        world = new AcoWorld<>(distance);
+        world = new AcoWorld(new MemoryGraph(distance));
     }
 
     private void initializeWorld()
     {
         if(world == null)
         {
-            world = new AcoWorld<>(distance);
+            world = new AcoWorld(new MemoryGraph(distance));
         }
 
         pheromoneSenseDirections();

@@ -13,7 +13,7 @@ public class AcoWorld extends World
         super(G);
     }
 
-    protected GraphCell addNewVertex(Vector position)
+    public GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = G.determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);
@@ -24,7 +24,7 @@ public class AcoWorld extends World
         return cell;
     }
 
-    protected void connectNeighbouringVertices(GraphCell currentCell)
+    public void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
         for(java.lang.Object cardinalObject: G.cardinalDirections.values())
