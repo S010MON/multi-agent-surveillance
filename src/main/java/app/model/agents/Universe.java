@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Universe
 {
-    private Universe instance;
+    private static Universe instance;
     private HashMap<Team, MemoryGraph> hashMap;
 
     private Universe()
@@ -12,17 +12,17 @@ public class Universe
         hashMap = new HashMap<>();
     }
 
-    public void init(Team team, int distance)
+    public static void init(Team team, int distance)
     {
         if(instance == null)
             instance = new Universe();
 
-        if(!hashMap.containsKey(team))
-            hashMap.put(team, new MemoryGraph(distance));
+        if(!instance.hashMap.containsKey(team))
+            instance.hashMap.put(team, new MemoryGraph(distance));
     }
 
-    public MemoryGraph getMemoryGraph(Team team)
+    public static MemoryGraph getMemoryGraph(Team team)
     {
-        return hashMap.get(team);
+        return instance.hashMap.get(team);
     }
 }

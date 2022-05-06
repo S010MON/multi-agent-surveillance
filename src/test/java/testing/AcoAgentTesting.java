@@ -11,6 +11,7 @@ import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 
+import app.model.agents.Universe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ public class AcoAgentTesting
     @BeforeEach
     public void clearMemoryAndWorld()
     {
-        AcoAgent.resetWorld(moveDistance);
+
     }
 
     //Bug testing
@@ -230,8 +231,8 @@ public class AcoAgentTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
-        GraphCell obstacleCell_1 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
-        GraphCell obstacleCell_2 = AcoAgent.getWorld().getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
+        GraphCell obstacleCell_1 = Universe.getMemoryGraph(Team.GUARD).getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
+        GraphCell obstacleCell_2 = Universe.getMemoryGraph(Team.GUARD).getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
 
         assertTrue(obstacleCell_1.getObstacle());
         assertTrue(obstacleCell_2.getObstacle());
