@@ -6,6 +6,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
+import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,7 +63,7 @@ public class WallFollowAgent extends AgentImp
     {
         if(world == null)
         {
-            world = new WfWorld<>((int)moveLength);
+            world = new WfWorld(new MemoryGraph((int)moveLength));
         }
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));

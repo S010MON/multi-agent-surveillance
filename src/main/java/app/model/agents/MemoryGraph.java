@@ -86,9 +86,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
 
-
-
-
     public void setVertexAsObstacle(Vector currentPosition, Vector movement)
     {
         Vector obstaclePosition = currentPosition.add(movement);

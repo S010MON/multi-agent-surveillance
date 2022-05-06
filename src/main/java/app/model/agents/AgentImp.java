@@ -33,7 +33,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
 
-    @Getter @Setter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
+    @Getter @Setter protected static World world;
 
     public AgentImp(Vector position, Vector direction, double radius, Team team)
     {

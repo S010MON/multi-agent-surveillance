@@ -6,7 +6,6 @@ import app.model.agents.MemoryGraph;
 import app.model.agents.World;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-
 public class AcoWorld extends World
 {
     public AcoWorld(MemoryGraph G)
