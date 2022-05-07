@@ -4,10 +4,12 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
+import app.model.agents.ACO.AcoWorld;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
+import app.model.agents.Universe;
 import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.Graphs;
@@ -61,10 +63,9 @@ public class WallFollowAgent extends AgentImp
 
     public void initializeWorld()
     {
-        if(world == null)
-        {
-            world = new WfWorld(new MemoryGraph((int)moveLength));
-        }
+        Universe.init(team, (int)moveLength);
+        world = new WfWorld(Universe.getMemoryGraph(team));
+
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);

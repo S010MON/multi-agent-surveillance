@@ -7,6 +7,7 @@ import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
+import app.model.agents.Universe;
 import app.model.agents.WallFollow.WfWorld;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,17 +100,10 @@ public class AcoAgent extends AgentImp
                 };
     }
 
-    public static void resetWorld(int distance)
-    {
-        world = new AcoWorld(new MemoryGraph(distance));
-    }
-
     private void initializeWorld()
     {
-        if(world == null)
-        {
-            world = new AcoWorld(new MemoryGraph(distance));
-        }
+        Universe.init(team, distance);
+        world = new AcoWorld(Universe.getMemoryGraph(team));
 
         pheromoneSenseDirections();
         world.add_or_adjust_Vertex(position);
