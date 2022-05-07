@@ -3,7 +3,6 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import lombok.Getter;
-import lombok.Setter;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     @Getter private HashMap<String, Vector> cardinalDirections = new HashMap<>();
     @Getter private int travelDistance;
 
-    @Getter @Setter private GraphCell initialWallFollowPos;
+    // @Getter @Setter private GraphCell initialWallFollowPos;
     @Getter private double obstaclePheromoneValue = 1000.0;
 
     public MemoryGraph(int distance)

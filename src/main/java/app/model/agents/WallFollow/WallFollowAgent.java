@@ -44,7 +44,8 @@ public class WallFollowAgent extends AgentImp
             new Vector(-1,0));
     private ArrayList<GraphCell> lastPositions = new ArrayList<>();
     @Getter private GraphCell prevAgentVertex = null;
-    private boolean hasMovedAlongWall = false;
+    private boolean hasLeftInitialWallFollowPos = false;
+    private GraphCell initialWallFollowPos = null;
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Team team)
     {
@@ -105,8 +106,13 @@ public class WallFollowAgent extends AgentImp
         {
             updateGraphAfterSuccessfulMove();
         }
-        if (hasMovedAlongWall && world.getInitialWallFollowPos() != null &&
-                world.getInitialWallFollowPos().equals(world.getVertexAt(position)))
+        if (!hasLeftInitialWallFollowPos && initialWallFollowPos != null &&
+                !initialWallFollowPos.equals(world.getVertexAt(position)))
+        {
+            hasLeftInitialWallFollowPos = true;
+        }
+        if (!initialVertexFound && hasLeftInitialWallFollowPos && initialWallFollowPos != null &&
+                initialWallFollowPos.equals(world.getVertexAt(position)))
         {
             initialVertexFound = true;
         }
@@ -127,7 +133,6 @@ public class WallFollowAgent extends AgentImp
             if (DEBUG) {
                 System.out.println("Agent stuck in vertex.");
             }
-            //GraphCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
             GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
                     world.getDirectionStr(direction.getAngle()));
             if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
@@ -145,6 +150,7 @@ public class WallFollowAgent extends AgentImp
             wallEncountered = false;
             currentTargetVertex = null;
             currentPathToNextVertex = null;
+            hasLeftInitialWallFollowPos = false;
         }
         else if (currentPathToNextVertex != null && !foundUnexploredWallToFollow())
         {
@@ -161,6 +167,7 @@ public class WallFollowAgent extends AgentImp
             currentTargetVertex = null;
             wallEncountered = true;
             initialVertexFound = false;
+            hasLeftInitialWallFollowPos = false;
             Move wallFollowMove = runWallFollowAlgorithm();
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
@@ -175,8 +182,7 @@ public class WallFollowAgent extends AgentImp
             deltaPos = heuristicsMove.getDeltaPos();
             newDirection = heuristicsMove.getEndDir();
             wallEncountered = false;
-            hasMovedAlongWall = false;
-            // TODO follows heuristics instead of following wall
+            hasLeftInitialWallFollowPos = false;
         }
         else if (!wallEncountered) {
             GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
@@ -192,8 +198,7 @@ public class WallFollowAgent extends AgentImp
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
                 wallEncountered = true;
-                world.setInitialWallFollowPos(world.getVertexAt(position));
-                System.out.println("Initial wall follow pos: " + world.getInitialWallFollowPos());
+                initialWallFollowPos = world.getVertexAt(position);
             }
             else if (!noWallDetected(getAngleOfLeftRay()) && leftCell.getObstacle())
             {
@@ -201,8 +206,7 @@ public class WallFollowAgent extends AgentImp
                     System.out.println("ALGORITHM CASE 0: wall encountered on left!");
                 }
                 wallEncountered = true;
-                world.setInitialWallFollowPos(world.getVertexAt(position));
-                System.out.println("Initial wall follow pos: " + world.getInitialWallFollowPos());
+                initialWallFollowPos = world.getVertexAt(position);
             }
             else
             {
@@ -268,7 +272,6 @@ public class WallFollowAgent extends AgentImp
             movedForwardLast = true;
             lastTurn = TurnType.NO_TURN;
             markWallAsCovered();
-            hasMovedAlongWall = true;
         }
         else
         {
