@@ -9,7 +9,7 @@ import java.util.Stack;
 
 public class SoundEngine
 {
-    final static int noOfRays = 10;
+    final static int noOfRays = 4;
     final static int noOfBounces = 2;
     final static int maxDist = 1000;
 

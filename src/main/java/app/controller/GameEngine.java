@@ -42,7 +42,7 @@ public class GameEngine
     public void tick()
     {
         map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
-        // map.getSoundSources().forEach(s -> s.decay());
+        map.getSoundSources().forEach(s -> s.decay());
         for(Agent agent: map.getAgents())
         {
             agent.clearHeard();
@@ -73,6 +73,10 @@ public class GameEngine
                     legalMove(a, endPoint) &&
                     legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
             {
+                if(!a.getPosition().equals(endPoint))
+                {
+                    map.addSoundSource(endPoint, a.getType());
+                }
                 a.updateLocation(endPoint);
                 a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
