@@ -49,13 +49,13 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
 
-    public void add_or_adjust_Vertex(Vector position)
+    public void add_or_adjust_Vertex(Vector position, boolean occupied)
     {
         GraphCell cell = getVertexAt(position);
 
         if(cell != null)
         {
-            modifyVertex(cell);
+            modifyVertex(cell, occupied);
         }
         else
         {
@@ -80,9 +80,9 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
 
-    protected void modifyVertex(GraphCell cell)
+    protected void modifyVertex(GraphCell cell, boolean occupied)
     {
-        cell.setOccupied(true);
+        cell.setOccupied(occupied);
     }
 
 

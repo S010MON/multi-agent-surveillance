@@ -22,7 +22,7 @@ public class AcoAgent extends AgentImp
     private static Random randomGenerator = new Random(1);
 
     @Getter private final double maxPheromone = 2;
-    private final double epsilon = 0.3;
+    private final double epsilon = 0.5;
     private final int[] cardinalAngles = {0, 90, 180, 270};
 
     @Setter private double movementHeuristic = 1.0;
@@ -104,9 +104,9 @@ public class AcoAgent extends AgentImp
     {
         Universe.init(team, distance);
         world = new AcoWorld(Universe.getMemoryGraph(team));
+        world.add_or_adjust_Vertex(position);
 
         pheromoneSenseDirections();
-        world.add_or_adjust_Vertex(position);
         movementContinuity = direction.scale(distance);
         tgtDirection = direction.copy();
         previousMove = new Move(position, new Vector());
@@ -174,6 +174,7 @@ public class AcoAgent extends AgentImp
             movement = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
         }
 
+        //TODO Set occupied state to true
         direction = movement.normalise();
         previousMove = new Move(position, movement);
         return new Move(position, movement);
@@ -196,7 +197,6 @@ public class AcoAgent extends AgentImp
     {
         ArrayList<Double> aggregatePheromones = accessAvailableCellAggregatePheromones();
         minimumPheromonesToDirections(aggregatePheromones);
-        direction = visualDirectionsToExplore.peek().normalise();
         if(visualDirectionsToExplore.isEmpty())
         {
             relyOnMemory();
@@ -216,13 +216,13 @@ public class AcoAgent extends AgentImp
 
             if(!movementInMemory && pheromoneValue == minValue)
             {
-                visualDirectionsToExplore.add(pheromoneDirection);
+                visualDirectionsToExplore.add(pheromoneDirection.normalise());
             }
             else if(!movementInMemory && pheromoneValues.get(i) < minValue)
             {
                 visualDirectionsToExplore.clear();
                 minValue = pheromoneValues.get(i);
-                visualDirectionsToExplore.add(pheromoneDirection);
+                visualDirectionsToExplore.add(pheromoneDirection.normalise());
             }
         }
     }
@@ -242,26 +242,51 @@ public class AcoAgent extends AgentImp
     /* Vision */
     public Move visibleExploration()
     {
-        explorationToViableMovement();
-        nextExplorationVisionDirection();
+        explorationToViableMovements();
 
         previousMove = new Move(position, new Vector());
         return new Move(position, new Vector());
     }
 
-    public void explorationToViableMovement()
+    public void explorationToViableMovements()
     {
-        Ray cardinalRay = detectCardinalPoint(direction.getAngle());
-        Vector currentDirection = visualDirectionsToExplore.pop();
+        ArrayList<Vector> directionStillToExplore = new ArrayList<>();
+
+
+        while(!visualDirectionsToExplore.isEmpty())
+        {
+            Vector currentExplorationDirection = visualDirectionsToExplore.pop();
+
+            try
+            {
+                explorationToViableMovement(currentExplorationDirection);
+            }
+            catch(Exception e)
+            {
+                directionStillToExplore.add(currentExplorationDirection);
+            }
+        }
+
+        // Directions not within current field of view
+        if (!directionStillToExplore.isEmpty())
+        {
+            visualDirectionsToExplore.addAll(directionStillToExplore);
+            nextExplorationVisionDirection();
+        }
+    }
+
+    public void explorationToViableMovement(Vector explorationDirection)
+    {
+        Ray cardinalRay = detectCardinalPoint(explorationDirection.getAngle());
         if(moveEvaluation(cardinalRay))
         {
-            possibleMovements.add(direction.scale(distance));
+            possibleMovements.add(explorationDirection.scale(distance));
         }
         else
         {
-            world.setVertexAsObstacle(position, currentDirection);
+            world.setVertexAsObstacle(position, explorationDirection.scale(distance));
         }
-        nextBestOptionHandling(currentDirection);
+        nextBestOptionHandling(explorationDirection);
     }
 
     private void nextBestOptionHandling(Vector currentDirectionExplored)
