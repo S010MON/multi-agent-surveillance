@@ -31,7 +31,7 @@ public class GraphCell
     {
         setGeneralInfo(position);
         obstacle = false;
-        occupied = false;
+        occupied = true;
         pheromone = 0;
     }
 

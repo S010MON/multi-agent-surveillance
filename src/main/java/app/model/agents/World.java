@@ -16,14 +16,18 @@ public abstract class World
         this.G = G;
     }
 
+    public void connectNeighbouringVertices(GraphCell currentCell) {}
+
+    public void add_or_adjust_Vertex(Vector position){}
+
     protected GraphCell addNewVertex(Vector position)
     {
-        return null;
+        Vector vertexCentre = G.determineVertexCentre(position);
+        GraphCell cell = new GraphCell(vertexCentre);
+        G.addVertex(cell);
+        G.vertices.put(G.keyGenerator(position), cell);
+        return cell;
     }
-
-    public void add_or_adjust_Vertex(Vector position) {}
-
-    public void connectNeighbouringVertices(GraphCell currentCell) {}
 
     protected void modifyVertex(GraphCell cell)
     {

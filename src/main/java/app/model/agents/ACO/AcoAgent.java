@@ -149,7 +149,7 @@ public class AcoAgent extends AgentImp
     /* Movement */
     private void successfulMovement()
     {
-        world.leaveVertex(previousMove.getEndDir(), maxPheromone);
+        world.leaveVertex(position.sub(previousMove.getDeltaPos()), maxPheromone);
         world.add_or_adjust_Vertex(position);
 
         movementContinuity = previousMove.getDeltaPos();
@@ -174,7 +174,6 @@ public class AcoAgent extends AgentImp
             movement = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
         }
 
-        //TODO Set occupied state to true
         direction = movement.normalise();
         previousMove = new Move(position, movement);
         return new Move(position, movement);

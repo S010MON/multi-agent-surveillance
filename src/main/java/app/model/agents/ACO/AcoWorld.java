@@ -13,6 +13,21 @@ public class AcoWorld extends World
         super(G);
     }
 
+    @Override
+    public void add_or_adjust_Vertex(Vector position)
+    {
+        GraphCell cell = G.getVertexAt(position);
+        if(cell != null)
+        {
+            modifyVertex(cell);
+        }
+        else
+        {
+            cell = addNewVertex(position);
+        }
+    }
+
+    @Override
     public GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = G.determineVertexCentre(position);

@@ -13,7 +13,6 @@ public class WfWorld extends World
         super(G);
     }
 
-    @Override
     public void add_or_adjust_Vertex(Vector position)
     {
         GraphCell cell = G.getVertexAt(position);
@@ -26,16 +25,6 @@ public class WfWorld extends World
             cell = addNewVertex(position);
         }
         connectNeighbouringVertices(cell);
-    }
-
-    @Override
-    protected GraphCell addNewVertex(Vector position)
-    {
-        Vector vertexCentre = G.determineVertexCentre(position);
-        GraphCell cell = new GraphCell(vertexCentre);
-        G.addVertex(cell);
-        G.vertices.put(G.keyGenerator(position), cell);
-        return cell;
     }
 
     @Override
