@@ -9,7 +9,6 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.GraphCell;
-import app.model.agents.Team;
 import app.model.agents.Universe;
 import app.model.Type;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,7 +44,7 @@ public class AcoAgentTesting
     {
         //Should detect obstacles on movement (distance, 0) and (o, distance)
         Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
-        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Type.GUARD);
 
         //Smell pheromones
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -56,8 +54,8 @@ public class AcoAgentTesting
         agent.updateView(graphicsEngine.compute(map, agent));
         agent.move();
 
-        GraphCell obstacleCell_1 = Universe.getMemoryGraph(Team.GUARD).getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
-        GraphCell obstacleCell_2 = Universe.getMemoryGraph(Team.GUARD).getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
+        GraphCell obstacleCell_1 = Universe.getMemoryGraph(Type.GUARD).getVertexAt(wallPosition.add(new Vector(moveDistance, 0)));
+        GraphCell obstacleCell_2 = Universe.getMemoryGraph(Type.GUARD).getVertexAt(wallPosition.add(new Vector(0, moveDistance)));
 
         assertTrue(obstacleCell_1.getObstacle());
         assertTrue(obstacleCell_2.getObstacle());
@@ -68,10 +66,10 @@ public class AcoAgentTesting
     public void testOccupiedLabelling()
     {
         position = new Vector(190, 350);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
-        assertTrue(Universe.getMemoryGraph(agent.getTeam()).getVertexAt(position).getOccupied());
+        assertTrue(Universe.getMemoryGraph(agent.getType()).getVertexAt(position).getOccupied());
 
         // Detect pheromones
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -91,15 +89,15 @@ public class AcoAgentTesting
 
         Vector newLocation = position.add(new Vector(moveDistance, 0));
         agent.updateLocation(newLocation);
-        assertTrue(Universe.getMemoryGraph(agent.getTeam()).getVertexAt(newLocation).getOccupied());
-        assertFalse(Universe.getMemoryGraph(agent.getTeam()).getVertexAt(position).getOccupied());
+        assertTrue(Universe.getMemoryGraph(agent.getType()).getVertexAt(newLocation).getOccupied());
+        assertFalse(Universe.getMemoryGraph(agent.getType()).getVertexAt(position).getOccupied());
     }
 
     @Test
     public void testLeavingCell()
     {
         position = new Vector(170, 350);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         agent.setPreviousMove(new Move(new Vector(170, 350), new Vector(moveDistance, 0)));
@@ -113,7 +111,7 @@ public class AcoAgentTesting
     public void testExplorationWithinVisualField()
     {
         position = new Vector(210, 350);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         //Smell pheromones
@@ -139,6 +137,7 @@ public class AcoAgentTesting
     @Test
     public void testCardinalPointDetection()
     {
+        position = new Vector(210, 370);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
@@ -160,25 +159,12 @@ public class AcoAgentTesting
         assertFalse(movePossible);
     }
 
-    @Test
-    public void testCardinalPointDetection()
-    {
-        position = new Vector(270, 390);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
-        agent.updateView(graphicsEngine.compute(map, agent));
-        agentSetup(agent);
-
-        assertNotNull(agent.detectCardinalPoint(90));
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {throw new RuntimeException("Indicator");});
-        assertEquals("Indicator", exception.getMessage());
-    }
-
     //Test smell capabilities
     @Test
     public void testPheromoneSenseDirections()
     {
         position = new Vector(250, 350);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         ArrayList<Vector> pheromoneSenseDirections = agent.getPheromoneDirections();
@@ -190,7 +176,7 @@ public class AcoAgentTesting
     public void testPheromoneSmellToDirections()
     {
         position = new Vector(250, 390);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         agent.updateView(graphicsEngine.compute(map, agent));

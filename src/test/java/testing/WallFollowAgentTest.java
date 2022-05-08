@@ -6,9 +6,8 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.Map;
 import app.model.Move;
-import app.model.agents.MemoryGraph;
-import app.model.agents.Team;
 import app.model.Type;
+import app.model.agents.MemoryGraph;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
 import app.model.furniture.Furniture;
@@ -31,7 +30,7 @@ public class WallFollowAgentTest
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
     double moveLen = 75.0;
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, moveLen);
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
     private app.model.agents.WallFollow.WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test

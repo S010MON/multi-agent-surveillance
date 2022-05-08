@@ -4,12 +4,8 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.agents.AgentImp;
-import app.model.agents.Cells.GraphCell;
-import app.model.agents.MemoryGraph;
-import app.model.agents.Team;
-import app.model.agents.Universe;
-import app.model.agents.WallFollow.WfWorld;
 import app.model.Type;
+import app.model.agents.Universe;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -103,8 +99,8 @@ public class AcoAgent extends AgentImp
 
     private void initializeWorld()
     {
-        Universe.init(team, distance);
-        world = new AcoWorld(Universe.getMemoryGraph(team));
+        Universe.init(type, distance);
+        world = new AcoWorld(Universe.getMemoryGraph(type));
         world.add_or_adjust_Vertex(position);
 
         pheromoneSenseDirections();
