@@ -36,13 +36,15 @@ public class SoundEngine
             else if(bdyIntersection != null)
                 endPoint = bdyIntersection;
 
-
-            if(r.getBounces() > 0 && endPoint.dist(r.getU()) > 0.01)
+            if( endPoint != null)
             {
-                Vector new_origin = bouncePoint(endPoint, r.getU());
-                stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, maxDist, r.getBounces()));
+                if(r.getBounces() > 0 && endPoint.dist(r.getU()) > 0.01)
+                {
+                    Vector new_origin = bouncePoint(endPoint, r.getU());
+                    stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, maxDist, r.getBounces()));
+                }
+                output.add(new SoundRay(r.getU(), endPoint));
             }
-            output.add(new SoundRay(r.getU(), endPoint));
         }
         return output;
     }
