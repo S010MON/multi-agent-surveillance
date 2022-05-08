@@ -20,7 +20,7 @@ public class SoundRay extends Ray
     public SoundRay(Vector u, Vector v)
     {
         super(u, v);
-        this.colour = Color.rgb(0,0,255, 0.7);
+        this.colour = Color.rgb(0,0,255, opacity());
         this.bounces = 0;
         this.children = new ArrayList<>();
         this.parent = null;
@@ -29,7 +29,7 @@ public class SoundRay extends Ray
     public SoundRay(Vector u, Vector v, int bounces)
     {
         super(u, v);
-        this.colour = Color.rgb(0,0,255, 0.7);
+        this.colour = Color.rgb(0,0,255, opacity());
         this.bounces = bounces;
         this.children = new ArrayList<>();
         this.parent = null;
@@ -38,7 +38,7 @@ public class SoundRay extends Ray
     public SoundRay(Vector u, Vector v, int bounces, SoundRay parent)
     {
         super(u, v);
-        this.colour = Color.rgb(0,0,255, 0.7);
+        this.colour = Color.rgb(0,0,255, opacity());
         this.bounces = bounces;
         this.children = new ArrayList<>();
         this.parent = parent;
@@ -66,5 +66,16 @@ public class SoundRay extends Ray
     public String toString()
     {
         return "ang:" + angle() + " u:" + getU().toString() + " v:" + getV().toString() + " bounces:" + bounces;
+    }
+
+    private double opacity()
+    {
+        switch(bounces)
+        {
+            case 0 -> {return 0.2;}
+            case 1 -> {return 0.4;}
+            case 2 -> {return 0.8;}
+            default -> {return 1.0;}
+        }
     }
 }

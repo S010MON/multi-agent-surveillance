@@ -43,7 +43,7 @@ public class SoundEngine
                     Vector new_origin = bouncePoint(endPoint, r.getU());
                     stack.addAll(SoundRayScatter.angle360(new_origin, noOfRays, maxDist, r.getBounces()));
                 }
-                output.add(new SoundRay(r.getU(), endPoint));
+                output.add(new SoundRay(r.getU(), endPoint, r.getBounces()));
             }
         }
         return output;
