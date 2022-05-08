@@ -11,6 +11,7 @@ import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Team;
 import app.model.agents.Universe;
+import app.model.Type;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -129,18 +130,28 @@ public class AcoAgentTesting
 
         //Explore one remaining unknown direction
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.move();
 
-        //All directions now explored
-        assertEquals(agent.getVisualDirectionsToExplore().size(), 0);
+        agent.move();
         assertEquals(agent.getPossibleMovements().size(), 4);
+    }
+
+    //Test vision capabilities
+    @Test
+    public void testCardinalPointDetection()
+    {
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
+        agent.updateView(graphicsEngine.compute(map, agent));
+
+        assertNotNull(agent.detectCardinalPoint(90));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {throw new RuntimeException("Indicator");});
+        assertEquals("Indicator", exception.getMessage());
     }
 
     @Test
     void movePossible()
     {
         position = new Vector(678, 100);
-        AcoAgent agent = new AcoAgent(position, direction, radius, Team.GUARD);
+        AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
         double angle = direction.getAngle();
 

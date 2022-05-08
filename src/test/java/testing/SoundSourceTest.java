@@ -6,7 +6,7 @@ import app.controller.soundEngine.SoundRay;
 import app.controller.soundEngine.SoundVector;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
-import app.model.agents.Team;
+import app.model.Type;
 import app.controller.soundEngine.SoundSource;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ public class SoundSourceTest
         Vector a_pos = new Vector(10,0);
         Vector a_dir = new Vector();
         double a_rad = 10;
-        Team a_team = Team.GUARD;
-        Agent agent = new AgentImp(a_pos, a_dir, a_rad, a_team);
+        Type a_type = Type.GUARD;
+        Agent agent = new AgentImp(a_pos, a_dir, a_rad, a_type);
 
         Vector s_pos = new Vector(0, 0);
         double s_amp = 10;

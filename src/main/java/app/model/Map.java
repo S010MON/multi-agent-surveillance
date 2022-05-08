@@ -6,6 +6,7 @@ import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
@@ -69,7 +70,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoAgent(srt, dir, 10, Team.GUARD);
+            Agent guard = new AcoAgent(srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -80,7 +81,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            Agent intruder = new DirectionFollowAgent(srt, dir, 10, Type.INTRUDER, targetDirection(srt));
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -88,8 +89,8 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = new Vector(100,100);
-            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
+            human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(human);
@@ -129,24 +130,9 @@ public class Map
     }
 
 
-    /**
-     * @param v: a vector in R^2 on the map
-     * @returns type: an enum of the type of furniture at Vector v, returns null if nothing is found
-     */
-    public FurnitureType furnitureAt(Vector v)
-    {
-        for(Furniture f: furniture)
-        {
-            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
-                return f.getType();
-        }
-        return null;
-    }
-
-
     public void updateAllSeen(Agent agent)
     {
-        if(agent.getTeam() == Team.GUARD)
+        if(agent.getType() == Type.GUARD)
             guardsSeen.addAll(agent.getSeen());
         else
             intrudersSeen.addAll(agent.getSeen());
@@ -190,9 +176,9 @@ public class Map
     }
 
 
-    public double percentageComplete(Team team)
+    public double percentageComplete(Type type)
     {
-        if(team == Team.GUARD)
+        if(type == Type.GUARD)
             return coverage.percentSeen(guardsSeen);
         else
             return coverage.percentSeen(intrudersSeen);
@@ -201,12 +187,12 @@ public class Map
 
     public void checkForCapture(Agent currentAgent)
     {
-        if(currentAgent.getTeam() != Team.GUARD)
+        if(currentAgent.getType() != Type.GUARD)
             return;
 
         for(Agent otherAgent : agents)
         {
-            if(otherAgent.getTeam() != currentAgent.getTeam())
+            if(otherAgent.getType() != currentAgent.getType())
             {
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
                 if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
@@ -237,14 +223,21 @@ public class Map
 
     /**
      * @param v: a vector in R^2 on the map
-     * @returns Team: an enum of the team of the agent at Vector v, returns null if nothing is found
+     * @return Type: an enum of the team of the agent or furniture at Vector v,
+     * returns null if nothing is found.
      */
-    public Team agentAt(Vector v)
+    public Type objectAt(Vector v)
     {
         for(Agent a: agents)
         {
             if(a.getPosition().dist(v) <= a.getRadius())
-                return a.getTeam();
+                return a.getType();
+        }
+
+        for(Furniture f: furniture)
+        {
+            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
+                return Type.of(f.getType());
         }
         return null;
     }

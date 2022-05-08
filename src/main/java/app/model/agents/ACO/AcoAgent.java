@@ -9,9 +9,9 @@ import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import app.model.agents.Universe;
 import app.model.agents.WallFollow.WfWorld;
+import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.util.*;
 
@@ -34,11 +34,12 @@ public class AcoAgent extends AgentImp
     @Getter @Setter private double visionDistance = 25.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
+    protected Vector previousPosition;
 
 
-    public AcoAgent(Vector position, Vector direction, double radius, Team team)
+    public AcoAgent(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         initializeWorld();
     }
 
@@ -109,7 +110,8 @@ public class AcoAgent extends AgentImp
         pheromoneSenseDirections();
         movementContinuity = direction.scale(distance);
         tgtDirection = direction.copy();
-        previousMove = new Move(position, new Vector());
+        previousMove = new Move(direction, new Vector());
+        previousPosition = position;
         acoAgentCount ++;
     }
 
@@ -143,7 +145,8 @@ public class AcoAgent extends AgentImp
     {
         Vector previousMovement = previousMove.getDeltaPos();
         shortTermMemory.put(previousMovement.hashCode(), previousMovement);
-        return new Move(position, new Vector());
+        previousPosition = position;
+        return new Move(direction, new Vector());
     }
 
     /* Movement */
@@ -159,7 +162,7 @@ public class AcoAgent extends AgentImp
 
     private boolean detectChangeInPosition()
     {
-        return (!previousMove.getEndDir().equals(position));
+        return (!previousPosition.equals(position));
     }
 
     public Move makeMove()
@@ -175,8 +178,9 @@ public class AcoAgent extends AgentImp
         }
 
         direction = movement.normalise();
-        previousMove = new Move(position, movement);
-        return new Move(position, movement);
+        previousPosition = position;
+        previousMove = new Move(direction, movement);
+        return new Move(direction, movement);
     }
 
     private boolean movementContinuityPossible()
@@ -188,8 +192,9 @@ public class AcoAgent extends AgentImp
     public Move smellPheromones()
     {
         smellPheromonesToVisualExplorationDirection();
-        previousMove = new Move(position, new Vector());
-        return new Move(position, new Vector());
+        previousPosition = position;
+        previousMove = new Move(direction, new Vector());
+        return new Move(direction, new Vector());
     }
 
     public void smellPheromonesToVisualExplorationDirection()
@@ -243,8 +248,9 @@ public class AcoAgent extends AgentImp
     {
         explorationToViableMovements();
 
-        previousMove = new Move(position, new Vector());
-        return new Move(position, new Vector());
+        previousPosition = position;
+        previousMove = new Move(direction, new Vector());
+        return new Move(direction, new Vector());
     }
 
     public void explorationToViableMovements()

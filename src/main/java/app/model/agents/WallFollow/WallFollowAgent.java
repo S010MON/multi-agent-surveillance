@@ -10,6 +10,7 @@ import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
 import app.model.agents.Universe;
+import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
 import org.jgrapht.Graphs;
@@ -48,15 +49,15 @@ public class WallFollowAgent extends AgentImp
     private ArrayList<GraphCell> lastPositions = new ArrayList<>();
     @Getter private GraphCell prevAgentVertex = null;
 
-    public WallFollowAgent(Vector position, Vector direction, double radius, Team team)
+    public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         initializeWorld();
     }
 
-    public WallFollowAgent(Vector position, Vector direction, double radius, Team team, double moveLen)
+    public WallFollowAgent(Vector position, Vector direction, double radius, Type type, double moveLen)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         this.moveLength = moveLen;
         initializeWorld();
     }

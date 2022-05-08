@@ -8,6 +8,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.MemoryGraph;
 import app.model.agents.Team;
+import app.model.Type;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
 import app.model.furniture.Furniture;
