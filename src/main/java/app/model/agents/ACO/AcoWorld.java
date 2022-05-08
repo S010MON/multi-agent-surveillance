@@ -39,6 +39,7 @@ public class AcoWorld extends World
         return cell;
     }
 
+    @Override
     public void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();

@@ -13,6 +13,7 @@ public class WfWorld extends World
         super(G);
     }
 
+    @Override
     public void add_or_adjust_Vertex(Vector position)
     {
         GraphCell cell = G.getVertexAt(position);

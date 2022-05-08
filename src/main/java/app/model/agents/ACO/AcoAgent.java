@@ -31,7 +31,7 @@ public class AcoAgent extends AgentImp
     @Getter private ArrayList<Vector> pheromoneDirections = new ArrayList<>();
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter private HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
-    @Getter @Setter private double visionDistance = 30.0;
+    @Getter @Setter private double visionDistance = 25.0;
     @Getter @Setter private int distance = 20;
     @Getter @Setter protected Move previousMove;
 
