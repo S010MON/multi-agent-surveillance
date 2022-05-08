@@ -34,7 +34,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
 
-    @Getter @Setter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
+    @Getter @Setter protected World world;
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
     {
