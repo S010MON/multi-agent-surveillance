@@ -243,6 +243,15 @@ public class Map
     }
 
 
+    public void addSoundSource(Vector position, Type team)
+    {
+        if(team == Type.GUARD)
+            soundSources.add(new SoundSource(position, 200, 1000));
+        else if(team == Type.INTRUDER)
+            soundSources.add(new SoundSource(position, 200, 2000));
+    }
+
+
     public void garbageCollection()
     {
         for(Agent a: deletion)

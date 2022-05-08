@@ -33,6 +33,7 @@ public class AgentImp implements Agent
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
+    protected final boolean DRAW_HEARD = false;
 
     @Getter @Setter protected World world;
 
@@ -103,7 +104,8 @@ public class AgentImp implements Agent
     @Override
     public void draw(GraphicsContext gc)
     {
-        heard.forEach(h -> h.draw(gc, this.position));
+        if(DRAW_HEARD)
+            heard.forEach(h -> h.draw(gc, this.position));
 
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(3.0);
