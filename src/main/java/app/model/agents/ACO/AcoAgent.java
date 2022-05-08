@@ -148,7 +148,7 @@ public class AcoAgent extends AgentImp
     /* Movement */
     private void successfulMovement()
     {
-        world.leaveVertex(position.sub(previousMove.getDeltaPos()), maxPheromone);
+        world.leaveVertex(previousPosition, maxPheromone);
         world.add_or_adjust_Vertex(position);
 
         movementContinuity = previousMove.getDeltaPos();
