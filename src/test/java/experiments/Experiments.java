@@ -1,4 +1,4 @@
-package testing;
+package experiments;
 
 import app.controller.TestingEngine;
 import app.controller.io.FileManager;

@@ -3,8 +3,9 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.model.Type;
 import app.model.agents.Agent;
-import app.model.agents.Team;
+
 import app.model.boundary.Boundary;
 import app.model.Map;
 import app.model.boundary.PortalBoundary;
@@ -35,7 +36,7 @@ public class TestingEngine
         {
             tick();
 
-             currentPercentage = map.percentageComplete(Team.GUARD);
+             currentPercentage = map.percentageComplete(Type.GUARD);
             if(currentPercentage != prevPercentage)
             {
                 updatePercentageBar(currentPercentage);
@@ -89,7 +90,7 @@ public class TestingEngine
 
     private boolean complete()
     {
-        return  map.percentageComplete(Team.GUARD) > 0.85;
+        return  map.percentageComplete(Type.GUARD) > 0.85;
     }
 
     private Vector checkTeleport(Vector start, Vector end)
