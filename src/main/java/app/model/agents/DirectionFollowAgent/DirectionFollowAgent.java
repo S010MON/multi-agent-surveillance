@@ -78,9 +78,11 @@ public class DirectionFollowAgent extends AgentImp
         if(DEBUG) { System.out.println("\n\n new agent:" +this); }
         if(moveFailed)
         {
+            System.out.println("\nmove failed, no wallDetected in direction: " + noWallDetected(previousMove.getEndDir().getAngle()) +"\n");
             if(DEBUG) {
                 System.out.println("previous move failed, state: " +internalState);
-                System.out.println("Move: " +previousMove.toString()); }
+                System.out.println("Move: " +previousMove.toString());
+            }
             return previousMove;
         }
         if(position.dist(targetRay.getV())>targetRay.length())
@@ -174,7 +176,7 @@ public class DirectionFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 1;
+        double anglePrecision = 3;
 
         // check that all rays start at the right position
         if (DEBUG)
@@ -205,6 +207,7 @@ public class DirectionFollowAgent extends AgentImp
                     wallDetected = true;
                     if(r.length() <= moveLength)
                     {
+                        System.out.println("type:" + r.getType());
                         if(DEBUG)
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
@@ -225,6 +228,7 @@ public class DirectionFollowAgent extends AgentImp
                     wallDetected = true;
                     if(r.length() <= moveLength)
                     {
+                        System.out.println("type:" + r.getType());
                         if(DEBUG)
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
@@ -241,6 +245,7 @@ public class DirectionFollowAgent extends AgentImp
                     wallDetected = true;
                     if(r.length() <= moveLength)
                     {
+                        System.out.println("type:" + r.getType());
                         if(DEBUG)
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
                         return false;
@@ -302,6 +307,7 @@ public class DirectionFollowAgent extends AgentImp
         {
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
             {
+                System.out.println("type:" + r.getType());
                 if (DEBUG)
                     System.out.println("     WALL DETECTED! Distance: "+r.length()+", Ray Angle: " + rayAngle);
                 return r.length();

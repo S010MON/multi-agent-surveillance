@@ -56,17 +56,22 @@ public class RayFeedbackTest
         agents.add(agent1);
         agents.add(agent2);
 
+        agent1.setDirection(new Vector(0, -1));
+
         Map map = new Map(agents, new ArrayList<>());
 
         // Compute rays
         agent1.updateView(ge.compute(map, agent1));
+        boolean seeAgent = false;
         for(Ray r : agent1.getView())
         {
-            if(r.getType() != null)
+            if(r.getType() == Type.INTRUDER)
             {
-                assertEquals(Type.INTRUDER, r.getType());
+                seeAgent = true;
             }
         }
+
+        assertEquals(true, seeAgent);
     }
 
     @Test void seeGuard()
@@ -75,17 +80,21 @@ public class RayFeedbackTest
         agents.add(agent1);
         agents.add(agent2);
 
+        agent2.setDirection(new Vector(0, 1));
+
         Map map = new Map(agents, new ArrayList<>());
 
         // Compute rays
         agent2.updateView(ge.compute(map, agent2));
+        boolean seeAgent = false;
         for(Ray r : agent2.getView())
         {
-            if(r.getType() != null)
+            if(r.getType() == Type.GUARD)
             {
-                assertEquals(Type.GUARD, r.getType());
+                seeAgent = true;
             }
         }
+        assertEquals(true, seeAgent);
     }
 
     @Test void seeNoAgents()
