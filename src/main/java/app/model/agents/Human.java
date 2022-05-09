@@ -2,14 +2,15 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.Type;
 
 public class Human extends AgentImp
 {
     private Vector nextMove;
 
-    public Human(Vector position, Vector direction, double radius, Team team)
+    public Human(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, team);
+        super(position, direction, radius, type);
         nextMove = new Vector();
     }
 
@@ -34,7 +35,7 @@ public class Human extends AgentImp
 
     public void sprint(Vector nextMove)
     {
-        this.nextMove = nextMove.scale(maxSprint);
+        this.nextMove = nextMove.scale(45);
     }
 
     public void rotateTo(double degrees)

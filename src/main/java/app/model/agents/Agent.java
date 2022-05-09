@@ -3,6 +3,8 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.VectorSet;
+import app.controller.soundEngine.SoundVector;
+import app.model.Type;
 import app.model.boundary.Boundary;
 import app.model.Move;
 import app.view.agentView.AgentView;
@@ -20,6 +22,8 @@ public interface Agent extends Boundary
 
     Vector getDirection();
 
+    void setDirection(Vector direction);
+
     ArrayList<Ray> getView();
 
     double getMaxWalk();
@@ -32,7 +36,11 @@ public interface Agent extends Boundary
 
     void updateView(ArrayList<Ray> view);
 
-    double getHearing();
+    void clearHeard();
+
+    void addHeard(ArrayList<SoundVector> soundVectors);
+
+    ArrayList<SoundVector> getHeard();
 
     double getRadius();
 
@@ -44,7 +52,13 @@ public interface Agent extends Boundary
 
     void addViewWindow(AgentView agentView);
 
-    Team getTeam();
+    Type getType();
 
     void setTgtDirection(Vector tgtDirection);
+
+    Vector getTgtDirection();
+
+    Agent nextState();
+
+    AgentView getAgentViewWindow();
 }

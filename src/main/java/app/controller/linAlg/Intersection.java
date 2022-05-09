@@ -123,7 +123,7 @@ public abstract class Intersection
     public static Vector findIntersection(SoundRay r1, SoundRay r2)
     {
         // segment-segment intersection
-        return findIntersection(r1.getStart(), r1.getEnd(), r2.getStart(), r2.getEnd());
+        return findIntersection(r1.getU(), r1.getV(), r2.getU(), r2.getV());
     }
 
     public static boolean hasIntersection(Vector A, Vector B, Vector center, double radius)
@@ -147,23 +147,7 @@ public abstract class Intersection
 
     public static boolean hasIntersection(Ray ray, Vector center, double radius)
     {
-        double direction = ray.angle();
-
-        double baX = ray.getV().getX() - ray.getU().getX();
-        double baY = ray.getV().getY() - ray.getU().getY();
-        double caX = center.getX() - ray.getU().getX();
-        double caY = center.getY() - ray.getU().getY();
-
-        double a = baX * baX + baY * baY;
-        double bBy2 = baX * caX + baY * caY;
-        double c = caX * caX + caY * caY - radius * radius;
-
-        double pBy2 = bBy2 / a;
-        double q = c / a;
-
-        double disc = pBy2 * pBy2 - q;
-
-        return disc >= 0;
+        return hasIntersection(ray.getU(), ray.getV(), center, radius);
     }
 
     public static boolean hasIntersection(Vector p_1, Vector p_2, Vector p_3, Vector p_4)
@@ -181,8 +165,46 @@ public abstract class Intersection
         return findIntersection(r1, r2) != null;
     }
 
-    public static boolean hasDirectionIntersect(Vector start,Vector end,double radius,Vector positionOther,double radiusOther){
+    public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
+    {
+        return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
+    }
 
+    public static boolean hasLimitedIntersection(Vector A, Vector B, Vector center, double radius)
+    {
+        if(A.dist(center) <= radius || B.dist(center) <= radius)
+            return true;
+
+        double baX = B.getX() - A.getX();
+        double baY = B.getY() - A.getY();
+        double caX = center.getX() - A.getX();
+        double caY = center.getY() - A.getY();
+
+        double a = baX * baX + baY * baY;
+        double bBy2 = baX * caX + baY * caY;
+        double c = caX * caX + caY * caY - radius * radius;
+
+        double pBy2 = bBy2 / a;
+        double q = c / a;
+
+        double disc = pBy2 * pBy2 - q;
+
+        if(disc >= 0)
+        {
+            Line line = new Line(A, B);
+            Vector intersection = findIntersection(A, B, center, radius);
+            return line.liesOn(intersection);
+        }
+        else
+            return false;
+    }
+
+    public static boolean hasDirectionIntersect(Vector start,
+                                                Vector end,
+                                                double radius,
+                                                Vector positionOther,
+                                                double radiusOther)
+    {
         Vector recCenter = start.add(end).scale(0.5);
         // rotate all the positions to the degree 0
         Vector start_rotate = recCenter.findPointOnCircle(start.dist(recCenter),180);
@@ -197,7 +219,8 @@ public abstract class Intersection
         if(otherRotate.getX() >= recBL_rotate.getX() &&
                 otherRotate.getX() <= recTR_rotate.getX() &&
                 otherRotate.getY() >= recBL_rotate.getY() &&
-                otherRotate.getY() <= recTR_rotate.getY()){
+                otherRotate.getY() <= recTR_rotate.getY())
+        {
             return true;
         }
 

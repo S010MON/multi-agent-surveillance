@@ -4,7 +4,9 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
+import app.controller.soundEngine.SoundVector;
 import app.model.Move;
+import app.model.Type;
 import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -12,47 +14,66 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 
 
 public class AgentImp implements Agent
 {
-    @Getter @Setter protected double maxWalk = 5;
-    @Getter @Setter protected double maxSprint = 10;
+    @Getter @Setter protected double maxWalk = 10;
+    @Getter @Setter protected double maxSprint = 30;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
-    @Setter protected Vector tgtDirection;
-    @Getter protected Team team;
+    @Getter @Setter protected Vector tgtDirection;
+    @Getter protected Type type;
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
+    @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
-    protected AgentView agentViewWindow;
+    @Getter protected AgentView agentViewWindow;
+    protected final boolean DRAW_HEARD = false;
 
-    @Getter protected static MemoryGraph<GraphCell, DefaultEdge> world;
+    @Getter @Setter protected World world;
 
-    public AgentImp(Vector position, Vector direction, double radius, Team team)
+    public AgentImp(Vector position, Vector direction, double radius, Type type)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        this.team = team;
+        this.type = type;
         this.tgtDirection = null;
         view = new ArrayList<>();
         seen = new VectorSet();
+        heard = new ArrayList<>();
     }
 
-    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
+    public AgentImp(Vector position, Vector direction, double radius, Type type, Vector tgtDirection)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        this.team = team;
+        this.type = type;
         this.tgtDirection = tgtDirection;
         view = new ArrayList<>();
         seen = new VectorSet();
+        heard = new ArrayList<>();
+    }
+
+    public AgentImp(Agent other)
+    {
+        this.direction = other.getDirection();
+        this.position = other.getPosition();
+        this.radius = other.getRadius();
+        this.type = other.getType();
+        this.tgtDirection = other.getTgtDirection();
+        this.view = other.getView();
+        this.seen = other.getSeen();
+        this.maxSprint = other.getMaxSprint();
+        this.maxWalk = other.getMaxWalk();
+        this.agentViewWindow = other.getAgentViewWindow();
+        // TODO add hearing after SoundEngine refactor merged
     }
 
     @Override
@@ -81,17 +102,14 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public double getHearing()
-    {
-        return 0;
-    }
-
-    @Override
     public void draw(GraphicsContext gc)
     {
+        if(DRAW_HEARD)
+            heard.forEach(h -> h.draw(gc, this.position));
+
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(3.0);
-        if(team == Team.GUARD)
+        if(type == Type.GUARD)
             gc.setFill(Color.BLUE);
         else
             gc.setFill(Color.RED);
@@ -101,6 +119,18 @@ public class AgentImp implements Agent
 
         gc.fillOval(x, y, radius, radius);
         gc.strokeOval(x , y, radius, radius);
+    }
+
+    @Override
+    public void clearHeard()
+    {
+        heard = new ArrayList<>();
+    }
+
+    @Override
+    public void addHeard(ArrayList<SoundVector> soundVectors)
+    {
+        heard.addAll(soundVectors);
     }
 
     @Override
@@ -116,7 +146,8 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public boolean isCrossed(Vector startPoint, Vector endPoint) {
+    public boolean isCrossed(Vector startPoint, Vector endPoint)
+    {
         return false;
     }
 
@@ -142,5 +173,11 @@ public class AgentImp implements Agent
     public void addViewWindow(AgentView agentView)
     {
         agentViewWindow = agentView;
+    }
+
+    @Override
+    public Agent nextState()
+    {
+        return this;
     }
 }

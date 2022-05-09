@@ -6,8 +6,10 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
 import app.model.Map;
 import app.model.Move;
-import app.model.agents.Team;
+import app.model.Type;
+import app.model.agents.MemoryGraph;
 import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.WallFollow.WfWorld;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
@@ -18,17 +20,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WallFollowAgentTest
 {
     GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-
- 
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Team.INTRUDER, 75.0);
-
+    double moveLen = 75.0;
+    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+    private app.model.agents.WallFollow.WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test
     void testAgentDirectionAngle()
@@ -237,6 +240,11 @@ public class WallFollowAgentTest
                 turn 90 deg right
                 set wallEcountered = true
          */
+        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
+        {
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+            agent.initializeWorld();
+        }
         agent.setDEBUG(true);
         agent.updateLocation(initialPosition);
         agent.setDirection(initialDirection);
@@ -270,7 +278,6 @@ public class WallFollowAgentTest
         Vector expectedDeltaPos2 = new Vector(moveLength * agent.getDirection().getX(), moveLength * agent.getDirection().getY());
         // move 3
         agent.updateView(graphicsEngine.compute(map, agent));
-        agent.getCellGraph().getVertices().get("0 225").setObstacle(true);
         Move newMove3 = agent.move();
         agent.updateLocation(agent.getPosition().add(newMove3.getDeltaPos()));
         Vector expectedDeltaPos3 = new Vector(0,0);
@@ -298,7 +305,11 @@ public class WallFollowAgentTest
         // ALGORITHM CASE 1
         // if (turned left previously and forward no wall)
         //      go forward
-
+        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
+        {
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+            agent.initializeWorld();
+        }
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.LEFT);
         agent.setMovedForwardLast(false);
@@ -346,6 +357,12 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
+        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
+        {
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+            agent.initializeWorld();
+        }
+
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
         agent.setMovedForwardLast(false);
@@ -383,6 +400,11 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
+        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
+        {
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+            agent.initializeWorld();
+        }
         agent.setWallEncountered(true);
         // Map
         FurnitureType obstacleType = FurnitureType.WALL;
@@ -422,6 +444,11 @@ public class WallFollowAgentTest
         // if (no wall forward)
         //    go forward
 
+        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
+        {
+            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+            agent.initializeWorld();
+        }
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
 

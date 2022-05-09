@@ -15,6 +15,6 @@ public class TextureFactory
             case PORTAL -> {return new PortalTexture(rectangle);}
             case SIREN -> {return new SoundSourceTexture(rectangle);}
         }
-        return null; // Redundant by design
+        return new TextureImp(rectangle);
     }
 }

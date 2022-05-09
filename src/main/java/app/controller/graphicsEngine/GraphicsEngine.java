@@ -3,12 +3,13 @@ package app.controller.graphicsEngine;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
+import app.model.Type;
 import app.model.boundary.Boundary;
 import java.util.ArrayList;
 
 public class GraphicsEngine
 {
-    private double angle = 90; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
+    private double angle = 91; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
     public GraphicsEngine(){};
 
@@ -30,20 +31,13 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-            {
-                if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
-                {
-                    output.add(new Ray(origin, bdyIntersection));
-                }
-                else
-                {
-                    output.add(new Ray(origin, agentIntersection));
-                }
-            }
+                output.add( closestRay(origin, bdyIntersection, agentIntersection, map.objectAt(agentIntersection)));
+
             else if(bdyIntersection != null)
-                output.add(new Ray(origin, bdyIntersection));
+                output.add(new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection)));
+
             else if(agentIntersection != null)
-                output.add(new Ray(origin, agentIntersection));
+                output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
         }
         return output;
     }
@@ -97,5 +91,13 @@ public class GraphicsEngine
         map.getFurniture()
                 .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
         return boundaries;
+    }
+
+    private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Type type)
+    {
+        if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
+            return new Ray(origin, bdyIntersection);
+        else
+            return new Ray(origin, agentIntersection, type);
     }
 }

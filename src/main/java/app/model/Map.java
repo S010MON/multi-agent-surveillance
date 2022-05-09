@@ -6,29 +6,27 @@ import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
-import app.model.soundFurniture.SoundFurniture;
-import app.model.soundFurniture.SoundFurnitureFactory;
-import app.model.soundSource.SoundSource;
-import app.model.soundSource.SoundSourceFactory;
-import app.model.soundSource.SoundSourceType;
+import app.controller.soundEngine.SoundSource;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Map
 {
-    private final Boolean HUMAN_ACTIVE = false;
+    @Setter private Boolean HUMAN_ACTIVE = true;
     @Getter private ArrayList<Furniture> furniture;
-    @Getter private ArrayList<SoundFurniture> soundFurniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
     @Getter private VectorSet guardsSeen;
@@ -59,13 +57,9 @@ public class Map
         addFurniture(border);
         settings.getFurniture().forEach(e -> addFurniture(e));
 
-        /* Make sound furniture */
-        soundFurniture = new ArrayList<>();
-        settings.getSoundFurniture().forEach(e -> addSoundFurniture(e));
-
-        /* Make some sound sources */
+        /* Make a test sound source */
         soundSources = new ArrayList<>();
-        settings.getSoundSources().forEach(e -> addSoundSource(e));
+        soundSources.add(new SoundSource(new Vector(300, 300), 200, 1000));
 
         agents = new ArrayList<>();
         guardsSeen = new VectorSet();
@@ -76,7 +70,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoAgent(srt, dir, 10, Team.GUARD);
+            Agent guard = new AcoAgent(srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -87,7 +81,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Team.INTRUDER);
+            Agent intruder = new DirectionFollowAgent(srt, dir, 10, Type.INTRUDER, targetDirection(srt));
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -95,8 +89,8 @@ public class Map
 
         if (HUMAN_ACTIVE)
         {
-            Vector humanStart = randPosition(intruderSpawn);
-            human = new Human(humanStart, new Vector(1, 0), 10, Team.INTRUDER);
+            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
+            human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
             human.setMaxWalk(settings.getWalkSpeedGuard());
             human.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(human);
@@ -115,6 +109,15 @@ public class Map
         furniture.addAll(obstacles);
     }
 
+    public Map(ArrayList<Agent> agents, ArrayList<Furniture> obstacles)
+    {
+        this.agents = new ArrayList<>();
+        this.agents.addAll(agents);
+
+        furniture = new ArrayList<>();
+        furniture.addAll(obstacles);
+    }
+
     public void addFurniture(SettingsObject obj)
     {
         switch(obj.getType())
@@ -126,28 +129,15 @@ public class Map
         }
     }
 
-    public void addSoundFurniture(SettingsObject obj)
-    {
-        switch(obj.getType())
-        {
-            case GUARD_SPAWN -> guardSpawn = obj.getRect();
-            case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            default -> this.soundFurniture.add(SoundFurnitureFactory.make(obj));
-        }
-    }
-
-    public void addSoundSource(SettingsObject obj)
-    {
-        this.soundSources.add(SoundSourceFactory.make(SoundSourceType.SIREN, Vector.from(obj.getRect()), obj.getAmplitude()));
-    }
 
     public void updateAllSeen(Agent agent)
     {
-        if(agent.getTeam() == Team.GUARD)
+        if(agent.getType() == Type.GUARD)
             guardsSeen.addAll(agent.getSeen());
         else
             intrudersSeen.addAll(agent.getSeen());
     }
+
 
     public ArrayList<Boundary> getBoundaries()
     {
@@ -155,6 +145,7 @@ public class Map
         furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
+
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
@@ -184,22 +175,24 @@ public class Map
         }
     }
 
-    public double percentageComplete(Team team)
+
+    public double percentageComplete(Type type)
     {
-        if(team == Team.GUARD)
+        if(type == Type.GUARD)
             return coverage.percentSeen(guardsSeen);
         else
             return coverage.percentSeen(intrudersSeen);
     }
 
+
     public void checkForCapture(Agent currentAgent)
     {
-        if(currentAgent.getTeam() != Team.GUARD)
+        if(currentAgent.getType() != Type.GUARD)
             return;
 
         for(Agent otherAgent : agents)
         {
-            if(otherAgent.getTeam() != currentAgent.getTeam())
+            if(otherAgent.getType() != currentAgent.getType())
             {
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
                 if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
@@ -210,10 +203,54 @@ public class Map
         }
     }
 
+
+    public void updateStates()
+    {
+        ArrayList<Agent> new_states = new ArrayList<>();
+        for(Agent a: agents)
+        {
+            new_states.add(a.nextState());
+        }
+        agents = new_states;
+    }
+
+
     public void deleteAgent(Agent agent)
     {
         deletion.push(agent);
     }
+
+
+    /**
+     * @param v: a vector in R^2 on the map
+     * @return Type: an enum of the team of the agent or furniture at Vector v,
+     * returns null if nothing is found.
+     */
+    public Type objectAt(Vector v)
+    {
+        for(Agent a: agents)
+        {
+            if(a.getPosition().dist(v) <= a.getRadius())
+                return a.getType();
+        }
+
+        for(Furniture f: furniture)
+        {
+            if(f.contains(v) && f.getType() != FurnitureType.BORDER)
+                return Type.of(f.getType());
+        }
+        return null;
+    }
+
+
+    public void addSoundSource(Vector position, Type team)
+    {
+        if(team == Type.GUARD)
+            soundSources.add(new SoundSource(position, 200, 1000));
+        else if(team == Type.INTRUDER)
+            soundSources.add(new SoundSource(position, 200, 2000));
+    }
+
 
     public void garbageCollection()
     {
@@ -221,6 +258,14 @@ public class Map
         {
             agents.remove(a);
         }
+
+        ArrayList<SoundSource> delete = new ArrayList<>();
+        for(SoundSource soundSource: soundSources)
+        {
+            if(soundSource.getAmplitude() < 0.1)
+                delete.add(soundSource);
+        }
+        soundSources.removeAll(delete);
     }
 
     private Vector randDirection()

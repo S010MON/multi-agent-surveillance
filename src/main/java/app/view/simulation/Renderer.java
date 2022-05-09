@@ -6,7 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Trail;
 import app.model.agents.Agent;
-import app.model.agents.Team;
+import app.model.Type;
 import app.view.ScreenSize;
 import app.view.agentView.AgentView;
 import javafx.geometry.Point2D;
@@ -50,6 +50,7 @@ public class Renderer extends Canvas
         drawBackground(gc);
 
         map.drawIndicatorBoxes(gc);
+        map.getSoundSources().forEach(e -> e.draw(gc));
         map.getFurniture().forEach(e -> e.draw(gc));
         trails.forEach(e -> drawTrail(gc, e));
         map.getAgents().forEach(e -> drawRays(gc, e.getView()));
@@ -105,7 +106,7 @@ public class Renderer extends Canvas
         // Add the label
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(20 * Info.getInfo().getZoom()));
-        gc.fillText("Guard Team: " + map.percentageComplete(Team.GUARD) + "%",
+        gc.fillText("Guard Team: " + map.percentageComplete(Type.GUARD) + "%",
                 xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
                 (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
                 mapWidthScaled * Info.getInfo().getZoom());
@@ -151,7 +152,7 @@ public class Renderer extends Canvas
         // Add the label
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(20 * Info.getInfo().getZoom()));
-        gc.fillText("Intruder Team: " + map.percentageComplete(Team.INTRUDER) + "%",
+        gc.fillText("Intruder Team: " + map.percentageComplete(Type.INTRUDER) + "%",
                       xPos * Info.getInfo().getZoom() + Info.getInfo().offsetX,
                       (yPos - 20) * Info.getInfo().getZoom() + Info.getInfo().offsetY,
                       mapWidthScaled * Info.getInfo().getZoom());

@@ -5,13 +5,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class SoundSourceTexture implements Texture
+public class SoundSourceTexture extends TextureImp implements Texture
 {
     private Vector pos;
     private Color color;
 
     public SoundSourceTexture(Rectangle2D rectangle)
     {
+        super(rectangle);
         pos = new Vector(rectangle.getMinX(), rectangle.getMinY());
         this.color = Color.BLUE;
     }
