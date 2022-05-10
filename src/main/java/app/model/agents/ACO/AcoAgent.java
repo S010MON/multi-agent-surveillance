@@ -127,7 +127,7 @@ public class AcoAgent extends AgentImp
         shortTermMemory.forEach((k, v) -> possibleMovements.add(v));
     }
 
-    private boolean selectNextPossibleMove()
+    protected boolean selectNextPossibleMove()
     {
         possibleMovements.remove(previousMove.getDeltaPos());
         return !possibleMovements.isEmpty();
@@ -272,7 +272,7 @@ public class AcoAgent extends AgentImp
         nextBestOptionHandling(explorationDirection);
     }
 
-    private void nextBestOptionHandling(Vector currentDirectionExplored)
+    protected void nextBestOptionHandling(Vector currentDirectionExplored)
     {
         shortTermMemory.put(currentDirectionExplored.hashCode(), currentDirectionExplored);
 
