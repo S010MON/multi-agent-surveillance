@@ -9,8 +9,6 @@ import lombok.Setter;
 
 public class AcoStraight extends AcoAgent
 {
-    @Getter private static int acoAgentCount;
-    @Getter private static int acoMoveCount;
     @Setter protected double momentumHeuristic = 1.0;
     @Setter protected Vector momentumContinuity = new Vector();
 
@@ -23,16 +21,8 @@ public class AcoStraight extends AcoAgent
     @Override
     protected void initializeWorld()
     {
-        Universe.init(type, distance);
-        world = new AcoWorld(Universe.getMemoryGraph(type));
-        world.add_or_adjust_Vertex(position);
-
-        pheromoneSenseDirections();
+        super.initializeWorld();
         momentumContinuity = direction.scale(distance);
-        tgtDirection = direction.copy();
-        previousMove = new Move(direction, new Vector());
-        previousPosition = position;
-        acoAgentCount ++;
     }
 
     @Override
@@ -63,17 +53,6 @@ public class AcoStraight extends AcoAgent
         previousPosition = position;
         previousMove = new Move(direction, movement);
         return new Move(direction, movement);
-    }
-
-    @Override
-    protected void evaporateProcess()
-    {
-        acoMoveCount ++;
-        if(acoMoveCount >= acoAgentCount)
-        {
-            world.evaporateWorld();
-            acoMoveCount = acoMoveCount - acoAgentCount;
-        }
     }
 
     private boolean momentumContinuityPossible()
