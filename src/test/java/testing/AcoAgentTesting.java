@@ -8,7 +8,7 @@ import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.Move;
 import app.model.agents.ACO.AcoAgent;
-import app.model.agents.ACO.AcoStraight;
+import app.model.agents.ACO.AcoMomentum;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
 import app.model.Type;
@@ -45,7 +45,7 @@ public class AcoAgentTesting
     {
         //Should detect obstacles on movement (distance, 0) and (o, distance)
         Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
-        AcoAgent agent = new AcoStraight(wallPosition, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(wallPosition, direction, radius, Type.GUARD);
 
         //Smell pheromones
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -67,7 +67,7 @@ public class AcoAgentTesting
     public void testOccupiedLabelling()
     {
         position = new Vector(190, 350);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         assertTrue(Universe.getMemoryGraph(agent.getType()).getVertexAt(position).getOccupied());
@@ -98,7 +98,7 @@ public class AcoAgentTesting
     public void testLeavingCell()
     {
         position = new Vector(170, 350);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         agent.setPreviousMove(new Move(new Vector(170, 350), new Vector(moveDistance, 0)));
@@ -112,7 +112,7 @@ public class AcoAgentTesting
     public void testExplorationWithinVisualField()
     {
         position = new Vector(210, 350);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         //Smell pheromones
@@ -139,7 +139,7 @@ public class AcoAgentTesting
     public void testCardinalPointDetection()
     {
         position = new Vector(210, 370);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
 
         assertNotNull(agent.detectCardinalPoint(90));
@@ -151,7 +151,7 @@ public class AcoAgentTesting
     void movePossible()
     {
         position = new Vector(678, 100);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
         double angle = direction.getAngle();
 
@@ -165,7 +165,7 @@ public class AcoAgentTesting
     public void testPheromoneSenseDirections()
     {
         position = new Vector(250, 350);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         ArrayList<Vector> pheromoneSenseDirections = agent.getPheromoneDirections();
@@ -177,7 +177,7 @@ public class AcoAgentTesting
     public void testPheromoneSmellToDirections()
     {
         position = new Vector(250, 390);
-        AcoAgent agent = new AcoStraight(position, direction, radius, Type.GUARD);
+        AcoAgent agent = new AcoMomentum(position, direction, radius, Type.GUARD);
         agentSetup(agent);
 
         agent.updateView(graphicsEngine.compute(map, agent));

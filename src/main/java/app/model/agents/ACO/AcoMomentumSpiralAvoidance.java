@@ -4,9 +4,9 @@ import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
 
-public class AcoStraightSpiralAvoidance extends AcoStraight
+public class AcoMomentumSpiralAvoidance extends AcoMomentum
 {
-    public AcoStraightSpiralAvoidance(Vector position, Vector direction, double radius, Type type)
+    public AcoMomentumSpiralAvoidance(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
     }
@@ -15,13 +15,13 @@ public class AcoStraightSpiralAvoidance extends AcoStraight
     public Move makeMove()
     {
         Vector movement;
-        avoidSpiral();
         if(randomGenerator.nextDouble() < momentumHeuristic && momentumContinuityPossible())
         {
             movement = momentumContinuity;
         }
         else
         {
+            avoidSpiral();
             movement = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
             turnQueue.add(movement);
         }

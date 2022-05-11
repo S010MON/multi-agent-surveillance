@@ -8,6 +8,7 @@ import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.ACO.AcoColony;
 import app.model.agents.ACO.AcoMid;
+import app.model.agents.ACO.AcoMomentumSpiralAvoidance;
 import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
@@ -72,7 +73,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoColony(srt, dir, 10, Type.GUARD);
+            Agent guard = new AcoMomentumSpiralAvoidance(srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);

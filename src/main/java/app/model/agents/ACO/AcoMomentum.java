@@ -5,13 +5,13 @@ import app.model.Move;
 import app.model.Type;
 import lombok.Setter;
 
-public class AcoStraight extends AcoAgent
+public class AcoMomentum extends AcoAgent
 {
     @Setter protected double momentumHeuristic = 1.0;
     @Setter protected Vector momentumContinuity = new Vector();
 
 
-    public AcoStraight(Vector position, Vector direction, double radius, Type type)
+    public AcoMomentum(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
     }

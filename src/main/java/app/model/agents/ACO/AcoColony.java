@@ -3,7 +3,7 @@ package app.model.agents.ACO;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 
-public class AcoColony extends AcoStraight
+public class AcoColony extends AcoMomentum
 {
     public AcoColony(Vector position, Vector direction, double radius, Type type)
     {
