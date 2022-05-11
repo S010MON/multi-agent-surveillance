@@ -1,6 +1,7 @@
 package app.model.agents.Capture;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Move;
@@ -65,6 +66,18 @@ public class Capture extends AgentImp
         }
     }
 
+    @Override
+    public Move move()
+    {
+        return new Move(new Vector(), new Vector());
+    }
+
+    @Override
+    public void updateLocation(Vector endPoint)
+    {
+        position = endPoint;
+    }
+
     /**
      * Method checks rays to see if we still see the intruder. Updates the intruderPos variable.
      *
@@ -106,11 +119,22 @@ public class Capture extends AgentImp
             newLocations.add(new Vector(location.getX(), location.getY() - getMaxWalk())); // West
             newLocations.add(new Vector(location.getX() - getMaxWalk(), location.getY())); // South
 
-            // TODO Check if we see these points, i.e. the intruder is not there.
+            checkLocationsVisible(newLocations);
         }
         beliefSet.addAll(newLocations);
-        // Will add a check to see if the position we are adding to the belief set is intersecting with one of our rays
-        // because we would therefore see the intruder, and it could not be a possible position.
+    }
+
+    /**
+     * Removes vectors that are visible from beliefSet.
+     *
+     * @param locations Potential intruder locations.
+     */
+    public void checkLocationsVisible(VectorSet locations)
+    {
+        for(Ray r : view)
+        {
+            locations.removeIf(location -> Intersection.hasLimitedIntersection(r, location, 1));
+        }
     }
 
     /**
@@ -126,18 +150,31 @@ public class Capture extends AgentImp
             for(Vector v : beliefSet)
                 return v;
 
+        // Currently, returning the closest point in the belief set to us. (Will improve this and add more heuristics)
+        return closestLocationInArray(new ArrayList<>(beliefSet), position);
+    }
+
+    /**
+     * Finds closest vector to given point.
+     *
+     * @param locations Array of locations.
+     * @param pos Position to compare to.
+     *
+     * @return Closest vector to pos from locations.
+     */
+    private Vector closestLocationInArray(ArrayList<Vector> locations, Vector pos)
+    {
         double shortestDist = Double.MAX_VALUE;
         Vector closestPoint = null;
-        for(Vector location : beliefSet)
+        for(Vector location : locations)
         {
-            if(location.dist(position) < shortestDist)
+            if(location.dist(pos) < shortestDist)
             {
-                shortestDist = location.dist(position);
+                shortestDist = location.dist(pos);
                 closestPoint = location;
             }
         }
 
-        // Currently, returning the closest point in the belief set to us. (Will improve this and add more heuristics)
         return closestPoint;
     }
 

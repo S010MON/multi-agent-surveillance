@@ -46,10 +46,29 @@ public class CaptureAgentTest
 
         ArrayList<Vector> list = new ArrayList<>(updatedBSet);
 
-        assertEquals(list.get(1), new Vector(50, 60));
-        assertEquals(list.get(2), new Vector(40, 50));
-        assertEquals(list.get(3), new Vector(60, 50));
-        assertEquals(list.get(4), new Vector(50, 40));
+        assertTrue(list.contains(new Vector(50, 60)));
+        assertTrue(list.contains(new Vector(40, 50)));
+        assertTrue(list.contains(new Vector(60, 50)));
+        assertTrue(list.contains(new Vector(50, 40)));
+    }
+
+    @Test void testRemovingVisibleLocations()
+    {
+        VectorSet bSet = new VectorSet();
+        bSet.add(agent1Pos);
+        agent1.setBeliefSet(bSet);
+
+        ArrayList<Ray> testView = new ArrayList<>();
+        testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), null));
+        agent1.setView(testView);
+
+        agent1.findAllPossiblePositions();
+        VectorSet updatedBSet = agent1.getBeliefSet();
+        ArrayList<Vector> list = new ArrayList<>(updatedBSet);
+
+        assertTrue(list.contains(new Vector(20, 10)));
+        assertTrue(list.contains(new Vector(0, 10)));
+        assertTrue(list.contains(new Vector(10, 0)));
     }
 
     @Test void testFindingTarget()
