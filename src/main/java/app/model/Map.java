@@ -7,11 +7,8 @@ import app.controller.settings.SettingsObject;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
-import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
-import app.model.furniture.Furniture;
-import app.model.furniture.FurnitureFactory;
-import app.model.furniture.FurnitureType;
+import app.model.furniture.*;
 import app.controller.soundEngine.SoundSource;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
@@ -240,6 +237,15 @@ public class Map
                 return Type.of(f.getType());
         }
         return null;
+    }
+
+
+    public void addSoundSource(Vector position, Type team)
+    {
+        if(team == Type.GUARD)
+            soundSources.add(new SoundSource(position, 200, 1000));
+        else if(team == Type.INTRUDER)
+            soundSources.add(new SoundSource(position, 200, 2000));
     }
 
 

@@ -6,6 +6,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
+import app.model.agents.Universe;
 import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,10 +61,9 @@ public class WallFollowAgent extends AgentImp
 
     public void initializeWorld()
     {
-        if(world == null)
-        {
-            world = new WfWorld<>((int)moveLength);
-        }
+        Universe.init(type, (int)moveLength);
+        world = new WfWorld(Universe.getMemoryGraph(type));
+
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
@@ -303,7 +303,7 @@ public class WallFollowAgent extends AgentImp
             if (minScoreVertex != null)
             {
                 currentTargetVertex = minScoreVertex;
-                currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world,
+                currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
                         world.getVertexAt(position), currentTargetVertex).getVertexList();
                 return getMoveBasedOnPath();
             }
@@ -344,7 +344,7 @@ public class WallFollowAgent extends AgentImp
         // TODO add weights to score components?
         double score;
         int shortestPathLength;
-        List<GraphCell> shortestPath = DijkstraShortestPath.findPathBetween(world, world.getVertexAt(position), vertex).getVertexList();
+        List<GraphCell> shortestPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex).getVertexList();
         if (shortestPath != null)
         {
             shortestPathLength = shortestPath.size();
@@ -354,10 +354,10 @@ public class WallFollowAgent extends AgentImp
             return 100000;
         }
         int neighboursOnUnexploredFrontier = 0;
-        List<GraphCell> neighbours = Graphs.neighborListOf(world,vertex);
+        List<GraphCell> neighbours = Graphs.neighborListOf(world.G,vertex);
         for (GraphCell neighbour : neighbours)
         {
-            if (!neighbour.getObstacle() && world.edgesOf(vertex).size() < 4)
+            if (!neighbour.getObstacle() && world.G.edgesOf(vertex).size() < 4)
             {
                 neighboursOnUnexploredFrontier++;
             }
@@ -380,7 +380,7 @@ public class WallFollowAgent extends AgentImp
             currentPathToNextVertex.remove(nextVertex);
             nextVertex = currentPathToNextVertex.get(0);
         }
-        Vector nextDir = world.getNeighbourDir(world.getVertexAt(position), nextVertex);
+        Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
         if (nextDir.equals(direction))
         {
             double deltaX = nextVertex.getX() - world.getVertexAt(position).getX();
@@ -421,7 +421,7 @@ public class WallFollowAgent extends AgentImp
     public void updateGraphAfterSuccessfulMove()
     {
         updateLastPositions(world.getVertexAt(position));
-        world.leaveVertex(prevAgentVertex.getPosition());
+        world.G.leaveVertex(prevAgentVertex.getPosition());
         world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
     }
@@ -591,7 +591,7 @@ public class WallFollowAgent extends AgentImp
      * Give vertex a direction score for heuristic's algorithm.
      * If vertex is towards the direction agent is currently facing at, give highest score.
      * If vertex is to the left or right of agent, give middle score.
-     * If vertex is bbehing agent, give lowest score.
+     * If vertex is behind agent, give lowest score.
      * @param targetVertex vertex to give the score to.
      * @return the direction score (1 or 2 or 3)
      */
