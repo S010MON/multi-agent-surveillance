@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
+import app.model.Type;
 import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -25,34 +26,35 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
     @Getter @Setter protected Vector tgtDirection;
-    @Getter protected Team team;
+    @Getter protected Type type;
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<Ray> view;
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
+    protected final boolean DRAW_HEARD = false;
 
-    @Getter @Setter protected static MemoryGraph<GraphCell, DefaultWeightedEdge> world;
+    @Getter @Setter protected World world;
 
-    public AgentImp(Vector position, Vector direction, double radius, Team team)
+    public AgentImp(Vector position, Vector direction, double radius, Type type)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        this.team = team;
+        this.type = type;
         this.tgtDirection = null;
         view = new ArrayList<>();
         seen = new VectorSet();
         heard = new ArrayList<>();
     }
 
-    public AgentImp(Vector position, Vector direction, double radius, Team team, Vector tgtDirection)
+    public AgentImp(Vector position, Vector direction, double radius, Type type, Vector tgtDirection)
     {
         this.direction = direction;
         this.position = position;
         this.radius = radius;
-        this.team = team;
+        this.type = type;
         this.tgtDirection = tgtDirection;
         view = new ArrayList<>();
         seen = new VectorSet();
@@ -64,7 +66,7 @@ public class AgentImp implements Agent
         this.direction = other.getDirection();
         this.position = other.getPosition();
         this.radius = other.getRadius();
-        this.team = other.getTeam();
+        this.type = other.getType();
         this.tgtDirection = other.getTgtDirection();
         this.view = other.getView();
         this.seen = other.getSeen();
@@ -102,11 +104,12 @@ public class AgentImp implements Agent
     @Override
     public void draw(GraphicsContext gc)
     {
-        heard.forEach(h -> h.draw(gc, this.position));
+        if(DRAW_HEARD)
+            heard.forEach(h -> h.draw(gc, this.position));
 
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(3.0);
-        if(team == Team.GUARD)
+        if(type == Type.GUARD)
             gc.setFill(Color.BLUE);
         else
             gc.setFill(Color.RED);

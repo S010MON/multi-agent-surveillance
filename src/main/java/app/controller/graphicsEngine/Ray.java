@@ -1,7 +1,8 @@
 package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
-import app.model.agents.Team;
+import app.model.Type;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -9,9 +10,9 @@ import lombok.Getter;
 
 public class Ray
 {
-    @Getter private Team agentTeam = null;
     @Getter private Vector u;
     @Getter private Vector v;
+    @Getter private Type type = null;
     protected Color colour = Color.rgb(255,191,0, 0.5);
     protected final double LINE_WIDTH = 1;
 
@@ -21,11 +22,11 @@ public class Ray
         this.v = v;
     }
 
-    public Ray(Vector u, Vector v, Team agentTeam)
+    public Ray(Vector u, Vector v, Type type)
     {
         this.u = u;
         this.v = v;
-        this.agentTeam = agentTeam;
+        this.type = type;
     }
 
     public double angle()
@@ -50,7 +51,17 @@ public class Ray
 
     public Vector direction()
     {
-        return v.sub(u);
+        return v.sub(u).normalise();
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof Ray r)
+        {
+            return this.u.equals(r.getU()) && this.v.equals(r.getV());
+        }
+        return false;
     }
 
     public void draw(GraphicsContext gc)
@@ -61,5 +72,11 @@ public class Ray
                       getU().getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
                       getV().getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
                       getV().getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new String("Ray: "+ u.toString() +", " + v.toString());
     }
 }

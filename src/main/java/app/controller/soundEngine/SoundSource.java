@@ -62,7 +62,7 @@ public class SoundSource
 
     public void decay()
     {
-        amplitude = amplitude * 0.9;
+        amplitude = amplitude * 0.5;
     }
 
     private double collectDistances(SoundRay ray, Agent agent)

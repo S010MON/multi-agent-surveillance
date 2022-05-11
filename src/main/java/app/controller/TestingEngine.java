@@ -3,84 +3,82 @@ package app.controller;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
-import app.controller.soundEngine.SoundEngine;
-import app.model.Move;
-import app.model.Trail;
+import app.model.Type;
 import app.model.agents.Agent;
+
 import app.model.boundary.Boundary;
 import app.model.Map;
 import app.model.boundary.PortalBoundary;
-import app.view.simulation.Renderer;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.input.KeyEvent;
-import javafx.util.Duration;
 import lombok.Getter;
 
-public class GameEngine
+public class TestingEngine
 {
-    @Getter private long tics;
+    @Getter private int tics;
     private Map map;
-    private Renderer renderer;
     private GraphicsEngine graphicsEngine;
-    private Timeline timeline;
-    private boolean captureEnabled = false;
+    private String test_name;
 
-    public GameEngine(Map map, Renderer renderer)
+    public TestingEngine(Map map, String test_name)
     {
         this.tics = 0;
         this.map = map;
-        this.renderer = renderer;
+        this.test_name = test_name;
         this.graphicsEngine = new GraphicsEngine();
-        this.timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+    }
+
+    public int[] run()
+    {
+        double prevPercentage = 0;
+        double currentPercentage;
+        int[] times = new int[100];
+
+        while(!complete() && tics < 100000 )
+        {
+            tick();
+
+             currentPercentage = map.percentageComplete(Type.GUARD);
+            if(currentPercentage != prevPercentage)
+            {
+                updatePercentageBar(currentPercentage);
+
+                int prevIndex = (int) (prevPercentage * 100);
+                int index = (int) (currentPercentage *  100);
+
+                for(int i = prevIndex + 1; i <= index; i++)
+                {
+                    times[i] = tics;
+                }
+
+                prevPercentage = currentPercentage;
+            }
+        }
+        System.out.println(" done");
+        return times;
     }
 
     public void tick()
     {
-        map.getSoundSources().forEach(s -> s.setRays(SoundEngine.buildTree(map, s)));
-        map.getSoundSources().forEach(s -> s.decay());
-        for(Agent agent: map.getAgents())
-        {
-            agent.clearHeard();
-            map.getSoundSources().forEach(s -> agent.addHeard(s.heard(agent)));
-        }
-
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
         map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
-        if(captureEnabled)
-            map.getAgents().forEach(a -> map.checkForCapture(a));
-        map.updateStates();
 
         for (Agent a : map.getAgents())
         {
             Vector startPoint = a.getPosition();
-            Move move = a.move();
-            Vector endPoint = startPoint.add(move.getDeltaPos());
+            Vector endPoint = startPoint.add(a.move().getDeltaPos());
 
             Vector teleportTo = checkTeleport(startPoint, endPoint);
             if (teleportTo != null)
             {
                 a.updateLocation(teleportTo);
-                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
-                renderer.addTrail(new Trail(teleportTo, tics));
             }
             else if (legalMove(startPoint, endPoint) &&
                     legalMove(a, endPoint) &&
                     legalMove(a, startPoint) && legalMove(a, startPoint, endPoint))
             {
-                if(!a.getPosition().equals(endPoint))
-                {
-                    map.addSoundSource(endPoint, a.getType());
-                }
                 a.updateLocation(endPoint);
-                a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
-                renderer.addTrail(new Trail(endPoint, tics));
             }
             else
             {
@@ -88,39 +86,11 @@ public class GameEngine
             }
         }
         tics++;
-        renderer.render();
-        map.garbageCollection();
     }
 
-    public void handleKey(KeyEvent e)
+    private boolean complete()
     {
-        if(e.getCharacter().equals(" "))
-            pausePlay();
-
-        if(map.getHuman() != null)
-        {
-            switch(e.getCharacter())
-            {
-                case "W" -> map.getHuman().sprint(new Vector(0, -1));
-                case "S" -> map.getHuman().sprint(new Vector(0, 1));
-                case "A" -> map.getHuman().sprint(new Vector(-1, 0));
-                case "D" -> map.getHuman().sprint(new Vector(1, 0));
-                case "w" -> map.getHuman().walk(new Vector(0, -1));
-                case "s" -> map.getHuman().walk(new Vector(0, 1));
-                case "a" -> map.getHuman().walk(new Vector(-1, 0));
-                case "d" -> map.getHuman().walk(new Vector(1, 0));
-                case "q" -> map.getHuman().rotateLeft();
-                case "e" -> map.getHuman().rotateRight();
-            }
-        }
-    }
-
-    public void pausePlay()
-    {
-        if(timeline.getStatus()== Animation.Status.RUNNING)
-            timeline.pause();
-        else
-            timeline.play();
+        return  map.percentageComplete(Type.GUARD) > 0.85;
     }
 
     private Vector checkTeleport(Vector start, Vector end)
@@ -165,5 +135,17 @@ public class GameEngine
                 return false;
         }
         return true;
+    }
+
+    private void updatePercentageBar(double percent)
+    {
+        StringBuilder bar = new StringBuilder();
+        bar.append(test_name);
+        for(double d = 0; d < percent; d += 0.01)
+        {
+            bar.append("#");
+        }
+        bar.append(" ").append(percent).append("%");
+        System.out.print("\r" + bar);
     }
 }

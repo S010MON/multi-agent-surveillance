@@ -9,7 +9,7 @@ public abstract class FurnitureFactory
 {
     public static Furniture make(SettingsObject object)
     {
-        Furniture furniture = new FurnitureBase();
+        Furniture furniture = new FurnitureBase(object.getType());
         furniture.addBoundaries(BoundaryFactory.make(object));
         furniture.addSoundBoundaries(SoundBoundaryFactory.make(object));
         furniture.setTexture(TextureFactory.make(object.getType(), object.getRect()));
