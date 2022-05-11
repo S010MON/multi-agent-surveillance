@@ -17,8 +17,9 @@ public class Capture extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
-    private Vector intruderPos;
     private ArrayList<Vector> positionHistory = new ArrayList<>();
+    private boolean captureComplete = false;
+    private Vector intruderPos;
     private int counter;
 
     /**
@@ -34,7 +35,6 @@ public class Capture extends AgentImp
     {
         super(position, direction, radius, type);
         this.intruderPos = intruderPos;
-        initializeCapturing();
     }
 
     /* Constructor for testing */
@@ -43,14 +43,13 @@ public class Capture extends AgentImp
         super(position, direction, radius, type);
     }
 
-    /**
-     * Starts the capturing agent and loops until state complete.
-     */
-    private void initializeCapturing()
+    @Override
+    public Move move()
     {
-        while(!maxTicsReached())
+        // TODO add check for move failure and add code to resolve such a situation...
+
+        if(!maxTicsReached() && !captureComplete)
         {
-            updateCounter();
             if(isIntruderSeen())
             {
                 addPositionHistory(intruderPos);
@@ -61,15 +60,11 @@ public class Capture extends AgentImp
             {
                 findAllPossiblePositions();
             }
-            Move nextMove = nextMove(findTarget());
-            // TODO moving implemented
+            updateCounter();
+            return nextMove(findTarget());
         }
-    }
-
-    @Override
-    public Move move()
-    {
-        return new Move(new Vector(), new Vector());
+        // TODO state change back to ACO if 'if' is false...
+        return null;
     }
 
     @Override
@@ -179,7 +174,7 @@ public class Capture extends AgentImp
     }
 
     /**
-     * TODO
+     * TODO decide and return the next move...
      *
      * @param target the vector location to move towards.
      *
@@ -187,8 +182,6 @@ public class Capture extends AgentImp
      */
     private Move nextMove(Vector target)
     {
-        // Decides on the best next move towards the target position. (Will be implemented when new World graph
-        // implementation is understood).
         return null;
     }
 
