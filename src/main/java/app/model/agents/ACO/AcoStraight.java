@@ -11,9 +11,8 @@ public class AcoStraight extends AcoAgent
 {
     @Getter private static int acoAgentCount;
     @Getter private static int acoMoveCount;
-
-    @Setter private double momentumHeuristic = 1.0;
-    @Setter private Vector momentumContinuity = new Vector();
+    @Setter protected double momentumHeuristic = 1.0;
+    @Setter protected Vector momentumContinuity = new Vector();
 
 
     public AcoStraight(Vector position, Vector direction, double radius, Type type)
@@ -64,6 +63,17 @@ public class AcoStraight extends AcoAgent
         previousPosition = position;
         previousMove = new Move(direction, movement);
         return new Move(direction, movement);
+    }
+
+    @Override
+    protected void evaporateProcess()
+    {
+        acoMoveCount ++;
+        if(acoMoveCount >= acoAgentCount)
+        {
+            world.evaporateWorld();
+            acoMoveCount = acoMoveCount - acoAgentCount;
+        }
     }
 
     private boolean momentumContinuityPossible()

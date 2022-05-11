@@ -315,7 +315,7 @@ public class AcoAgent extends AgentImp
     }
 
     //World (SWARM memory)
-    private void evaporateProcess()
+    protected void evaporateProcess()
     {
         acoMoveCount ++;
         if(acoMoveCount >= acoAgentCount)

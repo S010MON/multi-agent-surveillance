@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Universe;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +12,28 @@ import java.util.ArrayList;
 
 public class AcoRanking extends AcoAgent
 {
+    @Getter private static int acoAgentCount;
+    @Getter private static int acoMoveCount;
     @Getter private ArrayList<Double> moveRanking = new ArrayList<>();
     @Setter private double stochasticHeuristic = 0.20;
 
     public AcoRanking(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+    }
+
+    @Override
+    protected void initializeWorld()
+    {
+        Universe.init(type, distance);
+        world = new AcoWorld(Universe.getMemoryGraph(type));
+        world.add_or_adjust_Vertex(position);
+
+        pheromoneSenseDirections();
+        tgtDirection = direction.copy();
+        previousMove = new Move(direction, new Vector());
+        previousPosition = position;
+        acoAgentCount ++;
     }
 
     @Override
@@ -92,5 +109,16 @@ public class AcoRanking extends AcoAgent
         possibleMovements.clear();
         moveRanking.clear();
         shortTermMemory.clear();
+    }
+
+    @Override
+    protected void evaporateProcess()
+    {
+        acoMoveCount ++;
+        if(acoMoveCount >= acoAgentCount)
+        {
+            world.evaporateWorld();
+            acoMoveCount = acoMoveCount - acoAgentCount;
+        }
     }
 }
