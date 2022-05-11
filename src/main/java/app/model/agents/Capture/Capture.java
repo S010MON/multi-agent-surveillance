@@ -145,12 +145,34 @@ public class Capture extends AgentImp
             for(Vector v : beliefSet)
                 return v;
 
-        // Currently, returning the closest point in the belief set to us. (Will improve this and add more heuristics)
-        return closestLocationInArray(new ArrayList<>(beliefSet), position);
+        // Finds the centre of the belief region.
+        Vector centre = findCentreOfRegion(new ArrayList<>(beliefSet));
+
+        // Targets location closest to the centre.
+        return closestLocationInArray(new ArrayList<>(beliefSet), centre);
     }
 
     /**
-     * Finds closest vector to given point.
+     * Finds centre of the belief region denoted by the belief set.
+     *
+     * @param beliefRegion The belief set.
+     *
+     * @return The centre of the region as a vector.
+     */
+    private Vector findCentreOfRegion(ArrayList<Vector> beliefRegion)
+    {
+        double totalX = 0;
+        double totalY = 0;
+        for(Vector location : beliefRegion)
+        {
+            totalX += location.getX();
+            totalY += location.getY();
+        }
+        return new Vector(totalX/beliefRegion.size(), totalY/beliefRegion.size());
+    }
+
+    /**
+     * Finds the closest vector to given point.
      *
      * @param locations Array of locations.
      * @param pos Position to compare to.

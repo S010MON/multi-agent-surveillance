@@ -80,11 +80,14 @@ public class CaptureAgentTest
 
         assertEquals(target, new Vector(50, 50));
 
-        bSet.add(new Vector(20, 40));
-        bSet.add(new Vector(60, 70));
-        bSet.add(new Vector(15, 15));
+        bSet.clear();
+        bSet.add(new Vector(10, 10));
+        bSet.add(new Vector(10, 20));
+        bSet.add(new Vector(20, 10));
+        bSet.add(new Vector(20, 20));
+        bSet.add(new Vector(13, 13));
         agent1.setBeliefSet(bSet);
         Vector target2 = agent1.findTarget();
-        assertEquals(target2, new Vector(15, 15));
+        assertEquals(target2, new Vector(13, 13));
     }
 }
