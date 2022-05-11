@@ -3,8 +3,6 @@ package app.model.agents.ACO;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.Universe;
-import lombok.Getter;
 import lombok.Setter;
 
 public class AcoStraight extends AcoAgent
