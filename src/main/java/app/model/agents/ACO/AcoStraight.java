@@ -53,7 +53,7 @@ public class AcoStraight extends AcoAgent
         return new Move(direction, movement);
     }
 
-    private boolean momentumContinuityPossible()
+    protected boolean momentumContinuityPossible()
     {
         return possibleMovements.contains(momentumContinuity);
     }

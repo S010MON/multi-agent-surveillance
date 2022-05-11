@@ -28,6 +28,7 @@ public class AcoAgent extends AgentImp
     @Getter @Setter protected int distance = 20;
     @Getter @Setter protected Move previousMove;
     protected Vector previousPosition;
+    @Getter protected Queue<Vector> turnQueue = new LinkedList<>();
 
 
     public AcoAgent(Vector position, Vector direction, double radius, Type type)
@@ -158,12 +159,30 @@ public class AcoAgent extends AgentImp
 
     public Move makeMove()
     {
+        avoidSpiral();
         Vector movement = possibleMovements.get(randomGenerator.nextInt(possibleMovements.size()));
 
+        if(movement != previousMove.getDeltaPos())
+        {
+            turnQueue.add(movement);
+        }
         direction = movement.normalise();
         previousPosition = position;
         previousMove = new Move(direction, movement);
         return new Move(direction, movement);
+    }
+
+    protected void avoidSpiral()
+    {
+        if(turnQueue.size() == 4)
+        {
+            Vector headOfQueue = turnQueue.remove();
+            if(possibleMovements.contains(headOfQueue) && possibleMovements.size() >= 2)
+            {
+                possibleMovements.remove(headOfQueue);
+                turnQueue.clear();
+            }
+        }
     }
 
     /* Smell */
