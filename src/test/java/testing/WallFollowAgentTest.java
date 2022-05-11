@@ -10,6 +10,7 @@ import app.model.Type;
 import app.model.agents.MemoryGraph;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
+
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
@@ -31,7 +32,7 @@ public class WallFollowAgentTest
     Vector initialDirection = new Vector(0,1);
     double moveLen = 75.0;
     WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
-    private app.model.agents.WallFollow.WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+    private WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test
     void testAgentDirectionAngle()

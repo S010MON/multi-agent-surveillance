@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileParserTest
 {
+    @Disabled
     @Test void testCreationOfSettings()
     {
         Settings s = FileManager.loadSettings("src/test/resources/mytest.txt");
@@ -70,6 +71,7 @@ public class FileParserTest
         assertEquals("soundSource", s.getFurniture().get(13).getType().label);
     }
 
+    @Disabled
     @Test void testCreationOfSettingsNewMapWithoutComments()
     {
         Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 without comments.txt");
@@ -95,6 +97,7 @@ public class FileParserTest
         assertEquals("teleport", s.getFurniture().get(6).getType().label);
     }
 
+    @Disabled
     @Test void testCreationOfSettingsNewMapWithComments()
     {
         Settings s = FileManager.loadSettings("src/test/resources/examinermap_phase1 with comments.txt");
