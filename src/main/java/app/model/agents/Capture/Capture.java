@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Capture extends AgentImp
 
@@ -21,7 +20,7 @@ public class Capture extends AgentImp
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     @Getter private VectorSet shortTermMemory = new VectorSet();
     private ArrayList<Vector> positionHistory = new ArrayList<>();
-    private Move preMove;
+    private Move prevMove;
     private boolean captureComplete = false;
     private Vector intruderPos;
     private int counter;
@@ -65,15 +64,15 @@ public class Capture extends AgentImp
             // TODO state change back to ACO if 'if' is false...
             if(DEBUG) System.out.println("Max Tics Reached");
         }
-        preMove = nextMove(findTarget());
-        return preMove;
+        setShortTermMemory();
+        return nextMove(findTarget());
     }
 
     public void updateWorld(){
         if(isIntruderSeen())
         {
             if(DEBUG) System.out.println("Seen");
-            addPositionHistory(intruderPos);
+            positionHistory.add(intruderPos);
             beliefSet.clear();
             beliefSet.add(intruderPos);
         }
@@ -87,14 +86,12 @@ public class Capture extends AgentImp
 
     public Move shortTermMemory()
     {
-        shortTermMemory.remove(position.add(preMove.getDeltaPos()));
+        shortTermMemory.remove(position.add(prevMove.getDeltaPos()));
         Vector wantedMove = closestLocationInArray(new ArrayList<>(shortTermMemory), findTarget());
-//
-//        Vector wantedMove = shortTermMemory[0];
         Vector deltaPos = wantedMove.sub(position);
         Vector direction = deltaPos.normalise();
-        preMove = new Move(direction,deltaPos);
-        return preMove;
+        prevMove = new Move(direction, deltaPos);
+        return new Move(direction, deltaPos);
     }
 
     public void setShortTermMemory()
@@ -128,12 +125,6 @@ public class Capture extends AgentImp
         return seen;
     }
 
-    private void addPositionHistory(Vector curPos)
-    {
-        positionHistory.add(curPos);
-    }
-
-
     /**
      * Will loop through belief set and add all the next possible positions to the set.
      * Only unique positions are stored.
@@ -145,9 +136,18 @@ public class Capture extends AgentImp
         {
             newLocations.addAll(findAllPossiblePositions(location));
         }
+
+        //checkLocationsVisible(newLocations); TODO this method call reduces performance significantly...
         beliefSet.addAll(newLocations);
     }
 
+    /**
+     * Returns the 4 cardinal locations reachable in one move.
+     *
+     * @param location Centre location to calculate from.
+     *
+     * @return The set of 4 vectors.
+     */
     public VectorSet findAllPossiblePositions(Vector location)
     {
         VectorSet newLocations = new VectorSet();
@@ -234,7 +234,7 @@ public class Capture extends AgentImp
     }
 
     /**
-     * TODO decide and return the next move...
+     * Chooses the cardinal movement which gets the agent closer to the target.
      *
      * @param target the vector location to move towards.
      * @return The next Move.
@@ -245,8 +245,10 @@ public class Capture extends AgentImp
         VectorSet possibleMoves = findAllPossiblePositions(position);
 
         Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
-        direction = wantedMove.normalise(); // GET cardinal directions
-        return new Move(direction, wantedMove); // Calculate change in position for wanted move.
+        Vector changeInPos = wantedMove.sub(position);
+        direction = changeInPos.normalise();
+        prevMove = new Move(direction, changeInPos);
+        return new Move(direction, changeInPos);
     }
 
     private boolean maxTicsReached()
