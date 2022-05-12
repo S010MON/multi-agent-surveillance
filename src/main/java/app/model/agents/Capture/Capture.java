@@ -35,6 +35,8 @@ public class Capture extends AgentImp
     {
         super(position, direction, radius, type);
         this.intruderPos = intruderPos;
+        beliefSet.add(intruderPos);
+        positionHistory.add(intruderPos);
     }
 
     /* Constructor for testing */
@@ -52,19 +54,25 @@ public class Capture extends AgentImp
         {
             if(isIntruderSeen())
             {
+                System.out.println("Seen");
                 addPositionHistory(intruderPos);
                 beliefSet.clear();
                 beliefSet.add(intruderPos);
             }
             else
             {
+                System.out.println("Not seen");
                 findAllPossiblePositions();
             }
             updateCounter();
             return nextMove(findTarget());
         }
-        // TODO state change back to ACO if 'if' is false...
-        return null;
+        else
+        {
+            // TODO state change back to ACO if 'if' is false...
+            System.out.println("Max Tics Reached");
+        }
+        return new Move(new Vector(10, 10), new Vector(10, 10));
     }
 
     @Override
@@ -114,7 +122,7 @@ public class Capture extends AgentImp
             newLocations.add(new Vector(location.getX(), location.getY() - getMaxWalk())); // West
             newLocations.add(new Vector(location.getX() - getMaxWalk(), location.getY())); // South
 
-            checkLocationsVisible(newLocations);
+            //checkLocationsVisible(newLocations);
         }
         beliefSet.addAll(newLocations);
     }
@@ -204,7 +212,17 @@ public class Capture extends AgentImp
      */
     private Move nextMove(Vector target)
     {
-        return null;
+        // Populate with possible moves.
+        ArrayList<Vector> possibleMoves = new ArrayList<>();
+
+        possibleMoves.add(new Vector(position.getX(), position.getY() + getMaxWalk())); // North
+        possibleMoves.add(new Vector(position.getX() + getMaxWalk(), position.getY())); // East
+        possibleMoves.add(new Vector(position.getX(), position.getY() - getMaxWalk())); // West
+        possibleMoves.add(new Vector(position.getX() - getMaxWalk(), position.getY())); // South
+
+        Vector wantedMove = closestLocationInArray(possibleMoves, target);
+        direction = wantedMove.normalise();
+        return new Move(direction, wantedMove);
     }
 
     private boolean maxTicsReached()
