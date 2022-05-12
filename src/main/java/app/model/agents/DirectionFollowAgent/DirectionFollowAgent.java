@@ -140,7 +140,7 @@ public class DirectionFollowAgent extends AgentImp
                 System.out.println("--------------");
             }
 
-            return new Move(newDirection, targetRay.direction().scale(dist));
+            return new Move(newDirection, targetRay.direction().scale(dist-radius));
         }
     }
 
@@ -148,8 +148,8 @@ public class DirectionFollowAgent extends AgentImp
     {
         if(moveFailed)
         {
-            System.out.println("\nmove failed, no wallDetected in direction: " + noWallDetected(previousMove.getEndDir().getAngle()) +"\n");
             if(DEBUG) {
+                System.out.println("\nmove failed, no wallDetected in direction: " + noWallDetected(previousMove.getEndDir().getAngle()) +"\n");
                 System.out.println("previous move failed, state: " +internalState);
                 System.out.println("Move: " +previousMove.toString());
             }
