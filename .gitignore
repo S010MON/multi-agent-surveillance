@@ -6,3 +6,4 @@
 # Project exclude paths
 /.gradle/
 /logs
+/src/main/resources/best_Map
