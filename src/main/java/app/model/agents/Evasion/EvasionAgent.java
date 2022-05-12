@@ -1,5 +1,6 @@
 package app.model.agents.Evasion;
 
+import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
@@ -52,6 +53,16 @@ public class EvasionAgent extends AgentImp
     public Move moveAway(){
         // TODO modify!
         return new Move(new Vector(), new Vector());
+    }
+
+    private Vector findFirstGuardRay(){
+        for(Ray ray: view)
+        {
+            if(ray.getType() == Type.GUARD){
+                return ray.direction();
+            }
+        }
+        return null;
     }
 
 
