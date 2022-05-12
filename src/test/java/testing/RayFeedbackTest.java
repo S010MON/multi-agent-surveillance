@@ -12,15 +12,16 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class RayFeedbackTest
 {
     GraphicsEngine ge = new GraphicsEngine(180);
     Vector agent1Pos = new Vector(10, 10);
-    Vector agent1Dir = new Vector(1, 0);
+    Vector agent1Dir = new Vector(0, 1);
     Vector agent2Pos = new Vector(10, 20);
-    Vector agent2Dir = new Vector(-1, 0);
+    Vector agent2Dir = new Vector(0, -1);
 
     Human agent1 = new Human(agent1Pos, agent1Dir, 1, Type.GUARD);
     Human agent2 = new Human(agent2Pos, agent2Dir, 1, Type.INTRUDER);
@@ -81,6 +82,28 @@ public class RayFeedbackTest
             }
         }
          */
+    }
+
+    @Test void seeIntruderOneRay()
+    {
+        ArrayList<Agent> agents = new ArrayList<>();
+        agents.add(agent1);
+        agents.add(agent2);
+
+        Ray ray = new Ray(agent1Pos, new Vector(10, 30));
+
+        assertNotNull(ge.getIntersection(ray, agents, agent1));
+    }
+
+    @Test void seeIntruderTwoRays()
+    {
+        ArrayList<Agent> agents = new ArrayList<>();
+        agents.add(agent1);
+        agents.add(agent2);
+
+        Ray ray = new Ray(agent1Pos, new Vector(10, 30));
+
+        assertNotNull(ge.getIntersection(ray, agents, agent1));
     }
 
     @Test void seeGuard()
