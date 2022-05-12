@@ -6,6 +6,7 @@ import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.*;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.Capture.Capture;
 import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.*;
@@ -67,7 +68,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoAgent(srt, dir, 10, Type.GUARD);
+            Agent guard = new Capture(srt, dir, 10, Type.GUARD,new Vector(10,10));
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);

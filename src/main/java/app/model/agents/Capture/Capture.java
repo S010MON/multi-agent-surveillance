@@ -16,10 +16,12 @@ import java.util.HashMap;
 public class Capture extends AgentImp
 
 {
+    private final boolean DEBUG = true;
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     @Getter private VectorSet shortTermMemory = new VectorSet();
     private ArrayList<Vector> positionHistory = new ArrayList<>();
+    private Move preMove;
     private boolean captureComplete = false;
     private Vector intruderPos;
     private int counter;
@@ -50,50 +52,54 @@ public class Capture extends AgentImp
     @Override
     public Move move()
     {
-        // TODO add check for move failure and add code to resolve such a situation...
-
-        if(moveFailed)
-        {
-//            return shortTermMemory();
-        } else
-        {
-            shortTermMemory.clear();
-        }
-
         if(!maxTicsReached() && !captureComplete)
         {
-            if(isIntruderSeen())
-            {
-                System.out.println("Seen");
-                addPositionHistory(intruderPos);
-                beliefSet.clear();
-                beliefSet.add(intruderPos);
-                setShortTermMemory();
-            } else
-            {
-                System.out.println("Not seen");
-                updateBeliefSet();a
+            updateWorld();
+            if(moveFailed){
+                return shortTermMemory();
+            }else {
+                shortTermMemory.clear();
             }
-            updateCounter();
-            return nextMove(findTarget());
         } else
         {
             // TODO state change back to ACO if 'if' is false...
-            System.out.println("Max Tics Reached");
+            if(DEBUG) System.out.println("Max Tics Reached");
         }
-        return new Move(new Vector(10, 10), new Vector(10, 10));
+        preMove = nextMove(findTarget());
+        return preMove;
+    }
+
+    public void updateWorld(){
+        if(isIntruderSeen())
+        {
+            if(DEBUG) System.out.println("Seen");
+            addPositionHistory(intruderPos);
+            beliefSet.clear();
+            beliefSet.add(intruderPos);
+        }
+        else
+        {
+            if(DEBUG) System.out.println("Not seen");
+            updateBeliefSet();
+        }
+        updateCounter();
     }
 
     public Move shortTermMemory()
     {
-        Move nextMove = new Move();
-
-        return null;
+        shortTermMemory.remove(position.add(preMove.getDeltaPos()));
+        Vector wantedMove = closestLocationInArray(new ArrayList<>(shortTermMemory), findTarget());
+//
+//        Vector wantedMove = shortTermMemory[0];
+        Vector deltaPos = wantedMove.sub(position);
+        Vector direction = deltaPos.normalise();
+        preMove = new Move(direction,deltaPos);
+        return preMove;
     }
 
     public void setShortTermMemory()
     {
-        shortTermMemory.addAll(findAllPossiblePositions(intruderPos));
+        shortTermMemory.addAll(findAllPossiblePositions(position));
     }
 
     @Override
@@ -236,16 +242,11 @@ public class Capture extends AgentImp
     private Move nextMove(Vector target)
     {
         // Populate with possible moves.
-        ArrayList<Vector> possibleMoves = new ArrayList<>();
+        VectorSet possibleMoves = findAllPossiblePositions(position);
 
-        possibleMoves.add(new Vector(position.getX(), position.getY() + getMaxWalk())); // North
-        possibleMoves.add(new Vector(position.getX() + getMaxWalk(), position.getY())); // East
-        possibleMoves.add(new Vector(position.getX(), position.getY() - getMaxWalk())); // West
-        possibleMoves.add(new Vector(position.getX() - getMaxWalk(), position.getY())); // South
-
-        Vector wantedMove = closestLocationInArray(possibleMoves, target);
-        direction = wantedMove.normalise();
-        return new Move(direction, wantedMove);
+        Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
+        direction = wantedMove.normalise(); // GET cardinal directions
+        return new Move(direction, wantedMove); // Calculate change in position for wanted move.
     }
 
     private boolean maxTicsReached()
