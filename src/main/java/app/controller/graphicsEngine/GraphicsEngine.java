@@ -52,6 +52,7 @@ public class GraphicsEngine
             {
                 Vector currentV = obj.intersection(r);
                 double dist = r.getU().dist(currentV);
+                // if(dist < closestDist && currentV.getAngle() == r.angle()) How is was previously
                 if(dist < closestDist)
                 {
                     intersection = currentV;
