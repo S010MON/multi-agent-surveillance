@@ -5,6 +5,7 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.Agent;
 import app.model.agents.Human;
@@ -82,7 +83,7 @@ public class Map
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
             // TODO Change Back to WF a
-            Agent intruder = new EvasionAgent(srt, dir, 10, Type.INTRUDER);
+            Agent intruder = new EvasionAgent(srt, dir, 10, Type.INTRUDER, EvasionStrategy.AWAY);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);

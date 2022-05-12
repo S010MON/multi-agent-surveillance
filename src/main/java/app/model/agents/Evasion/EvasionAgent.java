@@ -4,11 +4,15 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.WallFollow.WallFollowAgent;
 
 public class EvasionAgent extends AgentImp
 {
-    public EvasionStrategy strategy;
+    private EvasionStrategy strategy;
+    private Move zeroMove = new Move(new Vector(), new Vector());
+    private boolean guardInView = true;
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
@@ -39,23 +43,49 @@ public class EvasionAgent extends AgentImp
 
     private Move moveRandom(){
         int theta = (int) (Math.random() * 360);
-        direction = new Vector(0, 1).rotate(theta);
-        Vector mov = new Vector(maxSprint, maxSprint).rotate(theta);
+        Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        return new Move(direction, mov);
+        return new Move(direction, randomDirection.scale(maxSprint));
     }
 
     private Move moveRandomDirected(){
-        // TODO modify!
-        return new Move(new Vector(), new Vector());
-    }
+        Vector guardDirection = findFirstGuardDirection();
+
+        if(guardDirection == null){
+            guardInView = false;
+            return zeroMove;
+        }
+
+        Vector flippedDirection = guardDirection.rotate(180);
+
+        int theta = (int) (Math.random() * 360);
+        Vector randomDirection = new Vector(0, 1).rotate(theta);
+
+        // randomness should be a number between 0 and 1
+        Double randomness = 0.3;
+
+        Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
+
+        return new Move(flippedDirection, mixedDirection.scale(maxSprint));    }
 
     public Move moveAway(){
-        // TODO modify!
-        return new Move(new Vector(), new Vector());
+
+        // need condition on this value being null
+        Vector guardDirection = findFirstGuardDirection();
+
+        if(guardDirection == null){
+            guardInView = false;
+            return zeroMove;
+        }
+
+        Vector flippedDirection = guardDirection.rotate(180);
+
+        return new Move(flippedDirection, flippedDirection.scale(maxSprint));
     }
 
-    private Vector findFirstGuardRay(){
+    private Vector findFirstGuardDirection(){
+        // we dont have a view range yet, just a viewcone for now
+
         for(Ray ray: view)
         {
             if(ray.getType() == Type.GUARD){
@@ -65,5 +95,12 @@ public class EvasionAgent extends AgentImp
         return null;
     }
 
+    @Override public Agent nextState()
+    {
+        if(guardInView){
+            return this;
+        }
 
+        return new WallFollowAgent(position, direction, radius, type);
+    }
 }
