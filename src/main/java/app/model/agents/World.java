@@ -2,6 +2,7 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
+import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
@@ -9,6 +10,9 @@ import java.util.HashMap;
 
 public abstract class World
 {
+    @Getter private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();  // pheromone 2
+    @Getter private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();  // pheromone 2
+
     public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
 
     public World(MemoryGraph G)
@@ -94,5 +98,5 @@ public abstract class World
         G.evaporateWorld();
     }
 
-
+    public void markWallAsCovered(GraphCell cell, Vector position) {}
 }

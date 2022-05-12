@@ -8,6 +8,10 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class WfWorld extends World
 {
+    // TODO mark covered walls here instead of the agent class, so all agents can know which walls are already followed
+    //  possibly just do markWallAsCovered() here
+    //  and add the horizontal.. and vertical.. variables here
+
     public WfWorld(MemoryGraph G)
     {
         super(G);
@@ -54,6 +58,21 @@ public class WfWorld extends World
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) G.addEdge(currentCell, neighbouringCell);
                 G.setEdgeWeight(edge, G.travelDistance);
             }
+        }
+    }
+
+    @Override
+    public void markWallAsCovered(GraphCell cell, Vector agentPos)
+    {
+        if (cell.getX() == getVertexAt(agentPos).getX()
+                && !getHorizontalWallsCovered().contains(cell.getX()))
+        {
+            getHorizontalWallsCovered().add(cell.getX());
+        }
+        if (cell.getY() == getVertexAt(agentPos).getY()
+                && !getVerticalWallsCovered().contains(cell.getY()))
+        {
+            getVerticalWallsCovered().add(cell.getY());
         }
     }
 }

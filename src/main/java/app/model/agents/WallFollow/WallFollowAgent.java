@@ -4,12 +4,13 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
+import app.model.Type;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
-import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
@@ -37,8 +38,6 @@ public class WallFollowAgent extends AgentImp
     private GraphCell currentTargetVertex = null;
     private List<GraphCell> currentPathToNextVertex = null;
     private ArrayList<GraphCell> inaccessibleCells = new ArrayList<>();
-    private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();  // pheromone 2
-    private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();  // pheromone 2
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
@@ -65,7 +64,6 @@ public class WallFollowAgent extends AgentImp
     {
         Universe.init(type, (int)moveLength);
         world = new WfWorld(Universe.getMemoryGraph(type));
-
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
@@ -79,7 +77,7 @@ public class WallFollowAgent extends AgentImp
         else if following path and no unexplored wall found
             get move based on path
         else if found unexplored wall while following path
-            start wall following again
+            start wall following again  // TODO problem: not doing this
         else if found initial wall following vertex or stuck in weird movement
             run heuristics algorithm
         else if no wall encountered yet
@@ -163,11 +161,13 @@ public class WallFollowAgent extends AgentImp
         }
         else if (currentPathToNextVertex != null && foundUnexploredWallToFollow())
         {
+            System.out.println("Found unexplored wall to follow");
             currentPathToNextVertex = null;
             currentTargetVertex = null;
             wallEncountered = true;
             initialVertexFound = false;
             hasLeftInitialWallFollowPos = false;
+            initialWallFollowPos = world.getVertexAt(position);
             Move wallFollowMove = runWallFollowAlgorithm();
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
@@ -220,6 +220,7 @@ public class WallFollowAgent extends AgentImp
         }
         else
         {
+            // TODO check that not following covered wall? unless it's for dijkstra's
             Move wallFollowMove = runWallFollowAlgorithm();
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
@@ -244,6 +245,8 @@ public class WallFollowAgent extends AgentImp
      */
     public Move runWallFollowAlgorithm()
     {
+        System.out.println("agent pos: " + world.getVertexAt(position));
+        System.out.println("initial wall follow pos: " + initialWallFollowPos);
         Vector newMove = new Vector(0,0);
         Vector newDirection = direction;
         GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
@@ -271,7 +274,9 @@ public class WallFollowAgent extends AgentImp
             newMove = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
             movedForwardLast = true;
             lastTurn = TurnType.NO_TURN;
-            markWallAsCovered();
+            GraphCell cell = world.getVertexFromCurrent(world.getVertexAt(position),
+                    world.getDirectionStr(direction.getAngle()));
+            world.markWallAsCovered(cell,position);
         }
         else
         {
@@ -355,13 +360,13 @@ public class WallFollowAgent extends AgentImp
     {
         // currently takes into account shortest path length, direction relative to agent's and
         // how many neighbours also have unexplored cells
-        // TODO add weights to score components?
+        // TODO add weights to score components - HEURISTICS EXPERIMENTS
         double score;
         int shortestPathLength;
-        List<GraphCell> shortestPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex).getVertexList();
-        if (shortestPath != null)
+        GraphPath dijkstrasPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
+        if (dijkstrasPath != null)
         {
-            shortestPathLength = shortestPath.size();
+            shortestPathLength = dijkstrasPath.getVertexList().size();
         }
         else
         {
@@ -514,7 +519,7 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 1;
+        double anglePrecision = 2;
 
         // check that all rays start at the right position
         if (DEBUG)
@@ -596,28 +601,20 @@ public class WallFollowAgent extends AgentImp
         return true;
     }
 
-    public void markWallAsCovered()
-    {
-        // TODO implement pheromone smell here?
-        GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
-                world.getDirectionStr(direction.getAngle()));
-        if (forwardCell.getX() == world.getVertexAt(position).getX())
-        {
-            horizontalWallsCovered.add(forwardCell.getX());
-        }
-        if (forwardCell.getY() == world.getVertexAt(position).getY())
-        {
-            verticalWallsCovered.add(forwardCell.getY());
-        }
-    }
-
     private boolean foundUnexploredWallToFollow()
     {
+        System.out.println("Checking if found unexplored wall to follow");
         GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
                 world.getDirectionStr(direction.getAngle()));
-        return (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle()
-                && ((!horizontalWallsCovered.contains(forwardCell.getX()) && direction.getX() == 0)
-                || (!verticalWallsCovered.contains(forwardCell.getY()) && direction.getY() == 0)));
+        System.out.println("Wall detected: " + (!noWallDetected(direction.getAngle())));
+        System.out.println("Wall (if detected) is not in marked hor. walls: " + (!world.getHorizontalWallsCovered().contains(forwardCell.getX())));
+        System.out.println("Agent is perpendicular to hor. wall: " + (direction.getX() == 0));
+        System.out.println("Wall (if detected) is not in marked ver. walls: " + (!world.getVerticalWallsCovered().contains(forwardCell.getY())));
+        System.out.println("Agent is perpendicular to ver. wall: " + (direction.getY() == 0));
+
+        return (!noWallDetected(direction.getAngle())
+                && ((!world.getHorizontalWallsCovered().contains(forwardCell.getX()) && direction.getX() == 0)
+                || (!world.getVerticalWallsCovered().contains(forwardCell.getY()) && direction.getY() == 0)));
     }
 
     public Vector rotateAgentLeft()
