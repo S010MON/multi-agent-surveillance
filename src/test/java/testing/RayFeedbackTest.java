@@ -70,18 +70,6 @@ public class RayFeedbackTest
                 assertEquals(Type.INTRUDER, r.getType());
             }
         }
-
-        /*
-        boolean seeAgent = false;
-        for(Ray r : agent1.getView())
-        {
-            if(r.getType() == Type.INTRUDER)
-            {
-                seeAgent = true;
-            }
-        }
-        assertEquals(true, seeAgent);
-        */
     }
 
     @Test void seeGuard()
@@ -104,18 +92,6 @@ public class RayFeedbackTest
                 assertEquals(Type.GUARD, r.getType());
             }
         }
-
-        /*
-        boolean seeAgent = false;
-        for(Ray r : agent2.getView())
-        {
-            if(r.getType() == Type.GUARD)
-            {
-                seeAgent = true;
-            }
-        }
-        assertEquals(true, seeAgent);
-         */
     }
 
     @Test void seeNoAgents()
