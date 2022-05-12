@@ -75,13 +75,7 @@ public class DirectionFollowAgent extends AgentImp
     public Move move()
     {
         if(DEBUG) { System.out.println("\n\n new agent:" +this); }
-        if(moveFailed)
-        {
-            if(DEBUG) {
-                System.out.println("previous move failed, state: " +internalState);
-                System.out.println("Move: " +previousMove.toString()); }
-            return previousMove;
-        }
+
         if(position.dist(targetRay.getV())>targetRay.length())
         {
             if(DEBUG) { System.out.println("direction old targetRay: " +targetRay.direction().toString());}
@@ -101,6 +95,17 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followRay()
     {
+
+        if(moveFailed)
+        {
+            if(DEBUG) {
+                System.out.println("\nmove failed, no wallDetected in direction: " + noWallDetected(previousMove.getEndDir().getAngle()) +"\n");
+                System.out.println("previous move failed, state: " +internalState);
+                System.out.println("Move: " +previousMove.toString());
+            }
+        }
+
+
         // followRay assumes the start point is on the ray itself
         if(!direction.equals(targetRay.direction()))
         {
@@ -141,6 +146,17 @@ public class DirectionFollowAgent extends AgentImp
 
     private Move followWall()
     {
+        if(moveFailed)
+        {
+            System.out.println("\nmove failed, no wallDetected in direction: " + noWallDetected(previousMove.getEndDir().getAngle()) +"\n");
+            if(DEBUG) {
+                System.out.println("previous move failed, state: " +internalState);
+                System.out.println("Move: " +previousMove.toString());
+            }
+
+            return followGlassWall();
+        }
+
         if(!directions.contains(direction))
         {
             throw new RuntimeException("Agent is in followingWall state, but direction isn't cardinal");
@@ -173,7 +189,7 @@ public class DirectionFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 1;
+        double anglePrecision = 3;
 
         // check that all rays start at the right position
         if (DEBUG)
@@ -205,7 +221,10 @@ public class DirectionFollowAgent extends AgentImp
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
+                        {
+                            System.out.println("type:" + r.getType());
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        }
                         return false;
                     }
                 }
@@ -225,7 +244,10 @@ public class DirectionFollowAgent extends AgentImp
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
+                        {
+                            System.out.println("type:" + r.getType());
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        }
                         return false;
                     }
                 }
@@ -241,7 +263,10 @@ public class DirectionFollowAgent extends AgentImp
                     if(r.length() <= moveLength)
                     {
                         if(DEBUG)
+                        {
+                            System.out.println("type:" + r.getType());
                             System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
+                        }
                         return false;
                     }
                 }
@@ -253,6 +278,13 @@ public class DirectionFollowAgent extends AgentImp
                 "\n       direction angle: " + direction.getAngle()); }
 
         return true;
+    }
+
+    private Move followGlassWall()
+    {
+        lastTurn = wallTurn;
+        Vector newDirection = rotateAgentAsOppositeWallTurn();
+        return new Move(newDirection, new Vector(0,0));
     }
 
     public Vector getDirectionStartWallFollowing(Vector diagonalDirection)
@@ -302,7 +334,10 @@ public class DirectionFollowAgent extends AgentImp
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
             {
                 if (DEBUG)
-                    System.out.println("     WALL DETECTED! Distance: "+r.length()+", Ray Angle: " + rayAngle);
+                {
+                    System.out.println("type:" + r.getType());
+                    System.out.println("     WALL DETECTED! Distance: " + r.length() + ", Ray Angle: " + rayAngle);
+                }
                 return r.length();
             }
         }
