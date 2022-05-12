@@ -41,7 +41,7 @@ public class CaptureAgentTest
         VectorSet bSet = new VectorSet();
         bSet.add(new Vector(50, 50));
         agent1.setBeliefSet(bSet);
-        agent1.findAllPossiblePositions();
+        agent1.updateBeliefSet();
         VectorSet updatedBSet = agent1.getBeliefSet();
 
         ArrayList<Vector> list = new ArrayList<>(updatedBSet);
@@ -62,7 +62,7 @@ public class CaptureAgentTest
         testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), null));
         agent1.setView(testView);
 
-        agent1.findAllPossiblePositions();
+        agent1.updateBeliefSet();
         VectorSet updatedBSet = agent1.getBeliefSet();
         ArrayList<Vector> list = new ArrayList<>(updatedBSet);
 
