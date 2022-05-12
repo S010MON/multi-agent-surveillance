@@ -108,10 +108,10 @@ public class DirectionFollowAgent extends AgentImp
             return new Move(targetRay.direction(), new Vector(0,0));
         }
 
-        double dist = distanceToObstacle(targetRay.angle()) - radius;
+        Double dist = distanceToObstacle(targetRay.angle()) - radius;
 
 
-        if(Math.abs(dist) >= moveLength || dist<0){
+        if(Math.abs(dist) >= moveLength || dist!=null){
             if(DEBUG)
             {
                 System.out.println("No wall, keep following ray to target");
@@ -295,7 +295,7 @@ public class DirectionFollowAgent extends AgentImp
         throw new RuntimeException("wallTurn type not specified while in WallFollow state");
     }
 
-    private double distanceToObstacle(double rayAngle){
+    private Double distanceToObstacle(double rayAngle){
         if (DEBUG)
             System.out.println("distanceToObstacle method:");
         for (Ray r : view)
@@ -310,7 +310,7 @@ public class DirectionFollowAgent extends AgentImp
         if (DEBUG)
             System.out.println("     No wall detected with ray of angle: " + rayAngle);
 
-        return -1.0;
+        return null;
     }
 
 
