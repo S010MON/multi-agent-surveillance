@@ -74,7 +74,9 @@ public class GraphicsEngine
                 {
                     Vector currentV = agent.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if (dist < closestDist )
+                    //if (dist < closestDist && currentV.getAngle() == r.angle())
+                    //if (dist < closestDist && currentV.getAngle() == r.angle())
+                    if (dist < closestDist)
                     {
                         intersection = currentV;
                         closestDist = dist;

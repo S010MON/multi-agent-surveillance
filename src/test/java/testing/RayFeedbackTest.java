@@ -63,13 +63,14 @@ public class RayFeedbackTest
         agent1.updateView(ge.compute(map, agent1));
 
         boolean seeAgent = false;
-        for(Ray r : agent2.getView())
+        for(Ray r : agent1.getView())
         {
             if(r.getType() == Type.INTRUDER)
             {
                 seeAgent = true;
             }
         }
+        System.out.println(agent1.getView().size());
         assertEquals(true, seeAgent);
 
         /*
