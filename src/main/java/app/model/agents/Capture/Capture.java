@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Capture extends AgentImp
 
 {
+    private final boolean DEBUG = true;
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     private ArrayList<Vector> positionHistory = new ArrayList<>();
@@ -54,25 +55,24 @@ public class Capture extends AgentImp
         {
             if(isIntruderSeen())
             {
-                System.out.println("Seen");
+                if(DEBUG) System.out.println("Seen");
                 addPositionHistory(intruderPos);
                 beliefSet.clear();
                 beliefSet.add(intruderPos);
             }
             else
             {
-                System.out.println("Not seen");
+                if(DEBUG) System.out.println("Not seen");
                 findAllPossiblePositions();
             }
             updateCounter();
-            return nextMove(findTarget());
         }
         else
         {
             // TODO state change back to ACO if 'if' is false...
-            System.out.println("Max Tics Reached");
+            if(DEBUG) System.out.println("Max Tics Reached");
         }
-        return new Move(new Vector(10, 10), new Vector(10, 10));
+        return nextMove(findTarget());
     }
 
     @Override
@@ -221,8 +221,8 @@ public class Capture extends AgentImp
         possibleMoves.add(new Vector(position.getX() - getMaxWalk(), position.getY())); // South
 
         Vector wantedMove = closestLocationInArray(possibleMoves, target);
-        direction = wantedMove.normalise();
-        return new Move(direction, wantedMove);
+        direction = wantedMove.normalise(); // GET cardinal directions
+        return new Move(direction, wantedMove); // Calculate change in position for wanted move.
     }
 
     private boolean maxTicsReached()
