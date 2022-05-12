@@ -15,10 +15,17 @@ public class EvasionAgent extends AgentImp
     @Override
     public Move move()
     {
-        int theta = (int) (Math.random() * 360);
-        direction = new Vector(0, 1).rotate(theta);
-        Vector mov = new Vector(maxSprint, maxSprint).rotate(theta);
-
-        return new Move(direction, mov);
+        switch(strategy)
+        {
+            case AWAY -> {
+                return moveAway();
+            }
+            case RANDOMDIRECTED -> {
+                return  moveRandomDirected();
+            }
+            default -> {
+                return moveRandom();
+            }
+        }
     }
 }
