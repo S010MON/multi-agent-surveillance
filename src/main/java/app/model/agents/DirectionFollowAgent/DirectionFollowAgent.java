@@ -31,7 +31,6 @@ public class DirectionFollowAgent extends AgentImp
     private Ray targetRay;
     @Getter private InternalState internalState;
     private boolean DEBUG = false;
-    @Getter @Setter private double moveLength = 20;
     private TurnType lastTurn;
     private TurnType wallTurn;
 
