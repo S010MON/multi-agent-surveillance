@@ -111,7 +111,7 @@ public class DirectionFollowAgent extends AgentImp
         double dist = distanceToObstacle(targetRay.angle()) - radius;
 
 
-        if(Math.abs(dist) >= moveLength || dist<0){
+        if(Math.abs(dist) >= moveLength || Double.compare(dist, -1.0)==0){
             if(DEBUG)
             {
                 System.out.println("No wall, keep following ray to target");
