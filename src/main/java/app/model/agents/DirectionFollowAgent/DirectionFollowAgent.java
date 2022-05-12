@@ -104,7 +104,6 @@ public class DirectionFollowAgent extends AgentImp
                 System.out.println("previous move failed, state: " +internalState);
                 System.out.println("Move: " +previousMove.toString());
             }
-            //return previousMove;
         }
 
 
