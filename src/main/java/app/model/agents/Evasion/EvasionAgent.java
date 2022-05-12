@@ -11,7 +11,6 @@ import app.model.agents.WallFollow.WallFollowAgent;
 public class EvasionAgent extends AgentImp
 {
     private EvasionStrategy strategy;
-    private Move zeroMove = new Move(new Vector(), new Vector());
     private boolean guardInView = true;
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
@@ -49,20 +48,21 @@ public class EvasionAgent extends AgentImp
     }
 
     private Move moveRandomDirected(){
-        Vector guardDirection = findFirstGuardDirection();
-
-        if(guardDirection == null){
-            guardInView = false;
-            return zeroMove;
-        }
-
-        Vector flippedDirection = guardDirection.rotate(180);
+        // randomness should be a number between 0 and 1
+        Double randomness = 0.3;
 
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        // randomness should be a number between 0 and 1
-        Double randomness = 0.3;
+        Vector guardDirection = findFirstGuardDirection();
+
+        if(guardDirection == null){
+            // TODO this should flip to a new state
+            //guardInView = false;
+            return new Move(randomDirection, randomDirection.scale(maxSprint));
+        }
+
+        Vector flippedDirection = guardDirection.rotate(180);
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
@@ -74,8 +74,9 @@ public class EvasionAgent extends AgentImp
         Vector guardDirection = findFirstGuardDirection();
 
         if(guardDirection == null){
-            guardInView = false;
-            return zeroMove;
+            // TODO this should flip to a new state
+            // guardInView = false;
+            return new Move(direction, new Vector());
         }
 
         Vector flippedDirection = guardDirection.rotate(180);

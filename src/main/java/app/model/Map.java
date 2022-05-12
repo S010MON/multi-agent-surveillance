@@ -83,7 +83,7 @@ public class Map
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
             // TODO Change Back to WF a
-            Agent intruder = new EvasionAgent(srt, dir, 10, Type.INTRUDER, EvasionStrategy.AWAY);
+            Agent intruder = new EvasionAgent(srt, dir, 10, Type.INTRUDER, EvasionStrategy.RANDOMDIRECTED);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
