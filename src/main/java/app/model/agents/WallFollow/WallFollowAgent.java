@@ -1,6 +1,7 @@
 package app.model.agents.WallFollow;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Angle;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
@@ -30,6 +31,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
+    private double visionDistance = 30;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
     private boolean initialVertexFound = false;  // pheromone 1
@@ -46,6 +48,7 @@ public class WallFollowAgent extends AgentImp
     @Getter private GraphCell prevAgentVertex = null;
     private boolean hasLeftInitialWallFollowPos = false;
     private GraphCell initialWallFollowPos = null;
+    private boolean WALLDETECTION_DEBUG = false;
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
@@ -152,32 +155,32 @@ public class WallFollowAgent extends AgentImp
         }
         else if (currentPathToNextVertex != null && !foundUnexploredWallToFollow())
         {
-            if (DEBUG) {
-                System.out.println("Following path.");
-            }
+            System.out.println("Following path.");
             Move pathMove = getMoveBasedOnPath();
             deltaPos = pathMove.getDeltaPos();
             newDirection = pathMove.getEndDir();
         }
-        else if (currentPathToNextVertex != null && foundUnexploredWallToFollow())
+        else if ((currentPathToNextVertex != null || initialVertexFound) && foundUnexploredWallToFollow())  // todo add the case of stuck movement?
         {
             System.out.println("Found unexplored wall to follow");
             currentPathToNextVertex = null;
             currentTargetVertex = null;
+            Move wallFollowMove = runWallFollowAlgorithm();
+            deltaPos = wallFollowMove.getDeltaPos();
+            newDirection = wallFollowMove.getEndDir();
             wallEncountered = true;
             initialVertexFound = false;
             hasLeftInitialWallFollowPos = false;
             initialWallFollowPos = world.getVertexAt(position);
-            Move wallFollowMove = runWallFollowAlgorithm();
-            deltaPos = wallFollowMove.getDeltaPos();
-            newDirection = wallFollowMove.getEndDir();
         }
         else if (initialVertexFound || agentInStuckMovement())
         {
+            // TODO only do heuristics if haven't found unexplored wall to follow
             if (DEBUG) {
                 if (initialVertexFound) System.out.println("Found initial vertex");
                 if (agentInStuckMovement()) System.out.println("Agent stuck in movement");
             }
+            System.out.println("doing heuristics move");
             Move heuristicsMove = runHeuristicsAlgorithm();
             deltaPos = heuristicsMove.getDeltaPos();
             newDirection = heuristicsMove.getEndDir();
@@ -194,6 +197,8 @@ public class WallFollowAgent extends AgentImp
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: wall encountered in front!");
                 }
+                // TODO: check if the wall encountered is already covered
+                //  i.e. do foundUnexploredWallToFollow check here?
                 newDirection = rotateAgentRight();
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
@@ -213,6 +218,7 @@ public class WallFollowAgent extends AgentImp
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: no wall encountered");
                 }
+                System.out.println("no wall encountered -> move forward");
                 deltaPos = new Vector(moveLength * direction.getX(), moveLength * direction.getY());
                 movedForwardLast = true;
                 lastTurn = TurnType.NO_TURN;
@@ -221,6 +227,7 @@ public class WallFollowAgent extends AgentImp
         else
         {
             // TODO check that not following covered wall? unless it's for dijkstra's
+            System.out.println("doing wall follow move");
             Move wallFollowMove = runWallFollowAlgorithm();
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
@@ -228,13 +235,14 @@ public class WallFollowAgent extends AgentImp
         Move nextMove = new Move(newDirection, deltaPos);
         direction = nextMove.getEndDir();
         noMovesDone = false;
+        System.out.println("making move with deltapos: " + deltaPos + " and new dir: " + direction);
         return nextMove;
     }
 
     /** Pseudocode for simple wall following algorithm:
         if (turned left previously and forward no wall)
             go forward;
-        else if (no wall at left)
+        else if (no wall at left and already following a wall)
             turn 90 deg left;
         else if (no wall forward)
             go forward;
@@ -245,6 +253,7 @@ public class WallFollowAgent extends AgentImp
      */
     public Move runWallFollowAlgorithm()
     {
+        DEBUG = true;
         System.out.println("agent pos: " + world.getVertexAt(position));
         System.out.println("initial wall follow pos: " + initialWallFollowPos);
         Vector newMove = new Vector(0,0);
@@ -260,7 +269,7 @@ public class WallFollowAgent extends AgentImp
             movedForwardLast = true;
             lastTurn = TurnType.NO_TURN;
         }
-        else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle())
+        else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle() && wallEncountered)
         {
             if (DEBUG) { System.out.println("Obstacle on left: " + leftCell.getObstacle()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
@@ -285,6 +294,7 @@ public class WallFollowAgent extends AgentImp
             lastTurn = TurnType.RIGHT;
             movedForwardLast = false;
         }
+        DEBUG = false;
         return new Move(newDirection,newMove);
     }
 
@@ -439,10 +449,13 @@ public class WallFollowAgent extends AgentImp
 
     public void updateGraphAfterSuccessfulMove()
     {
+        // System.out.println("vertices in graph: " + world.G.getVertices());
         updateLastPositions(world.getVertexAt(position));
+        // System.out.println("NEW AGENT POS VERTEX: " + world.getVertexAt(position));
         world.G.leaveVertex(prevAgentVertex.getPosition());
         world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
+        System.out.println("agent vertex: " + world.getVertexAt(position));
     }
 
     public void checkIfNeighboursAreObstacles()
@@ -520,99 +533,45 @@ public class WallFollowAgent extends AgentImp
     public boolean noWallDetected(double rayAngle)
     {
         double anglePrecision = 2;
-
-        // check that all rays start at the right position
-        if (DEBUG)
+        if (WALLDETECTION_DEBUG)
         {
-            System.out.println("noWallDetected method:");
-            for(Ray r: view)
-            {
-                if(!r.getU().equals(position))
-                {
-                    System.out.println("not all rays start at the right position!");
-                }
-            }
-            System.out.println("all "+view.size()+ " rays start at the right position");
+            System.out.println("Agent direction: " + direction + " , angle: " + direction.getAngle());
+            System.out.println("Checking rayAngle: " + rayAngle);
         }
-
-        boolean wallDetected = false;
-        // checks if rayAngle becomes >360 or <0 when adding/subtracting anglePrecision
-        if(rayAngle-anglePrecision<0)
+        for (Ray r : view)
         {
-            if(DEBUG)
+            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
             {
-                System.out.println("     rayAngle-"+anglePrecision+" < 0");
-            }
-            for (Ray r : view)
-            {
-                if((r.angle() <= rayAngle + anglePrecision || r.angle() >= rayAngle - anglePrecision + 360))
+                if (WALLDETECTION_DEBUG) {
+                    System.out.println("detected correct angle ray");
+                    System.out.println("detected ray length: " + r.length());
+                }
+                /*
+                if (WALLDETECTION_DEBUG && r.length() <= visionDistance)
                 {
-                    wallDetected = true;
-                    if(r.length() <= moveLength)
-                    {
-                        if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
-                        return false;
-                    }
+                    System.out.println("THERE IS A WALL.");
+                    return false;
+                }*/
+                if (r.length() <= moveLength)
+                {
+                    return false;
                 }
             }
         }
-        else if(rayAngle+anglePrecision>360)
-        {
-            if(DEBUG)
-            {
-                System.out.println("     rayAngle+"+anglePrecision+" > 360");
-            }
-            for (Ray r : view)
-            {
-                if((r.angle() <= rayAngle + anglePrecision-360 || r.angle() >= rayAngle - anglePrecision))
-                {
-                    wallDetected = true;
-                    if(r.length() <= moveLength)
-                    {
-                        if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
-                        return false;
-                    }
-                }
-            }
-        }
-        else
-        {
-            for(Ray r : view)
-            {
-                if((r.angle() <= rayAngle + anglePrecision && r.angle() >= rayAngle - anglePrecision))
-                {
-                    wallDetected = true;
-                    if(r.length() <= moveLength)
-                    {
-                        if(DEBUG)
-                            System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
-                        return false;
-                    }
-                }
-            }
-        }
-        if(DEBUG && wallDetected) { System.out.println("     ray with angle " +rayAngle+ " exists in view and no wall detected");}
-        else if(DEBUG) { System.out.println("     No ray with Ray angle: " + rayAngle + " detected,  position: "+position.toString() +
-                "\n       position: " + position.toString() +
-                "\n       direction angle: " + direction.getAngle()); }
-
         return true;
     }
 
     private boolean foundUnexploredWallToFollow()
     {
+        WALLDETECTION_DEBUG = true;
         System.out.println("Checking if found unexplored wall to follow");
         GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
                 world.getDirectionStr(direction.getAngle()));
+        //System.out.println("agent's position: " + position);
+        //System.out.println("agent vertex: " + world.getVertexAt(position));
         System.out.println("Wall detected: " + (!noWallDetected(direction.getAngle())));
-        System.out.println("Wall (if detected) is not in marked hor. walls: " + (!world.getHorizontalWallsCovered().contains(forwardCell.getX())));
-        System.out.println("Agent is perpendicular to hor. wall: " + (direction.getX() == 0));
-        System.out.println("Wall (if detected) is not in marked ver. walls: " + (!world.getVerticalWallsCovered().contains(forwardCell.getY())));
-        System.out.println("Agent is perpendicular to ver. wall: " + (direction.getY() == 0));
-
-        return (!noWallDetected(direction.getAngle())
+        WALLDETECTION_DEBUG = false;
+        return ((!noWallDetected(direction.getAngle()) || forwardCell.getObstacle())
                 && ((!world.getHorizontalWallsCovered().contains(forwardCell.getX()) && direction.getX() == 0)
                 || (!world.getVerticalWallsCovered().contains(forwardCell.getY()) && direction.getY() == 0)));
     }

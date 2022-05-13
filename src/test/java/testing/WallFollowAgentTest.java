@@ -241,11 +241,12 @@ public class WallFollowAgentTest
                 turn 90 deg right
                 set wallEcountered = true
          */
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
+        // todo: reset world/universe before running wall follow tests
+        // todo problem: vertex not created before moving into the vertex
+        agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
+        agent.initializeWorld();
+
+        System.out.println("agent prev vertex: " + agent.getPrevAgentVertex());
         agent.setDEBUG(true);
         agent.updateLocation(initialPosition);
         agent.setDirection(initialDirection);
