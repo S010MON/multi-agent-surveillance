@@ -56,11 +56,14 @@ public class RayFeedbackTest
         agents.add(agent1);
         agents.add(agent2);
 
+        agent1.setDirection(new Vector(0, -1));
+
         Map map = new Map(agents, new ArrayList<>());
 
         // Compute rays
         agent1.updateView(ge.compute(map, agent1));
-        for(Ray r : agent1.getView())
+
+        for(Ray r : agent2.getView())
         {
             if(r.getType() != null)
             {
@@ -75,10 +78,13 @@ public class RayFeedbackTest
         agents.add(agent1);
         agents.add(agent2);
 
+        agent2.setDirection(new Vector(0, 1));
+
         Map map = new Map(agents, new ArrayList<>());
 
         // Compute rays
         agent2.updateView(ge.compute(map, agent2));
+
         for(Ray r : agent2.getView())
         {
             if(r.getType() != null)
