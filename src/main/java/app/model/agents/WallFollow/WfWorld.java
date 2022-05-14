@@ -54,7 +54,6 @@ public class WfWorld extends World
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) G.addEdge(currentCell, neighbouringCell);
                 G.setEdgeWeight(edge, G.travelDistance);
             }
-            System.out.println("Connected this vertex: " + neighbouringCell + " to current vertex: " + currentCell);
         }
     }
 
