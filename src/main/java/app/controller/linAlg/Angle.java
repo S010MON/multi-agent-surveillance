@@ -11,7 +11,7 @@ public abstract class Angle
 
         if(a < b)
             return a <= N && N <= b;
-        throw new RuntimeException("Upper bound needs to be strictly above the lower bound");
+        return a <= N || N <= b;
     }
 
     public static double normalizeAngle(double angle)

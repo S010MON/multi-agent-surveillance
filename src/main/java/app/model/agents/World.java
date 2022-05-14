@@ -53,16 +53,6 @@ public abstract class World
         return G.getDirectionStr(directionAngle);
     }
 
-    public void setInitialWallFollowPos(GraphCell graphCell)
-    {
-        G.setInitialWallFollowPos(graphCell);
-    }
-
-    public GraphCell getInitialWallFollowPos()
-    {
-        return G.getInitialWallFollowPos();
-    }
-
     public ArrayList<GraphCell> getVerticesWithUnexploredNeighbours()
     {
         return G.getVerticesWithUnexploredNeighbours();
@@ -76,11 +66,6 @@ public abstract class World
     public void leaveVertex(Vector position, double pheromoneValue)
     {
         G.leaveVertex(position, pheromoneValue);
-    }
-
-    public void leaveVertex(Vector position)
-    {
-        G.leaveVertex(position);
     }
 
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
