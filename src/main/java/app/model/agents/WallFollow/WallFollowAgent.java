@@ -190,8 +190,7 @@ public class WallFollowAgent extends AgentImp
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: wall encountered in front!");
                 }
-                // TODO: check if the wall encountered is already covered
-                //  i.e. do foundUnexploredWallToFollow check here?
+                // TODO: check if the wall encountered is already being covered by someone else?
                 newDirection = rotateAgentRight();
                 lastTurn = TurnType.RIGHT;
                 movedForwardLast = false;
@@ -218,7 +217,6 @@ public class WallFollowAgent extends AgentImp
         }
         else
         {
-            // TODO check that not following covered wall? unless it's for dijkstra's
             Move wallFollowMove = runWallFollowAlgorithm();
             deltaPos = wallFollowMove.getDeltaPos();
             newDirection = wallFollowMove.getEndDir();
@@ -436,7 +434,10 @@ public class WallFollowAgent extends AgentImp
     public void updateGraphAfterSuccessfulMove()
     {
         updateLastPositions(world.getVertexAt(position));
-        world.G.leaveVertex(prevAgentVertex.getPosition());
+        if (prevAgentVertex != null)
+        {
+            world.G.leaveVertex(prevAgentVertex.getPosition());
+        }
         world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
     }
