@@ -9,13 +9,13 @@ import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.World;
 
-public class GoToTargetAgent extends AgentImp
+public class TargetAgent extends AgentImp
 {
     private Ray targetRay;
     private boolean guardDetected;
     private final boolean DEBUG = false;
 
-    public GoToTargetAgent(Vector position, Vector direction, double radius, Type type, Ray targetRay, World world)
+    public TargetAgent(Vector position, Vector direction, double radius, Type type, Ray targetRay, World world)
     {
         super(position, direction, radius, type);
         this.targetRay = targetRay;
@@ -39,50 +39,11 @@ public class GoToTargetAgent extends AgentImp
         }
     }
 
-    public boolean guardDetected()
-    {
-        for(Ray r : view)
-        {
-            if(r.getType()==Type.GUARD)
-            {
-                if(DEBUG) {System.out.println("     GUARD DETECTED!");}
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Vector closestGuard()
-    {
-        Vector closestGuardPos = null;
-        double closestGuardDist = 10^5;
-
-        for(Ray r : view)
-        {
-            if(r.getType()==Type.GUARD)
-            {
-                if(DEBUG) {System.out.println("     GUARD DETECTED!");}
-
-                if(closestGuardPos == null)
-                {
-                    closestGuardPos = r.getV();
-                    closestGuardDist = r.length();
-                }
-                else if(r.length() < closestGuardDist)
-                {
-                    closestGuardPos = r.getV();
-                    closestGuardDist = r.length();
-                }
-            }
-        }
-        return closestGuardPos;
-    }
-
 
     @Override
     public Agent nextState()
     {
-        if(guardDetected())
+        if(agentDetected(Type.GUARD))
         {
             //TODO: make this return a new EvasionAgent,
             //      once that agent exists in this branch
