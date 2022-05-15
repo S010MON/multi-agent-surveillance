@@ -20,7 +20,7 @@ public class AcoMomentum extends AcoAgent
     protected void initializeWorld()
     {
         super.initializeWorld();
-        momentumContinuity = direction.scale(distance);
+        momentumContinuity = direction.scale(moveLength);
     }
 
     @Override

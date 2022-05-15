@@ -23,6 +23,7 @@ public class AgentImp implements Agent
 {
     @Getter @Setter protected double maxWalk = 10;
     @Getter @Setter protected double maxSprint = 30;
+    @Getter @Setter protected double moveLength = 20;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
     @Getter @Setter protected Vector tgtDirection;
@@ -119,6 +120,42 @@ public class AgentImp implements Agent
 
         gc.fillOval(x, y, radius, radius);
         gc.strokeOval(x , y, radius, radius);
+    }
+
+    public boolean agentDetected(Type agentType)
+    {
+        for(Ray r : view)
+        {
+            if(r.getType()==agentType)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Vector closestAgent(Type agentType)
+    {
+        Vector closestAgentPos = null;
+        double closestAgentDist = 10^5;
+
+        for(Ray r : view)
+        {
+            if(r.getType()==agentType)
+            {
+                if(closestAgentPos == null)
+                {
+                    closestAgentPos = r.getV();
+                    closestAgentDist = r.length();
+                }
+                else if(r.length() < closestAgentDist)
+                {
+                    closestAgentPos = r.getV();
+                    closestAgentDist = r.length();
+                }
+            }
+        }
+        return closestAgentPos;
     }
 
     @Override
