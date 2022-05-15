@@ -180,4 +180,15 @@ public class AgentImp implements Agent
     {
         return this;
     }
+
+    @Override
+    public boolean isTypeSeen(Type type)
+    {
+        for(Ray r : view)
+        {
+            if(r.getType() == type)
+                return true;
+        }
+        return false;
+    }
 }
