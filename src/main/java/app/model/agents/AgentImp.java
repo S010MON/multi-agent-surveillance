@@ -7,14 +7,12 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 
