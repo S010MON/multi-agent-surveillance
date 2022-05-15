@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.TypeInformation;
 import app.model.agents.AgentImp;
 import app.model.Type;
 import app.model.agents.Universe;
@@ -319,7 +320,7 @@ public class AcoAgent extends AgentImp
     {
         for(Ray ray: view)
         {
-            if(approximateAngleRange(ray.angle(), targetCardinalAngle))
+            if(TypeInformation.isSolid(ray.getType()) && approximateAngleRange(ray.angle(), targetCardinalAngle))
             {
                 return ray;
             }

@@ -6,6 +6,7 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
+import app.model.TypeInformation;
 import app.model.agents.AgentImp;
 import lombok.Getter;
 import lombok.Setter;
@@ -194,7 +195,7 @@ public class DirectionFollowAgent extends AgentImp
         boolean wallDetected = false;
         for(Ray r : view)
         {
-            if(r.getType()!=Type.GUARD && r.getType()!=Type.INTRUDER && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
+            if(TypeInformation.isSolid(r.getType()) && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
             {
                 wallDetected = true;
                 if(r.length() <= moveLength)
@@ -267,7 +268,7 @@ public class DirectionFollowAgent extends AgentImp
             System.out.println("distanceToObstacle method:");
         for (Ray r : view)
         {
-            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
+            if (TypeInformation.isSolid(r.getType()) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
             {
                 if (DEBUG)
                 {
