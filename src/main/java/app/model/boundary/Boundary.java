@@ -21,4 +21,6 @@ public interface Boundary
     boolean isSolid();
 
     boolean isVisible();
+
+    boolean isTransparent();
 }

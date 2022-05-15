@@ -6,6 +6,6 @@ public class VisibleTransparentBoundary extends BoundaryImp
 {
     public VisibleTransparentBoundary(Vector a, Vector b)
     {
-        super(a, b, true, false);
+        super(a, b, true, true, false);
     }
 }

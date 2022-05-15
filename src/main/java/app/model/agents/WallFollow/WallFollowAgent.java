@@ -501,9 +501,12 @@ public class WallFollowAgent extends AgentImp
         {
             if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
             {
-                if (DEBUG)
-                    System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
-                return false;
+                if(r.getType()==Type.BORDER || r.getType()==Type.WALL)
+                {
+                    if(DEBUG)
+                        System.out.println("WALL DETECTED! Ray Angle: " + rayAngle);
+                    return false;
+                }
             }
         }
         if (DEBUG)

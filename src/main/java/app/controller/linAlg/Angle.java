@@ -1,5 +1,11 @@
 package app.controller.linAlg;
 
+import app.controller.graphicsEngine.Ray;
+import app.model.Type;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Angle
 {
     public static boolean angleInRange(double angle, double upper, double lower)
@@ -24,5 +30,24 @@ public abstract class Angle
             outAngle += 360.0;
 
         return outAngle;
+    }
+
+    public static List<Ray> raysWithAngle(double angle, double anglePrecision, List<Ray> rays)
+    {
+        List<Ray> raysWithRightAngle = new ArrayList<>();
+        for (Ray r : rays)
+        {
+            if (Angle.angleInRange(r.angle(), angle+anglePrecision, angle-anglePrecision))
+            {
+                raysWithRightAngle.add(r);
+            }
+        }
+
+        return raysWithRightAngle;
+    }
+
+    public static List<Ray> raysWithAngle(double angle, List<Ray> rays)
+    {
+        return raysWithAngle(angle, 1, rays);
     }
 }

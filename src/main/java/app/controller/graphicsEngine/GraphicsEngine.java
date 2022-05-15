@@ -18,6 +18,7 @@ public class GraphicsEngine
         this.angle = angle;
     }
 
+    /*
     public ArrayList<Ray> compute(Map map, Agent agent)
     {
         ArrayList<Boundary> boundaries = collectBoundaries(map);
@@ -31,10 +32,41 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-                output.add(closestRay(origin, bdyIntersection, agentIntersection, map.objectAt(agentIntersection)));
+                output.add(closestRay(origin, bdyIntersection, agentIntersection, map));
 
             else if(bdyIntersection != null)
                 output.add(new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection)));
+
+            else if(agentIntersection != null)
+                output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
+        }
+        return output;
+    }
+    */
+
+    public ArrayList<Ray> compute(Map map, Agent agent)
+    {
+        ArrayList<Boundary> boundaries = collectBoundaries(map);
+        ArrayList<Ray> output = new ArrayList<>();
+        ArrayList<Ray> rays = RayScatter.angle(agent.getPosition(), agent.getDirection(), angle);
+        Vector origin = agent.getPosition();
+
+        for(Ray r: rays)
+        {
+            ArrayList<Vector> bdyIntersections = getIntersections(r, boundaries);
+            Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
+
+            if(bdyIntersections.size() != 0 && agentIntersection != null)
+            {
+                for(Vector bdy: bdyIntersections)
+                    output.add(closestRay(origin, bdy, agentIntersection, map));
+            }
+
+            else if(bdyIntersections.size() != 0)
+            {
+                for(Vector bdy: bdyIntersections)
+                    output.add(new Ray(origin, bdy, map.objectAt(bdy)));
+            }
 
             else if(agentIntersection != null)
                 output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
@@ -65,33 +97,34 @@ public class GraphicsEngine
     // this method returns both the non-transparent intersection, and the transparent (but visible) intersections before it
     private ArrayList<Vector> getIntersections(Ray r, ArrayList<Boundary> boundaries)
     {
-        ArrayList<Vector> nonSolidIntersections = new ArrayList<>();
-        Vector solidIntersection = null;
+        ArrayList<Vector> transparentIntersections = new ArrayList<>();
+        Vector nonTransparentIntersection = null;
         double closestDist = Double.MAX_VALUE;
         for (Boundary obj: boundaries)
         {
             if(obj.isHit(r))
             {
-                if(obj.isSolid() && obj.isVisible())
+                if(!obj.isTransparent())
                 {
                     Vector currentV = obj.intersection(r);
                     double dist = r.getU().dist(currentV);
                     if(dist < closestDist)
                     {
-                        solidIntersection = currentV;
+                        nonTransparentIntersection = currentV;
                         closestDist = dist;
                     }
                 }
                 else if(obj.isVisible())
                 {
-                    nonSolidIntersections.add(obj.intersection(r));
+                    transparentIntersections.add(obj.intersection(r));
                 }
             }
         }
 
         ArrayList<Vector> intersections = new ArrayList<>();
-        intersections.add(solidIntersection);
-        for(Vector intersection: nonSolidIntersections)
+        if(nonTransparentIntersection!=null)
+            intersections.add(nonTransparentIntersection);
+        for(Vector intersection: transparentIntersections)
         {
             double dist = r.getU().dist(intersection);
             if(dist < closestDist)
@@ -133,11 +166,11 @@ public class GraphicsEngine
         return boundaries;
     }
 
-    private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Type type)
+    private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Map map)
     {
         if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
-            return new Ray(origin, bdyIntersection);
+            return new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection));
         else
-            return new Ray(origin, agentIntersection, type);
+            return new Ray(origin, agentIntersection, map.objectAt(agentIntersection));
     }
 }

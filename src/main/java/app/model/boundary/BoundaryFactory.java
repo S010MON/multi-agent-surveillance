@@ -27,7 +27,7 @@ public abstract class BoundaryFactory
         {
             case WALL, TOWER, BORDER -> { return new VisibleBoundary(a, b);}
             case GLASS -> { return  new TransparentBoundary(a, b);}
-            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN -> { return new BoundaryImp(a, b, false, false);}
+            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN -> { return new BoundaryImp(a, b, false, true, false);}
             case TARGET -> { return new VisibleTransparentBoundary(a, b);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }

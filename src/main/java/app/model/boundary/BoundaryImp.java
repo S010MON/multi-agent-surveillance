@@ -14,12 +14,16 @@ public class BoundaryImp implements Boundary
     protected Vector a;
     protected Vector b;
     @Getter protected boolean visible;
+    @Getter protected boolean transparent; //automatically true if not visible
     @Getter protected boolean solid;
 
-    public BoundaryImp(Vector a, Vector b, boolean visible, boolean solid)
+    public BoundaryImp(Vector a, Vector b, boolean visible, boolean transparent, boolean solid)
     {
         this.a = a;
         this.b = b;
+        this.visible = visible;
+        this.transparent = transparent;
+        this.solid = solid;
     }
 
     @Override

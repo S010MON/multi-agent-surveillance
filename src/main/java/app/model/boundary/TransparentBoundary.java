@@ -8,7 +8,7 @@ public class TransparentBoundary extends BoundaryImp
 {
     public TransparentBoundary(Vector a, Vector b)
     {
-        super(a, b, false, true);
+        super(a, b, false, true, true);
     }
 
     @Override

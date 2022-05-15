@@ -35,6 +35,7 @@ public class AgentImp implements Agent
     protected final boolean DRAW_HEARD = false;
     @Getter protected boolean solid;
     @Getter protected boolean visible;
+    @Getter protected boolean transparent;
 
     @Getter @Setter protected World world;
 
@@ -50,6 +51,7 @@ public class AgentImp implements Agent
         heard = new ArrayList<>();
         solid = true;
         visible = true;
+        transparent = false;
     }
 
     public AgentImp(Vector position, Vector direction, double radius, Type type, Vector tgtDirection)
@@ -64,6 +66,7 @@ public class AgentImp implements Agent
         heard = new ArrayList<>();
         solid = true;
         visible = true;
+        transparent = false;
     }
 
     public AgentImp(Agent other)
@@ -80,6 +83,7 @@ public class AgentImp implements Agent
         this.agentViewWindow = other.getAgentViewWindow();
         solid = true;
         visible = true;
+        transparent = false;
         // TODO add hearing after SoundEngine refactor merged
     }
 
