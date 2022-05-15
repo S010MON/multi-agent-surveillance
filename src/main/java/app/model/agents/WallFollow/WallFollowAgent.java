@@ -26,7 +26,7 @@ public class WallFollowAgent extends AgentImp
         RIGHT,
         NO_TURN,
     }
-    @Setter private boolean DEBUG = true;
+    @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private boolean wallEncountered = false;
@@ -457,7 +457,8 @@ public class WallFollowAgent extends AgentImp
 
     public boolean agentInStuckMovement()
     {
-        System.out.println("Last positions before checking stuck movement: " + lastPositions);
+        if(DEBUG)
+            System.out.println("Last positions before checking stuck movement: " + lastPositions);
         ArrayList<GraphCell> diffVertices = new ArrayList<>();
         if (lastPositions.size() >= 24)
         {
@@ -473,7 +474,8 @@ public class WallFollowAgent extends AgentImp
                 }
             }
         }
-        System.out.println("Different vertices: " + diffVertices);
+        if(DEBUG)
+            System.out.println("Different vertices: " + diffVertices);
         return false;
     }
 
