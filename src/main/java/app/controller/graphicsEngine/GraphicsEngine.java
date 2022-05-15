@@ -62,6 +62,46 @@ public class GraphicsEngine
         return intersection;
     }
 
+    // this method returns both the non-transparent intersection, and the transparent (but visible) intersections before it
+    private ArrayList<Vector> getIntersections(Ray r, ArrayList<Boundary> boundaries)
+    {
+        ArrayList<Vector> nonSolidIntersections = new ArrayList<>();
+        Vector solidIntersection = null;
+        double closestDist = Double.MAX_VALUE;
+        for (Boundary obj: boundaries)
+        {
+            if(obj.isHit(r))
+            {
+                if(obj.isSolid() && obj.isVisible())
+                {
+                    Vector currentV = obj.intersection(r);
+                    double dist = r.getU().dist(currentV);
+                    if(dist < closestDist)
+                    {
+                        solidIntersection = currentV;
+                        closestDist = dist;
+                    }
+                }
+                else if(obj.isVisible())
+                {
+                    nonSolidIntersections.add(obj.intersection(r));
+                }
+            }
+        }
+
+        ArrayList<Vector> intersections = new ArrayList<>();
+        intersections.add(solidIntersection);
+        for(Vector intersection: nonSolidIntersections)
+        {
+            double dist = r.getU().dist(intersection);
+            if(dist < closestDist)
+            {
+                intersections.add(intersection);
+            }
+        }
+        return intersections;
+    }
+
     private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
     {
         Vector intersection = null;

@@ -5,6 +5,7 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 
 import java.awt.geom.Line2D;
 
@@ -12,8 +13,10 @@ public class BoundaryImp implements Boundary
 {
     protected Vector a;
     protected Vector b;
+    @Getter protected boolean visible;
+    @Getter protected boolean solid;
 
-    public BoundaryImp(Vector a, Vector b)
+    public BoundaryImp(Vector a, Vector b, boolean visible, boolean solid)
     {
         this.a = a;
         this.b = b;

@@ -123,7 +123,8 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            case TARGET -> target = obj.getRect();
+            case TARGET -> { target = obj.getRect();
+                this.furniture.add(FurnitureFactory.make(obj));}
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }

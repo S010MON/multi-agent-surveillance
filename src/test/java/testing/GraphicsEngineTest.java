@@ -15,7 +15,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new BoundaryImp(a,b);
+        Boundary bdy = new BoundaryImp(a,b, true, true);
 
         Vector u = new Vector(15,0);
         Vector v = new Vector(15,16);
@@ -33,7 +33,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new BoundaryImp(a,b);
+        Boundary bdy = new BoundaryImp(a,b, true, true);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);

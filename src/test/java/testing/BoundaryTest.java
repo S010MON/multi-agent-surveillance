@@ -16,7 +16,7 @@ public class BoundaryTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Boundary wall = new BoundaryImp(a, b);
+        Boundary wall = new BoundaryImp(a, b, true, true);
 
         Vector origin = new Vector(20, 0);
         Vector direction = new Vector(20, 1);
@@ -29,7 +29,7 @@ public class BoundaryTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Boundary wall = new BoundaryImp(a, b);
+        Boundary wall = new BoundaryImp(a, b, true, true);
 
         Vector origin = new Vector(20, 20);
         Vector direction = new Vector(20, 21);
@@ -42,7 +42,7 @@ public class BoundaryTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Boundary wall = new BoundaryImp(a, b);
+        Boundary wall = new BoundaryImp(a, b, true, true);
 
         Vector origin = new Vector(20, 0);
         Vector direction = new Vector(20, 1);
@@ -57,7 +57,7 @@ public class BoundaryTest
     {
         Vector a = new Vector(10,10);
         Vector b = new Vector(30,10);
-        Boundary wall = new BoundaryImp(a, b);
+        Boundary wall = new BoundaryImp(a, b, true, true);
 
         Vector origin = new Vector(0, 0);
         Vector direction = new Vector(10, 5);

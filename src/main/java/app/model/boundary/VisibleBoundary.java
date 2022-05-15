@@ -9,7 +9,7 @@ public class VisibleBoundary extends BoundaryImp
 {
     public VisibleBoundary(Vector a, Vector b)
     {
-        super(a, b);
+        super(a, b, true, true);
     }
 
     @Override
