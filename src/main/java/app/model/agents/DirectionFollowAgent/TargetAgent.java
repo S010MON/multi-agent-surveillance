@@ -43,7 +43,7 @@ public class TargetAgent extends AgentImp
     @Override
     public Agent nextState()
     {
-        if(agentDetected(Type.GUARD))
+        if(isTypeSeen(Type.GUARD))
         {
             //TODO: make this return a new EvasionAgent,
             //      once that agent exists in this branch

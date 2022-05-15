@@ -132,33 +132,16 @@ public class AgentImp implements Agent
         gc.strokeOval(x , y, radius, radius);
     }
 
-    public boolean agentDetected(Type agentType)
-    {
-        for(Ray r : view)
-        {
-            if(r.getType()==agentType)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Vector closestAgent(Type agentType)
+    public Vector closestTypeSeen(Type type)
     {
         Vector closestAgentPos = null;
-        double closestAgentDist = 10^5;
+        double closestAgentDist = Double.MAX_VALUE;
 
         for(Ray r : view)
         {
-            if(r.getType()==agentType)
+            if(r.getType()==type)
             {
-                if(closestAgentPos == null)
-                {
-                    closestAgentPos = r.getV();
-                    closestAgentDist = r.length();
-                }
-                else if(r.length() < closestAgentDist)
+                if(r.length() < closestAgentDist)
                 {
                     closestAgentPos = r.getV();
                     closestAgentDist = r.length();

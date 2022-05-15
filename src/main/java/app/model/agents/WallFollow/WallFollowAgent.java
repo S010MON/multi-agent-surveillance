@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
+import app.model.TypeInformation;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
@@ -499,7 +500,7 @@ public class WallFollowAgent extends AgentImp
     {
         for (Ray r : view)
         {
-            if ((r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
+            if (TypeInformation.isSolid(r.getType()) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
             {
                 if(r.getType()==Type.BORDER || r.getType()==Type.WALL)
                 {
