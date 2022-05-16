@@ -20,13 +20,12 @@ public class BoundaryImp implements Boundary
     {
         this.a = a;
         this.b = b;
-        colour = Color.WHITE;
     }
 
     @Override
     public void draw(GraphicsContext gc)
     {
-        if(colour == Color.WHITE)
+        if(colour == null)
             return;
 
         gc.setStroke(colour);
