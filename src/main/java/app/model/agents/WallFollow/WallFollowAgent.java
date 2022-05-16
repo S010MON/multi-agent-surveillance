@@ -25,7 +25,7 @@ public class WallFollowAgent extends AgentImp
         RIGHT,
         NO_TURN,
     }
-    @Setter private boolean DEBUG = true;
+    @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private double moveLength = 20;
