@@ -29,4 +29,6 @@ public class TransparentBoundary extends BoundaryImp
         return false; // Overrides super -> light goes through it
     }
 
+    @Override
+    public boolean isCrossed(Vector startPoint, Vector endPoint) { return false;}
 }
