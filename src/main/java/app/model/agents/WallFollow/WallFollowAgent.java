@@ -5,12 +5,13 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
 import app.model.TypeInformation;
+import app.model.Type;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
-import app.model.Type;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
@@ -120,7 +121,6 @@ public class WallFollowAgent extends AgentImp
             if (DEBUG) {
                 System.out.println("Agent stuck in vertex.");
             }
-            //GraphCell forwardCell = getAgentNeighbourBasedOnAngle(direction.getAngle());
             GraphCell forwardCell = world.getVertexFromCurrent(world.getVertexAt(position),
                     world.getDirectionStr(direction.getAngle()));
             if (noWallDetected(direction.getAngle()) && !forwardCell.getObstacle())
@@ -244,7 +244,6 @@ public class WallFollowAgent extends AgentImp
         }
         else if (noWallDetected(getAngleOfLeftRay()) && !leftCell.getObstacle())
         {
-            // TODO sth weird happens when having moved forward after making a turn
             if (DEBUG) { System.out.println("Obstacle on left: " + leftCell.getObstacle()); ; }
             if (DEBUG) { System.out.println("ALGORITHM CASE 2"); }
             newDirection = rotateAgentLeft();
@@ -331,9 +330,6 @@ public class WallFollowAgent extends AgentImp
             wallEncountered = false;
             initialVertexFound = false;
         }
-        else {
-            throw new RuntimeException("Move failed but last move was not position change!");
-        }
         return new Move(newDirection, deltaPos);
     }
 
@@ -341,13 +337,13 @@ public class WallFollowAgent extends AgentImp
     {
         // currently takes into account shortest path length, direction relative to agent's and
         // how many neighbours also have unexplored cells
-        // TODO add weights to score components?
+        // TODO add weights to score components - HEURISTICS EXPERIMENTS
         double score;
         int shortestPathLength;
-        List<GraphCell> shortestPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex).getVertexList();
-        if (shortestPath != null)
+        GraphPath dijkstrasPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
+        if (dijkstrasPath != null)
         {
-            shortestPathLength = shortestPath.size();
+            shortestPathLength = dijkstrasPath.getVertexList().size();
         }
         else
         {
@@ -421,7 +417,10 @@ public class WallFollowAgent extends AgentImp
     public void updateGraphAfterSuccessfulMove()
     {
         updateLastPositions(world.getVertexAt(position));
-        world.G.leaveVertex(prevAgentVertex.getPosition());
+        if (prevAgentVertex != null)
+        {
+            world.G.leaveVertex(prevAgentVertex.getPosition());
+        }
         world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
     }
@@ -464,13 +463,16 @@ public class WallFollowAgent extends AgentImp
         {
             for (int i=0; i<lastPositions.size(); i++)
             {
-                if(!diffVertices.contains(lastPositions.get(i)))
+                if (lastPositions.get(i) != null)
                 {
-                    diffVertices.add(lastPositions.get(i));
-                }
-                if(i == lastPositions.size() - 1 && diffVertices.size() < 5)
-                {
-                    return true;
+                    if(!diffVertices.contains(lastPositions.get(i)))
+                    {
+                        diffVertices.add(lastPositions.get(i));
+                    }
+                    if(i == lastPositions.size() - 1 && diffVertices.size() < 5)
+                    {
+                        return true;
+                    }
                 }
             }
         }
