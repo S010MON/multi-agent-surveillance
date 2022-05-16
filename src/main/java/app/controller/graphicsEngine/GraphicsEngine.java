@@ -18,32 +18,6 @@ public class GraphicsEngine
         this.angle = angle;
     }
 
-    /*
-    public ArrayList<Ray> compute(Map map, Agent agent)
-    {
-        ArrayList<Boundary> boundaries = collectBoundaries(map);
-        ArrayList<Ray> output = new ArrayList<>();
-        ArrayList<Ray> rays = RayScatter.angle(agent.getPosition(), agent.getDirection(), angle);
-        Vector origin = agent.getPosition();
-
-        for(Ray r: rays)
-        {
-            Vector bdyIntersection = getIntersection(r, boundaries);
-            Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
-
-            if(bdyIntersection != null && agentIntersection != null)
-                output.add(closestRay(origin, bdyIntersection, agentIntersection, map));
-
-            else if(bdyIntersection != null)
-                output.add(new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection)));
-
-            else if(agentIntersection != null)
-                output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
-        }
-        return output;
-    }
-    */
-
     public ArrayList<Ray> compute(Map map, Agent agent)
     {
         ArrayList<Boundary> boundaries = collectBoundaries(map);
@@ -72,26 +46,6 @@ public class GraphicsEngine
                 output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
         }
         return output;
-    }
-
-    private Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
-    {
-        Vector intersection = null;
-        double closestDist = Double.MAX_VALUE;
-        for (Boundary obj: boundaries)
-        {
-            if(obj.isHit(r))
-            {
-                Vector currentV = obj.intersection(r);
-                double dist = r.getU().dist(currentV);
-                if(dist < closestDist)
-                {
-                    intersection = currentV;
-                    closestDist = dist;
-                }
-            }
-        }
-        return intersection;
     }
 
     // this method returns both the non-transparent intersection, and the transparent (but visible) intersections before it
