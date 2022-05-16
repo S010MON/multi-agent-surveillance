@@ -1,5 +1,6 @@
 package app.model;
 
+import app.model.agents.Agent;
 import app.model.furniture.FurnitureType;
 
 public enum Type

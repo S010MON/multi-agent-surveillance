@@ -153,7 +153,7 @@ public class SettingsPane extends StackPane
         settings.setWalkSpeedGuard(Double.parseDouble(bGuard.getText()));
         settings.setWalkSpeedIntruder(Double.parseDouble(bIntruder.getText()));
         settings.setSprintSpeedGuard(Double.parseDouble(sGuard.getText()));
-        settings.setWalkSpeedIntruder(Double.parseDouble(sIntruder.getText()));
+        settings.setSprintSpeedIntruder(Double.parseDouble(sIntruder.getText()));
         return settings;
     }
 }
