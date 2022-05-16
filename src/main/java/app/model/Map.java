@@ -5,10 +5,9 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.controller.soundEngine.SoundSource;
-import app.model.agents.ACO.AcoMomentumSpiralAvoidance;
 import app.model.agents.Agent;
+import app.model.agents.AgentType;
 import app.model.agents.Human;
-import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -70,7 +69,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoMomentumSpiralAvoidance(srt, dir, 10, Type.GUARD);
+            Agent guard = AgentType.agentOf(settings.getGuardType(), srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -81,7 +80,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new WallFollowAgent(srt, dir, 10, Type.INTRUDER);
+            Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
