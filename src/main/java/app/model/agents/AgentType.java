@@ -46,7 +46,7 @@ public enum AgentType
             }
             case WALL_FOLLOW ->
             {
-                return new WallFollowAgent(position, direction, radius, type);
+                return new WallFollowAgent(position, direction, radius, type, 20);
             }
             case RANDOM ->
             {
