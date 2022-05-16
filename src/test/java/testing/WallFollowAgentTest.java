@@ -31,12 +31,15 @@ public class WallFollowAgentTest
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
     double moveLen = 75.0;
-    WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
-    private WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+    //WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+    //private WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test
     void testAgentDirectionAngle()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         agent.setDirection(new Vector(0,-1));
         assertEquals(180.0, agent.getDirection().getAngle());
         agent.setDirection(new Vector(1,0));
@@ -50,6 +53,8 @@ public class WallFollowAgentTest
     @Test
     void testAgentViewRays()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -76,6 +81,9 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedInFront()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         ArrayList<Furniture> walls = new ArrayList<>();
         Map map = new Map(agent, walls);
@@ -92,6 +100,9 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedOnLeft()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         ArrayList<Furniture> walls = new ArrayList<>();
         Map map = new Map(agent, walls);
@@ -108,6 +119,9 @@ public class WallFollowAgentTest
     @Test
     void testWallDetectedInFront()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -127,6 +141,9 @@ public class WallFollowAgentTest
     @Test
     void testWallDetectedOnLeft()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
@@ -146,6 +163,9 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedInFrontButDetectedOnLeft()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
@@ -167,6 +187,9 @@ public class WallFollowAgentTest
     @Test
     void testNoWallDetectedOnLeftButDetectedInFront()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
@@ -188,6 +211,9 @@ public class WallFollowAgentTest
     @Test
     void testRotateLeft()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // dir. before rotate = (0,-1)
         agent.setDirection(new Vector(0,-1));
         agent.setDirection(agent.rotateAgentLeft());
@@ -210,6 +236,9 @@ public class WallFollowAgentTest
     @Test
     void testRotateRight()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // dir. before rotate = (0,-1)
         agent.setDirection(new Vector(0,-1));
         agent.setDirection(agent.rotateAgentRight());
@@ -232,6 +261,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase0()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         /*
         ALGORITHM CASE 0
         if !wallEncountered
@@ -303,6 +335,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase1()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // ALGORITHM CASE 1
         // if (turned left previously and forward no wall)
         //      go forward
@@ -353,6 +388,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase2LastTurnNotLeft()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // ALGORITHM CASE 2.1
         // (case 1 condition violated as last turn was not LEFT (i.e. was NO_TURN or RIGHT)) ->
         // if (no wall at left)
@@ -396,6 +434,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase2WallInFront()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // ALGORITHM CASE 2.2
         // (case 1 condition violated as there is a wall in front) ->
         // if (no wall at left)
@@ -440,6 +481,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase3()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // ALGORITHM CASE 3
         // (case 1 violated as last turn not left; case 2 violated as there is wall on left) ->
         // if (no wall forward)
@@ -490,6 +534,9 @@ public class WallFollowAgentTest
     @Test
     void testAlgorithmCase4()
     {
+        WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
+        WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
+
         // ALGORITHM CASE 4
         // (case 1, 2 nd 3 violated as walls in front and on left) ->
         //    turn 90 deg right
