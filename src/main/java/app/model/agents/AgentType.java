@@ -4,7 +4,6 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
-import app.model.agents.DirectionFollowAgent.TargetAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 
 public enum AgentType
@@ -19,7 +18,12 @@ public enum AgentType
     TARGET,
     RANDOM;
 
-    public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type, Ray targetRay, World world)
+    public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
+    {
+        return agentOf(agentType, position, direction, radius, type, null);
+    }
+
+    public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type, Ray targetRay)
     {
         switch(agentType)
         {
@@ -53,7 +57,7 @@ public enum AgentType
             }
             case TARGET ->
                     {
-                        return new TargetAgent(position, direction, radius, type, targetRay, world);
+                        return new TargetAgent(position, direction, radius, type, targetRay);
                     }
             case RANDOM ->
             {
