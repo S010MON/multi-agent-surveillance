@@ -22,7 +22,6 @@ public class Capture extends AgentImp
     private ArrayList<Vector> positionHistory = new ArrayList<>();
     private Move prevMove;
     private boolean captureComplete = false;
-    private Vector intruderPos;
     private int counter;
 
     /**
@@ -37,7 +36,6 @@ public class Capture extends AgentImp
     public Capture(Vector position, Vector direction, double radius, Type type, Vector intruderPos)
     {
         super(position, direction, radius, type);
-        this.intruderPos = intruderPos;
         beliefSet.add(intruderPos);
         positionHistory.add(intruderPos);
     }
@@ -53,7 +51,7 @@ public class Capture extends AgentImp
     {
         if(!maxTicsReached() && !captureComplete)
         {
-            updateWorld();
+            updateKnowledge();
             if(moveFailed){
                 return shortTermMemory();
             }else {
@@ -68,13 +66,13 @@ public class Capture extends AgentImp
         return nextMove(findTarget());
     }
 
-    public void updateWorld(){
-        if(isIntruderSeen())
+    public void updateKnowledge(){
+        if(isTypeSeen(Type.INTRUDER))
         {
             if(DEBUG) System.out.println("Seen");
-            positionHistory.add(intruderPos);
+            positionHistory.add(typePosition);
             beliefSet.clear();
-            beliefSet.add(intruderPos);
+            beliefSet.add(typePosition);
         }
         else
         {
@@ -106,26 +104,6 @@ public class Capture extends AgentImp
     }
 
     /**
-     * Method checks rays to see if we still see the intruder. Updates the intruderPos variable.
-     *
-     * @return True/False if we see intruder or not.
-     */
-    public boolean isIntruderSeen()
-    {
-        boolean seen = false;
-        for(Ray r : view)
-        {
-            if(r.getType() == Type.INTRUDER)
-            {
-                seen = true;
-                intruderPos = r.getV();
-                break;
-            }
-        }
-        return seen;
-    }
-
-    /**
      * Will loop through belief set and add all the next possible positions to the set.
      * Only unique positions are stored.
      */
@@ -137,7 +115,7 @@ public class Capture extends AgentImp
             newLocations.addAll(findAllPossiblePositions(location));
         }
 
-        //checkLocationsVisible(newLocations); TODO this method call reduces performance significantly...
+        checkLocationsVisible(newLocations);
         beliefSet.addAll(newLocations);
     }
 
