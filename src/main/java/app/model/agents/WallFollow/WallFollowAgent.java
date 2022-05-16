@@ -329,9 +329,6 @@ public class WallFollowAgent extends AgentImp
             wallEncountered = false;
             initialVertexFound = false;
         }
-//        else {
-//            throw new RuntimeException("Move failed but last move was not position change!");
-//        }
         return new Move(newDirection, deltaPos);
     }
 
