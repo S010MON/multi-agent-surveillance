@@ -5,7 +5,9 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Type;
 import app.model.agents.Capture.Capture;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 
@@ -13,19 +15,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CaptureAgentTest
 {
-    Vector agent1Pos = new Vector(10, 10);
-    Vector agent1Dir = new Vector(1, 0);
+    Vector agent1Pos;
+    Capture agent1;
 
-    Capture agent1 = new Capture(agent1Pos, agent1Dir, 1, Type.GUARD);
+    @BeforeAll void setup()
+    {
+        agent1Pos = new Vector(10, 10);
+        agent1 = new Capture(new Vector(10, 10), new Vector(1, 0), 1, Type.GUARD);
+    }
 
     @Test void testSeeingIntruder()
     {
         ArrayList<Ray> testView = new ArrayList<>();
         testView.add(new Ray(new Vector(), new Vector(), Type.INTRUDER));
         agent1.setView(testView);
-        assertTrue(agent1.isIntruderSeen());
+        assertTrue(agent1.isTypeSeen(Type.INTRUDER));
     }
 
     @Test void testNotSeeingIntruder()
@@ -33,7 +40,7 @@ public class CaptureAgentTest
         ArrayList<Ray> testView = new ArrayList<>();
         testView.add(new Ray(new Vector(), new Vector(), null));
         agent1.setView(testView);
-        assertFalse(agent1.isIntruderSeen());
+        assertFalse(agent1.isTypeSeen(Type.INTRUDER));
     }
 
     @Test void testUpdatingBeliefs()

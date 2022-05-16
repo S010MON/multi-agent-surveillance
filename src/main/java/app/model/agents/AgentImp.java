@@ -223,8 +223,10 @@ public class AgentImp implements Agent
         for(Ray r : view)
         {
             if(r.getType() == type)
+            {
                 typePosition = r.getV();
                 return true;
+            }
         }
         return false;
     }
