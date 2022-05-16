@@ -473,25 +473,24 @@ public class WallFollowAgent extends AgentImp
 
     public boolean agentInStuckMovement()
     {
-        if(DEBUG)
-            System.out.println("Last positions before checking stuck movement: " + lastPositions);
         ArrayList<GraphCell> diffVertices = new ArrayList<>();
         if (lastPositions.size() >= 24)
         {
             for (int i=0; i<lastPositions.size(); i++)
             {
-                if(!diffVertices.contains(lastPositions.get(i)))
+                if (lastPositions.get(i) != null)
                 {
-                    diffVertices.add(lastPositions.get(i));
-                }
-                if(i == lastPositions.size() - 1 && diffVertices.size() < 5)
-                {
-                    return true;
+                    if(!diffVertices.contains(lastPositions.get(i)))
+                    {
+                        diffVertices.add(lastPositions.get(i));
+                    }
+                    if(i == lastPositions.size() - 1 && diffVertices.size() < 5)
+                    {
+                        return true;
+                    }
                 }
             }
         }
-        if (DEBUG)
-            System.out.println("Different vertices: " + diffVertices);
         return false;
     }
 
