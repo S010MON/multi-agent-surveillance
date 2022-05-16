@@ -10,7 +10,7 @@ public class PortalBoundary extends BoundaryImp
 
     public PortalBoundary(Vector a, Vector b, Vector teleport)
     {
-        super(a, b, true, true, true);
+        super(a, b, BoundaryType.VISIBLE_TRANSPARENT);
         this.teleport = teleport;
     }
 

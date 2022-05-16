@@ -6,14 +6,10 @@ import app.controller.linAlg.Angle;
 import app.controller.linAlg.Vector;
 import app.controller.settings.Settings;
 import app.model.Map;
-import app.model.Type;
 import app.model.agents.Agent;
-import app.model.agents.AgentImp;
 import app.model.boundary.Boundary;
 import app.model.boundary.BoundaryImp;
-import app.model.boundary.VisibleTransparentBoundary;
-import app.model.furniture.Furniture;
-import app.model.furniture.FurnitureBase;
+import app.model.boundary.VisibleTransparentNonSolidBoundary;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
@@ -30,7 +26,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new BoundaryImp(a,b, true, false, true);
+        Boundary bdy = new BoundaryImp(a,b);
 
         Vector u = new Vector(15,0);
         Vector v = new Vector(15,16);
@@ -48,7 +44,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new BoundaryImp(a,b, true, false, true);
+        Boundary bdy = new BoundaryImp(a,b);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);
@@ -66,7 +62,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new VisibleTransparentBoundary(a,b);
+        Boundary bdy = new VisibleTransparentNonSolidBoundary(a,b);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);

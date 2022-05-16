@@ -5,25 +5,25 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
-import lombok.Getter;
-
-import java.awt.geom.Line2D;
 
 public class BoundaryImp implements Boundary
 {
     protected Vector a;
     protected Vector b;
-    @Getter protected boolean visible;
-    @Getter protected boolean transparent; //automatically true if not visible
-    @Getter protected boolean solid;
+    protected BoundaryType type;
 
-    public BoundaryImp(Vector a, Vector b, boolean visible, boolean transparent, boolean solid)
+    public BoundaryImp(Vector a, Vector b)
     {
         this.a = a;
         this.b = b;
-        this.visible = visible;
-        this.transparent = transparent;
-        this.solid = solid;
+        this.type = BoundaryType.VISIBLE_SOLID;
+    }
+
+    public BoundaryImp(Vector a, Vector b, BoundaryType type)
+    {
+        this.a = a;
+        this.b = b;
+        this.type = type;
     }
 
     @Override
@@ -62,5 +62,20 @@ public class BoundaryImp implements Boundary
     public Vector getTeleport()
     {
         return null;
+    }
+
+    public boolean isSolid()
+    {
+        return BoundaryType.isSolid(type);
+    }
+
+    public boolean isVisible()
+    {
+        return BoundaryType.isVisible(type);
+    }
+
+    public boolean isTransparent()
+    {
+        return BoundaryType.isTransparent(type);
     }
 }

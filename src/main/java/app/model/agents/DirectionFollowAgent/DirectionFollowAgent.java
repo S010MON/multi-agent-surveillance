@@ -195,7 +195,7 @@ public class DirectionFollowAgent extends AgentImp
         boolean wallDetected = false;
         for(Ray r : view)
         {
-            if(TypeInformation.isSolid(r.getType()) && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
+            if(solidOrOnlyRay(r) && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
             {
                 wallDetected = true;
                 if(r.length() <= moveLength)
@@ -263,12 +263,12 @@ public class DirectionFollowAgent extends AgentImp
         throw new RuntimeException("wallTurn type not specified while in WallFollow state");
     }
 
-    private Double distanceToObstacle(double rayAngle){
+    private Double distanceToObstacle(double rayAngle) {
         if (DEBUG)
             System.out.println("distanceToObstacle method:");
         for (Ray r : view)
         {
-            if ((TypeInformation.isSolid(r.getType()) || r.getType()==null) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
+            if (solidOrOnlyRay(r) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
             {
                 if (DEBUG)
                 {
