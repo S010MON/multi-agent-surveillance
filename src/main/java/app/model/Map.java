@@ -154,14 +154,6 @@ public class Map
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
-//        if(target != null)
-//        {
-//            gc.setStroke(Color.GOLD);
-//            gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-//                    target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-//                    target.getHeight() * Info.getInfo().zoom,
-//                    target.getHeight() * Info.getInfo().zoom);
-//        }
         if(guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);
