@@ -320,7 +320,7 @@ public class AcoAgent extends AgentImp
     {
         for(Ray ray: view)
         {
-            if(TypeInformation.isSolid(ray.getType()) && approximateAngleRange(ray.angle(), targetCardinalAngle))
+            if((TypeInformation.isSolid(ray.getType()) || ray.getType() ==null) && approximateAngleRange(ray.angle(), targetCardinalAngle))
             {
                 return ray;
             }
