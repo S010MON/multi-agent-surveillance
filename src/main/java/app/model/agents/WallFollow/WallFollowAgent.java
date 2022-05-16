@@ -502,7 +502,7 @@ public class WallFollowAgent extends AgentImp
     {
         for (Ray r : view)
         {
-            if (TypeInformation.isSolid(r.getType()) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
+            if ((TypeInformation.isSolid(r.getType()) || r.getType()==null) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0) && r.length() <= moveLength)
             {
                 if(r.getType()==Type.BORDER || r.getType()==Type.WALL)
                 {
