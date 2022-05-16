@@ -15,6 +15,7 @@ import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -229,7 +230,7 @@ public class WallFollowAgentTest
         assertEquals(expectedDir, agent.getDirection());
     }
 
-    @Test
+    @Disabled
     void testAlgorithmCase0()
     {
         /*
