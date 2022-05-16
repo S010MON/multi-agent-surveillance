@@ -13,6 +13,8 @@ public enum BoundaryType
 
     public static BoundaryType of(Type type)
     {
+        if(type == null)
+            return null;
         switch(type)
         {
             case WALL, BORDER, TOWER -> {return BoundaryType.VISIBLE_SOLID;}

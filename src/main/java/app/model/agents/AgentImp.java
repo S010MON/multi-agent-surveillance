@@ -214,7 +214,7 @@ public class AgentImp implements Agent
     // if the object is solid, it's the farthest you can get, if it's null, it's the only ray with that angle, thus use no obstacles on rayLength
     protected boolean solidOrOnlyRay(Ray ray)
     {
-        return !(ray.isSolid() || ray.getType()==null);
+        return (ray.isSolid() || ray.getType()==null);
     }
 
     @Override public boolean isSolid() { return true; }
