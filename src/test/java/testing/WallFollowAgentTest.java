@@ -7,10 +7,7 @@ import app.controller.settings.SettingsObject;
 import app.model.Map;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.MemoryGraph;
 import app.model.agents.WallFollow.WallFollowAgent;
-import app.model.agents.WallFollow.WfWorld;
-
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
@@ -31,9 +28,8 @@ public class WallFollowAgentTest
     GraphicsEngine graphicsEngine = new GraphicsEngine(181);
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
-    double moveLen = 75.0;
+    double moveLen = 20.0;
     WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
-    private WfWorld tempWfWorld = new WfWorld(new MemoryGraph((int)moveLen));
 
     @Test
     void testAgentDirectionAngle()
@@ -53,7 +49,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
+        Rectangle2D obstacle = new Rectangle2D(150, 115, 100, 2);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -68,9 +64,6 @@ public class WallFollowAgentTest
                 hittingRayAngles.add(r.angle());
             }
         }
-
-        System.out.println("The angles of rays that hit the wall:");
-        System.out.println(hittingRayAngles);
         assertTrue(agent.getView().size() > 0);
     }
 
@@ -111,7 +104,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
+        Rectangle2D obstacle = new Rectangle2D(150, 115, 100, 2);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -130,7 +123,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
+        Rectangle2D obstacle = new Rectangle2D(215, 50, 2, 100);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -149,7 +142,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(250, 50, 2, 100);
+        Rectangle2D obstacle = new Rectangle2D(215, 50, 2, 100);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -170,7 +163,7 @@ public class WallFollowAgentTest
     {
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
+        Rectangle2D obstacle = new Rectangle2D(150, 115, 100, 2);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(List.of(FurnitureFactory.make(obj)));
         Map map = new Map(agent, walls);
@@ -242,20 +235,14 @@ public class WallFollowAgentTest
                 turn 90 deg right
                 set wallEcountered = true
          */
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
+
         agent.setDEBUG(true);
         agent.updateLocation(initialPosition);
         agent.setDirection(initialDirection);
-        System.out.println("Agent direction: " + agent.getDirection());
-        System.out.println("Agent direction angle: " + agent.getDirection().getAngle());
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacle = new Rectangle2D(150, 275, 100, 2);
+        Rectangle2D obstacle = new Rectangle2D(150, 150, 100, 2);
         Rectangle2D obstacle2 = new Rectangle2D(10, 10, 2, 700);
         Rectangle2D obstacle3 = new Rectangle2D(700, 10, 2, 700);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
@@ -307,11 +294,7 @@ public class WallFollowAgentTest
         // ALGORITHM CASE 1
         // if (turned left previously and forward no wall)
         //      go forward
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
+
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.LEFT);
         agent.setMovedForwardLast(false);
@@ -359,12 +342,6 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
-
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
         agent.setMovedForwardLast(false);
@@ -402,11 +379,6 @@ public class WallFollowAgentTest
         // if (no wall at left)
         //    turn 90 deg left
 
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
         agent.setWallEncountered(true);
         // Map
         FurnitureType obstacleType = FurnitureType.WALL;
@@ -446,18 +418,13 @@ public class WallFollowAgentTest
         // if (no wall forward)
         //    go forward
 
-        if (!agent.getWorld().getClass().equals(tempWfWorld.getClass()))
-        {
-            agent.setWorld(new WfWorld(new MemoryGraph((int)moveLen)));
-            agent.initializeWorld();
-        }
         agent.setWallEncountered(true);
         agent.setLastTurn(WallFollowAgent.TurnType.NO_TURN);
 
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
         Rectangle2D obstacle = new Rectangle2D(150, 400, 100, 2);
-        Rectangle2D obstacle2 = new Rectangle2D(250, 50, 2, 200);
+        Rectangle2D obstacle2 = new Rectangle2D(215, 50, 2, 200);
         Rectangle2D obstacle3 = new Rectangle2D(50, 10, 2, 700);
         SettingsObject obj = new SettingsObject(obstacle, obstacleType);
         SettingsObject obj2 = new SettingsObject(obstacle2, obstacleType);
@@ -498,8 +465,8 @@ public class WallFollowAgentTest
         agent.setWallEncountered(true);
         //Map
         FurnitureType obstacleType = FurnitureType.WALL;
-        Rectangle2D obstacleLeft = new Rectangle2D(250, 50, 2, 100);
-        Rectangle2D obstacleFront = new Rectangle2D(150, 150, 100, 2);
+        Rectangle2D obstacleLeft = new Rectangle2D(215, 50, 2, 100);
+        Rectangle2D obstacleFront = new Rectangle2D(150, 115, 100, 2);
         SettingsObject obj1 = new SettingsObject(obstacleLeft, obstacleType);
         SettingsObject obj2 = new SettingsObject(obstacleFront, obstacleType);
         ArrayList<Furniture> walls = new ArrayList<>(Arrays.asList(FurnitureFactory.make(obj1),
@@ -529,4 +496,3 @@ public class WallFollowAgentTest
         assertFalse(agent.isMovedForwardLast());
     }
 }
-

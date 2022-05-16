@@ -25,12 +25,12 @@ public class AcoRanking extends AcoAgent
         Ray cardinalRay = detectCardinalPoint(explorationDirection.getAngle());
         if(moveEvaluation(cardinalRay))
         {
-            possibleMovements.add(explorationDirection.scale(distance));
+            possibleMovements.add(explorationDirection.scale(moveLength));
             moveRanking.add(cardinalRay.length());
         }
         else
         {
-            world.setVertexAsObstacle(position, explorationDirection.scale(distance));
+            world.setVertexAsObstacle(position, explorationDirection.scale(moveLength));
         }
         nextBestOptionHandling(explorationDirection);
     }
