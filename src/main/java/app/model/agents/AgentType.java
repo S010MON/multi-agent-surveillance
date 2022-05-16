@@ -26,7 +26,7 @@ public enum AgentType
             }
             case ACO_MOMENTUM ->
             {
-                return new AcoColony(position, direction, radius, type);
+                return new AcoMomentum(position, direction, radius, type);
             }
             case ACO_MIDI ->
             {
