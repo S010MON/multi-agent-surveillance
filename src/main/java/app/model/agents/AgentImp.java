@@ -24,6 +24,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected double moveLength = 20;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
+    @Getter @Setter protected boolean captureOccurred;
     @Getter @Setter protected Vector tgtDirection;
     @Getter protected Type type;
     @Getter protected Vector position;

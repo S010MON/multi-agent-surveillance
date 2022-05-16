@@ -48,6 +48,8 @@ public interface Agent extends Boundary
 
     void setMoveFailed(boolean failed);
 
+    void setCaptureOccurred(boolean occurred);
+
     void updateSeen(Vector vector);
 
     void addViewWindow(AgentView agentView);

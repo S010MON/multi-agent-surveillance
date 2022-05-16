@@ -186,6 +186,7 @@ public class Map
 
     public void checkForCapture(Agent currentAgent)
     {
+        boolean flag = false;
         if(currentAgent.getType() != Type.GUARD)
             return;
 
@@ -196,10 +197,15 @@ public class Map
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
                 if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
                 {
+                    flag = true;
                     deleteAgent(otherAgent);
+                    currentAgent.setCaptureOccurred(true);
                 }
             }
         }
+
+        if(!flag)
+            currentAgent.setCaptureOccurred(false);
     }
 
 
