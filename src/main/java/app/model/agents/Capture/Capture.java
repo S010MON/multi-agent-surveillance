@@ -11,17 +11,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Capture extends AgentImp
 
 {
     private final boolean DEBUG = true;
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
+    private final int MAX_MOVES_BEFORE_RETURN = 5;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     @Getter private VectorSet shortTermMemory = new VectorSet();
     private ArrayList<Vector> positionHistory = new ArrayList<>();
+    private Queue<Vector> prevPositions =  new LinkedList<>();
     private Move prevMove;
-    private boolean captureComplete = false;
     private int counter;
 
     /**
@@ -38,6 +41,7 @@ public class Capture extends AgentImp
         super(position, direction, radius, type);
         beliefSet.add(intruderPos);
         positionHistory.add(intruderPos);
+        prevPositions.add(position);
     }
 
     /* Constructor for testing */
@@ -49,7 +53,7 @@ public class Capture extends AgentImp
     @Override
     public Move move()
     {
-        if(!maxTicsReached() && !captureComplete)
+        if(!maxTicsReached())
         {
             updateKnowledge();
             if(moveFailed){
@@ -79,12 +83,18 @@ public class Capture extends AgentImp
             if(DEBUG) System.out.println("Not seen");
             updateBeliefSet();
         }
+        updatePrevPositions();
         updateCounter();
     }
 
     public Move shortTermMemory()
     {
         shortTermMemory.remove(position.add(prevMove.getDeltaPos()));
+
+        // Remove possible moves that we have been in recently when we do not see the intruder.
+        if(beliefSet.size() != 1)
+            checkPrevPositions(shortTermMemory);
+
         Vector wantedMove = closestLocationInArray(new ArrayList<>(shortTermMemory), findTarget());
         Vector deltaPos = wantedMove.sub(position);
         Vector direction = deltaPos.normalise();
@@ -222,11 +232,23 @@ public class Capture extends AgentImp
         // Populate with possible moves.
         VectorSet possibleMoves = findAllPossiblePositions(position);
 
+        // Remove possible moves that we have been in recently when we do not see the intruder.
+        if(beliefSet.size() != 1)
+            checkPrevPositions(possibleMoves);
+
         Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
         Vector changeInPos = wantedMove.sub(position);
         direction = changeInPos.normalise();
         prevMove = new Move(direction, changeInPos);
         return new Move(direction, changeInPos);
+    }
+
+    private void checkPrevPositions(VectorSet moves)
+    {
+        for(Vector p : prevPositions)
+        {
+            moves.removeIf(location -> moves.contains(p));
+        }
     }
 
     private boolean maxTicsReached()
@@ -240,5 +262,12 @@ public class Capture extends AgentImp
             counter++;
         else if(beliefSet.size() == 1)
             counter = 0; // Reset counter when we see the intruder.
+    }
+
+    private void updatePrevPositions()
+    {
+        prevPositions.add(position);
+        if(prevPositions.size() > MAX_MOVES_BEFORE_RETURN)
+            prevPositions.remove();
     }
 }
