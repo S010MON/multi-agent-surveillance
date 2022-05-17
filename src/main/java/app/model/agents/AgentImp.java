@@ -126,21 +126,21 @@ public class AgentImp implements Agent
 
     public Vector closestTypeSeen(Type type)
     {
-        Vector closestAgentPos = null;
-        double closestAgentDist = Double.MAX_VALUE;
+        Vector closestPos = null;
+        double closestDist = Double.MAX_VALUE;
 
         for(Ray r : view)
         {
             if(r.getType()==type)
             {
-                if(r.length() < closestAgentDist)
+                if(r.length() < closestDist)
                 {
-                    closestAgentPos = r.getV();
-                    closestAgentDist = r.length();
+                    closestPos = r.getV();
+                    closestDist = r.length();
                 }
             }
         }
-        return closestAgentPos;
+        return closestPos;
     }
 
     @Override
