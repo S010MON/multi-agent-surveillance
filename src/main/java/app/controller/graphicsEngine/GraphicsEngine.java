@@ -13,7 +13,7 @@ public class GraphicsEngine
 {
     private double angle = 91; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
-    public GraphicsEngine(){};
+    public GraphicsEngine(){}
 
     public GraphicsEngine(double angle)
     {
@@ -33,16 +33,10 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersections.size() != 0 && agentIntersection != null)
-            {
-                for(Vector bdy: bdyIntersections)
-                    output.add(closestRay(origin, bdy, agentIntersection, map));
-            }
+                bdyIntersections.forEach(bdy -> output.add(closestRay(origin, bdy, agentIntersection, map)));
 
             else if(bdyIntersections.size() != 0)
-            {
-                for(Vector bdy: bdyIntersections)
-                    output.add(new Ray(origin, bdy, map.objectAt(bdy)));
-            }
+                bdyIntersections.forEach(bdy -> output.add(new Ray(origin, bdy, map.objectAt(bdy))));
 
             else if(agentIntersection != null)
                 output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
@@ -50,7 +44,10 @@ public class GraphicsEngine
         return output;
     }
 
-    // this method returns both the non-transparent intersection, and the transparent (but visible) intersections before it
+    /**
+     *  @return both the non-transparent intersection, and the transparent (but visible) intersections
+     *  encountered before it
+     */
     private ArrayList<Vector> getIntersections(Ray r, ArrayList<Boundary> boundaries)
     {
         ArrayList<Vector> transparentIntersections = new ArrayList<>();
@@ -80,6 +77,7 @@ public class GraphicsEngine
         ArrayList<Vector> intersections = new ArrayList<>();
         if(nonTransparentIntersection!=null)
             intersections.add(nonTransparentIntersection);
+
         for(Vector intersection: transparentIntersections)
         {
             double dist = r.getU().dist(intersection);

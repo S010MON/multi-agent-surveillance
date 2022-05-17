@@ -3,7 +3,6 @@ package app.controller.graphicsEngine;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.boundary.BoundaryType;
-import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -93,6 +92,6 @@ public class Ray
     @Override
     public String toString()
     {
-        return new String("Ray: "+ u.toString() +", " + v.toString());
+        return "Ray: "+ u.toString() +", " + v.toString();
     }
 }

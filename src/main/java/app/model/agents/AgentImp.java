@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 
 public class AgentImp implements Agent
@@ -217,5 +218,17 @@ public class AgentImp implements Agent
     protected boolean solidOrOnlyRay(Ray ray)
     {
         return (ray.isSolid() || ray.getType()==null);
+    }
+
+    /**
+     * Removes all non-solid rays from the input
+     * @param rays an arraylist of rays to be filtered
+     * @return an arraylist of rays with non-solid removed
+     */
+    protected ArrayList<Ray> filterSolidOnly(ArrayList<Ray> rays)
+    {
+        return  (ArrayList<Ray>) rays.stream()
+                                     .filter(r -> r.isSolid() || r.getType() == null)
+                                     .collect(Collectors.toList());
     }
 }
