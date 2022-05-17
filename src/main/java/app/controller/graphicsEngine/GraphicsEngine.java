@@ -42,7 +42,10 @@ public class GraphicsEngine
         return output;
     }
 
-    // this method returns both the non-transparent intersection, and the transparent (but visible) intersections before it
+    /**
+     *  @return both the non-transparent intersection, and the transparent (but visible) intersections
+     *  encountered before it
+     */
     private ArrayList<Vector> getIntersections(Ray r, ArrayList<Boundary> boundaries)
     {
         ArrayList<Vector> transparentIntersections = new ArrayList<>();
@@ -72,6 +75,7 @@ public class GraphicsEngine
         ArrayList<Vector> intersections = new ArrayList<>();
         if(nonTransparentIntersection!=null)
             intersections.add(nonTransparentIntersection);
+
         for(Vector intersection: transparentIntersections)
         {
             double dist = r.getU().dist(intersection);
