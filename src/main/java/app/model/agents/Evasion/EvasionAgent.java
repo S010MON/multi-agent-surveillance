@@ -12,6 +12,7 @@ public class EvasionAgent extends AgentImp
 {
     private EvasionStrategy strategy;
     private boolean guardInView = true;
+    private double randomness = 0.3;
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
@@ -28,16 +29,17 @@ public class EvasionAgent extends AgentImp
     {
         switch(strategy)
         {
-            case AWAY -> {
-                return moveAway();
+            case DIRECTED -> {
+                return moveDirected();
             }
             case RANDOMDIRECTED -> {
                 return  moveRandomDirected();
             }
-            default -> {
+            case RANDOM -> {
                 return moveRandom();
             }
         }
+        return null;
     }
 
     private Move moveRandom(){
@@ -49,7 +51,7 @@ public class EvasionAgent extends AgentImp
 
     private Move moveRandomDirected(){
         // randomness should be a number between 0 and 1
-        Double randomness = 0.3;
+
 
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
@@ -66,9 +68,9 @@ public class EvasionAgent extends AgentImp
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
-        return new Move(flippedDirection, mixedDirection.scale(maxSprint));    }
+        return new Move(guardDirection, mixedDirection.scale(maxSprint));    }
 
-    public Move moveAway(){
+    public Move moveDirected(){
 
         // need condition on this value being null
         Vector guardDirection = findFirstGuardDirection();
@@ -81,7 +83,9 @@ public class EvasionAgent extends AgentImp
 
         Vector flippedDirection = guardDirection.rotate(180);
 
-        return new Move(flippedDirection, flippedDirection.scale(maxSprint));
+        // Keep looking back to keep the agent in view
+
+        return new Move(guardDirection, flippedDirection.scale(maxSprint));
     }
 
     private Vector findFirstGuardDirection(){

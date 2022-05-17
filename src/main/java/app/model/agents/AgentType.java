@@ -3,6 +3,8 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
+import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WallFollowAgent;
 
 public enum AgentType
@@ -14,6 +16,9 @@ public enum AgentType
     ACO_RANKING,
     ACO_COLONY,
     WALL_FOLLOW,
+    EVASION_RANDOM,
+    EVASION_DIRECTED,
+    EVASION_RANDOMDIRECTED,
     RANDOM;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
@@ -47,6 +52,18 @@ public enum AgentType
             case WALL_FOLLOW ->
             {
                 return new WallFollowAgent(position, direction, radius, type, 20);
+            }
+            case EVASION_RANDOM ->
+            {
+                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOM);
+            }
+            case EVASION_DIRECTED ->
+            {
+                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.DIRECTED);
+            }
+            case EVASION_RANDOMDIRECTED ->
+            {
+                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
             }
             case RANDOM ->
             {

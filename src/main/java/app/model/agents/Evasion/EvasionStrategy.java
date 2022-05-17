@@ -4,5 +4,5 @@ public enum EvasionStrategy
 {
     RANDOM,
     RANDOMDIRECTED,
-    AWAY
+    DIRECTED
 }
