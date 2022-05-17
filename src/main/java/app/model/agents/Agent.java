@@ -61,4 +61,6 @@ public interface Agent extends Boundary
     Agent nextState();
 
     AgentView getAgentViewWindow();
+
+    boolean isTypeSeen(Type type);
 }

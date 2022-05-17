@@ -35,7 +35,7 @@ public class AcoAgentTesting
 
     public void agentSetup(AcoAgent agent)
     {
-        agent.setDistance(moveDistance);
+        agent.setMoveLength(moveDistance);
         agent.setVisionDistance(viewingDistance);
     }
 
