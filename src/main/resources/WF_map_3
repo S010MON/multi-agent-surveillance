@@ -31,3 +31,4 @@ wall = 465 342 581 351
 wall = 348 539 534 554
 spawnAreaGuards = 433 117 467 193
 spawnAreaIntruders = 44 317 204 383
+targetArea = 400 99 400 181
