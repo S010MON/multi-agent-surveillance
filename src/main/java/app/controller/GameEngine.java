@@ -138,7 +138,7 @@ public class GameEngine
     {
         for (Boundary bdy : map.getBoundaries())
         {
-            if(bdy.isCrossed(start, end) && BoundaryType.isSolid(bdy.getBoundaryType()) == true)
+            if(bdy.isCrossed(start, end) && BoundaryType.isSolid(bdy.getBoundaryType()))
                 return false;
         }
         return true;

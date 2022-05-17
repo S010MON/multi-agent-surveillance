@@ -11,6 +11,7 @@ import app.model.agents.AgentImp;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -193,9 +194,10 @@ public class DirectionFollowAgent extends AgentImp
         double anglePrecision = 1;
 
         boolean wallDetected = false;
-        for(Ray r : view)
+        ArrayList<Ray> solidView = filterSolidOnly(view);
+        for (Ray r : solidView)
         {
-            if(solidOrOnlyRay(r) && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
+            if(Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
             {
                 wallDetected = true;
                 if(r.length() <= moveLength)
@@ -266,9 +268,10 @@ public class DirectionFollowAgent extends AgentImp
     private Double distanceToObstacle(double rayAngle) {
         if (DEBUG)
             System.out.println("distanceToObstacle method:");
-        for (Ray r : view)
+        ArrayList<Ray> solidView = filterSolidOnly(view);
+        for (Ray r : solidView)
         {
-            if (solidOrOnlyRay(r) && (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0))
+            if (r.angle() <= rayAngle + 1.0 && r.angle() >= rayAngle - 1.0)
             {
                 if (DEBUG)
                 {

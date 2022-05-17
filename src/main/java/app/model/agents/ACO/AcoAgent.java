@@ -318,8 +318,8 @@ public class AcoAgent extends AgentImp
 
     public Ray detectCardinalPoint(double targetCardinalAngle)
     {
-        view = filterSolidOnly(view);
-        for(Ray ray: view)
+        ArrayList<Ray> solidView = filterSolidOnly(view);
+        for (Ray ray : solidView)
         {
             if(approximateAngleRange(ray.angle(), targetCardinalAngle))
             {

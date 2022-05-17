@@ -513,7 +513,8 @@ public class WallFollowAgent extends AgentImp
     public boolean noWallDetected(double rayAngle)
     {
         double anglePrecision = 2;
-        for (Ray r : view)
+        ArrayList<Ray> solidView = filterSolidOnly(view);
+        for (Ray r : solidView)
         {
             if ((TypeInformation.isSolid(r.getType()) || r.getType()==null) && (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision)))
             {
