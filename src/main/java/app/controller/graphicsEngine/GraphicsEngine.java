@@ -11,7 +11,7 @@ public class GraphicsEngine
 {
     private double angle = 91; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
-    public GraphicsEngine(){};
+    public GraphicsEngine(){}
 
     public GraphicsEngine(double angle)
     {
@@ -31,16 +31,10 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersections.size() != 0 && agentIntersection != null)
-            {
-                for(Vector bdy: bdyIntersections)
-                    output.add(closestRay(origin, bdy, agentIntersection, map));
-            }
+                bdyIntersections.forEach(bdy -> output.add(closestRay(origin, bdy, agentIntersection, map)));
 
             else if(bdyIntersections.size() != 0)
-            {
-                for(Vector bdy: bdyIntersections)
-                    output.add(new Ray(origin, bdy, map.objectAt(bdy)));
-            }
+                bdyIntersections.forEach(bdy -> output.add(new Ray(origin, bdy, map.objectAt(bdy))));
 
             else if(agentIntersection != null)
                 output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
