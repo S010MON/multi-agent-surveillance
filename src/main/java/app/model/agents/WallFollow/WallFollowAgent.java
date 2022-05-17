@@ -32,7 +32,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
-    private boolean initialVertexFound = false;  // pheromone 1
+    private boolean initialVertexFound = false;
     private boolean noMovesDone = true;
     private boolean explorationDone = false;
     private GraphCell currentTargetVertex = null;
@@ -46,7 +46,11 @@ public class WallFollowAgent extends AgentImp
     @Getter private GraphCell prevAgentVertex = null;
     private boolean hasLeftInitialWallFollowPos = false;
     private GraphCell initialWallFollowPos = null;
+    protected double directionHeuristicWeight = 1;
 
+    /** Original WallFollow agent that switches between following a wall and doing heuristics exploration,
+     * depending on if it finds an unexplored wall to follow.
+     * Compared to other variants of WF, gives lowest weight to direction in heuristics part. */
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
@@ -155,7 +159,7 @@ public class WallFollowAgent extends AgentImp
             deltaPos = pathMove.getDeltaPos();
             newDirection = pathMove.getEndDir();
         }
-        else if ((currentPathToNextVertex != null || initialVertexFound) && foundUnexploredWallToFollow())  // todo add the case of stuck movement?
+        else if ((currentPathToNextVertex != null || initialVertexFound) && foundUnexploredWallToFollow())
         {
             currentPathToNextVertex = null;
             currentTargetVertex = null;
@@ -298,23 +302,23 @@ public class WallFollowAgent extends AgentImp
         }
         else
         {
-            double minScore = 0;
-            GraphCell minScoreVertex = null;
+            double bestScore = 0;
+            GraphCell bestScoreVertex = null;
             for (GraphCell vertex : unexploredVertices)
             {
                 if (!inaccessibleCells.contains(vertex))
                 {
                     double score = getVertexScore(vertex);
-                    if (minScore == 0 || score < minScore)
+                    if (bestScore == 0 || score < bestScore)
                     {
-                        minScore = score;
-                        minScoreVertex = vertex;
+                        bestScore = score;
+                        bestScoreVertex = vertex;
                     }
                 }
             }
-            if (minScoreVertex != null)
+            if (bestScoreVertex != null)
             {
-                currentTargetVertex = minScoreVertex;
+                currentTargetVertex = bestScoreVertex;
                 currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
                         world.getVertexAt(position), currentTargetVertex).getVertexList();
                 return getMoveBasedOnPath();
@@ -346,13 +350,15 @@ public class WallFollowAgent extends AgentImp
         return new Move(newDirection, deltaPos);
     }
 
+    /** Takes into account shortest path length, direction relative to agent's
+     * and how many neighbours also have unexplored cells.
+     * Original WF agent gives low weight to keeping in current direction, WFDirHeuristicMedWeight gives more weight
+     * and WFDirHeuristicHighWeight gives most weight to that.
+     */
     public double getVertexScore(GraphCell vertex)
     {
-        // currently takes into account shortest path length, direction relative to agent's and
-        // how many neighbours also have unexplored cells
-        // TODO add weights to score components - HEURISTICS EXPERIMENTS
         double score;
-        int shortestPathLength;
+        double shortestPathLength;
         GraphPath dijkstrasPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
         if (dijkstrasPath != null)
         {
@@ -371,11 +377,12 @@ public class WallFollowAgent extends AgentImp
                 neighboursOnUnexploredFrontier++;
             }
         }
+
         score = shortestPathLength;
         score = score / getDirectionScore(vertex);
         if (neighboursOnUnexploredFrontier != 0)
         {
-            score = score / neighboursOnUnexploredFrontier;
+           score = score / neighboursOnUnexploredFrontier;
         }
 
         return score;
@@ -593,7 +600,7 @@ public class WallFollowAgent extends AgentImp
      * @param targetVertex vertex to give the score to.
      * @return the direction score (1 or 2 or 3)
      */
-    public int getDirectionScore(GraphCell targetVertex)
+    public double getDirectionScore(GraphCell targetVertex)
     {
         Vector targetVector = new Vector(targetVertex.getX(),targetVertex.getY());
         double angle = targetVector.sub(position).getAngle();
@@ -602,7 +609,7 @@ public class WallFollowAgent extends AgentImp
         {
             if (angle >= 315 || angle <= 45)
             {
-                return 3;
+                return 3 * directionHeuristicWeight;
             }
             else if (angle >= 225 || angle <= 135)
             {
@@ -615,7 +622,7 @@ public class WallFollowAgent extends AgentImp
         }
         else if (angle >= agentAngle-45 && angle <= agentAngle+45)
         {
-            return 3;
+            return 3 * directionHeuristicWeight;
         }
         else if (angle >= agentAngle-135 && angle <= agentAngle+135)
         {
