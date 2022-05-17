@@ -46,4 +46,14 @@ public class AngleTest
         assertTrue(Angle.angleInRange(v1, u, l));
         assertFalse(Angle.angleInRange(v2, u, l));
     }
+
+    @Test void angle0Case()
+    {
+        double u = 2;
+        double l = -2;
+        double v1 = 0;
+        double v2 = 357;
+        assertTrue(Angle.angleInRange(v1, u, l));
+        assertFalse(Angle.angleInRange(v2, u, l));
+    }
 }
