@@ -2,6 +2,7 @@ package app.controller.graphicsEngine;
 
 import app.controller.linAlg.Vector;
 import app.model.Type;
+import app.model.boundary.BoundaryType;
 import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,6 +14,7 @@ public class Ray
     @Getter private Vector u;
     @Getter private Vector v;
     @Getter private Type type = null;
+    @Getter private BoundaryType boundaryType = null;
     protected Color colour = Color.rgb(255,191,0, 0.5);
     protected final double LINE_WIDTH = 1;
 
@@ -27,6 +29,14 @@ public class Ray
         this.u = u;
         this.v = v;
         this.type = type;
+        this.boundaryType = BoundaryType.of(type);
+    }
+
+    public Ray(Vector u, Vector v, BoundaryType boundaryType)
+    {
+        this.u = u;
+        this.v = v;
+        this.boundaryType = boundaryType;
     }
 
     public double angle()
@@ -53,6 +63,12 @@ public class Ray
     {
         return v.sub(u).normalise();
     }
+
+    public boolean isSolid() { return BoundaryType.isSolid(boundaryType); }
+
+    public boolean isVisible() { return BoundaryType.isVisible(boundaryType); }
+
+    public boolean isTransparent() { return BoundaryType.isTransparent(boundaryType); }
 
     @Override
     public boolean equals(Object other)

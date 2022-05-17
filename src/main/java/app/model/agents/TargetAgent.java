@@ -1,4 +1,4 @@
-package app.model.agents.DirectionFollowAgent;
+package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Angle;
@@ -15,11 +15,10 @@ public class TargetAgent extends AgentImp
     private boolean guardDetected;
     private final boolean DEBUG = false;
 
-    public TargetAgent(Vector position, Vector direction, double radius, Type type, Ray targetRay, World world)
+    public TargetAgent(Vector position, Vector direction, double radius, Type type, Ray targetRay)
     {
         super(position, direction, radius, type);
         this.targetRay = targetRay;
-        this.world = world;
         guardDetected = false;
     }
 

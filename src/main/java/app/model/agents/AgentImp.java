@@ -7,6 +7,7 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.TypeInformation;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -33,9 +34,6 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
-    @Getter protected boolean solid = true;
-    @Getter protected boolean visible = true;
-    @Getter protected boolean transparent = false;
 
     @Getter @Setter protected World world;
 
@@ -212,4 +210,16 @@ public class AgentImp implements Agent
         }
         return false;
     }
+
+    // if the object is solid, it's the farthest you can get, if it's null, it's the only ray with that angle, thus use no obstacles on rayLength
+    protected boolean solidOrOnlyRay(Ray ray)
+    {
+        return (ray.isSolid() || ray.getType()==null);
+    }
+
+    @Override public boolean isSolid() { return true; }
+
+    @Override public boolean isVisible() { return true; }
+
+    @Override public boolean isTransparent() { return false; }
 }
