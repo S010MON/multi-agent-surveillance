@@ -56,9 +56,9 @@ public enum AgentType
                 return new WallFollowAgent(position, direction, radius, type, 20);
             }
             case TARGET ->
-                    {
-                        return new TargetAgent(position, direction, radius, type, targetRay);
-                    }
+            {
+                return new TargetAgent(position, direction, radius, type, targetRay);
+            }
             case RANDOM ->
             {
                 return new AgentImp(position, direction, radius, type);
