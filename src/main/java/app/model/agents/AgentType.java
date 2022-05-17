@@ -25,48 +25,37 @@ public enum AgentType
     {
         switch(agentType)
         {
-            case ACO ->
-            {
+            case ACO -> {
                 return new AcoAgent(position, direction, radius, type);
             }
-            case ACO_MOMENTUM ->
-            {
+            case ACO_MOMENTUM -> {
                 return new AcoMomentum(position, direction, radius, type);
             }
-            case ACO_MIDI ->
-            {
+            case ACO_MIDI -> {
                 return new AcoMid(position, direction, radius, type);
             }
-            case ACO_MOMENTUM_SPIRAL_AVOIDANCE ->
-            {
+            case ACO_MOMENTUM_SPIRAL_AVOIDANCE -> {
                 return new AcoMomentumSpiralAvoidance(position, direction, radius, type);
             }
-            case ACO_RANKING ->
-            {
+            case ACO_RANKING -> {
                 return new AcoRanking(position, direction, radius, type);
             }
-            case ACO_COLONY ->
-            {
+            case ACO_COLONY -> {
                 return new AcoColony(position, direction, radius, type);
             }
-            case WALL_FOLLOW ->
-            {
+            case WALL_FOLLOW -> {
                 return new WallFollowAgent(position, direction, radius, type, 20);
             }
-            case EVASION_RANDOM ->
-            {
+            case EVASION_RANDOM -> {
                 return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOM);
             }
-            case EVASION_DIRECTED ->
-            {
+            case EVASION_DIRECTED -> {
                 return new EvasionAgent(position, direction, radius, type, EvasionStrategy.DIRECTED);
             }
-            case EVASION_RANDOMDIRECTED ->
-            {
+            case EVASION_RANDOMDIRECTED -> {
                 return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
             }
-            case RANDOM ->
-            {
+            case RANDOM -> {
                 return new AgentImp(position, direction, radius, type);
             }
             default -> throw new RuntimeException("Agent type not recognized");

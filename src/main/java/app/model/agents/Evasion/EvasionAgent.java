@@ -20,8 +20,9 @@ public class EvasionAgent extends AgentImp
         this.strategy = strategy;
     }
 
-    public EvasionAgent(Vector position, Vector direction, double radius, Type type){
-        this(position,direction, radius, type, EvasionStrategy.RANDOM);
+    public EvasionAgent(Vector position, Vector direction, double radius, Type type)
+    {
+        this(position, direction, radius, type, EvasionStrategy.RANDOM);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class EvasionAgent extends AgentImp
                 return moveDirected();
             }
             case RANDOMDIRECTED -> {
-                return  moveRandomDirected();
+                return moveRandomDirected();
             }
             case RANDOM -> {
                 return moveRandom();
@@ -42,23 +43,24 @@ public class EvasionAgent extends AgentImp
         return null;
     }
 
-    private Move moveRandom(){
+    private Move moveRandom()
+    {
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
         return new Move(direction, randomDirection.scale(maxSprint));
     }
 
-    private Move moveRandomDirected(){
+    private Move moveRandomDirected()
+    {
         // randomness should be a number between 0 and 1
-
-
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
         Vector guardDirection = findFirstGuardDirection();
 
-        if(guardDirection == null){
+        if(guardDirection == null)
+        {
             // TODO this should flip to a new state
             //guardInView = false;
             return new Move(randomDirection, randomDirection.scale(maxSprint));
@@ -68,14 +70,17 @@ public class EvasionAgent extends AgentImp
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
-        return new Move(guardDirection, mixedDirection.scale(maxSprint));    }
+        return new Move(guardDirection, mixedDirection.scale(maxSprint));
+    }
 
-    public Move moveDirected(){
+    public Move moveDirected()
+    {
 
         // need condition on this value being null
         Vector guardDirection = findFirstGuardDirection();
 
-        if(guardDirection == null){
+        if(guardDirection == null)
+        {
             // TODO this should flip to a new state
             // guardInView = false;
             return new Move(direction, new Vector());
@@ -88,12 +93,14 @@ public class EvasionAgent extends AgentImp
         return new Move(guardDirection, flippedDirection.scale(maxSprint));
     }
 
-    private Vector findFirstGuardDirection(){
+    private Vector findFirstGuardDirection()
+    {
         // we dont have a view range yet, just a viewcone for now
 
-        for(Ray ray: view)
+        for(Ray ray : view)
         {
-            if(ray.getType() == Type.GUARD){
+            if(ray.getType() == Type.GUARD)
+            {
                 return ray.direction();
             }
         }
@@ -102,7 +109,8 @@ public class EvasionAgent extends AgentImp
 
     @Override public Agent nextState()
     {
-        if(guardInView){
+        if(guardInView)
+        {
             return this;
         }
 
