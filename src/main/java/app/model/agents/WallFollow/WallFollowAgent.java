@@ -30,7 +30,6 @@ public class WallFollowAgent extends AgentImp
     @Setter private boolean DEBUG = false;
     @Getter @Setter private boolean movedForwardLast = false;
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
-    @Getter @Setter private double moveLength = 20;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
     private boolean initialVertexFound = false;  // pheromone 1
@@ -343,9 +342,6 @@ public class WallFollowAgent extends AgentImp
             movedForwardLast = false;
             wallEncountered = false;
             initialVertexFound = false;
-        }
-        else {
-            throw new RuntimeException("Move failed but last move was not position change!");
         }
         return new Move(newDirection, deltaPos);
     }
