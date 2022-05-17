@@ -41,7 +41,6 @@ public class Capture extends AgentImp
         super(position, direction, radius, type);
         beliefSet.add(intruderPos);
         positionHistory.add(intruderPos);
-        prevPositions.add(position);
     }
 
     /* Constructor for testing */
@@ -63,7 +62,7 @@ public class Capture extends AgentImp
             }
         } else
         {
-            // TODO state change back to ACO if 'if' is false...
+            // TODO state change back to ACO...
             if(DEBUG) System.out.println("Max Tics Reached");
         }
         setShortTermMemory();
@@ -245,10 +244,7 @@ public class Capture extends AgentImp
 
     private void checkPrevPositions(VectorSet moves)
     {
-        for(Vector p : prevPositions)
-        {
-            moves.removeIf(location -> moves.contains(p));
-        }
+        moves.removeIf(l -> prevPositions.contains(l) && moves.size() > 1);
     }
 
     private boolean maxTicsReached()
