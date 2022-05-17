@@ -29,7 +29,6 @@ public class WallFollowAgentTest
     Vector initialPosition = new Vector(200, 100);
     Vector initialDirection = new Vector(0,1);
     double moveLen = 20.0;
-    //WallFollowAgent agent = new WallFollowAgent(initialPosition, initialDirection, 1, Type.INTRUDER, moveLen);
 
     @Test
     void testAgentDirectionAngle()
