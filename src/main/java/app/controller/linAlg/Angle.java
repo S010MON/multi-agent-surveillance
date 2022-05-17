@@ -38,7 +38,7 @@ public abstract class Angle
         List<Ray> raysWithRightAngle = new ArrayList<>();
         for (Ray r : rays)
         {
-            if (Angle.angleInRange(r.angle(), angle+anglePrecision, angle-anglePrecision))
+            if (Angle.angleInRange(r.angle(), angle + anglePrecision, angle - anglePrecision))
             {
                 raysWithRightAngle.add(r);
             }
