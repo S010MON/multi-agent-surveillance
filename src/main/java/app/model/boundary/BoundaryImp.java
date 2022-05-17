@@ -5,25 +5,26 @@ import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 
 public class BoundaryImp implements Boundary
 {
     protected Vector a;
     protected Vector b;
-    protected BoundaryType type;
+    @Getter protected BoundaryType boundaryType;
 
     public BoundaryImp(Vector a, Vector b)
     {
         this.a = a;
         this.b = b;
-        this.type = BoundaryType.VISIBLE_SOLID;
+        this.boundaryType = BoundaryType.VISIBLE_SOLID;
     }
 
-    public BoundaryImp(Vector a, Vector b, BoundaryType type)
+    public BoundaryImp(Vector a, Vector b, BoundaryType boundaryType)
     {
         this.a = a;
         this.b = b;
-        this.type = type;
+        this.boundaryType = boundaryType;
     }
 
     @Override
@@ -62,20 +63,5 @@ public class BoundaryImp implements Boundary
     public Vector getTeleport()
     {
         return null;
-    }
-
-    public boolean isSolid()
-    {
-        return BoundaryType.isSolid(type);
-    }
-
-    public boolean isVisible()
-    {
-        return BoundaryType.isVisible(type);
-    }
-
-    public boolean isTransparent()
-    {
-        return BoundaryType.isTransparent(type);
     }
 }

@@ -9,6 +9,7 @@ import app.model.Trail;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.Map;
+import app.model.boundary.BoundaryType;
 import app.model.boundary.PortalBoundary;
 import app.view.simulation.Renderer;
 import javafx.animation.Animation;
@@ -137,7 +138,7 @@ public class GameEngine
     {
         for (Boundary bdy : map.getBoundaries())
         {
-            if(bdy.isCrossed(start, end) && bdy.isSolid() == true)
+            if(bdy.isCrossed(start, end) && BoundaryType.isSolid(bdy.getBoundaryType()) == true)
                 return false;
         }
         return true;

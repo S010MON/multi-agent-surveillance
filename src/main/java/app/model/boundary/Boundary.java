@@ -18,9 +18,5 @@ public interface Boundary
 
     Vector getTeleport();
 
-    boolean isSolid();
-
-    boolean isVisible();
-
-    boolean isTransparent();
+    BoundaryType getBoundaryType();
 }

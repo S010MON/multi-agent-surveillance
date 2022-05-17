@@ -5,6 +5,8 @@ import app.model.agents.Agent;
 import app.model.Map;
 import app.model.Type;
 import app.model.boundary.Boundary;
+import app.model.boundary.BoundaryType;
+
 import java.util.ArrayList;
 
 public class GraphicsEngine
@@ -58,7 +60,7 @@ public class GraphicsEngine
         {
             if(obj.isHit(r))
             {
-                if(!obj.isTransparent())
+                if(!BoundaryType.isTransparent(obj.getBoundaryType()))
                 {
                     Vector currentV = obj.intersection(r);
                     double dist = r.getU().dist(currentV);
@@ -68,7 +70,7 @@ public class GraphicsEngine
                         closestDist = dist;
                     }
                 }
-                else if(obj.isVisible())
+                else if(BoundaryType.isVisible(obj.getBoundaryType()))
                 {
                     transparentIntersections.add(obj.intersection(r));
                 }

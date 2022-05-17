@@ -8,6 +8,7 @@ import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
 import app.model.TypeInformation;
+import app.model.boundary.BoundaryType;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,6 +35,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
+    @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_SOLID;
 
     @Getter @Setter protected World world;
 
@@ -216,10 +218,4 @@ public class AgentImp implements Agent
     {
         return (ray.isSolid() || ray.getType()==null);
     }
-
-    @Override public boolean isSolid() { return true; }
-
-    @Override public boolean isVisible() { return true; }
-
-    @Override public boolean isTransparent() { return false; }
 }
