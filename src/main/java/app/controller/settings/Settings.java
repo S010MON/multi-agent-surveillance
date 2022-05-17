@@ -4,11 +4,12 @@ import app.controller.linAlg.Vector;
 import app.model.agents.AgentType;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,7 +29,7 @@ public class Settings
     private double timeStep;
     private double scaling;
     private AgentType guardType = AgentType.ACO;
-    private AgentType IntruderType = AgentType.WALL_FOLLOW;
+    private AgentType IntruderType = AgentType.WALL_FOLLOW_DIR_HEURISTIC;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
     private ArrayList<SettingsObject> soundSources = new ArrayList<>();
     private ArrayList<SettingsObject> soundFurniture = new ArrayList<>();

@@ -32,7 +32,7 @@ public class WallFollowAgent extends AgentImp
     @Getter @Setter private TurnType lastTurn = TurnType.NO_TURN;
     @Getter @Setter private boolean wallEncountered = false;
     public static Map map;
-    private boolean initialVertexFound = false;  // pheromone 1
+    private boolean initialVertexFound = false;
     private boolean noMovesDone = true;
     private boolean explorationDone = false;
     private GraphCell currentTargetVertex = null;
@@ -46,7 +46,10 @@ public class WallFollowAgent extends AgentImp
     @Getter private GraphCell prevAgentVertex = null;
     private boolean hasLeftInitialWallFollowPos = false;
     private GraphCell initialWallFollowPos = null;
+    protected double directionHeuristicWeight = 1;
 
+    /** Original WallFollow agent that switches between following a wall and doing heuristics exploration,
+     * depending on if it finds an unexplored wall to follow. */
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
@@ -155,7 +158,7 @@ public class WallFollowAgent extends AgentImp
             deltaPos = pathMove.getDeltaPos();
             newDirection = pathMove.getEndDir();
         }
-        else if ((currentPathToNextVertex != null || initialVertexFound) && foundUnexploredWallToFollow())  // todo add the case of stuck movement?
+        else if ((currentPathToNextVertex != null || initialVertexFound) && foundUnexploredWallToFollow())
         {
             currentPathToNextVertex = null;
             currentTargetVertex = null;
@@ -312,6 +315,7 @@ public class WallFollowAgent extends AgentImp
                     }
                 }
             }
+            System.out.println("PICKED MIN. SCORE: " + minScore);
             if (minScoreVertex != null)
             {
                 currentTargetVertex = minScoreVertex;
@@ -351,12 +355,15 @@ public class WallFollowAgent extends AgentImp
         // currently takes into account shortest path length, direction relative to agent's and
         // how many neighbours also have unexplored cells
         // TODO add weights to score components - HEURISTICS EXPERIMENTS
+        // (smaller score is better!)
+        System.out.println("INDIVIDUAL SCORE COMPONENTS");
         double score;
         int shortestPathLength;
         GraphPath dijkstrasPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
         if (dijkstrasPath != null)
         {
             shortestPathLength = dijkstrasPath.getVertexList().size();
+            System.out.println("Dijkstra's path length: " + shortestPathLength);
         }
         else
         {
@@ -371,11 +378,16 @@ public class WallFollowAgent extends AgentImp
                 neighboursOnUnexploredFrontier++;
             }
         }
+
         score = shortestPathLength;
         score = score / getDirectionScore(vertex);
+        System.out.println("Direction score: " + getDirectionScore(vertex));
+        System.out.println("Score after dividing with dir. score: " + score);
         if (neighboursOnUnexploredFrontier != 0)
         {
             score = score / neighboursOnUnexploredFrontier;
+            System.out.println("Neighbours on unexplored frontier: " + neighboursOnUnexploredFrontier);
+            System.out.println("Score after dividing with unexplored neig. count: " + score);
         }
 
         return score;
@@ -593,7 +605,7 @@ public class WallFollowAgent extends AgentImp
      * @param targetVertex vertex to give the score to.
      * @return the direction score (1 or 2 or 3)
      */
-    public int getDirectionScore(GraphCell targetVertex)
+    public double getDirectionScore(GraphCell targetVertex)
     {
         Vector targetVector = new Vector(targetVertex.getX(),targetVertex.getY());
         double angle = targetVector.sub(position).getAngle();
@@ -602,7 +614,7 @@ public class WallFollowAgent extends AgentImp
         {
             if (angle >= 315 || angle <= 45)
             {
-                return 3;
+                return 3 * directionHeuristicWeight;
             }
             else if (angle >= 225 || angle <= 135)
             {
@@ -615,7 +627,7 @@ public class WallFollowAgent extends AgentImp
         }
         else if (angle >= agentAngle-45 && angle <= agentAngle+45)
         {
-            return 3;
+            return 3 * directionHeuristicWeight;
         }
         else if (angle >= agentAngle-135 && angle <= agentAngle+135)
         {

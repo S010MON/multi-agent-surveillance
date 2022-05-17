@@ -11,7 +11,8 @@ public class Experiments
 {
     private static final int iterations = 1;
     private static final int[] no_of_agents = {1, 2, 4, 6 ,5, 10};
-    private static final AgentType[] agents = {AgentType.RANDOM, AgentType.ACO_MOMENTUM, AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE, AgentType.WALL_FOLLOW};
+    private static final AgentType[] agents = {AgentType.RANDOM, AgentType.ACO_MOMENTUM,
+            AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE, AgentType.WALL_FOLLOW, AgentType.WALL_FOLLOW_DIR_HEURISTIC};
     /**
      * Enter a map name and run the Experiments file to run every agent through the map 100 times
      */
