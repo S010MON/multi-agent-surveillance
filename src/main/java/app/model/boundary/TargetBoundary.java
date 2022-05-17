@@ -12,4 +12,10 @@ public class TargetBoundary extends TransparentBoundary
         super(a, b);
         colour = Color.GOLD;
     }
+
+    @Override
+    public boolean isCrossed(Vector centre, double radius)
+    {
+        return false; // Overrides super -> light goes through it
+    }
 }
