@@ -28,7 +28,7 @@ public class AcoRankingTesting
     public void rangerSetup(AcoRanking agent)
     {
         agent.setStochasticHeuristic(stochasticHeuristic);
-        agent.setDistance(moveDistance);
+        agent.setMoveLength(moveDistance);
         agent.setVisionDistance(viewingDistance);
     }
 

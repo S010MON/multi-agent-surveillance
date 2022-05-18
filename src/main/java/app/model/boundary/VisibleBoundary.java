@@ -10,15 +10,6 @@ public class VisibleBoundary extends BoundaryImp
     public VisibleBoundary(Vector a, Vector b)
     {
         super(a, b);
-    }
-
-    @Override
-    public void draw(GraphicsContext gc)
-    {
-        gc.setStroke(Color.BLACK);
-        gc.strokeLine(a.getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      a.getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                      b.getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                      b.getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
+        colour = Color.BLACK;
     }
 }

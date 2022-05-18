@@ -4,14 +4,16 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
-import app.model.agents.WallFollow.WallFollowAgent;
-import app.model.agents.Agent;
-import app.model.agents.Human;
-import app.model.agents.ACO.*;
-import app.model.agents.DirectionFollowAgent.DirectionFollowAgent;
-import app.model.boundary.Boundary;
-import app.model.furniture.*;
 import app.controller.soundEngine.SoundSource;
+import app.model.agents.Agent;
+import app.model.agents.AgentType;
+import app.model.agents.Human;
+import app.model.boundary.Boundary;
+import app.model.boundary.Flag;
+import app.model.furniture.Furniture;
+import app.model.furniture.FurnitureBase;
+import app.model.furniture.FurnitureFactory;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -69,7 +71,7 @@ public class Map
         {
             Vector srt = randPosition(guardSpawn);
             Vector dir = randDirection();
-            Agent guard = new AcoMomentumSpiralAvoidance(srt, dir, 10, Type.GUARD);
+            Agent guard = AgentType.agentOf(settings.getGuardType(), srt, dir, 10, Type.GUARD);
             guard.setMaxWalk(settings.getWalkSpeedGuard());
             guard.setMaxSprint(settings.getSprintSpeedGuard());
             agents.add(guard);
@@ -80,7 +82,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
-            Agent intruder = new DirectionFollowAgent(srt, dir, 10, Type.INTRUDER, targetDirection(srt));
+            Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -123,7 +125,10 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            case TARGET -> target = obj.getRect();
+            case TARGET -> {
+                target = obj.getRect();
+                furniture.add(FurnitureFactory.make(obj));
+            }
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }
@@ -148,14 +153,6 @@ public class Map
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
-        if(target != null)
-        {
-            gc.setStroke(Color.GOLD);
-            gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                    target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                    target.getHeight() * Info.getInfo().zoom,
-                    target.getHeight() * Info.getInfo().zoom);
-        }
         if(guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);

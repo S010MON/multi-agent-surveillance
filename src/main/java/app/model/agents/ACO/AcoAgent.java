@@ -25,7 +25,6 @@ public class AcoAgent extends AgentImp
     @Getter private Stack<Vector> visualDirectionsToExplore = new Stack<>();
     @Getter protected HashMap<Integer, Vector> shortTermMemory = new HashMap<>();
     @Getter @Setter private double visionDistance = 25.0;
-    @Getter @Setter protected int distance = 20;
     @Getter @Setter protected Move previousMove;
     protected Vector previousPosition;
     @Getter protected Queue<Vector> turnQueue = new LinkedList<>();
@@ -87,17 +86,17 @@ public class AcoAgent extends AgentImp
     {
         return switch (angle)
                 {
-                    case 0 -> new Vector(0, -distance);
-                    case 90 -> new Vector(distance, 0);
-                    case 180 -> new Vector(0, distance);
-                    case 270 -> new Vector(-distance, 0);
+                    case 0 -> new Vector(0, -moveLength);
+                    case 90 -> new Vector(moveLength, 0);
+                    case 180 -> new Vector(0, moveLength);
+                    case 270 -> new Vector(-moveLength, 0);
                     default -> null;
                 };
     }
 
     protected void initializeWorld()
     {
-        Universe.init(type, distance);
+        Universe.init(type, (int)moveLength);
         world = new AcoWorld(Universe.getMemoryGraph(type));
         world.add_or_adjust_Vertex(position);
 
@@ -282,11 +281,11 @@ public class AcoAgent extends AgentImp
         Ray cardinalRay = detectCardinalPoint(explorationDirection.getAngle());
         if(moveEvaluation(cardinalRay))
         {
-            possibleMovements.add(explorationDirection.scale(distance));
+            possibleMovements.add(explorationDirection.scale(moveLength));
         }
         else
         {
-            world.setVertexAsObstacle(position, explorationDirection.scale(distance));
+            world.setVertexAsObstacle(position, explorationDirection.scale(moveLength));
         }
         nextBestOptionHandling(explorationDirection);
     }

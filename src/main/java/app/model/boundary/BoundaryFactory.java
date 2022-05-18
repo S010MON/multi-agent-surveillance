@@ -18,6 +18,12 @@ public abstract class BoundaryFactory
         objects.add(create(obj.getType(), corner[2], corner[3], obj.getTeleportTo()));
         objects.add(create(obj.getType(), corner[3], corner[0], obj.getTeleportTo()));
         objects.removeAll(Collections.singleton(null));
+        if(obj.getType() == FurnitureType.TARGET)
+        {
+            double x = obj.getRect().getMinX() + obj.getRect().getWidth()/2;
+            double y = obj.getRect().getMinY() + obj.getRect().getHeight()/2;
+            objects.add(new Flag(new Vector(x, y), 10));
+        }
         return objects;
     }
 
@@ -25,9 +31,10 @@ public abstract class BoundaryFactory
     {
         switch (f)
         {
+            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN -> { return new BoundaryImp(a, b);}
             case WALL, TOWER, BORDER -> { return new VisibleBoundary(a, b);}
             case GLASS -> { return  new TransparentBoundary(a, b);}
-            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET -> { return new BoundaryImp(a, b);}
+            case TARGET -> {return new TargetBoundary(a, b);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }
         return null;

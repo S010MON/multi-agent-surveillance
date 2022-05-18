@@ -57,6 +57,8 @@ public class RayFeedbackTest
         agents.add(agent1);
         agents.add(agent2);
 
+        agent1.setDirection(new Vector(0, -1));
+
         Map map = new Map(agents, new ArrayList<>());
 
         // Compute rays
@@ -112,6 +114,8 @@ public class RayFeedbackTest
         ArrayList<Agent> agents = new ArrayList<>();
         agents.add(agent1);
         agents.add(agent2);
+
+        agent2.setDirection(new Vector(0, 1));
 
         Map map = new Map(agents, new ArrayList<>());
 

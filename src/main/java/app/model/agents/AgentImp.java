@@ -7,14 +7,12 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.Cells.GraphCell;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 
@@ -23,6 +21,7 @@ public class AgentImp implements Agent
 {
     @Getter @Setter protected double maxWalk = 10;
     @Getter @Setter protected double maxSprint = 30;
+    @Getter @Setter protected double moveLength = 20;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
     @Getter @Setter protected Vector tgtDirection;
@@ -121,6 +120,42 @@ public class AgentImp implements Agent
         gc.strokeOval(x , y, radius, radius);
     }
 
+    public boolean agentDetected(Type agentType)
+    {
+        for(Ray r : view)
+        {
+            if(r.getType()==agentType)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Vector closestAgent(Type agentType)
+    {
+        Vector closestAgentPos = null;
+        double closestAgentDist = 10^5;
+
+        for(Ray r : view)
+        {
+            if(r.getType()==agentType)
+            {
+                if(closestAgentPos == null)
+                {
+                    closestAgentPos = r.getV();
+                    closestAgentDist = r.length();
+                }
+                else if(r.length() < closestAgentDist)
+                {
+                    closestAgentPos = r.getV();
+                    closestAgentDist = r.length();
+                }
+            }
+        }
+        return closestAgentPos;
+    }
+
     @Override
     public void clearHeard()
     {
@@ -179,5 +214,16 @@ public class AgentImp implements Agent
     public Agent nextState()
     {
         return this;
+    }
+
+    @Override
+    public boolean isTypeSeen(Type type)
+    {
+        for(Ray r : view)
+        {
+            if(r.getType() == type)
+                return true;
+        }
+        return false;
     }
 }

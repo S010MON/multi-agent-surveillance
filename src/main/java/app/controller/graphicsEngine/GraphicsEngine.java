@@ -31,7 +31,7 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-                output.add( closestRay(origin, bdyIntersection, agentIntersection, map.objectAt(agentIntersection)));
+                output.add(closestRay(origin, bdyIntersection, agentIntersection, map.objectAt(agentIntersection)));
 
             else if(bdyIntersection != null)
                 output.add(new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection)));
