@@ -9,7 +9,9 @@ import app.model.agents.Agent;
 import app.model.agents.AgentType;
 import app.model.agents.Human;
 import app.model.boundary.Boundary;
+import app.model.boundary.Flag;
 import app.model.furniture.Furniture;
+import app.model.furniture.FurnitureBase;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
@@ -123,7 +125,10 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            case TARGET -> target = obj.getRect();
+            case TARGET -> {
+                target = obj.getRect();
+                furniture.add(FurnitureFactory.make(obj));
+            }
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }
@@ -148,14 +153,6 @@ public class Map
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
-        if(target != null)
-        {
-            gc.setStroke(Color.GOLD);
-            gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                    target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                    target.getHeight() * Info.getInfo().zoom,
-                    target.getHeight() * Info.getInfo().zoom);
-        }
         if(guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);
