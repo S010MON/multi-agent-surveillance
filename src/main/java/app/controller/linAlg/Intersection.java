@@ -107,7 +107,7 @@ public abstract class Intersection
         double abScalingFactor2 = -pBy2 - tmpSqrt;
 
         Vector p1 = new Vector(A.getX() - baX * abScalingFactor1, A.getY() - baY * abScalingFactor1);
-        if (disc == 0) // if the discriminant == 0 -> only one intersection exists.
+        if (disc == 0 && rightDirection(A, B, p1)) // if the discriminant == 0 -> only one intersection exists.
             return p1;
 
         Vector p2 = new Vector(A.getX() - baX * abScalingFactor2, A.getY() - baY * abScalingFactor2);
@@ -248,7 +248,8 @@ public abstract class Intersection
         Vector directionOfIntersection = intersection.sub(A);
         double directionOfRayAngle = directionOfRay.getAngle();
         double directionIntersectionAngle = directionOfIntersection.getAngle();
-        return Math.abs(directionOfRayAngle-directionIntersectionAngle) < 0.1;
+        //return Math.abs(directionOfRayAngle-directionIntersectionAngle) < 0.1;
+        return true;
     }
 
 }

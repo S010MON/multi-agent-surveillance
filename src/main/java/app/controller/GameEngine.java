@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
+import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundEngine;
@@ -49,7 +50,7 @@ public class GameEngine
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
+        map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(rayObstacle(ray))));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         if(captureEnabled)
             map.getAgents().forEach(a -> map.checkForCapture(a));
@@ -165,5 +166,16 @@ public class GameEngine
                 return false;
         }
         return true;
+    }
+
+    private Vector rayObstacle(Ray ray)
+    {
+        if(ray.getType() == null)
+            return null;
+        switch(ray.getType())
+        {
+            case TARGET, GUARD, INTRUDER -> { return null; }
+            default -> { return ray.getV(); }
+        }
     }
 }
