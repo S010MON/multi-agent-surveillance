@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.Type;
 import app.model.agents.Universe;
@@ -34,6 +35,12 @@ public class AcoAgent extends AgentImp
     {
         super(position, direction, radius, type);
         initializeWorld();
+    }
+
+    public AcoAgent(Agent other)
+    {
+        super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class GameEngine
     private Renderer renderer;
     private GraphicsEngine graphicsEngine;
     private Timeline timeline;
-    private boolean captureEnabled = false;
+    private boolean captureEnabled = true;
 
     public GameEngine(Map map, Renderer renderer)
     {

@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
@@ -62,6 +63,12 @@ public class WallFollowAgent extends AgentImp
         super(position, direction, radius, type);
         this.moveLength = moveLen;
         initializeWorld();
+    }
+
+    public WallFollowAgent(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     public void initializeWorld()

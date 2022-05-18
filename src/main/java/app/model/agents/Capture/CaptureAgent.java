@@ -7,7 +7,9 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.WallFollow.WallFollowAgent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Capture extends AgentImp
+public class CaptureAgent extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     private final int MAX_MOVES_BEFORE_RETURN = 5;
@@ -37,17 +39,22 @@ public class Capture extends AgentImp
      * @param type        Our type. (Guard).
      * @param intruderPos The position of the intruder to capture.
      */
-    public Capture(Vector position, Vector direction, double radius, Type type, Vector intruderPos)
+    public CaptureAgent(Vector position, Vector direction, double radius, Type type, Vector intruderPos)
     {
         super(position, direction, radius, type);
         beliefSet.add(intruderPos);
         positionHistory.add(intruderPos);
     }
 
-    /* Constructor for testing */
-    public Capture(Vector position, Vector direction, double radius, Type type)
+    public CaptureAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+    }
+
+    public CaptureAgent(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     @Override
@@ -209,6 +216,16 @@ public class Capture extends AgentImp
             return intruderHistory.get(arrLength-1).add(intruderDirection.scale(distBetween));
         }
         return intruderHistory.get(arrLength-1);
+    }
+
+
+    @Override
+    public Agent nextState()
+    {
+        if(maxTicsReached())
+            return new WallFollowAgent(this);
+
+        return this;
     }
 
     /**
