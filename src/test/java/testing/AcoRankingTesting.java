@@ -21,12 +21,16 @@ public class AcoRankingTesting
     private double viewingDistance = 25;
     private int moveDistance = 20;
     private GraphicsEngine graphicsEngine = new GraphicsEngine(91);
-    private Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
-    private Map map = new Map(settings);
+    private Settings settings;
+    private Map map;
     private double stochasticHeuristic = 0;
 
     public void rangerSetup(AcoRanking agent)
     {
+        graphicsEngine = new GraphicsEngine(91);
+        settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+        map = new Map(settings);
+
         agent.setStochasticHeuristic(stochasticHeuristic);
         agent.setMoveLength(moveDistance);
         agent.setVisionDistance(viewingDistance);
@@ -35,7 +39,7 @@ public class AcoRankingTesting
     @Test
     public void testRankingSystem()
     {
-        position = new Vector(190, 350);
+        position = new Vector(100, 350);
         AcoRanking agent = new AcoRanking(position, direction, radius, Type.GUARD);
         rangerSetup(agent);
 
@@ -47,11 +51,11 @@ public class AcoRankingTesting
     @Test
     public void testRankingClearance()
     {
-        position = new Vector(170, 350);
+        position = new Vector(170, 250);
         AcoRanking agent = new AcoRanking(position, direction, radius, Type.GUARD);
         rangerSetup(agent);
 
-        agent.updateLocation(new Vector(190, 350));
+        agent.updateLocation(new Vector(190, 250));
         assertTrue(agent.getMoveRanking().isEmpty());
     }
 
