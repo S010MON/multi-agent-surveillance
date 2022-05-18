@@ -97,27 +97,22 @@ public abstract class Intersection
         double disc = pBy2 * pBy2 - q;
 
         if (disc < 0)
-        {
-            return null;
-            //throw new RuntimeException("Negative discriminant: no intersection exists.  Use `hasIntersection` method to check");
-        }
+            throw new RuntimeException("Negative discriminant: no intersection exists.  Use `hasIntersection` method to check");
 
         double tmpSqrt = Math.sqrt(disc);
         double abScalingFactor1 = -pBy2 + tmpSqrt;
         double abScalingFactor2 = -pBy2 - tmpSqrt;
 
         Vector p1 = new Vector(A.getX() - baX * abScalingFactor1, A.getY() - baY * abScalingFactor1);
-        if (disc == 0 && rightDirection(A, B, p1)) // if the discriminant == 0 -> only one intersection exists.
+        if (disc == 0) // if the discriminant == 0 -> only one intersection exists.
             return p1;
 
         Vector p2 = new Vector(A.getX() - baX * abScalingFactor2, A.getY() - baY * abScalingFactor2);
 
-        if(p1.dist(A) < p2.dist(A) && rightDirection(A, B, p1))
+        if(p1.dist(A) < p2.dist(A))
             return p1;
-        else if(rightDirection(A, B, p2))
-            return p2;
         else
-            return null;
+            return p2;
     }
 
     public static Vector findIntersection(Ray ray, Vector centre, double radius)
@@ -133,7 +128,21 @@ public abstract class Intersection
 
     public static boolean hasIntersection(Vector A, Vector B, Vector center, double radius)
     {
-        return findIntersection(A, B, center, radius) != null;
+        double baX = B.getX() - A.getX();
+        double baY = B.getY() - A.getY();
+        double caX = center.getX() - A.getX();
+        double caY = center.getY() - A.getY();
+
+        double a = baX * baX + baY * baY;
+        double bBy2 = baX * caX + baY * caY;
+        double c = caX * caX + caY * caY - radius * radius;
+
+        double pBy2 = bBy2 / a;
+        double q = c / a;
+
+        double disc = pBy2 * pBy2 - q;
+
+        return disc >= 0;
     }
 
     public static boolean hasIntersection(Ray ray, Vector center, double radius)
@@ -241,15 +250,4 @@ public abstract class Intersection
 
         return (Dx * Dx + Dy * Dy) <= radiusOther * radiusOther;
     }
-
-    private static boolean rightDirection(Vector A, Vector B, Vector intersection)
-    {
-        Vector directionOfRay = B.sub(A);
-        Vector directionOfIntersection = intersection.sub(A);
-        double directionOfRayAngle = directionOfRay.getAngle();
-        double directionIntersectionAngle = directionOfIntersection.getAngle();
-        //return Math.abs(directionOfRayAngle-directionIntersectionAngle) < 0.1;
-        return true;
-    }
-
 }
