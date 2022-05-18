@@ -37,6 +37,7 @@ public class AcoAgentTesting
         settings = FileManager.loadSettings("src/main/resources/AcoTestMap");
         map = new Map(settings);
         map.setHUMAN_ACTIVE(false);
+        Universe.clearUniverse();
     }
 
     // Test connectivity and labelling its world
