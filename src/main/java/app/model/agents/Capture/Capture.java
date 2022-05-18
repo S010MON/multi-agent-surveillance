@@ -16,9 +16,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Capture extends AgentImp
-
 {
-    private final boolean DEBUG = false;
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     private final int MAX_MOVES_BEFORE_RETURN = 5;
     private final int MAX_POSITIONS_HELD = 3;
@@ -66,24 +64,29 @@ public class Capture extends AgentImp
         } else
         {
             // TODO state change back to ACO...
-            if(DEBUG) System.out.println("Max Tics Reached");
         }
         setShortTermMemory();
         return nextMove(findTarget());
     }
 
+    @Override
+    public void updateLocation(Vector endPoint)
+    {
+        position = endPoint;
+    }
+
+    /**
+     * Updates the internal state of the agent.
+     */
     public void updateKnowledge(){
         if(isTypeSeen(Type.INTRUDER))
         {
-            if(DEBUG) System.out.println("Seen");
-            if(DEBUG) System.out.println("Intruder Position: " + typePosition.toString());
             updatePositionHistory();
             beliefSet.clear();
             beliefSet.add(typePosition);
         }
         else
         {
-            if(DEBUG) System.out.println("Not seen");
             updateBeliefSet();
             positionHistory.clear();
         }
@@ -109,12 +112,6 @@ public class Capture extends AgentImp
     public void setShortTermMemory()
     {
         shortTermMemory.addAll(findAllPossiblePositions(position));
-    }
-
-    @Override
-    public void updateLocation(Vector endPoint)
-    {
-        position = endPoint;
     }
 
     /**
@@ -183,6 +180,14 @@ public class Capture extends AgentImp
         return closestLocationInArray(new ArrayList<>(beliefSet), centre);
     }
 
+    /**
+     * This method checks if the intruder is moving in a straight line, and calculates a target
+     * point in front of the intruder to try and intercept.
+     *
+     * @param intruderHistory The previous actual positions of the intruder.
+     *
+     * @return The target for our next move.
+     */
     public Vector checkMomentum(ArrayList<Vector> intruderHistory)
     {
         int arrLength = intruderHistory.size();
@@ -206,6 +211,14 @@ public class Capture extends AgentImp
         return intruderHistory.get(arrLength-1);
     }
 
+    /**
+     * Finds the direction the intruder is travelling in.
+     *
+     * @param head Where the intruder is now.
+     * @param tail Where the intruder was when it started moving in a straight line.
+     *
+     * @return The direction vector that the intruder is following.
+     */
     private Vector findDirection(Vector head, Vector tail)
     {
         Vector diff = head.sub(tail);
@@ -261,7 +274,6 @@ public class Capture extends AgentImp
      */
     private Move nextMove(Vector target)
     {
-        if(DEBUG) System.out.println("Target: " + target.toString());
         // Populate with possible moves.
         VectorSet possibleMoves = findAllPossiblePositions(position);
 
@@ -276,11 +288,6 @@ public class Capture extends AgentImp
         return new Move(direction, changeInPos);
     }
 
-    private void checkPrevPositions(VectorSet moves)
-    {
-        moves.removeIf(l -> prevPositions.contains(l) && moves.size() > 1);
-    }
-
     private boolean maxTicsReached()
     {
         return (counter > MAX_TICS_WITHOUT_SIGHT);
@@ -292,6 +299,11 @@ public class Capture extends AgentImp
             counter++;
         else if(beliefSet.size() == 1)
             counter = 0; // Reset counter when we see the intruder.
+    }
+
+    private void checkPrevPositions(VectorSet moves)
+    {
+        moves.removeIf(l -> prevPositions.contains(l) && moves.size() > 1);
     }
 
     private void updatePrevPositions()

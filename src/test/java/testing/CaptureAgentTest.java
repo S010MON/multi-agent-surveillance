@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -96,5 +96,24 @@ public class CaptureAgentTest
         agent1.setBeliefSet(bSet);
         Vector target2 = agent1.findTarget();
         assertEquals(target2, new Vector(13, 13));
+    }
+
+    @Test void testCheckMomentum()
+    {
+        ArrayList<Vector> vs = new ArrayList<>();
+        vs.add(new Vector(20, 10));
+        Vector v1 = agent1.checkMomentum(vs);
+
+        vs.add(new Vector(20, 20));
+        vs.add(new Vector(15, 15));
+        Vector v2 = agent1.checkMomentum(vs);
+
+        vs.remove(new Vector(15, 15));
+        vs.add(new Vector(20, 30));
+        Vector v3 = agent1.checkMomentum(vs);
+
+        assertEquals(v1, new Vector(20, 10));
+        assertEquals(v2, new Vector(15, 15));
+        assertTrue(Math.abs(v3.dist(new Vector(20, 63.54102))) < 0.01);
     }
 }
