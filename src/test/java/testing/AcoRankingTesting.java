@@ -8,6 +8,7 @@ import app.model.Map;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.ACO.AcoRanking;
+import app.model.agents.Universe;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,23 +22,25 @@ public class AcoRankingTesting
     private double viewingDistance = 25;
     private int moveDistance = 20;
     private GraphicsEngine graphicsEngine = new GraphicsEngine(91);
-    private Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
-    private Map map = new Map(settings);
+    private Settings settings;
+    private Map map;
     private double stochasticHeuristic = 0;
 
-    public void rangerSetup(AcoRanking agent)
+    public void independentTestSetup()
     {
-        agent.setStochasticHeuristic(stochasticHeuristic);
-        agent.setMoveLength(moveDistance);
-        agent.setVisionDistance(viewingDistance);
+        settings = FileManager.loadSettings("src/main/resources/AcoTestMap");
+        map = new Map(settings);
+        map.setHUMAN_ACTIVE(false);
+        Universe.clearUniverse();
     }
 
     @Test
     public void testRankingSystem()
     {
-        position = new Vector(190, 350);
+        position = new Vector(10, 10);
         AcoRanking agent = new AcoRanking(position, direction, radius, Type.GUARD);
-        rangerSetup(agent);
+        agent.setStochasticHeuristic(stochasticHeuristic);
+        independentTestSetup();
 
         Move longestMove = singleMoveCycle(agent);
 
@@ -47,20 +50,23 @@ public class AcoRankingTesting
     @Test
     public void testRankingClearance()
     {
-        position = new Vector(170, 350);
+        position = new Vector(10, 10);
         AcoRanking agent = new AcoRanking(position, direction, radius, Type.GUARD);
-        rangerSetup(agent);
+        agent.setStochasticHeuristic(stochasticHeuristic);
+        independentTestSetup();
 
-        agent.updateLocation(new Vector(190, 350));
+        Vector nextLocation = position.add(new Vector(moveDistance, 0));
+        agent.updateLocation(nextLocation);
         assertTrue(agent.getMoveRanking().isEmpty());
     }
 
     @Test
     public void testNextBestMoveAfterFail()
     {
-        position = new Vector(210, 350);
+        position = new Vector(20, 20);
         AcoRanking agent = new AcoRanking(position, direction, radius, Type.GUARD);
-        rangerSetup(agent);
+        agent.setStochasticHeuristic(stochasticHeuristic);
+        independentTestSetup();
 
         Move move = singleMoveCycle(agent);
         assertEquals(move.getDeltaPos(), new Vector(0, moveDistance));

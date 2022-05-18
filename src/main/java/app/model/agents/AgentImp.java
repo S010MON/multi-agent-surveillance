@@ -202,7 +202,8 @@ public class AgentImp implements Agent
     @Override
     public void updateSeen(Vector vector)
     {
-        this.seen.add(vector);
+        if(vector !=null)
+            this.seen.add(vector);
     }
 
     @Override
