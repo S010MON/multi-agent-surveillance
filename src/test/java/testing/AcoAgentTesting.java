@@ -25,12 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class AcoAgentTesting
 {
     private Vector position;
-    private Vector direction = new Vector(1, 0);
-    private int radius = 10;
-    private double viewingDistance = 100;
-    private int moveDistance = 20;
-    private GraphicsEngine graphicsEngine = new GraphicsEngine(91);
-    private Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+    private final Vector direction = new Vector(1, 0);
+    private final int radius = 10;
+    private final double viewingDistance = 100;
+    private final int moveDistance = 20;
+    private final GraphicsEngine graphicsEngine = new GraphicsEngine(91);
+    private Settings settings = FileManager.loadSettings("src/main/resources/testing_map_6.txt");
     private Map map = new Map(settings);
 
     public void agentSetup(AcoAgent agent)
@@ -42,7 +42,7 @@ public class AcoAgentTesting
     private void reset()
     {
         position = null;
-        settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+        settings = FileManager.loadSettings("src/main/resources/testing_map_6.txt");
         map = new Map(settings);
     }
 
@@ -50,6 +50,8 @@ public class AcoAgentTesting
     @Test
     public void testObstacleLabelling()
     {
+        reset();
+
         //Should detect obstacles on movement (distance, 0) and (o, distance)
         Vector wallPosition = new Vector(1394.1540153394126, 889.0381125375702);
         AcoAgent agent = new AcoAgent(wallPosition, direction, radius, Type.GUARD);
@@ -73,6 +75,8 @@ public class AcoAgentTesting
     @Test
     public void testOccupiedLabelling()
     {
+        reset();
+
         position = new Vector(190, 350);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
@@ -104,6 +108,8 @@ public class AcoAgentTesting
     @Test
     public void testLeavingCell()
     {
+        reset();
+
         position = new Vector(170, 350);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
@@ -111,15 +117,14 @@ public class AcoAgentTesting
         agent.setPreviousMove(new Move(new Vector(170, 350), new Vector(moveDistance, 0)));
 
         agent.updateLocation(new Vector(190, 350));
-
-        position = null;
-
     }
 
     // Testing visual exploration
     @Test
     public void testExplorationWithinVisualField()
     {
+        reset();
+        System.out.println(map.getAgents().size());
         position = new Vector(210, 350);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
@@ -147,6 +152,8 @@ public class AcoAgentTesting
     @Test
     public void testCardinalPointDetection()
     {
+        reset();
+
         position = new Vector(210, 370);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -159,6 +166,8 @@ public class AcoAgentTesting
     @Test
     void movePossible()
     {
+        reset();
+
         position = new Vector(678, 100);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agent.updateView(graphicsEngine.compute(map, agent));
@@ -173,6 +182,8 @@ public class AcoAgentTesting
     @Test
     public void testPheromoneSenseDirections()
     {
+        reset();
+
         position = new Vector(250, 350);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
@@ -185,6 +196,8 @@ public class AcoAgentTesting
     @Test
     public void testPheromoneSmellToDirections()
     {
+        reset();
+
         position = new Vector(250, 390);
         AcoAgent agent = new AcoAgent(position, direction, radius, Type.GUARD);
         agentSetup(agent);
