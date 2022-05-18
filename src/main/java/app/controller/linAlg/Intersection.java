@@ -97,7 +97,10 @@ public abstract class Intersection
         double disc = pBy2 * pBy2 - q;
 
         if (disc < 0)
-            throw new RuntimeException("Negative discriminant: no intersection exists.  Use `hasIntersection` method to check");
+        {
+            return null;
+            //throw new RuntimeException("Negative discriminant: no intersection exists.  Use `hasIntersection` method to check");
+        }
 
         double tmpSqrt = Math.sqrt(disc);
         double abScalingFactor1 = -pBy2 + tmpSqrt;
@@ -109,10 +112,12 @@ public abstract class Intersection
 
         Vector p2 = new Vector(A.getX() - baX * abScalingFactor2, A.getY() - baY * abScalingFactor2);
 
-        if(p1.dist(A) < p2.dist(A))
+        if(p1.dist(A) < p2.dist(A) && rightDirection(A, B, p1))
             return p1;
-        else
+        else if(rightDirection(A, B, p2))
             return p2;
+        else
+            return null;
     }
 
     public static Vector findIntersection(Ray ray, Vector centre, double radius)
@@ -128,21 +133,7 @@ public abstract class Intersection
 
     public static boolean hasIntersection(Vector A, Vector B, Vector center, double radius)
     {
-        double baX = B.getX() - A.getX();
-        double baY = B.getY() - A.getY();
-        double caX = center.getX() - A.getX();
-        double caY = center.getY() - A.getY();
-
-        double a = baX * baX + baY * baY;
-        double bBy2 = baX * caX + baY * caY;
-        double c = caX * caX + caY * caY - radius * radius;
-
-        double pBy2 = bBy2 / a;
-        double q = c / a;
-
-        double disc = pBy2 * pBy2 - q;
-
-        return disc >= 0;
+        return findIntersection(A, B, center, radius) != null;
     }
 
     public static boolean hasIntersection(Ray ray, Vector center, double radius)
@@ -165,16 +156,13 @@ public abstract class Intersection
         return findIntersection(r1, r2) != null;
     }
 
-    public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
+    public static Vector findLimitedIntersection(Ray ray, Vector center, double radius)
     {
-        return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
+        return findLimitedIntersection(ray.getU(), ray.getV(), center, radius);
     }
 
-    public static boolean hasLimitedIntersection(Vector A, Vector B, Vector center, double radius)
+    public static Vector findLimitedIntersection(Vector A, Vector B, Vector center, double radius)
     {
-        if(A.dist(center) <= radius || B.dist(center) <= radius)
-            return true;
-
         double baX = B.getX() - A.getX();
         double baY = B.getY() - A.getY();
         double caX = center.getX() - A.getX();
@@ -189,7 +177,28 @@ public abstract class Intersection
 
         double disc = pBy2 * pBy2 - q;
 
-        if(disc >= 0)
+        if(hasIntersection(A, B, center, radius))
+        {
+            Line line = new Line(A, B);
+            Vector intersection = findIntersection(A, B, center, radius);
+            return intersection;
+        }
+        else
+            return null;
+    }
+
+
+    public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
+    {
+        return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
+    }
+
+    public static boolean hasLimitedIntersection(Vector A, Vector B, Vector center, double radius)
+    {
+        if(A.dist(center) <= radius || B.dist(center) <= radius)
+            return true;
+
+        if(hasIntersection(A, B, center, radius))
         {
             Line line = new Line(A, B);
             Vector intersection = findIntersection(A, B, center, radius);
@@ -233,5 +242,13 @@ public abstract class Intersection
         return (Dx * Dx + Dy * Dy) <= radiusOther * radiusOther;
     }
 
+    private static boolean rightDirection(Vector A, Vector B, Vector intersection)
+    {
+        Vector directionOfRay = B.sub(A);
+        Vector directionOfIntersection = intersection.sub(A);
+        double directionOfRayAngle = directionOfRay.getAngle();
+        double directionIntersectionAngle = directionOfIntersection.getAngle();
+        return Math.abs(directionOfRayAngle-directionIntersectionAngle) < 0.1;
+    }
 
 }
