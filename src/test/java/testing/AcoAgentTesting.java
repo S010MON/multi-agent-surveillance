@@ -35,6 +35,10 @@ public class AcoAgentTesting
 
     public void agentSetup(AcoAgent agent)
     {
+        graphicsEngine = new GraphicsEngine(91);
+        settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+        map = new Map(settings);
+
         agent.setMoveLength(moveDistance);
         agent.setVisionDistance(viewingDistance);
     }
