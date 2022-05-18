@@ -9,9 +9,7 @@ import app.model.agents.Agent;
 import app.model.agents.AgentType;
 import app.model.agents.Human;
 import app.model.boundary.Boundary;
-import app.model.boundary.Flag;
 import app.model.furniture.Furniture;
-import app.model.furniture.FurnitureBase;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
@@ -26,7 +24,7 @@ import java.util.Stack;
 
 public class Map
 {
-    @Setter private Boolean HUMAN_ACTIVE = true;
+    @Setter private Boolean HUMAN_ACTIVE = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;

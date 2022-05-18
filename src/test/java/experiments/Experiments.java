@@ -9,17 +9,16 @@ import app.model.agents.AgentType;
 
 public class Experiments
 {
-    private static final int iterations = 1;
+    private static final int iterations = 100;
     private static final int[] no_of_agents = {1, 2, 4, 6 ,5, 10};
-    private static final AgentType[] agents = {AgentType.RANDOM, AgentType.ACO_MOMENTUM,
-            AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE, AgentType.WALL_FOLLOW, AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC,
+    private static final AgentType[] agents = {AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC,
             AgentType.WALL_FOLLOW_HIGH_DIR_HEURISTIC};
     /**
      * Enter a map name and run the Experiments file to run every agent through the map 100 times
      */
     public static void main(String[] args)
     {
-        run("experiment_map_1");
+        //run("experiment_map_1");
     }
 
     private static void run(String map_name)
