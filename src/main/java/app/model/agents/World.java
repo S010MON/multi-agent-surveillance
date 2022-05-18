@@ -2,6 +2,7 @@ package app.model.agents;
 
 import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
+import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
@@ -9,6 +10,9 @@ import java.util.HashMap;
 
 public abstract class World
 {
+    @Getter private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();
+    @Getter private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();
+
     public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
 
     public World(MemoryGraph G)
@@ -49,16 +53,6 @@ public abstract class World
         return G.getDirectionStr(directionAngle);
     }
 
-    public void setInitialWallFollowPos(GraphCell graphCell)
-    {
-        G.setInitialWallFollowPos(graphCell);
-    }
-
-    public GraphCell getInitialWallFollowPos()
-    {
-        return G.getInitialWallFollowPos();
-    }
-
     public ArrayList<GraphCell> getVerticesWithUnexploredNeighbours()
     {
         return G.getVerticesWithUnexploredNeighbours();
@@ -72,11 +66,6 @@ public abstract class World
     public void leaveVertex(Vector position, double pheromoneValue)
     {
         G.leaveVertex(position, pheromoneValue);
-    }
-
-    public void leaveVertex(Vector position)
-    {
-        G.leaveVertex(position);
     }
 
     public double aggregateCardinalPheromones(Vector currentPosition, Vector cardinalMovement)
@@ -94,5 +83,5 @@ public abstract class World
         G.evaporateWorld();
     }
 
-
+    public void markWallAsCovered(GraphCell cell, Vector position) {}
 }
