@@ -165,38 +165,6 @@ public abstract class Intersection
         return findIntersection(r1, r2) != null;
     }
 
-    public static Vector findLimitedIntersection(Ray ray, Vector center, double radius)
-    {
-        return findLimitedIntersection(ray.getU(), ray.getV(), center, radius);
-    }
-
-    public static Vector findLimitedIntersection(Vector A, Vector B, Vector center, double radius)
-    {
-        double baX = B.getX() - A.getX();
-        double baY = B.getY() - A.getY();
-        double caX = center.getX() - A.getX();
-        double caY = center.getY() - A.getY();
-
-        double a = baX * baX + baY * baY;
-        double bBy2 = baX * caX + baY * caY;
-        double c = caX * caX + caY * caY - radius * radius;
-
-        double pBy2 = bBy2 / a;
-        double q = c / a;
-
-        double disc = pBy2 * pBy2 - q;
-
-        if(hasIntersection(A, B, center, radius))
-        {
-            Line line = new Line(A, B);
-            Vector intersection = findIntersection(A, B, center, radius);
-            return intersection;
-        }
-        else
-            return null;
-    }
-
-
     public static boolean hasLimitedIntersection(Ray ray, Vector center, double radius)
     {
         return hasLimitedIntersection(ray.getU(), ray.getV(), center, radius);
