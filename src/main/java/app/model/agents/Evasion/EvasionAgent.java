@@ -57,7 +57,7 @@ public class EvasionAgent extends AgentImp
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        Vector guardDirection = findFirstGuardDirection();
+        Vector guardDirection = closestAgent(Type.GUARD);
 
         if(guardDirection == null)
         {
@@ -77,7 +77,7 @@ public class EvasionAgent extends AgentImp
     {
 
         // need condition on this value being null
-        Vector guardDirection = findFirstGuardDirection();
+        Vector guardDirection = closestAgent(Type.GUARD);
 
         if(guardDirection == null)
         {
@@ -91,20 +91,6 @@ public class EvasionAgent extends AgentImp
         // Keep looking back to keep the agent in view
 
         return new Move(guardDirection, flippedDirection.scale(maxSprint));
-    }
-
-    private Vector findFirstGuardDirection()
-    {
-        // we dont have a view range yet, just a viewcone for now
-
-        for(Ray ray : view)
-        {
-            if(ray.getType() == Type.GUARD)
-            {
-                return ray.direction();
-            }
-        }
-        return null;
     }
 
     @Override public Agent nextState()
