@@ -21,7 +21,7 @@ public class AcoRankingTesting
     private double viewingDistance = 25;
     private int moveDistance = 20;
     private GraphicsEngine graphicsEngine = new GraphicsEngine(91);
-    private Settings settings = FileManager.loadSettings("src/main/resources/map_1.txt");
+    private Settings settings = FileManager.loadSettings("src/main/resources/testing_map_6.txt");
     private Map map = new Map(settings);
     private double stochasticHeuristic = 0;
 
