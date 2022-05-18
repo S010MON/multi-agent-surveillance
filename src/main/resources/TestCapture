@@ -1,0 +1,16 @@
+name = TestCapture
+gameFile = C:\Users\mattf\OneDrive\Documents\GitHub\multi-agent-surveillance/src/main/resources/TestCapture
+gameMode = 1
+height = 600
+width = 800
+scaling = 0.0
+numGuards = 1
+numIntruders = 1
+baseSpeedIntruder = 10.0
+sprintSpeedIntruder = 20.0
+baseSpeedGuard = 20.0
+sprintSpeedGuard = 20.0
+timeStep = 0.0
+targetArea = 320 27 395 73
+spawnAreaGuards = 66 221 162 349
+spawnAreaIntruders = 626 206 733 360

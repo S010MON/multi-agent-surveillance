@@ -24,11 +24,12 @@ public class AgentImp implements Agent
     @Getter @Setter protected double moveLength = 20;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
+    @Getter @Setter protected Vector typePosition;
     @Getter @Setter protected Vector tgtDirection;
+    @Getter @Setter protected ArrayList<Ray> view;
     @Getter protected Type type;
     @Getter protected Vector position;
     @Getter protected double radius;
-    @Getter protected ArrayList<Ray> view;
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
@@ -222,7 +223,10 @@ public class AgentImp implements Agent
         for(Ray r : view)
         {
             if(r.getType() == type)
+            {
+                typePosition = r.getV();
                 return true;
+            }
         }
         return false;
     }
