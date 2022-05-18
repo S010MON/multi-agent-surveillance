@@ -60,6 +60,8 @@ public class GraphCell
     @Override
     public boolean equals(Object obj)
     {
+        if(obj == null)
+            return false;
         if(obj.getClass() == this.getClass())
         {
             return (this.x == ((GraphCell) obj).getX() && this.y == ((GraphCell) obj).getY());

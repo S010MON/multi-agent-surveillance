@@ -5,6 +5,8 @@ import app.model.Type;
 import app.model.agents.ACO.*;
 import app.model.agents.Evasion.EvasionAgent;
 import app.model.agents.Evasion.EvasionStrategy;
+import app.model.agents.WallFollow.WFMedDirHeuristic;
+import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
 
 public enum AgentType
@@ -19,6 +21,8 @@ public enum AgentType
     EVASION_RANDOM,
     EVASION_DIRECTED,
     EVASION_RANDOMDIRECTED,
+    WALL_FOLLOW_MED_DIR_HEURISTIC,
+    WALL_FOLLOW_HIGH_DIR_HEURISTIC,
     RANDOM;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
@@ -55,7 +59,16 @@ public enum AgentType
             case EVASION_RANDOMDIRECTED -> {
                 return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
             }
-            case RANDOM -> {
+            case WALL_FOLLOW_MED_DIR_HEURISTIC ->
+            {
+                return new WFMedDirHeuristic(position, direction, radius, type, 20);
+            }
+            case WALL_FOLLOW_HIGH_DIR_HEURISTIC ->
+            {
+                return new WFHighDirHeuristic(position, direction, radius, type, 20);
+            }
+            case RANDOM ->
+            {
                 return new AgentImp(position, direction, radius, type);
             }
             default -> throw new RuntimeException("Agent type not recognized");

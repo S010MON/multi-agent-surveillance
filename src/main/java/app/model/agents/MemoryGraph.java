@@ -111,7 +111,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
         return aggregatePheromoneValues(aggregateCells);
     }
 
-
     //Depreciated, however still necessary in case of calculating aggregate pheromone values
     public double aggregatePheromoneValues(GraphCell[] aggregateVertices)
     {

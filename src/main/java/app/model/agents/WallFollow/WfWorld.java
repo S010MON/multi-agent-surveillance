@@ -56,4 +56,20 @@ public class WfWorld extends World
             }
         }
     }
+
+    @Override
+    public void markWallAsCovered(GraphCell cell, Vector agentPos)
+    {
+        // TODO modify hor. and ver. walls covered to be hashmaps with agent names who covered the wall
+        if (cell.getX() == getVertexAt(agentPos).getX()
+                && !getHorizontalWallsCovered().contains(cell.getX()))
+        {
+            getHorizontalWallsCovered().add(cell.getX());
+        }
+        if (cell.getY() == getVertexAt(agentPos).getY()
+                && !getVerticalWallsCovered().contains(cell.getY()))
+        {
+            getVerticalWallsCovered().add(cell.getY());
+        }
+    }
 }
