@@ -2,6 +2,7 @@ package app.model.agents.Capture;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
+import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Move;
@@ -17,12 +18,14 @@ import java.util.Queue;
 public class Capture extends AgentImp
 
 {
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     private final int MAX_MOVES_BEFORE_RETURN = 5;
+    private final int MAX_POSITIONS_HELD = 3;
+    private final double SCALE_TARGET = 1.5;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     @Getter private VectorSet shortTermMemory = new VectorSet();
-    private ArrayList<Vector> positionHistory = new ArrayList<>();
+    private Queue<Vector> positionHistory = new LinkedList<>();
     private Queue<Vector> prevPositions =  new LinkedList<>();
     private Move prevMove;
     private int counter;
@@ -73,7 +76,8 @@ public class Capture extends AgentImp
         if(isTypeSeen(Type.INTRUDER))
         {
             if(DEBUG) System.out.println("Seen");
-            positionHistory.add(typePosition);
+            if(DEBUG) System.out.println("Intruder Position: " + typePosition.toString());
+            updatePositionHistory();
             beliefSet.clear();
             beliefSet.add(typePosition);
         }
@@ -81,6 +85,7 @@ public class Capture extends AgentImp
         {
             if(DEBUG) System.out.println("Not seen");
             updateBeliefSet();
+            positionHistory.clear();
         }
         updatePrevPositions();
         updateCounter();
@@ -168,15 +173,43 @@ public class Capture extends AgentImp
     {
         //Using heuristics decides on target for next move.
         // If our belief set is size 1, then we have our target.
-        if(beliefSet.size() == 1)
-            for(Vector v : beliefSet)
-                return v;
+        if(beliefSet.size() == 1 && positionHistory.size() > 0)
+            return checkMomentum(new ArrayList<>(positionHistory));
 
         // Finds the centre of the belief region.
         Vector centre = findCentreOfRegion(new ArrayList<>(beliefSet));
 
         // Targets location closest to the centre.
         return closestLocationInArray(new ArrayList<>(beliefSet), centre);
+    }
+
+    public Vector checkMomentum(ArrayList<Vector> intruderHistory)
+    {
+        int arrLength = intruderHistory.size();
+        if(arrLength == MAX_POSITIONS_HELD)
+        {
+            if(intruderHistory.get(arrLength-1).equals(intruderHistory.get(0)))
+                return intruderHistory.get(arrLength-1);
+
+            Line line = new Line(intruderHistory.get(0), intruderHistory.get(arrLength-1));
+            for(int i = 1; i < arrLength - 1; i++)
+            {
+                if(!line.liesOn(intruderHistory.get(i)))
+                    return intruderHistory.get(arrLength-1);
+            }
+
+            Vector intruderDirection = findDirection(intruderHistory.get(arrLength-1),
+                                                     intruderHistory.get(0));
+            double distBetween = intruderHistory.get(arrLength-1).dist(position) * SCALE_TARGET;
+            return intruderHistory.get(arrLength-1).add(intruderDirection.scale(distBetween));
+        }
+        return intruderHistory.get(arrLength-1);
+    }
+
+    private Vector findDirection(Vector head, Vector tail)
+    {
+        Vector diff = head.sub(tail);
+        return diff.normalise();
     }
 
     /**
@@ -228,6 +261,7 @@ public class Capture extends AgentImp
      */
     private Move nextMove(Vector target)
     {
+        if(DEBUG) System.out.println("Target: " + target.toString());
         // Populate with possible moves.
         VectorSet possibleMoves = findAllPossiblePositions(position);
 
@@ -265,5 +299,12 @@ public class Capture extends AgentImp
         prevPositions.add(position);
         if(prevPositions.size() > MAX_MOVES_BEFORE_RETURN)
             prevPositions.remove();
+    }
+
+    private void updatePositionHistory()
+    {
+        positionHistory.add(typePosition);
+        if(positionHistory.size() > MAX_POSITIONS_HELD)
+            positionHistory.remove();
     }
 }
