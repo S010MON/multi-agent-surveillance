@@ -18,7 +18,7 @@ public class App extends Application
     @Getter private FileMenuBar fileMenuBar;
     @Getter private StartMenu startMenu;
     @Getter private Stage stage;
-    private Simulation simulation;
+    @Getter private Simulation simulation;
 
     @Override
     public void start(Stage stage)
@@ -77,4 +77,9 @@ public class App extends Application
         simulation.pauseOrResume();
     }
 
+    public void updateRenderer(int toggle, boolean display)
+    {
+        if(simulation != null)
+            simulation.updateRenderer(toggle, display);
+    }
 }

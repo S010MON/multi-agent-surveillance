@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -69,9 +70,33 @@ public class FileMenuBar extends MenuBar
         simView.setOnAction(e -> app.gotoSimulation());
         view.getItems().add(simView);
 
+        /* Display Options */
+        Menu displayOptions = new Menu("Display Options");
+
+        RadioMenuItem rays = new RadioMenuItem("Display Rays");
+        rays.setSelected(true);
+        rays.setOnAction(e -> app.updateRenderer(1, rays.isSelected()));
+
+        RadioMenuItem sound = new RadioMenuItem("Display Sound");
+        sound.setSelected(true);
+        sound.setOnAction(e -> app.updateRenderer(2, sound.isSelected()));
+
+        RadioMenuItem trail = new RadioMenuItem("Display Trail");
+        trail.setSelected(true);
+        trail.setOnAction(e -> app.updateRenderer(3, trail.isSelected()));
+
+        RadioMenuItem miniMaps = new RadioMenuItem("Display MiniMaps");
+        miniMaps.setSelected(true);
+        miniMaps.setOnAction(e -> app.updateRenderer(4, miniMaps.isSelected()));
+
+        RadioMenuItem areas = new RadioMenuItem("Display Spawn Areas etc.");
+        areas.setSelected(true);
+        areas.setOnAction(e -> app.updateRenderer(5, areas.isSelected()));
+
+        displayOptions.getItems().addAll(rays, sound, trail, miniMaps, areas);
 
         // Add to the Menu Bar object
-        this.getMenus().addAll(file, edit, view);
+        this.getMenus().addAll(file, edit, view, displayOptions);
     }
 
     private void eventOpen(ActionEvent e, FileChooser fileChooser)

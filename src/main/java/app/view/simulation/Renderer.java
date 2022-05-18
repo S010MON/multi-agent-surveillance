@@ -23,10 +23,11 @@ import java.util.PriorityQueue;
 
 public class Renderer extends Canvas
 {
-    @Setter private boolean displayRay;
-    @Setter private boolean displaySound;
-    @Setter private boolean displayTrail;
-    @Setter private boolean displayMiniMaps;
+    @Setter private boolean displayRay = true;
+    @Setter private boolean displaySound = true;
+    @Setter private boolean displayTrail = true;
+    @Setter private boolean displayMiniMaps = true;
+    @Setter private boolean displayAreas = true;
     private Map map;
     private Color backgroundColour, outlineColor;
     private double zoomRate = 0.2d;
@@ -54,8 +55,8 @@ public class Renderer extends Canvas
     {
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
-
-        map.drawIndicatorBoxes(gc);
+        if(displayAreas)
+            map.drawIndicatorBoxes(gc);
         if(displaySound)
             map.getSoundSources().forEach(e -> e.draw(gc));
         map.getFurniture().forEach(e -> e.draw(gc));
