@@ -76,7 +76,7 @@ public class TargetAgent extends AgentImp
     @Override
     public Agent nextState()
     {
-        if(targetLost)
+        if(targetLost || moveFailed)
             return new WallFollowAgent(this);
 
         return this;
