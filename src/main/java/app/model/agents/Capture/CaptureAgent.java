@@ -270,7 +270,7 @@ public class CaptureAgent extends AgentImp
     private Vector closestLocationInArray(ArrayList<Vector> locations, Vector pos)
     {
         double shortestDist = Double.MAX_VALUE;
-        Vector closestPoint = null;
+        Vector closestPoint = new Vector(0,0);
         for(Vector location : locations)
         {
             if(location.dist(pos) < shortestDist)
