@@ -128,6 +128,8 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
 
     public GraphCell getVertexFromCurrent(GraphCell currentCell, String direction)
     {
+        if(currentCell==null)
+            System.out.println("currenCell = null");
         Vector currentPosition = currentCell.getPosition();
         Vector neighbouringCellDirection = cardinalDirections.get(direction);
         return getVertexAt(currentPosition.add(neighbouringCellDirection));

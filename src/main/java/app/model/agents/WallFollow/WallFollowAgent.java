@@ -70,9 +70,14 @@ public class WallFollowAgent extends AgentImp
 
     public WallFollowAgent(Agent other)
     {
-        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         this.direction = closestCardinalDirection(direction.getAngle());
+        this.moveLength = other.getMoveLength();
         copyOver(other);
+        world.add_or_adjust_Vertex(position);
+        lastPositions.add(world.getVertexAt(position));
+        prevAgentVertex = world.getVertexAt(position);
+        world.add_or_adjust_Vertex(position);
     }
 
     public void initializeWorld()
@@ -82,6 +87,7 @@ public class WallFollowAgent extends AgentImp
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
+        world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
     }
 
@@ -199,7 +205,7 @@ public class WallFollowAgent extends AgentImp
                     world.getDirectionStr(direction.getAngle()));
             GraphCell leftCell = world.getVertexFromCurrent(world.getVertexAt(position),
                     world.getDirectionStr(getAngleOfLeftRay()));
-            if (!noWallDetected(direction.getAngle()) && forwardCell.getObstacle())
+            if (!noWallDetected(direction.getAngle()) && forwardCell != null && forwardCell.getObstacle())
             {
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: wall encountered in front!");

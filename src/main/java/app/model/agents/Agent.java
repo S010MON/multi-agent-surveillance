@@ -65,4 +65,6 @@ public interface Agent extends Boundary
     boolean isTypeSeen(Type type);
 
     World getWorld();
+
+    double getMoveLength();
 }

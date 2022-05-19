@@ -32,6 +32,7 @@ public class WfWorld extends World
     public void connectNeighbouringVertices(GraphCell currentCell)
     {
         Vector currentPosition = currentCell.getPosition();
+        System.out.println("\n\n\n");
         for(java.lang.Object cardinalObject: G.cardinalDirections.values())
         {
             Vector cardinal = (Vector) cardinalObject;
@@ -40,10 +41,12 @@ public class WfWorld extends World
             String neighbourKey = G.keyGenerator(resultingPosition);
             if (G.vertices.containsKey(neighbourKey))
             {
+                System.out.println("Cell already exists");
                 neighbouringCell = (GraphCell) G.vertices.get(neighbourKey);
             }
             else
             {
+                System.out.println("Cell is created, didn't exists yet");
                 neighbouringCell = new GraphCell(resultingPosition);
                 G.vertices.put(neighbourKey,neighbouringCell);
                 G.addVertex(neighbouringCell);
@@ -51,6 +54,7 @@ public class WfWorld extends World
 
             if(neighbouringCell != null && !G.containsEdge(currentCell, neighbouringCell))
             {
+                System.out.println("NeighbourCell can't be created");
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) G.addEdge(currentCell, neighbouringCell);
                 G.setEdgeWeight(edge, G.travelDistance);
             }
