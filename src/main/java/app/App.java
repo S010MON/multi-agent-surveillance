@@ -18,7 +18,7 @@ public class App extends Application
     @Getter private FileMenuBar fileMenuBar;
     @Getter private StartMenu startMenu;
     @Getter private Stage stage;
-    @Getter private Simulation simulation;
+    private Simulation simulation;
 
     @Override
     public void start(Stage stage)
