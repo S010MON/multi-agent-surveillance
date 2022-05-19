@@ -7,6 +7,7 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -223,7 +224,7 @@ public class CaptureAgent extends AgentImp
     public Agent nextState()
     {
         if(maxTicsReached())
-            return new WallFollowAgent(this);
+            return new AcoAgent(this);
 
         return this;
     }
