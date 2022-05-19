@@ -1,14 +1,10 @@
 package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
-import app.controller.linAlg.Angle;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.Agent;
-import app.model.agents.AgentImp;
 import app.model.agents.WallFollow.WallFollowAgent;
-import app.model.agents.World;
 
 public class TargetAgent extends AgentImp
 {

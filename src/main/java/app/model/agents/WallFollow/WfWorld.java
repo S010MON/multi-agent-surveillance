@@ -4,7 +4,10 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.World;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
+
+import java.util.List;
 
 public class WfWorld extends World
 {
@@ -31,8 +34,10 @@ public class WfWorld extends World
     @Override
     public void connectNeighbouringVertices(GraphCell currentCell)
     {
+        boolean debug = false;
         Vector currentPosition = currentCell.getPosition();
-        System.out.println("\n\n\n");
+        if(debug)
+            System.out.println("\n\n\n");
         for(java.lang.Object cardinalObject: G.cardinalDirections.values())
         {
             Vector cardinal = (Vector) cardinalObject;
@@ -41,12 +46,14 @@ public class WfWorld extends World
             String neighbourKey = G.keyGenerator(resultingPosition);
             if (G.vertices.containsKey(neighbourKey))
             {
-                System.out.println("Cell already exists");
+                if(debug)
+                    System.out.println("Cell already exists");
                 neighbouringCell = (GraphCell) G.vertices.get(neighbourKey);
             }
             else
             {
-                System.out.println("Cell is created, didn't exists yet");
+                if(debug)
+                    System.out.println("Cell is created, didn't exists yet");
                 neighbouringCell = new GraphCell(resultingPosition);
                 G.vertices.put(neighbourKey,neighbouringCell);
                 G.addVertex(neighbouringCell);
@@ -54,9 +61,18 @@ public class WfWorld extends World
 
             if(neighbouringCell != null && !G.containsEdge(currentCell, neighbouringCell))
             {
-                System.out.println("NeighbourCell can't be created");
+                if(debug)
+            {
+                System.out.println("edge to NeighbourCell is created");
+                List<GraphCell> neigbours = Graphs.neighborListOf(G, currentCell);
+            }
                 DefaultWeightedEdge edge = (DefaultWeightedEdge) G.addEdge(currentCell, neighbouringCell);
                 G.setEdgeWeight(edge, G.travelDistance);
+            }
+            else if(debug)
+            {
+                System.out.println("NeighbourCell can't be created");
+                List<GraphCell> neigbours = Graphs.neighborListOf(G, currentCell);
             }
         }
     }

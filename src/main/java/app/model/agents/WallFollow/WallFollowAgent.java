@@ -74,6 +74,8 @@ public class WallFollowAgent extends AgentImp
         this.direction = closestCardinalDirection(direction.getAngle());
         this.moveLength = other.getMoveLength();
         copyOver(other);
+
+        world = new WfWorld(world.getG());
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
@@ -205,7 +207,7 @@ public class WallFollowAgent extends AgentImp
                     world.getDirectionStr(direction.getAngle()));
             GraphCell leftCell = world.getVertexFromCurrent(world.getVertexAt(position),
                     world.getDirectionStr(getAngleOfLeftRay()));
-            if (!noWallDetected(direction.getAngle()) && forwardCell != null && forwardCell.getObstacle())
+            if (!noWallDetected(direction.getAngle()) /*&& forwardCell != null*/ && forwardCell.getObstacle())
             {
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: wall encountered in front!");
@@ -217,7 +219,7 @@ public class WallFollowAgent extends AgentImp
                 wallEncountered = true;
                 initialWallFollowPos = world.getVertexAt(position);
             }
-            else if (!noWallDetected(getAngleOfLeftRay()) && leftCell.getObstacle())
+            else if (!noWallDetected(getAngleOfLeftRay()) /*&& leftCell != null*/ && leftCell.getObstacle())
             {
                 if (DEBUG) {
                     System.out.println("ALGORITHM CASE 0: wall encountered on left!");
@@ -410,7 +412,13 @@ public class WallFollowAgent extends AgentImp
         GraphCell nextVertex = currentPathToNextVertex.get(0);
         if (nextVertex.equals(world.getVertexAt(position)))
         {
-            currentPathToNextVertex.remove(nextVertex);
+            boolean removed = currentPathToNextVertex.remove(nextVertex);
+            if(removed && !(currentPathToNextVertex instanceof ArrayList<?>))
+                System.out.println(removed);
+            if(!removed)
+            {
+                System.out.println("not removed");
+            }
             nextVertex = currentPathToNextVertex.get(0);
         }
         Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
@@ -470,6 +478,10 @@ public class WallFollowAgent extends AgentImp
             GraphCell neighbour = world.getVertexFromCurrent(agentCell,dir);
             if (!noWallDetected(world.getCardinalDirections().get(dir).getAngle()))
             {
+                /*
+                if(neighbour == null)
+                    return;
+                 */
                 neighbour.setObstacle(true);
             }
         }

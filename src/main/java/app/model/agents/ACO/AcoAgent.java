@@ -43,6 +43,7 @@ public class AcoAgent extends AgentImp
         super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         this.direction = directionOfAngle(direction.getAngle());
         copyOver(other);
+        world = new AcoWorld(world.getG());
     }
 
     @Override
