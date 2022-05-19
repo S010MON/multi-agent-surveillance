@@ -74,12 +74,6 @@ public class WallFollowAgent extends AgentImp
         this.direction = closestCardinalDirection(direction.getAngle());
         this.moveLength = other.getMoveLength();
         copyOver(other);
-
-        world = new WfWorld(world.getG());
-        world.add_or_adjust_Vertex(position);
-        lastPositions.add(world.getVertexAt(position));
-        prevAgentVertex = world.getVertexAt(position);
-        world.add_or_adjust_Vertex(position);
     }
 
     public void initializeWorld()
@@ -91,6 +85,23 @@ public class WallFollowAgent extends AgentImp
         prevAgentVertex = world.getVertexAt(position);
         world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
+    }
+
+    protected void copyOver(Agent other)
+    {
+        super.copyOver(other);
+
+        if(other.getWorld() != null)
+        {
+            this.world = new WfWorld(other.getWorld().getG());
+            world.add_or_adjust_Vertex(position);
+            lastPositions.add(world.getVertexAt(position));
+            prevAgentVertex = world.getVertexAt(position);
+            world.add_or_adjust_Vertex(position);
+            checkIfNeighboursAreObstacles();
+        }
+        else
+            initializeWorld();
     }
 
     /**

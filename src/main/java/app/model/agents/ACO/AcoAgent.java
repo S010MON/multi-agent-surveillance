@@ -6,7 +6,10 @@ import app.model.Move;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.Type;
+import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Universe;
+import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.WallFollow.WfWorld;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +39,7 @@ public class AcoAgent extends AgentImp
         super(position, direction, radius, type);
         this.direction = directionOfAngle(direction.getAngle());
         initializeWorld();
+        acoAgentCount ++;
     }
 
     public AcoAgent(Agent other)
@@ -43,7 +47,29 @@ public class AcoAgent extends AgentImp
         super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         this.direction = directionOfAngle(direction.getAngle());
         copyOver(other);
-        world = new AcoWorld(world.getG());
+        if(other.getWorld() != null)
+            this.world = new AcoWorld(other.getWorld().getG());
+        else
+            initializeWorld();
+        acoAgentCount ++;
+    }
+
+    protected void copyOver(Agent other)
+    {
+        super.copyOver(other);
+
+        if(other.getWorld() != null)
+        {
+            this.world = new AcoWorld(other.getWorld().getG());
+            world.add_or_adjust_Vertex(position);
+
+            pheromoneSenseDirections();
+            tgtDirection = direction.copy();
+            previousMove = new Move(direction, new Vector());
+            previousPosition = position;
+        }
+        else
+            initializeWorld();
     }
 
     @Override
@@ -357,5 +383,14 @@ public class AcoAgent extends AgentImp
     {
         Vector direction = new Vector(0, -1);
         return direction.rotate(angle);
+    }
+
+    @Override
+    public Agent nextState()
+    {
+        Agent newAgent = super.nextState();
+        if(this != newAgent)
+            acoAgentCount--;
+        return newAgent;
     }
 }
