@@ -63,6 +63,7 @@ public class WallFollowAgent extends AgentImp
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type, double moveLen)
     {
         super(position, direction, radius, type);
+        this.direction = closestCardinalDirection(direction.getAngle());
         this.moveLength = moveLen;
         initializeWorld();
     }
@@ -70,6 +71,7 @@ public class WallFollowAgent extends AgentImp
     public WallFollowAgent(Agent other)
     {
         this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        this.direction = closestCardinalDirection(direction.getAngle());
         copyOver(other);
     }
 
