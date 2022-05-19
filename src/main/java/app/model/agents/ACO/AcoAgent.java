@@ -34,12 +34,14 @@ public class AcoAgent extends AgentImp
     public AcoAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+        this.direction = directionOfAngle(direction.getAngle());
         initializeWorld();
     }
 
     public AcoAgent(Agent other)
     {
         super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        this.direction = directionOfAngle(direction.getAngle());
         copyOver(other);
     }
 
@@ -348,5 +350,11 @@ public class AcoAgent extends AgentImp
             world.evaporateWorld();
             acoMoveCount = acoMoveCount - acoAgentCount;
         }
+    }
+
+    private Vector directionOfAngle(double angle)
+    {
+        Vector direction = new Vector(0, -1);
+        return direction.rotate(angle);
     }
 }
