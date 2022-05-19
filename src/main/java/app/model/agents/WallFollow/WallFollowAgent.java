@@ -423,13 +423,7 @@ public class WallFollowAgent extends AgentImp
         GraphCell nextVertex = currentPathToNextVertex.get(0);
         if (nextVertex.equals(world.getVertexAt(position)))
         {
-            boolean removed = currentPathToNextVertex.remove(nextVertex);
-            if(removed && !(currentPathToNextVertex instanceof ArrayList<?>))
-                System.out.println(removed);
-            if(!removed)
-            {
-                System.out.println("not removed");
-            }
+            currentPathToNextVertex.remove(nextVertex);
             nextVertex = currentPathToNextVertex.get(0);
         }
         Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
