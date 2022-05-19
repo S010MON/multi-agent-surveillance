@@ -37,7 +37,6 @@ public class AcoAgent extends AgentImp
     public AcoAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
-        this.direction = directionOfAngle(direction.getAngle());
         initializeWorld();
         acoAgentCount ++;
     }
