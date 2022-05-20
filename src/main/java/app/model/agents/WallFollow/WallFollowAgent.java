@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
@@ -47,6 +48,7 @@ public class WallFollowAgent extends AgentImp
     private boolean hasLeftInitialWallFollowPos = false;
     private GraphCell initialWallFollowPos = null;
     protected double directionHeuristicWeight = 1;
+    private final double epsilon = 0.5;
 
     /** Original WallFollow agent that switches between following a wall and doing heuristics exploration,
      * depending on if it finds an unexplored wall to follow.
@@ -54,14 +56,24 @@ public class WallFollowAgent extends AgentImp
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+        this.direction = closestCardinalDirection(direction.getAngle());
         initializeWorld();
     }
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type, double moveLen)
     {
         super(position, direction, radius, type);
+        this.direction = closestCardinalDirection(direction.getAngle());
         this.moveLength = moveLen;
         initializeWorld();
+    }
+
+    public WallFollowAgent(Agent other)
+    {
+        super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        this.direction = closestCardinalDirection(direction.getAngle());
+        this.moveLength = other.getMoveLength();
+        copyOver(other);
     }
 
     public void initializeWorld()
@@ -71,7 +83,25 @@ public class WallFollowAgent extends AgentImp
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
+        world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
+    }
+
+    protected void copyOver(Agent other)
+    {
+        super.copyOver(other);
+
+        if(other.getWorld() != null)
+        {
+            this.world = new WfWorld(other.getWorld().getG());
+            world.add_or_adjust_Vertex(position);
+            lastPositions.add(world.getVertexAt(position));
+            prevAgentVertex = world.getVertexAt(position);
+            world.add_or_adjust_Vertex(position);
+            checkIfNeighboursAreObstacles();
+        }
+        else
+            initializeWorld();
     }
 
     /**
@@ -632,5 +662,21 @@ public class WallFollowAgent extends AgentImp
         {
             return 1;
         }
+    }
+
+    private Vector closestCardinalDirection(double angle)
+    {
+        Vector direction = directions.get(0);
+        double smallestDiff = 360;
+        for(Vector dir: directions)
+        {
+            double diff = Math.abs(dir.getAngle() - angle);
+            if(diff < smallestDiff)
+            {
+                smallestDiff = diff;
+                direction = dir;
+            }
+        }
+        return direction;
     }
 }

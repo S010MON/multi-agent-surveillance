@@ -4,7 +4,10 @@ import app.controller.linAlg.Vector;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.World;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
+
+import java.util.List;
 
 public class WfWorld extends World
 {

@@ -2,6 +2,7 @@ package app.model.agents.ACO;
 
 import app.controller.linAlg.Vector;
 import app.model.Type;
+import app.model.agents.Agent;
 
 public class AcoMid extends AcoMomentum
 {
@@ -9,5 +10,11 @@ public class AcoMid extends AcoMomentum
     {
         super(position, direction, radius, type);
         momentumHeuristic = 0.5;
+    }
+
+    public AcoMid(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 }

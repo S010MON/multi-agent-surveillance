@@ -4,7 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Type;
-import app.model.agents.Capture.Capture;
+import app.model.agents.Capture.CaptureAgent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,15 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CaptureAgentTest
+public class CaptureAgentAgentTest
 {
     Vector agent1Pos;
-    Capture agent1;
+    CaptureAgent agent1;
 
     @BeforeAll void setup()
     {
         agent1Pos = new Vector(10, 10);
-        agent1 = new Capture(new Vector(10, 10), new Vector(1, 0), 1, Type.GUARD);
+        agent1 = new CaptureAgent(new Vector(10, 10), new Vector(1, 0), 1, Type.GUARD);
     }
 
     @Test void testSeeingIntruder()
