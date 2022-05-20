@@ -1,7 +1,5 @@
 package app.model.boundary;
 
-import app.controller.graphicsEngine.Ray;
-import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import javafx.scene.paint.Color;
 
@@ -16,6 +14,11 @@ public class TargetBoundary extends TransparentBoundary
     @Override
     public boolean isCrossed(Vector centre, double radius)
     {
-        return false; // Overrides super -> light goes through it
+        return false;
+    }
+
+    @Override public boolean isCrossed(Vector startPoint, Vector endPoint)
+    {
+        return false;
     }
 }

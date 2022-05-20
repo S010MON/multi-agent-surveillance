@@ -50,7 +50,7 @@ public class Flag implements Boundary
 
     @Override public boolean isCrossed(Vector centre, double radius)
     {
-        return position.dist(centre) <= radius;
+        return false;
     }
 
     @Override public Vector getTeleport()
