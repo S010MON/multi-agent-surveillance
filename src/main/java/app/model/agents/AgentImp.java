@@ -7,6 +7,8 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Evasion.EvasionAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -49,31 +51,25 @@ public class AgentImp implements Agent
         heard = new ArrayList<>();
     }
 
-    public AgentImp(Vector position, Vector direction, double radius, Type type, Vector tgtDirection)
-    {
-        this.direction = direction;
-        this.position = position;
-        this.radius = radius;
-        this.type = type;
-        this.tgtDirection = tgtDirection;
-        view = new ArrayList<>();
-        seen = new VectorSet();
-        heard = new ArrayList<>();
-    }
-
     public AgentImp(Agent other)
     {
         this.direction = other.getDirection();
         this.position = other.getPosition();
         this.radius = other.getRadius();
         this.type = other.getType();
+        copyOver(other);
+    }
+
+    protected void copyOver(Agent other)
+    {
         this.tgtDirection = other.getTgtDirection();
         this.view = other.getView();
         this.seen = other.getSeen();
         this.maxSprint = other.getMaxSprint();
         this.maxWalk = other.getMaxWalk();
         this.agentViewWindow = other.getAgentViewWindow();
-        // TODO add hearing after SoundEngine refactor merged
+        this.heard = other.getHeard();
+        this.world = other.getWorld();
     }
 
     @Override
@@ -213,12 +209,6 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public Agent nextState()
-    {
-        return this;
-    }
-
-    @Override
     public boolean isTypeSeen(Type type)
     {
         for(Ray r : view)
@@ -230,5 +220,36 @@ public class AgentImp implements Agent
             }
         }
         return false;
+    }
+
+    /**
+     * Encodes state changes for all types of agent, and returns either the current class or
+     * creates a new class of the requisite type for the current state change
+     * @return
+     */
+    @Override
+    public Agent nextState()
+    {
+        // State GUARD
+        if(this.type == Type.GUARD)
+        {
+            if(isTypeSeen(Type.INTRUDER))
+                return new CaptureAgent(this);
+
+        }
+
+        // State INTRUDER
+        else if(this.type == Type.INTRUDER)
+        {
+            if(isTypeSeen(Type.GUARD))
+                return new EvasionAgent(this);
+
+            if(isTypeSeen(Type.TARGET))
+                return new TargetAgent(this);
+
+            return this;
+        }
+
+        return this;
     }
 }

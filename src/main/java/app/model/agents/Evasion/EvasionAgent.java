@@ -1,6 +1,5 @@
 package app.model.agents.Evasion;
 
-import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
@@ -23,6 +22,12 @@ public class EvasionAgent extends AgentImp
     public EvasionAgent(Vector position, Vector direction, double radius, Type type)
     {
         this(position, direction, radius, type, EvasionStrategy.RANDOM);
+    }
+
+    public EvasionAgent(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     @Override
@@ -96,10 +101,8 @@ public class EvasionAgent extends AgentImp
     @Override public Agent nextState()
     {
         if(guardInView)
-        {
             return this;
-        }
 
-        return new WallFollowAgent(position, direction, radius, type);
+        return new WallFollowAgent(this);
     }
 }

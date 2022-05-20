@@ -4,7 +4,6 @@ import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsGenerator;
 import app.model.Map;
 import app.model.Type;
-import app.model.furniture.FurnitureType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +33,14 @@ public class MapTest
         Map map = new Map(SettingsGenerator.mapTest());
         Type exp = Type.INTRUDER;
         Type act = map.objectAt(new Vector(100, 100));
+        assertEquals(exp, act);
+    }
+
+    @Test void TestGetAgentTypeBoundary()
+    {
+        Map map = new Map(SettingsGenerator.mapTest());
+        Type exp = Type.INTRUDER;
+        Type act = map.objectAt(new Vector(110, 100));
         assertEquals(exp, act);
     }
 

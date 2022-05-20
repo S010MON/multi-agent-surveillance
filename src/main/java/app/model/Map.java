@@ -9,9 +9,7 @@ import app.model.agents.Agent;
 import app.model.agents.AgentType;
 import app.model.agents.Human;
 import app.model.boundary.Boundary;
-import app.model.boundary.Flag;
 import app.model.furniture.Furniture;
-import app.model.furniture.FurnitureBase;
 import app.model.furniture.FurnitureFactory;
 import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
@@ -145,11 +143,18 @@ public class Map
 
     public ArrayList<Boundary> getBoundaries()
     {
+        ArrayList<Furniture> filteredFurniture = (ArrayList<Furniture>) furniture.clone();
+        filterFurnitureType(filteredFurniture, FurnitureType.TARGET);
+
         ArrayList<Boundary> boundaries = new ArrayList<>();
-        furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
+        filteredFurniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
 
+    private void filterFurnitureType(ArrayList<Furniture> furn, FurnitureType type)
+    {
+        furn.removeIf(e -> e.getType() == type);
+    }
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
