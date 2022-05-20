@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Map
@@ -28,6 +29,7 @@ public class Map
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
+    @Getter private PriorityQueue<Trail> trails;
     @Getter private VectorSet guardsSeen;
     @Getter private VectorSet intrudersSeen;
     @Getter private Settings settings;
@@ -48,6 +50,7 @@ public class Map
         this.width = settings.getWidth();
         this.height = settings.getHeight();
         this.deletion = new Stack<>();
+        this.trails = new PriorityQueue<>();
 
         /* Make furniture */
         furniture = new ArrayList<>();
@@ -205,6 +208,31 @@ public class Map
     }
 
 
+    public boolean goalReached()
+    {
+        for(Agent a: agents)
+        {
+            if(a.getType() == Type.INTRUDER && target.contains(a.getPosition().getX(), a.getPosition().getY()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int agentsRemaining(Type type)
+    {
+        int count = 0;
+        for(Agent a: agents)
+        {
+            if(a.getType() == type)
+                count++;
+        }
+        return count;
+    }
+
+
     public void updateStates()
     {
         ArrayList<Agent> new_states = new ArrayList<>();
@@ -250,6 +278,12 @@ public class Map
             soundSources.add(new SoundSource(position, 200, 1000));
         else if(team == Type.INTRUDER)
             soundSources.add(new SoundSource(position, 200, 2000));
+    }
+
+
+    public void addTrail(Trail t)
+    {
+        trails.add(t);
     }
 
 

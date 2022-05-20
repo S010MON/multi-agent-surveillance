@@ -1,6 +1,6 @@
 package testing;
 
-import app.controller.TestingEngine;
+import experiments.TestingEngine;
 import app.controller.io.FileManager;
 import app.controller.logging.Logger;
 import app.controller.settings.Settings;
@@ -28,7 +28,7 @@ public class HeadlessAgentTest
 
         Map map = new Map((settings));
         TestingEngine gameEngine = new TestingEngine(map, typeIntruder + " " + typeGuard);
-        int[] data = gameEngine.run();
+        int[] data = gameEngine.runCoverageTest();
         logger.log(typeIntruder + " " + typeGuard + " test", data);
     }
 
