@@ -44,7 +44,9 @@ public class StartMenu extends BorderPane
         {
             Settings settings = settingsPane.getSettings();
             furniturePane.getSettings(settings);
-            FileManager.saveSettings(settings, settings.getName());
+            String fileName = Alert.answerAlert("Name of File", "Enter the Name of the file you wish to create.");
+            settings.setName(fileName);
+            FileManager.saveSettings(settings, fileName);
             Alert.displayAlert("Done!", "The map file was successfully created.");
         }
         else
@@ -59,8 +61,9 @@ public class StartMenu extends BorderPane
         {
             Settings settings = settingsPane.getSettings();
             furniturePane.getSettings(settings);
-            FileManager.saveSettings(settings, settings.getName());
-            String fileName = settings.getName();
+            String fileName = Alert.answerAlert("Name of File", "Enter the Name of the file you wish to create.");
+            settings.setName(fileName);
+            FileManager.saveSettings(settings, fileName);
             app.gotoSimulation(fileName);
         }
         else
