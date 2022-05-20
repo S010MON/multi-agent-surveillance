@@ -205,6 +205,17 @@ public class Map
     }
 
 
+    public boolean hasAgentOfType(Type type)
+    {
+        for(Agent a: agents)
+        {
+            if(a.getType() == type)
+                return true;
+        }
+        return false;
+    }
+
+
     public void updateStates()
     {
         ArrayList<Agent> new_states = new ArrayList<>();
