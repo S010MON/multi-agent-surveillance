@@ -130,7 +130,7 @@ public class AgentImp implements Agent
         return false;
     }
 
-    public Vector closestTypePos(Type Type)
+    public Vector closestTypePos(Type type)
     {
         Vector closestAgentPos = null;
         double closestAgentDist = 10^5;
