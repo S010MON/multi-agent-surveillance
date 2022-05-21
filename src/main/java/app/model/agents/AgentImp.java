@@ -1,6 +1,7 @@
 package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Angle;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
@@ -220,6 +221,34 @@ public class AgentImp implements Agent
             }
         }
         return false;
+    }
+
+    /**
+     * Method for checking for walls/obstacles for getting next move in the wall following algorithm.
+     * Walls/obstacles are checked in the direction of the given rayAngle by checking if that ray detects
+     * an obstacle within the moveLength distance range.
+     * @param rayAngle angle of the direction to be checked.
+     * @return true if no obstacle detected; false if obstacle detected
+     */
+    public boolean noWallDetected(double rayAngle, double moveLength)
+    {
+        double anglePrecision = 2;
+        for (Ray r : view)
+        {
+            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
+            {
+                if (r.length() <= moveLength)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean noWallDetected(Vector vector, double moveLength)
+    {
+        return noWallDetected(vector.getAngle(), moveLength);
     }
 
     /**

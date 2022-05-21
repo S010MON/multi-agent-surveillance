@@ -14,9 +14,12 @@ public class EvasionAgent extends AgentImp
     private Vector closestGuard;
     private Vector guardDirection;
 
+    private final int MAX_MOVES = 20;
+    private int moveCounter;
     private EvasionStrategy strategy;
     private boolean guardInView = true;
-    private double randomness = 0.3;
+    private final double RANDOMNESS = 0.3;
+    private final double MAX_RANDOMNESS = 0.8;
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
@@ -46,7 +49,7 @@ public class EvasionAgent extends AgentImp
                 return moveDirected();
             }
             case RANDOMDIRECTED -> {
-                return moveRandomDirected();
+                return moveRandomDirected(RANDOMNESS);
             }
             case RANDOM -> {
                 return moveRandom();
@@ -57,6 +60,7 @@ public class EvasionAgent extends AgentImp
 
     private void updateKnowledge()
     {
+        moveCounter = 0;
         Vector closestSeenGuard = closestTypePos(Type.GUARD);
         if(closestSeenGuard != null)
         {
@@ -81,10 +85,18 @@ public class EvasionAgent extends AgentImp
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        return new Move(randomDirection, randomDirection.scale(maxSprint));
+        if(noWallDetected(randomDirection, maxSprint))
+            return new Move(randomDirection, randomDirection.scale(maxSprint));
+        else if(moveCounter < MAX_MOVES)
+        {
+            moveCounter++;
+            return moveRandom();
+        }
+        else
+            return new Move(direction, new Vector(0,0));
     }
 
-    private Move moveRandomDirected()
+    private Move moveRandomDirected(double randomness)
     {
         if(guardDirection == null)
         {
@@ -98,7 +110,16 @@ public class EvasionAgent extends AgentImp
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
-        return new Move(guardDirection, mixedDirection.scale(maxSprint));
+        if(noWallDetected(mixedDirection, maxSprint))
+            return new Move(guardDirection, mixedDirection.scale(maxSprint));
+        else if(moveCounter < MAX_MOVES)
+        {
+            moveCounter++;
+            randomness = Math.max(MAX_RANDOMNESS, randomness+0.05);
+            return moveRandomDirected(randomness);
+        }
+        else
+            return new Move(direction, new Vector(0,0));
     }
 
     public Move moveDirected()
@@ -106,7 +127,13 @@ public class EvasionAgent extends AgentImp
         Vector flippedDirection = guardDirection.rotate(180);
 
         // Keep looking back to keep the agent in view
-        return new Move(guardDirection, flippedDirection.scale(maxSprint));
+        if(noWallDetected(flippedDirection, maxSprint))
+            return new Move(guardDirection, flippedDirection.scale(maxSprint));
+        else
+        {
+            moveCounter++;
+            return moveRandomDirected(0.1);
+        }
     }
 
     private boolean maxTicsReached()
