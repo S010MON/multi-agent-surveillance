@@ -9,6 +9,11 @@ import app.model.agents.WallFollow.WallFollowAgent;
 
 public class EvasionAgent extends AgentImp
 {
+    private final int MAX_TICS_WITHOUT_SIGHT = 100;
+    private int counter = 0;
+    private Vector closestGuard;
+    private Vector guardDirection;
+
     private EvasionStrategy strategy;
     private boolean guardInView = true;
     private double randomness = 0.3;
@@ -21,18 +26,20 @@ public class EvasionAgent extends AgentImp
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type)
     {
-        this(position, direction, radius, type, EvasionStrategy.RANDOM);
+        this(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
     }
 
     public EvasionAgent(Agent other)
     {
         this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         copyOver(other);
+        updateKnowledge();
     }
 
     @Override
     public Move move()
     {
+        updateKnowledge();
         switch(strategy)
         {
             case DIRECTED -> {
@@ -48,28 +55,44 @@ public class EvasionAgent extends AgentImp
         return null;
     }
 
+    private void updateKnowledge()
+    {
+        Vector closestSeenGuard = closestTypePos(Type.GUARD);
+        if(closestSeenGuard != null)
+        {
+            counter = 0;
+            if(closestGuard == null)
+            {
+                closestGuard = closestSeenGuard;
+                guardDirection = closestGuard.sub(position);
+            }
+            else if(closestSeenGuard.dist(position) < closestGuard.dist(position))
+            {
+                closestGuard = closestSeenGuard;
+                guardDirection = closestGuard.sub(position);
+            }
+        }
+        else
+            counter++;
+    }
+
     private Move moveRandom()
     {
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        return new Move(direction, randomDirection.scale(maxSprint));
+        return new Move(randomDirection, randomDirection.scale(maxSprint));
     }
 
     private Move moveRandomDirected()
     {
+        if(guardDirection == null)
+        {
+            return moveRandom();
+        }
         // randomness should be a number between 0 and 1
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
-
-        Vector guardDirection = closestAgent(Type.GUARD);
-
-        if(guardDirection == null)
-        {
-            // TODO this should flip to a new state
-            //guardInView = false;
-            return new Move(randomDirection, randomDirection.scale(maxSprint));
-        }
 
         Vector flippedDirection = guardDirection.rotate(180);
 
@@ -80,29 +103,22 @@ public class EvasionAgent extends AgentImp
 
     public Move moveDirected()
     {
-
-        // need condition on this value being null
-        Vector guardDirection = closestAgent(Type.GUARD);
-
-        if(guardDirection == null)
-        {
-            // TODO this should flip to a new state
-            // guardInView = false;
-            return new Move(direction, new Vector());
-        }
-
         Vector flippedDirection = guardDirection.rotate(180);
 
         // Keep looking back to keep the agent in view
-
         return new Move(guardDirection, flippedDirection.scale(maxSprint));
+    }
+
+    private boolean maxTicsReached()
+    {
+        return (counter > MAX_TICS_WITHOUT_SIGHT);
     }
 
     @Override public Agent nextState()
     {
-        if(guardInView)
-            return this;
+        if(maxTicsReached())
+            return new WallFollowAgent(this);
 
-        return new WallFollowAgent(this);
+        return this;
     }
 }
