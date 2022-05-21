@@ -548,18 +548,7 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 2;
-        for (Ray r : view)
-        {
-            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
-            {
-                if (r.length() <= moveLength)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return noWallDetected(rayAngle, moveLength, 2);
     }
 
     private boolean foundUnexploredWallToFollow()
