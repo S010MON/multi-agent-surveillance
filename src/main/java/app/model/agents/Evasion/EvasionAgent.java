@@ -111,7 +111,7 @@ public class EvasionAgent extends AgentImp
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
-        if(!checkIfLegalMove | noWallDetected(mixedDirection, maxSprint))
+        if(!checkIfLegalMove || noWallDetected(mixedDirection, maxSprint))
             return new Move(guardDirection, mixedDirection.scale(maxSprint));
         else if(moveCounter < MAX_MOVES)
         {

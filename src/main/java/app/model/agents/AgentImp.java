@@ -118,7 +118,7 @@ public class AgentImp implements Agent
         gc.strokeOval(x , y, radius, radius);
     }
 
-    public boolean typeDetected(Type ype)
+    public boolean typeDetected(Type type)
     {
         for(Ray r : view)
         {
