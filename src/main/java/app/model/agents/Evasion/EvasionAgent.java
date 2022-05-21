@@ -20,6 +20,7 @@ public class EvasionAgent extends AgentImp
     private boolean guardInView = true;
     private final double RANDOMNESS = 0.3;
     private final double MAX_RANDOMNESS = 0.8;
+    private boolean checkIfLegalMove = true;
 
     public EvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
@@ -85,7 +86,7 @@ public class EvasionAgent extends AgentImp
         int theta = (int) (Math.random() * 360);
         Vector randomDirection = new Vector(0, 1).rotate(theta);
 
-        if(noWallDetected(randomDirection, maxSprint))
+        if(!checkIfLegalMove | noWallDetected(randomDirection, maxSprint))
             return new Move(randomDirection, randomDirection.scale(maxSprint));
         else if(moveCounter < MAX_MOVES)
         {
@@ -110,7 +111,7 @@ public class EvasionAgent extends AgentImp
 
         Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
 
-        if(noWallDetected(mixedDirection, maxSprint))
+        if(!checkIfLegalMove | noWallDetected(mixedDirection, maxSprint))
             return new Move(guardDirection, mixedDirection.scale(maxSprint));
         else if(moveCounter < MAX_MOVES)
         {
@@ -127,7 +128,7 @@ public class EvasionAgent extends AgentImp
         Vector flippedDirection = guardDirection.rotate(180);
 
         // Keep looking back to keep the agent in view
-        if(noWallDetected(flippedDirection, maxSprint))
+        if(!checkIfLegalMove | noWallDetected(flippedDirection, maxSprint))
             return new Move(guardDirection, flippedDirection.scale(maxSprint));
         else
         {
