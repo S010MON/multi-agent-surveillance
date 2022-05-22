@@ -126,6 +126,10 @@ public class EvasionAgent extends AgentImp
 
     public Move moveDirected()
     {
+        if(guardDirection == null)
+        {
+            return moveRandom();
+        }
         Vector flippedDirection = guardDirection.rotate(180);
 
         // Keep looking back to keep the agent in view
