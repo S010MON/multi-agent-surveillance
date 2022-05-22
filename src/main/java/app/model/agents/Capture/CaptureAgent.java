@@ -20,7 +20,7 @@ import java.util.Queue;
 
 public class CaptureAgent extends AgentImp
 {
-    private final int MAX_TICS_WITHOUT_SIGHT = 100;
+    private final int MAX_TICS_WITHOUT_SIGHT = 10;
     private final int MAX_MOVES_BEFORE_RETURN = 5;
     private final int MAX_POSITIONS_HELD = 3;
     private final double SCALE_TARGET = 1.5;
