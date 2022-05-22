@@ -66,15 +66,15 @@ public class EvasionAgent extends AgentImp
         if(closestSeenGuard != null)
         {
             counter = 0;
-            if(closestGuard == null)
+            if(closestGuard == null && closestSeenGuard != null)
             {
                 closestGuard = closestSeenGuard;
-                guardDirection = closestGuard.sub(position);
+                guardDirection = closestGuard.sub(position).normalise();
             }
             else if(closestSeenGuard.dist(position) < closestGuard.dist(position))
             {
                 closestGuard = closestSeenGuard;
-                guardDirection = closestGuard.sub(position);
+                guardDirection = closestGuard.sub(position).normalise();
             }
         }
         else
@@ -104,12 +104,13 @@ public class EvasionAgent extends AgentImp
             return moveRandom();
         }
         // randomness should be a number between 0 and 1
-        int theta = (int) (Math.random() * 360);
-        Vector randomDirection = new Vector(0, 1).rotate(theta);
+        int theta = (int) (Math.random() * (randomness/2) * 360);
+        if(Math.random() < 0.5)
+            theta = -theta;
 
         Vector flippedDirection = guardDirection.rotate(180);
 
-        Vector mixedDirection = flippedDirection.scale(1 - randomness).add(randomDirection.scale(randomness));
+        Vector mixedDirection = flippedDirection.rotate(theta);
 
         if(!checkIfLegalMove || noWallDetected(mixedDirection, maxSprint))
             return new Move(guardDirection, mixedDirection.scale(maxSprint));
