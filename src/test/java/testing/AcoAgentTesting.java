@@ -36,7 +36,7 @@ public class AcoAgentTesting
     {
         settings = FileManager.loadSettings("src/main/resources/AcoTestMap");
         map = new Map(settings);
-        map.setHUMAN_ACTIVE(false);
+        map.setHumanActive(false);
         Universe.clearUniverse();
     }
 
