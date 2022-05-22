@@ -17,7 +17,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -25,7 +24,7 @@ import java.util.Stack;
 
 public class Map
 {
-    @Setter private Boolean HUMAN_ACTIVE = true;
+    private Boolean humanActive = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
@@ -89,14 +88,8 @@ public class Map
             agents.add(intruder);
         }
 
-        if (HUMAN_ACTIVE)
-        {
-            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
-            human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
-            human.setMaxWalk(settings.getWalkSpeedGuard());
-            human.setMaxSprint(settings.getSprintSpeedGuard());
-            agents.add(human);
-        }
+        if (humanActive)
+            activateHuman();
 
         this.coverage = new Coverage(this);
         System.out.print(" done");
@@ -207,6 +200,32 @@ public class Map
         }
     }
 
+    public void setHumanActive(boolean active)
+    {
+        if(!humanActive && active)
+        {
+            activateHuman();
+        }
+        else if(humanActive && !active)
+        {
+            for(Agent a : agents)
+            {
+                if(a instanceof Human)
+                {
+                    agents.remove(a);
+                }
+            }
+        }
+    }
+
+    public void activateHuman()
+    {
+        Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
+        human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
+        human.setMaxWalk(settings.getWalkSpeedGuard());
+        human.setMaxSprint(settings.getSprintSpeedGuard());
+        agents.add(human);
+    }
 
     public boolean goalReached()
     {

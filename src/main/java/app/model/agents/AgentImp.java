@@ -1,6 +1,7 @@
 package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Angle;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
@@ -117,11 +118,11 @@ public class AgentImp implements Agent
         gc.strokeOval(x , y, radius, radius);
     }
 
-    public boolean agentDetected(Type agentType)
+    public boolean typeDetected(Type type)
     {
         for(Ray r : view)
         {
-            if(r.getType()==agentType)
+            if(r.getType() == type)
             {
                 return true;
             }
@@ -129,14 +130,14 @@ public class AgentImp implements Agent
         return false;
     }
 
-    public Vector closestAgent(Type agentType)
+    public Vector closestTypePos(Type type)
     {
         Vector closestAgentPos = null;
         double closestAgentDist = 10^5;
 
         for(Ray r : view)
         {
-            if(r.getType()==agentType)
+            if(r.getType()==type)
             {
                 if(closestAgentPos == null)
                 {
@@ -220,6 +221,45 @@ public class AgentImp implements Agent
             }
         }
         return false;
+    }
+
+    /**
+     * Method for checking for walls/obstacles for getting next move in the wall following algorithm.
+     * Walls/obstacles are checked in the direction of the given rayAngle by checking if that ray detects
+     * an obstacle within the moveLength distance range.
+     * @param rayAngle angle of the direction to be checked.
+     * @param moveLength max dist to obstacle to still return true
+     * @param anglePrecision how much difference there can be between the visionRay and the rayAngle
+     * @return true if no obstacle detected; false if obstacle detected
+     */
+    public boolean noWallDetected(double rayAngle, double moveLength, double anglePrecision)
+    {
+        for (Ray r : view)
+        {
+            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
+            {
+                if (r.length() <= moveLength)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean noWallDetected(double rayAngle, double moveLength)
+    {
+        return noWallDetected(rayAngle, moveLength, 1);
+    }
+
+    public boolean noWallDetected(Vector vector, double moveLength, double anglePrecision)
+    {
+        return noWallDetected(vector.getAngle(), moveLength, 1);
+    }
+
+    public boolean noWallDetected(Vector vector, double moveLength)
+    {
+        return noWallDetected(vector.getAngle(), moveLength, 1);
     }
 
     /**

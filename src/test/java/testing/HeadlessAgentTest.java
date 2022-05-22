@@ -6,6 +6,7 @@ import app.controller.logging.Logger;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class HeadlessAgentTest
@@ -32,9 +33,12 @@ public class HeadlessAgentTest
         logger.log(typeIntruder + " " + typeGuard + " test", data);
     }
 
+    // This doesn't even test anything?
+    // and it takes way too long, 100000 tics is almost 3 hours worth of time (10 tics = 1 sec)
+    @Disabled
     @Test public void ACOWFTest()
     {
         // intruder ACO, guard WF
-        runOnce("experiment_map_1", AgentType.ACO, AgentType.WALL_FOLLOW);
+        runOnce("experiment_map_1", AgentType.WALL_FOLLOW, AgentType.ACO);
     }
 }

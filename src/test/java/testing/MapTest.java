@@ -31,6 +31,7 @@ public class MapTest
     @Test void TestGetAgentTypeInside()
     {
         Map map = new Map(SettingsGenerator.mapTest());
+        map.setHumanActive(true);
         Type exp = Type.INTRUDER;
         Type act = map.objectAt(new Vector(100, 100));
         assertEquals(exp, act);
@@ -39,6 +40,7 @@ public class MapTest
     @Test void TestGetAgentTypeBoundary()
     {
         Map map = new Map(SettingsGenerator.mapTest());
+        map.setHumanActive(true);
         Type exp = Type.INTRUDER;
         Type act = map.objectAt(new Vector(110, 100));
         assertEquals(exp, act);
