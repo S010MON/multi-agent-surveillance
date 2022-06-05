@@ -2,10 +2,12 @@ package experiments;
 
 import app.controller.TestingEngine;
 import app.controller.io.FileManager;
-import app.controller.logging.Logger;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import jogging.Logger;
+
+import java.util.Arrays;
 
 public class Experiments
 {
@@ -48,7 +50,10 @@ public class Experiments
                     Map map = new Map((settings));
                     TestingEngine gameEngine = new TestingEngine(map, test_name);
                     int[] data = gameEngine.run();
-                    logger.log(agent_heading + test_name, data);
+
+                    StringBuilder sb = new StringBuilder(agent_heading + test_name);
+                    Arrays.stream(data).forEach(e -> sb.append("," + e));
+                    logger.log(sb.toString());
                 }
             }
         }

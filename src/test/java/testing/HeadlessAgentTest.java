@@ -2,11 +2,13 @@ package testing;
 
 import app.controller.TestingEngine;
 import app.controller.io.FileManager;
-import app.controller.logging.Logger;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import jogging.Logger;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 public class HeadlessAgentTest
 {
@@ -29,7 +31,10 @@ public class HeadlessAgentTest
         Map map = new Map((settings));
         TestingEngine gameEngine = new TestingEngine(map, typeIntruder + " " + typeGuard);
         int[] data = gameEngine.run();
-        logger.log(typeIntruder + " " + typeGuard + " test", data);
+
+        StringBuilder sb = new StringBuilder(typeIntruder + " " + typeGuard + " test");
+        Arrays.stream(data).forEach(e -> sb.append("," + e));
+        logger.log(sb.toString());
     }
 
     @Test public void ACOWFTest()
