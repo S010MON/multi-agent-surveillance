@@ -6,6 +6,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
@@ -47,20 +48,32 @@ public class WallFollowAgent extends AgentImp
     private boolean hasLeftInitialWallFollowPos = false;
     private GraphCell initialWallFollowPos = null;
     protected double directionHeuristicWeight = 1;
+    private final double epsilon = 0.5;
 
     /** Original WallFollow agent that switches between following a wall and doing heuristics exploration,
-     * depending on if it finds an unexplored wall to follow. */
+     * depending on if it finds an unexplored wall to follow.
+     * Compared to other variants of WF, gives lowest weight to direction in heuristics part. */
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+        this.direction = closestCardinalDirection(direction.getAngle());
         initializeWorld();
     }
 
     public WallFollowAgent(Vector position, Vector direction, double radius, Type type, double moveLen)
     {
         super(position, direction, radius, type);
+        this.direction = closestCardinalDirection(direction.getAngle());
         this.moveLength = moveLen;
         initializeWorld();
+    }
+
+    public WallFollowAgent(Agent other)
+    {
+        super(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        this.direction = closestCardinalDirection(direction.getAngle());
+        this.moveLength = other.getMoveLength();
+        copyOver(other);
     }
 
     public void initializeWorld()
@@ -70,7 +83,25 @@ public class WallFollowAgent extends AgentImp
         world.add_or_adjust_Vertex(position);
         lastPositions.add(world.getVertexAt(position));
         prevAgentVertex = world.getVertexAt(position);
+        world.add_or_adjust_Vertex(position);
         checkIfNeighboursAreObstacles();
+    }
+
+    protected void copyOver(Agent other)
+    {
+        super.copyOver(other);
+
+        if(other.getWorld() != null)
+        {
+            this.world = new WfWorld(other.getWorld().getG());
+            world.add_or_adjust_Vertex(position);
+            lastPositions.add(world.getVertexAt(position));
+            prevAgentVertex = world.getVertexAt(position);
+            world.add_or_adjust_Vertex(position);
+            checkIfNeighboursAreObstacles();
+        }
+        else
+            initializeWorld();
     }
 
     /**
@@ -301,24 +332,23 @@ public class WallFollowAgent extends AgentImp
         }
         else
         {
-            double minScore = 0;
-            GraphCell minScoreVertex = null;
+            double bestScore = 0;
+            GraphCell bestScoreVertex = null;
             for (GraphCell vertex : unexploredVertices)
             {
                 if (!inaccessibleCells.contains(vertex))
                 {
                     double score = getVertexScore(vertex);
-                    if (minScore == 0 || score < minScore)
+                    if (bestScore == 0 || score < bestScore)
                     {
-                        minScore = score;
-                        minScoreVertex = vertex;
+                        bestScore = score;
+                        bestScoreVertex = vertex;
                     }
                 }
             }
-            System.out.println("PICKED MIN. SCORE: " + minScore);
-            if (minScoreVertex != null)
+            if (bestScoreVertex != null)
             {
-                currentTargetVertex = minScoreVertex;
+                currentTargetVertex = bestScoreVertex;
                 currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
                         world.getVertexAt(position), currentTargetVertex).getVertexList();
                 return getMoveBasedOnPath();
@@ -350,20 +380,19 @@ public class WallFollowAgent extends AgentImp
         return new Move(newDirection, deltaPos);
     }
 
+    /** Takes into account shortest path length, direction relative to agent's
+     * and how many neighbours also have unexplored cells.
+     * Original WF agent gives low weight to keeping in current direction, WFDirHeuristicMedWeight gives more weight
+     * and WFDirHeuristicHighWeight gives most weight to that.
+     */
     public double getVertexScore(GraphCell vertex)
     {
-        // currently takes into account shortest path length, direction relative to agent's and
-        // how many neighbours also have unexplored cells
-        // TODO add weights to score components - HEURISTICS EXPERIMENTS
-        // (smaller score is better!)
-        System.out.println("INDIVIDUAL SCORE COMPONENTS");
         double score;
-        int shortestPathLength;
+        double shortestPathLength;
         GraphPath dijkstrasPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
         if (dijkstrasPath != null)
         {
             shortestPathLength = dijkstrasPath.getVertexList().size();
-            System.out.println("Dijkstra's path length: " + shortestPathLength);
         }
         else
         {
@@ -381,13 +410,9 @@ public class WallFollowAgent extends AgentImp
 
         score = shortestPathLength;
         score = score / getDirectionScore(vertex);
-        System.out.println("Direction score: " + getDirectionScore(vertex));
-        System.out.println("Score after dividing with dir. score: " + score);
         if (neighboursOnUnexploredFrontier != 0)
         {
-            score = score / neighboursOnUnexploredFrontier;
-            System.out.println("Neighbours on unexplored frontier: " + neighboursOnUnexploredFrontier);
-            System.out.println("Score after dividing with unexplored neig. count: " + score);
+           score = score / neighboursOnUnexploredFrontier;
         }
 
         return score;
@@ -523,18 +548,7 @@ public class WallFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 2;
-        for (Ray r : view)
-        {
-            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
-            {
-                if (r.length() <= moveLength)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return noWallDetected(rayAngle, moveLength, 2);
     }
 
     private boolean foundUnexploredWallToFollow()
@@ -637,5 +651,21 @@ public class WallFollowAgent extends AgentImp
         {
             return 1;
         }
+    }
+
+    private Vector closestCardinalDirection(double angle)
+    {
+        Vector direction = directions.get(0);
+        double smallestDiff = 360;
+        for(Vector dir: directions)
+        {
+            double diff = Math.abs(dir.getAngle() - angle);
+            if(diff < smallestDiff)
+            {
+                smallestDiff = diff;
+                direction = dir;
+            }
+        }
+        return direction;
     }
 }

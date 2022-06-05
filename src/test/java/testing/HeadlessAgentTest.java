@@ -1,13 +1,13 @@
 package testing;
 
-import app.controller.TestingEngine;
+import experiments.TestingEngine;
 import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
 import jogging.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 
 public class HeadlessAgentTest
@@ -30,13 +30,16 @@ public class HeadlessAgentTest
 
         Map map = new Map((settings));
         TestingEngine gameEngine = new TestingEngine(map, typeIntruder + " " + typeGuard);
-        int[] data = gameEngine.run();
+        int[] data = gameEngine.runCoverageTest();
 
         StringBuilder sb = new StringBuilder(typeIntruder + " " + typeGuard + " test");
         Arrays.stream(data).forEach(e -> sb.append("," + e));
         logger.log(sb.toString());
     }
 
+    // This doesn't even test anything?
+    // and it takes way too long, 100000 tics is almost 3 hours worth of time (10 tics = 1 sec)
+    @Disabled
     @Test public void ACOWFTest()
     {
         // intruder ACO, guard WF

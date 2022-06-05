@@ -189,31 +189,7 @@ public class DirectionFollowAgent extends AgentImp
      */
     public boolean noWallDetected(double rayAngle)
     {
-        double anglePrecision = 1;
-
-        boolean wallDetected = false;
-        for(Ray r : view)
-        {
-            if(r.getType()!=Type.GUARD && r.getType()!=Type.INTRUDER && Angle.angleInRange(r.angle(), rayAngle+anglePrecision, rayAngle-anglePrecision))
-            {
-                wallDetected = true;
-                if(r.length() <= moveLength)
-                {
-                    if(DEBUG)
-                    {
-                        System.out.println("type:" + r.getType());
-                        System.out.println("     WALL DETECTED! Ray Angle: " + rayAngle);
-                    }
-                    return false;
-                }
-            }
-        }
-        if(DEBUG && wallDetected) { System.out.println("     ray with angle " +rayAngle+ " exists in view and no wall detected");}
-        else if(DEBUG) { System.out.println("     No ray with Ray angle: " + rayAngle + " detected,  position: "+position.toString() +
-                "\n       position: " + position.toString() +
-                "\n       direction angle: " + direction.getAngle()); }
-
-        return true;
+        return noWallDetected(rayAngle, moveLength, 1);
     }
 
     private Move followGlassWall()

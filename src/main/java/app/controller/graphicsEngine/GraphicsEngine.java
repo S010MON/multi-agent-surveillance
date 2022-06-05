@@ -52,7 +52,7 @@ public class GraphicsEngine
             {
                 Vector currentV = obj.intersection(r);
                 double dist = r.getU().dist(currentV);
-                if(dist < closestDist)
+                if(dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                 {
                     intersection = currentV;
                     closestDist = dist;
@@ -62,7 +62,7 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
+    public Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
     {
         Vector intersection = null;
         double closestDist = Double.MAX_VALUE;
@@ -74,7 +74,7 @@ public class GraphicsEngine
                 {
                     Vector currentV = agent.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if (dist < closestDist && currentV.getAngle() == r.angle())
+                    if (dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                     {
                         intersection = currentV;
                         closestDist = dist;

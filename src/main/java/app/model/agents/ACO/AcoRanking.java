@@ -4,6 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,12 @@ public class AcoRanking extends AcoAgent
     public AcoRanking(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+    }
+
+    public AcoRanking(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     @Override

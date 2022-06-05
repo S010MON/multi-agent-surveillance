@@ -1,12 +1,15 @@
 package app.model.agents;
 
 import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Angle;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Evasion.EvasionAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,11 +27,12 @@ public class AgentImp implements Agent
     @Getter @Setter protected double moveLength = 20;
     @Getter @Setter protected Vector direction;
     @Getter @Setter protected boolean moveFailed;
+    @Getter @Setter protected Vector typePosition;
     @Getter @Setter protected Vector tgtDirection;
+    @Getter @Setter protected ArrayList<Ray> view;
     @Getter protected Type type;
     @Getter protected Vector position;
     @Getter protected double radius;
-    @Getter protected ArrayList<Ray> view;
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
@@ -48,31 +52,25 @@ public class AgentImp implements Agent
         heard = new ArrayList<>();
     }
 
-    public AgentImp(Vector position, Vector direction, double radius, Type type, Vector tgtDirection)
-    {
-        this.direction = direction;
-        this.position = position;
-        this.radius = radius;
-        this.type = type;
-        this.tgtDirection = tgtDirection;
-        view = new ArrayList<>();
-        seen = new VectorSet();
-        heard = new ArrayList<>();
-    }
-
     public AgentImp(Agent other)
     {
         this.direction = other.getDirection();
         this.position = other.getPosition();
         this.radius = other.getRadius();
         this.type = other.getType();
+        copyOver(other);
+    }
+
+    protected void copyOver(Agent other)
+    {
         this.tgtDirection = other.getTgtDirection();
         this.view = other.getView();
         this.seen = other.getSeen();
         this.maxSprint = other.getMaxSprint();
         this.maxWalk = other.getMaxWalk();
         this.agentViewWindow = other.getAgentViewWindow();
-        // TODO add hearing after SoundEngine refactor merged
+        this.heard = other.getHeard();
+        this.world = other.getWorld();
     }
 
     @Override
@@ -120,11 +118,11 @@ public class AgentImp implements Agent
         gc.strokeOval(x , y, radius, radius);
     }
 
-    public boolean agentDetected(Type agentType)
+    public boolean typeDetected(Type type)
     {
         for(Ray r : view)
         {
-            if(r.getType()==agentType)
+            if(r.getType() == type)
             {
                 return true;
             }
@@ -132,14 +130,14 @@ public class AgentImp implements Agent
         return false;
     }
 
-    public Vector closestAgent(Type agentType)
+    public Vector closestTypePos(Type type)
     {
         Vector closestAgentPos = null;
         double closestAgentDist = 10^5;
 
         for(Ray r : view)
         {
-            if(r.getType()==agentType)
+            if(r.getType()==type)
             {
                 if(closestAgentPos == null)
                 {
@@ -201,7 +199,8 @@ public class AgentImp implements Agent
     @Override
     public void updateSeen(Vector vector)
     {
-        this.seen.add(vector);
+        if(vector !=null)
+            this.seen.add(vector);
     }
 
     @Override
@@ -211,19 +210,86 @@ public class AgentImp implements Agent
     }
 
     @Override
-    public Agent nextState()
-    {
-        return this;
-    }
-
-    @Override
     public boolean isTypeSeen(Type type)
     {
         for(Ray r : view)
         {
             if(r.getType() == type)
+            {
+                typePosition = r.getV();
                 return true;
+            }
         }
         return false;
+    }
+
+    /**
+     * Method for checking for walls/obstacles for getting next move in the wall following algorithm.
+     * Walls/obstacles are checked in the direction of the given rayAngle by checking if that ray detects
+     * an obstacle within the moveLength distance range.
+     * @param rayAngle angle of the direction to be checked.
+     * @param moveLength max dist to obstacle to still return true
+     * @param anglePrecision how much difference there can be between the visionRay and the rayAngle
+     * @return true if no obstacle detected; false if obstacle detected
+     */
+    public boolean noWallDetected(double rayAngle, double moveLength, double anglePrecision)
+    {
+        for (Ray r : view)
+        {
+            if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
+            {
+                if (r.length() <= moveLength)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean noWallDetected(double rayAngle, double moveLength)
+    {
+        return noWallDetected(rayAngle, moveLength, 1);
+    }
+
+    public boolean noWallDetected(Vector vector, double moveLength, double anglePrecision)
+    {
+        return noWallDetected(vector.getAngle(), moveLength, 1);
+    }
+
+    public boolean noWallDetected(Vector vector, double moveLength)
+    {
+        return noWallDetected(vector.getAngle(), moveLength, 1);
+    }
+
+    /**
+     * Encodes state changes for all types of agent, and returns either the current class or
+     * creates a new class of the requisite type for the current state change
+     * @return
+     */
+    @Override
+    public Agent nextState()
+    {
+        // State GUARD
+        if(this.type == Type.GUARD)
+        {
+            if(isTypeSeen(Type.INTRUDER))
+                return new CaptureAgent(this);
+
+        }
+
+        // State INTRUDER
+        else if(this.type == Type.INTRUDER)
+        {
+            if(isTypeSeen(Type.GUARD))
+                return new EvasionAgent(this);
+
+            if(isTypeSeen(Type.TARGET))
+                return new TargetAgent(this);
+
+            return this;
+        }
+
+        return this;
     }
 }

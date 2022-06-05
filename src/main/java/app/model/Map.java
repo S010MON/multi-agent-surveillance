@@ -17,17 +17,18 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Map
 {
-    @Setter private Boolean HUMAN_ACTIVE = true;
+    private Boolean humanActive = false;
     @Getter private ArrayList<Furniture> furniture;
     @Getter private ArrayList<Agent> agents;
     @Getter private ArrayList<SoundSource> soundSources;
+    @Getter private PriorityQueue<Trail> trails;
     @Getter private VectorSet guardsSeen;
     @Getter private VectorSet intrudersSeen;
     @Getter private Settings settings;
@@ -48,6 +49,7 @@ public class Map
         this.width = settings.getWidth();
         this.height = settings.getHeight();
         this.deletion = new Stack<>();
+        this.trails = new PriorityQueue<>();
 
         /* Make furniture */
         furniture = new ArrayList<>();
@@ -86,14 +88,8 @@ public class Map
             agents.add(intruder);
         }
 
-        if (HUMAN_ACTIVE)
-        {
-            Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
-            human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
-            human.setMaxWalk(settings.getWalkSpeedGuard());
-            human.setMaxSprint(settings.getSprintSpeedGuard());
-            agents.add(human);
-        }
+        if (humanActive)
+            activateHuman();
 
         this.coverage = new Coverage(this);
         System.out.print(" done");
@@ -123,7 +119,10 @@ public class Map
         {
             case GUARD_SPAWN -> guardSpawn = obj.getRect();
             case INTRUDER_SPAWN -> intruderSpawn = obj.getRect();
-            case TARGET -> target = obj.getRect();
+            case TARGET -> {
+                target = obj.getRect();
+                furniture.add(FurnitureFactory.make(obj));
+            }
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
     }
@@ -140,22 +139,21 @@ public class Map
 
     public ArrayList<Boundary> getBoundaries()
     {
+        ArrayList<Furniture> filteredFurniture = (ArrayList<Furniture>) furniture.clone();
+        filterFurnitureType(filteredFurniture, FurnitureType.TARGET);
+
         ArrayList<Boundary> boundaries = new ArrayList<>();
-        furniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
+        filteredFurniture.forEach(e -> boundaries.addAll(e.getBoundaries()));
         return boundaries;
     }
 
+    private void filterFurnitureType(ArrayList<Furniture> furn, FurnitureType type)
+    {
+        furn.removeIf(e -> e.getType() == type);
+    }
 
     public void drawIndicatorBoxes(GraphicsContext gc)
     {
-        if(target != null)
-        {
-            gc.setStroke(Color.GOLD);
-            gc.strokeRect(target.getMinX() * Info.getInfo().zoom + Info.getInfo().offsetX,
-                    target.getMinY() * Info.getInfo().zoom + Info.getInfo().offsetY,
-                    target.getHeight() * Info.getInfo().zoom,
-                    target.getHeight() * Info.getInfo().zoom);
-        }
         if(guardSpawn != null)
         {
             gc.setStroke(Color.BLUE);
@@ -200,6 +198,57 @@ public class Map
                 }
             }
         }
+    }
+
+    public void setHumanActive(boolean active)
+    {
+        if(!humanActive && active)
+        {
+            activateHuman();
+        }
+        else if(humanActive && !active)
+        {
+            for(Agent a : agents)
+            {
+                if(a instanceof Human)
+                {
+                    agents.remove(a);
+                }
+            }
+        }
+    }
+
+    public void activateHuman()
+    {
+        Vector humanStart = new Vector(100,100);    // Do not change this, it will break tests!
+        human = new Human(humanStart, new Vector(1, 0), 10, Type.INTRUDER);
+        human.setMaxWalk(settings.getWalkSpeedGuard());
+        human.setMaxSprint(settings.getSprintSpeedGuard());
+        agents.add(human);
+    }
+
+    public boolean goalReached()
+    {
+        for(Agent a: agents)
+        {
+            if(a.getType() == Type.INTRUDER && target.contains(a.getPosition().getX(), a.getPosition().getY()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int agentsRemaining(Type type)
+    {
+        int count = 0;
+        for(Agent a: agents)
+        {
+            if(a.getType() == type)
+                count++;
+        }
+        return count;
     }
 
 
@@ -248,6 +297,12 @@ public class Map
             soundSources.add(new SoundSource(position, 200, 1000));
         else if(team == Type.INTRUDER)
             soundSources.add(new SoundSource(position, 200, 2000));
+    }
+
+
+    public void addTrail(Trail t)
+    {
+        trails.add(t);
     }
 
 

@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.controller.graphicsEngine.GraphicsEngine;
+import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
 import app.controller.soundEngine.SoundEngine;
@@ -20,12 +21,12 @@ import lombok.Getter;
 
 public class GameEngine
 {
-    @Getter private long tics;
-    private Map map;
+    @Getter protected long tics;
+    protected Map map;
+    protected GraphicsEngine graphicsEngine;
+    protected boolean captureEnabled = true;
     private Renderer renderer;
-    private GraphicsEngine graphicsEngine;
     private Timeline timeline;
-    private boolean captureEnabled = false;
 
     public GameEngine(Map map, Renderer renderer)
     {
@@ -36,6 +37,13 @@ public class GameEngine
         this.timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    public GameEngine(Map map)
+    {
+        this.tics = 0;
+        this.map = map;
+        this.graphicsEngine = new GraphicsEngine();
     }
 
     public void tick()
@@ -49,7 +57,7 @@ public class GameEngine
         }
 
         map.getAgents().forEach(a -> a.updateView(graphicsEngine.compute(map, a)));
-        map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(ray.getV())));
+        map.getAgents().forEach(a -> a.getView().forEach(ray -> a.updateSeen(rayObstacle(ray))));
         map.getAgents().forEach(a -> map.updateAllSeen(a));
         if(captureEnabled)
             map.getAgents().forEach(a -> map.checkForCapture(a));
@@ -67,7 +75,7 @@ public class GameEngine
                 a.updateLocation(teleportTo);
                 a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
-                renderer.addTrail(new Trail(teleportTo, tics));
+                map.addTrail(new Trail(teleportTo, tics));
             }
             else if (legalMove(startPoint, endPoint) &&
                     legalMove(a, endPoint) &&
@@ -80,7 +88,7 @@ public class GameEngine
                 a.updateLocation(endPoint);
                 a.setDirection(move.getEndDir());
                 a.setMoveFailed(false);
-                renderer.addTrail(new Trail(endPoint, tics));
+                map.addTrail(new Trail(endPoint, tics));
             }
             else
             {
@@ -88,7 +96,10 @@ public class GameEngine
             }
         }
         tics++;
-        renderer.render();
+
+        if(renderer != null)
+            renderer.render();
+
         map.garbageCollection();
     }
 
@@ -123,7 +134,7 @@ public class GameEngine
             timeline.play();
     }
 
-    private Vector checkTeleport(Vector start, Vector end)
+    protected Vector checkTeleport(Vector start, Vector end)
     {
         for (Boundary bdy : map.getBoundaries())
         {
@@ -133,7 +144,7 @@ public class GameEngine
         return null;
     }
 
-    private boolean legalMove(Vector start, Vector end)
+    protected boolean legalMove(Vector start, Vector end)
     {
         for (Boundary bdy : map.getBoundaries())
         {
@@ -143,7 +154,7 @@ public class GameEngine
         return true;
     }
 
-    private boolean legalMove(Agent currentAgent, Vector end)
+    protected boolean legalMove(Agent currentAgent, Vector end)
     {
         for(Agent otherAgent: map.getAgents())
         {
@@ -154,7 +165,7 @@ public class GameEngine
         return true;
     }
 
-    private boolean legalMove(Agent currentAgent, Vector start,Vector end)
+    protected boolean legalMove(Agent currentAgent, Vector start,Vector end)
     {
         double radius = currentAgent.getRadius();
         for(Agent otherAgent: map.getAgents())
@@ -165,5 +176,16 @@ public class GameEngine
                 return false;
         }
         return true;
+    }
+
+    private Vector rayObstacle(Ray ray)
+    {
+        if(ray.getType() == null)
+            return null;
+        switch(ray.getType())
+        {
+            case TARGET, GUARD, INTRUDER -> { return null; }
+            default -> { return ray.getV(); }
+        }
     }
 }

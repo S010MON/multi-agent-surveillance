@@ -29,7 +29,7 @@ public class Settings
     private double timeStep;
     private double scaling;
     private AgentType guardType = AgentType.ACO;
-    private AgentType IntruderType = AgentType.WALL_FOLLOW_DIR_HEURISTIC;
+    private AgentType IntruderType = AgentType.WALL_FOLLOW;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
     private ArrayList<SettingsObject> soundSources = new ArrayList<>();
     private ArrayList<SettingsObject> soundFurniture = new ArrayList<>();

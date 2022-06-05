@@ -175,21 +175,7 @@ public abstract class Intersection
         if(A.dist(center) <= radius || B.dist(center) <= radius)
             return true;
 
-        double baX = B.getX() - A.getX();
-        double baY = B.getY() - A.getY();
-        double caX = center.getX() - A.getX();
-        double caY = center.getY() - A.getY();
-
-        double a = baX * baX + baY * baY;
-        double bBy2 = baX * caX + baY * caY;
-        double c = caX * caX + caY * caY - radius * radius;
-
-        double pBy2 = bBy2 / a;
-        double q = c / a;
-
-        double disc = pBy2 * pBy2 - q;
-
-        if(disc >= 0)
+        if(hasIntersection(A, B, center, radius))
         {
             Line line = new Line(A, B);
             Vector intersection = findIntersection(A, B, center, radius);
@@ -232,6 +218,4 @@ public abstract class Intersection
 
         return (Dx * Dx + Dy * Dy) <= radiusOther * radiusOther;
     }
-
-
 }

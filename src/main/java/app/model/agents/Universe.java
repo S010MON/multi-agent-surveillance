@@ -27,4 +27,12 @@ public class Universe
     {
         return instance.hashMap.get(team);
     }
+
+    public static void clearUniverse()
+    {
+        if(instance != null)
+        {
+            instance.hashMap.clear();
+        }
+    }
 }

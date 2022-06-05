@@ -63,4 +63,8 @@ public interface Agent extends Boundary
     AgentView getAgentViewWindow();
 
     boolean isTypeSeen(Type type);
+
+    World getWorld();
+
+    double getMoveLength();
 }

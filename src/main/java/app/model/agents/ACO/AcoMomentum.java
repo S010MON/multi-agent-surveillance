@@ -3,6 +3,7 @@ package app.model.agents.ACO;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Agent;
 import lombok.Setter;
 
 public class AcoMomentum extends AcoAgent
@@ -14,6 +15,12 @@ public class AcoMomentum extends AcoAgent
     public AcoMomentum(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+    }
+
+    public AcoMomentum(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 
     @Override
