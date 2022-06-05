@@ -37,8 +37,6 @@ public class HeadlessAgentTest
         logger.log(sb.toString());
     }
 
-    // This doesn't even test anything?
-    // and it takes way too long, 100000 tics is almost 3 hours worth of time (10 tics = 1 sec)
     @Disabled
     @Test public void ACOWFTest()
     {

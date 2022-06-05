@@ -1,6 +1,5 @@
 package experiments;
 
-import app.controller.TestingEngine;
 import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.model.Map;
