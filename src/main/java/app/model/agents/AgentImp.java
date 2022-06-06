@@ -268,7 +268,6 @@ public class AgentImp implements Agent
                                      .filter(r -> r.isSolid() || r.getType() == null)
                                      .collect(Collectors.toList());
     }
-}
 
     public boolean noWallDetected(Vector vector, double moveLength, double anglePrecision)
     {

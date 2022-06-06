@@ -5,6 +5,7 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
+import app.model.boundary.BoundaryType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -38,7 +39,7 @@ public class CaptureAgentAgentTest
     @Test void testNotSeeingIntruder()
     {
         ArrayList<Ray> testView = new ArrayList<>();
-        testView.add(new Ray(new Vector(), new Vector(), null));
+        testView.add(new Ray(new Vector(), new Vector(), (BoundaryType) null));
         agent1.setView(testView);
         assertFalse(agent1.isTypeSeen(Type.INTRUDER));
     }
@@ -66,7 +67,7 @@ public class CaptureAgentAgentTest
         agent1.setBeliefSet(bSet);
 
         ArrayList<Ray> testView = new ArrayList<>();
-        testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), null));
+        testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), (BoundaryType) null));
         agent1.setView(testView);
 
         agent1.updateBeliefSet();

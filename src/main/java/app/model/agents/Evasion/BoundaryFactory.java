@@ -1,7 +1,8 @@
-package app.model.boundary;
+package app.model.agents.Evasion;
 
 import app.controller.linAlg.Vector;
 import app.controller.settings.SettingsObject;
+import app.model.boundary.*;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;

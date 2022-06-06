@@ -16,13 +16,12 @@ public class BoundaryImp implements Boundary
     protected Vector a;
     protected Vector b;
     protected Color colour;
-    @Getter protected BoundaryType boundaryType;
+    @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_SOLID;
 
     public BoundaryImp(Vector a, Vector b)
     {
         this.a = a;
         this.b = b;
-        this.boundaryType = BoundaryType.VISIBLE_SOLID;
     }
 
     public BoundaryImp(Vector a, Vector b, BoundaryType boundaryType)

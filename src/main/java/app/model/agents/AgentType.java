@@ -76,7 +76,7 @@ public enum AgentType
             }
             case TARGET ->
             {
-                return new TargetAgent(position, direction, radius, type, targetRay);
+                return new TargetAgent(position, direction, radius, type);
             }
             case RANDOM ->
             {

@@ -12,6 +12,7 @@ public class Flag implements Boundary
 {
     @Getter protected Vector position;
     @Getter protected double radius;
+    @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_TRANSPARENT;
 
     public Flag(Vector position, double radius)
     {
