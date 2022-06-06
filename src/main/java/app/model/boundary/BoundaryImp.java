@@ -50,7 +50,10 @@ public class BoundaryImp implements Boundary
     @Override
     public boolean isHit(Ray ray)
     {
-        return Intersection.hasIntersection(a,b, ray);
+        if(BoundaryType.isVisible(getBoundaryType()))
+            return Intersection.hasIntersection(a,b, ray);
+        else
+            return false;
     }
 
     @Override
@@ -62,18 +65,27 @@ public class BoundaryImp implements Boundary
     @Override
     public boolean isCrossed(Vector startPoint, Vector endPoint)
     {
-        return Intersection.hasIntersection(startPoint,endPoint,a,b);
+        if(BoundaryType.isSolid(getBoundaryType()))
+            return Intersection.hasIntersection(startPoint,endPoint,a,b);
+        else
+            return false;
     }
 
     @Override
     public boolean isCrossed(Vector centre, double radius)
     {
-        if(!Intersection.hasIntersection(a, b, centre, radius))
-            return false;
+        if(BoundaryType.isSolid(getBoundaryType()))
+        {
 
-        Line line = new Line(a, b);
-        Vector intersection = Intersection.findIntersection(a, b, centre, radius);
-        return line.liesOn(intersection);
+            if(!Intersection.hasIntersection(a, b, centre, radius))
+                return false;
+
+            Line line = new Line(a, b);
+            Vector intersection = Intersection.findIntersection(a, b, centre, radius);
+            return line.liesOn(intersection);
+        }
+        else
+            return false;
     }
 
     @Override
