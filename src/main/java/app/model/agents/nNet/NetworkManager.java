@@ -22,7 +22,7 @@ public class NetworkManager
             float[] biases = layer.getBiases();
             Tensor weights = layer.getWeights();
             if(weights != null)
-                TensorSaver.save(net.getSavePath()+"weights_layer_"+layerID, weights);
+                TensorSaver.save(net.getResourcePath()+"weights_layer_"+layerID, weights);
             StringBuilder biasString = new StringBuilder();
             if(biases != null)
             {
@@ -31,7 +31,7 @@ public class NetworkManager
                     biasString.append(bias).append("\n");
                 }
             }
-            String fileNameBias = net.getSavePath()+"biases_layer_"+layerID;
+            String fileNameBias = net.getResourcePath()+"biases_layer_"+layerID;
             TensorSaver.clear(fileNameBias);
             TensorSaver.write(fileNameBias, biasString.toString());
             layerID++;
@@ -47,9 +47,9 @@ public class NetworkManager
         {
             if(layerID != 0)
             {
-                Tensor weights = TensorLoader.load(net.getSavePath()+"weights_layer_"+layerID);
+                Tensor weights = TensorLoader.load(net.getResourcePath()+"weights_layer_"+layerID);
                 layer.setWeights(weights);
-                BufferedReader reader = new BufferedReader(new FileReader(FilePath.get(net.getSavePath()+"biases_layer_"+layerID)));
+                BufferedReader reader = new BufferedReader(new FileReader(FilePath.get(net.getResourcePath()+"biases_layer_"+layerID)));
                 float[] biases = new float[layer.getBiases().length];
                 for(int i = 0; i < biases.length; i++)
                 {

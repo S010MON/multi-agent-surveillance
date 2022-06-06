@@ -8,6 +8,7 @@ import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.nNet.NeuralNetwork;
 
 public enum AgentType
 {
@@ -23,7 +24,8 @@ public enum AgentType
     EVASION_RANDOMDIRECTED,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
-    RANDOM;
+    RANDOM,
+    NEURAL_NET;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
     {
@@ -70,6 +72,10 @@ public enum AgentType
             case RANDOM ->
             {
                 return new AgentImp(position, direction, radius, type);
+            }
+            case NEURAL_NET ->
+            {
+                return new NeuralNetwork(position, direction, radius, type);
             }
             default -> throw new RuntimeException("Agent type not recognized");
         }

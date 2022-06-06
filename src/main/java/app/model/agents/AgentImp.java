@@ -14,6 +14,7 @@ import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
 import jogging.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -297,7 +298,7 @@ public class AgentImp implements Agent
 
     protected void collectData(Move move)
     {
-        double[] data = new double[360 + 4];
+        float[] data = new float[360 + 4];
 
         // Set all to -1 to suppress unseen angles
         for(int i = 0; i < 360; i++)
@@ -309,13 +310,13 @@ public class AgentImp implements Agent
         for(Ray r: view)
         {
             int index = (int) Math.round(r.angle());
-            data[index] = r.length();
+            data[index] = (float) r.length();
         }
 
-        data[360] = move.getEndDir().getX();
-        data[361] = move.getEndDir().getY();
-        data[362] = move.getDeltaPos().getX();
-        data[363] = move.getDeltaPos().getY();
+        data[360] = (float) move.getEndDir().getX();
+        data[361] = (float) move.getEndDir().getY();
+        data[362] = (float) move.getDeltaPos().getX();
+        data[363] = (float) move.getDeltaPos().getY();
 
         Logger logger = new Logger("data.csv");
         logger.setOutputCsv();

@@ -16,6 +16,7 @@ import deepnetts.net.loss.LossType;
 import deepnetts.net.train.BackpropagationTrainer;
 import deepnetts.net.train.opt.OptimizerType;
 import deepnetts.util.FileIO;
+import jogging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,23 +30,23 @@ import java.util.ArrayList;
 public class NeuralNetwork extends AgentImp
 {
     @Getter private FeedForwardNetwork neuralNet;
-    @Getter private String saveName = "networkSave.json";
+    @Getter private String saveName = FilePath.get("nNet/full/network.json");
     @Getter private NetworkType networkType = NetworkType.FULL;
-    @Getter private String savePath = NetworkType.getPath(networkType);
+    @Getter private String resourcePath = "nNet/full/";
 
-    public NeuralNetwork(Vector position, Vector direction, double radius, Type type) throws IOException
+    public NeuralNetwork(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
         try
         {
-            this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(savePath));
+            this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(saveName));
             NetworkManager.fillNN(this);
         }
         catch(IOException exception)
         {
             exception.printStackTrace();
             this.train();
-            NetworkManager.fillNN(this);
+            try{ NetworkManager.fillNN(this); } catch(IOException e){}  // This won't fail after training
         }
     }
 
@@ -54,7 +55,7 @@ public class NeuralNetwork extends AgentImp
         super(new Vector(), new Vector(), 10, Type.GUARD);
         this.neuralNet = n;
         networkType = NetworkType.TEST;
-        savePath = NetworkType.getPath(networkType);
+        resourcePath = NetworkType.getPath(networkType);
     }
 
     @Override
@@ -64,7 +65,9 @@ public class NeuralNetwork extends AgentImp
         float[] prediction = neuralNet.predict(input);
 
         Vector dir = new Vector(prediction[0], prediction[1]);
+        dir = dir.normalise();
         Vector pos = new Vector(prediction[2], prediction[3]);
+        pos = pos.normalise().scale(maxSprint);
         return new Move(dir, pos);
     }
 
@@ -86,6 +89,12 @@ public class NeuralNetwork extends AgentImp
         return data;
     }
 
+    public static void main(String[] args)
+    {
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new Vector(), new Vector(), 10, Type.GUARD);
+        neuralNetwork.train();
+    }
+
     public void train()
     {
         int inputsNum = 360;
@@ -104,7 +113,7 @@ public class NeuralNetwork extends AgentImp
             optimizeTrainer(neuralNet,testData);
             neuralNet.train(trainData);
             printMetrics(trainData,testData);
-            FileIO.writeToFileAsJson(neuralNet, savePath);
+            FileIO.writeToFileAsJson(neuralNet, saveName);
             NetworkManager.save(this);
         }
         catch (IOException e)
@@ -123,7 +132,7 @@ public class NeuralNetwork extends AgentImp
         }
         for(int out = 0; out < numOutputs; out++)
         {
-            Column temp = new Column("o"+out,Column.Type.BINARY,true);
+            Column temp = new Column("o"+out,Column.Type.DECIMAL,true);
             cols.add(temp);
         }
         dataSet.setColumns(cols);
@@ -133,10 +142,10 @@ public class NeuralNetwork extends AgentImp
     {
         this.neuralNet = FeedForwardNetwork.builder()
                                            .addInputLayer(inputs)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
-                                           .addOutputLayer(outputs, ActivationType.SOFTMAX)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
+                                           .addOutputLayer(outputs, ActivationType.SIGMOID)
                                            .lossFunction(LossType.CROSS_ENTROPY)
                                            .randomSeed(123)
                                            .build();
