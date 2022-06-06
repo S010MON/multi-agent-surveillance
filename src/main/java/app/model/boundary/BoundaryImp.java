@@ -34,6 +34,14 @@ public class BoundaryImp implements Boundary
         this.type = Type.of(furnitureType);
     }
 
+    public BoundaryImp(Vector a, Vector b, FurnitureType furnitureType, Color colour)
+    {
+        this.a = a;
+        this.b = b;
+        this.type = Type.of(furnitureType);
+        this.colour = colour;
+    }
+
     @Override
     public void draw(GraphicsContext gc)
     {

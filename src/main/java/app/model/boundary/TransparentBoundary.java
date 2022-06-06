@@ -11,16 +11,4 @@ public class TransparentBoundary extends BoundaryImp
     {
         super(a, b, f);
     }
-
-    @Override
-    public boolean isHit(Ray ray)
-    {
-        return false; // Overrides super -> light goes through it
-    }
-
-    @Override
-    public Vector intersection(Ray ray)
-    {
-        return null; // Overrides super -> light goes through it
-    }
 }

@@ -9,7 +9,6 @@ import app.model.Map;
 import app.model.agents.Agent;
 import app.model.boundary.Boundary;
 import app.model.boundary.BoundaryImp;
-import app.model.boundary.VisibleTransparentNonSolidBoundary;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
 import org.junit.jupiter.api.Test;
@@ -62,7 +61,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new VisibleTransparentNonSolidBoundary(a,b, FurnitureType.TARGET);
+        Boundary bdy = new BoundaryImp(a,b, FurnitureType.TARGET);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);

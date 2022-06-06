@@ -6,6 +6,8 @@ import app.controller.settings.SettingsObject;
 import app.model.boundary.*;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -27,10 +29,8 @@ public abstract class BoundaryFactory
     {
         switch (f)
         {
-            case WALL, TOWER, BORDER -> { return new VisibleBoundary(a, b, f);}
-            case GLASS -> { return  new TransparentBoundary(a, b, f);}
-            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN -> { return new BoundaryImp(a, b, f);}
-            case TARGET -> { return new VisibleTransparentNonSolidBoundary(a, b, f);}
+            case WALL, TOWER, BORDER -> { return new BoundaryImp(a, b, f, Color.BLACK);}
+            case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, TARGET, GLASS -> { return new BoundaryImp(a, b, f);}
             case PORTAL -> { return new PortalBoundary(a, b, teleport);}
         }
         return null;
