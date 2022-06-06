@@ -5,7 +5,6 @@ import app.controller.linAlg.Vector;
 import app.controller.linAlg.VectorSet;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
-import app.model.boundary.BoundaryType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

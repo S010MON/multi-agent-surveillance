@@ -13,7 +13,6 @@ public class Flag implements Boundary
 {
     @Getter protected Vector position;
     @Getter protected double radius;
-    @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_TRANSPARENT;
     @Getter protected Type type = Type.TARGET;
 
     public Flag(Vector position, double radius)
@@ -59,5 +58,11 @@ public class Flag implements Boundary
     @Override public Vector getTeleport()
     {
         return null;
+    }
+
+    @Override
+    public BoundaryType getBoundaryType()
+    {
+        return BoundaryType.of(type);
     }
 }
