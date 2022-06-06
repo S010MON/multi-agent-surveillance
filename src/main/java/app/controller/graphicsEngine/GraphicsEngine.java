@@ -29,6 +29,96 @@ public class GraphicsEngine
 
         for(Ray r: rays)
         {
+            ArrayList<Ray> intersectionRays = getRays(r, boundaries, map.getAgents(), agent);
+            intersectionRays.forEach(ray -> output.add(ray));
+        }
+        return output;
+    }
+
+    /**
+     *  @return both the non-transparent intersectionRays, and the transparent (but visible) intersectionRays
+     *  encountered before it, including agents
+     */
+    public ArrayList<Ray> getRays(Ray r, ArrayList<Boundary> boundaries, ArrayList<Agent> agents, Agent currentAgent)
+    {
+        ArrayList<Ray> transparentRays = new ArrayList<>();
+        Ray nonTransparentRay = null;
+        double closestDist = Double.MAX_VALUE;
+
+
+        // check all the agents
+        for (Agent agent: agents)
+        {
+            if(!agent.equals(currentAgent))
+            {
+                if (agent.isHit(r))
+                {
+                    Vector currentV = agent.intersection(r);
+                    double dist = r.getU().dist(currentV);
+                    if (dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
+                    {
+                        nonTransparentRay = new Ray(r.getU(), currentV, agent.getType());
+
+                        closestDist = dist;
+                    }
+                }
+            }
+        }
+
+        // check all the furniture
+        for (Boundary obj: boundaries)
+        {
+            if(obj.isHit(r))
+            {
+                Vector currentV = obj.intersection(r);
+                if(!BoundaryType.isTransparent(obj.getBoundaryType()))
+                {
+                    double dist = r.getU().dist(currentV);
+                    if(dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
+                    {
+                        nonTransparentRay = new Ray(r.getU(), currentV, obj.getType());
+                        closestDist = dist;
+                    }
+                }
+                else if(BoundaryType.isVisible(obj.getBoundaryType()) && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
+                {
+                    transparentRays.add(new Ray(r.getU(), currentV, obj.getType()));
+                }
+            }
+        }
+
+        ArrayList<Ray> rays = new ArrayList<>();
+        if(nonTransparentRay != null)
+            rays.add(nonTransparentRay);
+
+        for(Ray ray: transparentRays)
+        {
+            if(ray.length() < closestDist)
+            {
+                rays.add(ray);
+            }
+        }
+        return rays;
+    }
+
+    private ArrayList<Boundary> collectBoundaries(Map map)
+    {
+        ArrayList<Boundary> boundaries = new ArrayList<>();
+        map.getFurniture()
+           .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
+        return boundaries;
+    }
+
+    /*
+    public ArrayList<Ray> compute(Map map, Agent agent)
+    {
+        ArrayList<Boundary> boundaries = collectBoundaries(map);
+        ArrayList<Ray> output = new ArrayList<>();
+        ArrayList<Ray> rays = RayScatter.angle(agent.getPosition(), agent.getDirection(), angle);
+        Vector origin = agent.getPosition();
+
+        for(Ray r: rays)
+        {
             ArrayList<Vector> bdyIntersections = getIntersections(r, boundaries);
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
@@ -45,10 +135,13 @@ public class GraphicsEngine
         return output;
     }
 
+
+
     /**
      *  @return both the non-transparent intersection, and the transparent (but visible) intersections
      *  encountered before it
      */
+    /*
     private ArrayList<Vector> getIntersections(Ray r, ArrayList<Boundary> boundaries)
     {
         ArrayList<Vector> transparentIntersections = new ArrayList<>();
@@ -113,14 +206,6 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private ArrayList<Boundary> collectBoundaries(Map map)
-    {
-        ArrayList<Boundary> boundaries = new ArrayList<>();
-        map.getFurniture()
-                .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
-        return boundaries;
-    }
-
     private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Map map)
     {
         if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
@@ -128,4 +213,5 @@ public class GraphicsEngine
         else
             return new Ray(origin, agentIntersection, map.objectAt(agentIntersection));
     }
+    */
 }

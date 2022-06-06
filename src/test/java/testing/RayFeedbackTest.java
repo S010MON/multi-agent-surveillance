@@ -96,7 +96,7 @@ public class RayFeedbackTest
 
         Ray ray = new Ray(agent1Pos, new Vector(10, 30));
 
-        assertNotNull(ge.getIntersection(ray, agents, agent1));
+        assertEquals(1, ge.getRays(ray, new ArrayList<>(), agents, agent1).size());
     }
 
     @Test void seeIntruderTwoRays()
@@ -107,7 +107,7 @@ public class RayFeedbackTest
 
         Ray ray = new Ray(agent1Pos, new Vector(10, 30));
 
-        assertNotNull(ge.getIntersection(ray, agents, agent1));
+        assertEquals(1, ge.getRays(ray, new ArrayList<>(), agents, agent1).size());
     }
 
     @Test void seeGuard()
