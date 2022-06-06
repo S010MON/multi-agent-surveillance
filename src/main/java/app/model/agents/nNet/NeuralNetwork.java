@@ -46,6 +46,12 @@ public class NeuralNetwork extends AgentImp
         }
     }
 
+    public NeuralNetwork(FeedForwardNetwork n)
+    {
+        super(new Vector(), new Vector(), 10, Type.GUARD);
+        this.neuralNet = n;
+    }
+
     @Override
     public Move move()
     {
