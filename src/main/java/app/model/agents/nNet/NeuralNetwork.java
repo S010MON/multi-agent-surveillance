@@ -28,7 +28,7 @@ public class NeuralNetwork extends AgentImp
 {
     @Getter private FeedForwardNetwork neuralNet;
     private String nNetSaveName = "networkSave.json";
-    private String nNetSavePath = "";
+    private String nNetSavePath = "src/main/java/app/model/agents/nNet/";
 
     public NeuralNetwork(Vector position, Vector direction, double radius, Type type) throws IOException
     {

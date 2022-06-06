@@ -14,6 +14,7 @@ import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import jogging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,7 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector typePosition;
     @Getter @Setter protected Vector tgtDirection;
     @Getter @Setter protected ArrayList<Ray> view;
+    @Getter @Setter protected World world;
     @Getter protected Type type;
     @Getter protected Vector position;
     @Getter protected double radius;
@@ -37,8 +39,8 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
+    protected final boolean COLLECT_DATA = true;
 
-    @Getter @Setter protected World world;
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
     {
@@ -291,5 +293,32 @@ public class AgentImp implements Agent
         }
 
         return this;
+    }
+
+    protected void collectData(Move move)
+    {
+        double[] data = new double[360 + 4];
+
+        // Set all to -1 to suppress unseen angles
+        for(int i = 0; i < 360; i++)
+        {
+            data[i] = -1;
+        }
+
+        // Input ray distances for each angle
+        for(Ray r: view)
+        {
+            int index = (int) Math.round(r.angle());
+            data[index] = r.length();
+        }
+
+        data[360] = move.getEndDir().getX();
+        data[361] = move.getEndDir().getY();
+        data[362] = move.getDeltaPos().getX();
+        data[363] = move.getDeltaPos().getY();
+
+        Logger logger = new Logger("data.csv");
+        logger.setOutputCsv();
+        logger.log(data);
     }
 }

@@ -1,6 +1,5 @@
 package app.model.agents.nNet;
 
-
 import app.controller.io.FilePath;
 import deepnetts.net.FeedForwardNetwork;
 import deepnetts.net.layers.AbstractLayer;
