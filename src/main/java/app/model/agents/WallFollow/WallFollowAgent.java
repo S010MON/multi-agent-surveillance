@@ -1,11 +1,8 @@
 package app.model.agents.WallFollow;
 
-import app.controller.graphicsEngine.Ray;
-import app.controller.linAlg.Angle;
 import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.Move;
-import app.model.TypeInformation;
 import app.model.Type;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;

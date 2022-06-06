@@ -223,7 +223,7 @@ public class AgentImp implements Agent
     }
 
     /**
-     * Method for checking for walls/obstacles for getting next move in the wall following algorithm.
+     * Method for checking for walls/obstacles (excluding agents) for getting next move in the wall following algorithm.
      * Walls/obstacles are checked in the direction of the given rayAngle by checking if that ray detects
      * an obstacle within the moveLength distance range.
      * @param rayAngle angle of the direction to be checked.
@@ -233,7 +233,9 @@ public class AgentImp implements Agent
      */
     public boolean noWallDetected(double rayAngle, double moveLength, double anglePrecision)
     {
-        for (Ray r : view)
+        ArrayList<Ray> solidView = filterSolidOnly(view);
+        ArrayList<Ray> solidFurnitureView = filterFurnitureOnly(view);
+        for (Ray r : solidFurnitureView)
         {
             if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
             {
@@ -266,6 +268,18 @@ public class AgentImp implements Agent
     {
         return  (ArrayList<Ray>) rays.stream()
                                      .filter(r -> BoundaryType.isSolid(r.getBoundaryType()) || r.getType() == null)
+                                     .collect(Collectors.toList());
+    }
+
+    /**
+     * Removes all non-furniture (so agent) rays from the input
+     * @param rays an arraylist of rays to be filtered
+     * @return an arraylist of rays with non-furniture removed
+     */
+    protected ArrayList<Ray> filterFurnitureOnly(ArrayList<Ray> rays)
+    {
+        return  (ArrayList<Ray>) rays.stream()
+                                     .filter(r -> r.getType() != Type.INTRUDER && r.getType() != Type.GUARD)
                                      .collect(Collectors.toList());
     }
 

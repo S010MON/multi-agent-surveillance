@@ -77,7 +77,7 @@ public class Ray
     @Override
     public String toString()
     {
-        return "Ray: "+ u.toString() +", " + v.toString();
+        return "Ray: "+ u.toString() +", " + v.toString() +", " + type.toString();
     }
 
     public BoundaryType getBoundaryType()
