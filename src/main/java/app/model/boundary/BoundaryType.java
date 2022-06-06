@@ -21,8 +21,8 @@ public enum BoundaryType
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, SIREN -> {return BoundaryType.TRANSPARENT;}
             case GLASS -> {return BoundaryType.TRANSPARENT_SOLID;}
             case PORTAL, TARGET -> {return BoundaryType.VISIBLE_TRANSPARENT;}
+            default -> {return null;}
         }
-        return null;
     }
 
     public static boolean isSolid(BoundaryType type)

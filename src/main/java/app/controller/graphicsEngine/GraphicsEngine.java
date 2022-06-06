@@ -90,6 +90,8 @@ public class GraphicsEngine
         ArrayList<Ray> rays = new ArrayList<>();
         if(nonTransparentRay != null)
             rays.add(nonTransparentRay);
+        else
+            rays.add(new Ray(r.getU(), r.getV()));
 
         for(Ray ray: transparentRays)
         {

@@ -234,7 +234,7 @@ public class AgentImp implements Agent
     public boolean noWallDetected(double rayAngle, double moveLength, double anglePrecision)
     {
         ArrayList<Ray> solidView = filterSolidOnly(view);
-        ArrayList<Ray> solidFurnitureView = filterFurnitureOnly(view);
+        ArrayList<Ray> solidFurnitureView = filterFurnitureOnly(solidView);
         for (Ray r : solidFurnitureView)
         {
             if (Angle.angleInRange(r.angle(),rayAngle+anglePrecision, rayAngle-anglePrecision))
@@ -267,7 +267,7 @@ public class AgentImp implements Agent
     protected ArrayList<Ray> filterSolidOnly(ArrayList<Ray> rays)
     {
         return  (ArrayList<Ray>) rays.stream()
-                                     .filter(r -> BoundaryType.isSolid(r.getBoundaryType()) || r.getType() == null)
+                                     .filter(r -> BoundaryType.isSolid(r.getBoundaryType()))
                                      .collect(Collectors.toList());
     }
 

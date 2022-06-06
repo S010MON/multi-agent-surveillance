@@ -103,7 +103,7 @@ public class GraphicsEngineTest
         ArrayList<Ray> vision = agent.getView();
         List<Ray> raysWithRightAngle = Angle.raysWithAngle(ray.angle(), 0.01, vision);
 
-        //sees 2 boundaries of target1, so 3 total
-        assertEquals(3, raysWithRightAngle.size());
+        //sees 2 boundaries of target1 and one null cause no nonTransparent boundary, so 4 total
+        assertEquals(4, raysWithRightAngle.size());
     }
 }
