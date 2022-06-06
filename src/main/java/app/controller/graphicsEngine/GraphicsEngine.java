@@ -40,6 +40,7 @@ public class GraphicsEngine
 
             else if(agentIntersection != null)
                 output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
+
         }
         return output;
     }

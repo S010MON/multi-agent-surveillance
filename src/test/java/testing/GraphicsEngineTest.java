@@ -87,6 +87,7 @@ public class GraphicsEngineTest
         settings.addFurniture(target2, FurnitureType.TARGET);
         settings.addFurniture(guardSpawn, FurnitureType.GUARD_SPAWN);
         settings.setNoOfGuards(1);
+        settings.setNoOfIntruders(0);
         Map map = new Map(settings);
 
 
@@ -102,6 +103,8 @@ public class GraphicsEngineTest
         ArrayList<Ray> vision = agent.getView();
         List<Ray> raysWithRightAngle = Angle.raysWithAngle(ray.angle(), 0.01, vision);
 
+
+        //TODO: fix it so that don't see yourself (already checks that in the seeing agent parts?
         //sees 2 boundaries of target1, so 3 total
         assertEquals(3, raysWithRightAngle.size());
     }
