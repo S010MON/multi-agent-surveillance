@@ -254,7 +254,7 @@ public class AgentImp implements Agent
     // if the object is solid, it's the farthest you can get, if it's null, it's the only ray with that angle, thus use no obstacles on rayLength
     protected boolean solidOrOnlyRay(Ray ray)
     {
-        return (ray.isSolid() || ray.getType()==null);
+        return (BoundaryType.isSolid(ray.getBoundaryType()) || ray.getType()==null);
     }
 
     /**
@@ -265,7 +265,7 @@ public class AgentImp implements Agent
     protected ArrayList<Ray> filterSolidOnly(ArrayList<Ray> rays)
     {
         return  (ArrayList<Ray>) rays.stream()
-                                     .filter(r -> r.isSolid() || r.getType() == null)
+                                     .filter(r -> BoundaryType.isSolid(r.getBoundaryType()) || r.getType() == null)
                                      .collect(Collectors.toList());
     }
 

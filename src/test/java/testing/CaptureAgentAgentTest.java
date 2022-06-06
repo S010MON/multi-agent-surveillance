@@ -39,7 +39,7 @@ public class CaptureAgentAgentTest
     @Test void testNotSeeingIntruder()
     {
         ArrayList<Ray> testView = new ArrayList<>();
-        testView.add(new Ray(new Vector(), new Vector(), (BoundaryType) null));
+        testView.add(new Ray(new Vector(), new Vector(), null));
         agent1.setView(testView);
         assertFalse(agent1.isTypeSeen(Type.INTRUDER));
     }
@@ -67,7 +67,7 @@ public class CaptureAgentAgentTest
         agent1.setBeliefSet(bSet);
 
         ArrayList<Ray> testView = new ArrayList<>();
-        testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), (BoundaryType) null));
+        testView.add(new Ray(agent1Pos, new Vector(agent1Pos.getX(), agent1Pos.getY() + 20), null));
         agent1.setView(testView);
 
         agent1.updateBeliefSet();

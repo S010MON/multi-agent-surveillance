@@ -18,7 +18,6 @@ public class BoundaryImp implements Boundary
     protected Vector a;
     protected Vector b;
     protected Color colour;
-    protected BoundaryType boundaryType = BoundaryType.VISIBLE_SOLID;
     @Getter protected Type type;
 
     public BoundaryImp(Vector a, Vector b)
@@ -34,13 +33,6 @@ public class BoundaryImp implements Boundary
         this.b = b;
         this.type = Type.of(furnitureType);
     }
-
-//    public BoundaryImp(Vector a, Vector b, BoundaryType boundaryType)
-//    {
-//        this.a = a;
-//        this.b = b;
-//        this.boundaryType = boundaryType;
-//    }
 
     @Override
     public void draw(GraphicsContext gc)
