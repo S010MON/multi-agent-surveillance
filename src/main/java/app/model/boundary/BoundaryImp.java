@@ -4,13 +4,18 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
+import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
+import javafx.scene.paint.Color;
+
+import java.awt.geom.Line2D;
 
 public class BoundaryImp implements Boundary
 {
     protected Vector a;
     protected Vector b;
+    protected Color colour;
     @Getter protected BoundaryType boundaryType;
 
     public BoundaryImp(Vector a, Vector b)
@@ -28,7 +33,17 @@ public class BoundaryImp implements Boundary
     }
 
     @Override
-    public void draw(GraphicsContext gc) {}
+    public void draw(GraphicsContext gc)
+    {
+        if(colour == null)
+            return;
+
+        gc.setStroke(colour);
+        gc.strokeLine(a.getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                a.getY() * Info.getInfo().zoom + Info.getInfo().offsetY,
+                b.getX() * Info.getInfo().zoom + Info.getInfo().offsetX,
+                b.getY() * Info.getInfo().zoom + Info.getInfo().offsetY);
+    }
 
     @Override
     public boolean isHit(Ray ray)

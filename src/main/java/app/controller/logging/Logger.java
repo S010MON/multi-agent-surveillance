@@ -77,7 +77,6 @@ public class Logger
             assert writer != null;
             writer.write(str + "\n");
             writer.close();
-            System.out.println(str);
         }
         catch (IOException e)
         {
@@ -111,7 +110,6 @@ public class Logger
                 sb.append(s).append(delim);
             }
             writer.close();
-            System.out.println(sb);
         }
         catch (IOException e)
         {
@@ -146,7 +144,6 @@ public class Logger
                 sb.append(i).append(delim);
             }
             writer.close();
-            System.out.println(sb);
         }
         catch (IOException e)
         {
@@ -187,7 +184,6 @@ public class Logger
 
             writer.write("\n");
             writer.close();
-            //System.out.println(sb);
         }
         catch (IOException e)
         {

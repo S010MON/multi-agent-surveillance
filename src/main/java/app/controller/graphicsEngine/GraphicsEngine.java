@@ -57,17 +57,17 @@ public class GraphicsEngine
         {
             if(obj.isHit(r))
             {
+                Vector currentV = obj.intersection(r);
                 if(!BoundaryType.isTransparent(obj.getBoundaryType()))
                 {
-                    Vector currentV = obj.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if(dist < closestDist)
+                    if(dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                     {
                         nonTransparentIntersection = currentV;
                         closestDist = dist;
                     }
                 }
-                else if(BoundaryType.isVisible(obj.getBoundaryType()))
+                else if(BoundaryType.isVisible(obj.getBoundaryType()) && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                 {
                     transparentIntersections.add(obj.intersection(r));
                 }
@@ -89,7 +89,7 @@ public class GraphicsEngine
         return intersections;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
+    public Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
     {
         Vector intersection = null;
         double closestDist = Double.MAX_VALUE;
@@ -101,7 +101,7 @@ public class GraphicsEngine
                 {
                     Vector currentV = agent.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if (dist < closestDist && currentV.getAngle() == r.angle())
+                    if (dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                     {
                         intersection = currentV;
                         closestDist = dist;

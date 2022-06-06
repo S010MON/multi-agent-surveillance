@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 public abstract class World
 {
-    @Getter private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();  // pheromone 2
-    @Getter private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();  // pheromone 2
+    @Getter private ArrayList<Integer> horizontalWallsCovered = new ArrayList<>();
+    @Getter private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();
 
-    public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
+    @Getter public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
 
     public World(MemoryGraph G)
     {

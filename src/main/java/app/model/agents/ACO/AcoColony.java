@@ -2,6 +2,7 @@ package app.model.agents.ACO;
 
 import app.controller.linAlg.Vector;
 import app.model.Type;
+import app.model.agents.Agent;
 
 public class AcoColony extends AcoMomentum
 {
@@ -18,5 +19,11 @@ public class AcoColony extends AcoMomentum
             // Set heuristic value to that of Aco Straight
             momentumHeuristic = 0.97;
         }
+    }
+
+    public AcoColony(Agent other)
+    {
+        this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
+        copyOver(other);
     }
 }

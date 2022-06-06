@@ -77,4 +77,9 @@ public class App extends Application
         simulation.pauseOrResume();
     }
 
+    public void updateRenderer(int toggle, boolean display)
+    {
+        if(simulation != null)
+            simulation.updateRenderer(toggle, display);
+    }
 }

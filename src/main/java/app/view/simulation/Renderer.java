@@ -16,22 +16,28 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Renderer extends Canvas
 {
+    @Setter private boolean displayRay = true;
+    @Setter private boolean displaySound = true;
+    @Setter private boolean displayTrail = true;
+    @Setter private boolean displayMiniMaps = true;
+    @Setter private boolean displayAreas = true;
     private Map map;
     private Color backgroundColour, outlineColor;
     private double zoomRate = 0.2d;
     private Point2D click;
-    private PriorityQueue<Trail> trails;
+
 
     public Renderer(Map map)
     {
         super(ScreenSize.width, ScreenSize.height);
         this.map = map;
-        this.trails = new PriorityQueue<>();
         this.setInitialZoom(map.getSettings().getHeight(),map.getSettings().getWidth());
         backgroundColour = Color.WHITE;
         outlineColor = Color.rgb(191, 191, 191);
@@ -48,21 +54,20 @@ public class Renderer extends Canvas
     {
         GraphicsContext gc = this.getGraphicsContext2D();
         drawBackground(gc);
-
-        map.drawIndicatorBoxes(gc);
-        map.getSoundSources().forEach(e -> e.draw(gc));
         map.getFurniture().forEach(e -> e.draw(gc));
-        trails.forEach(e -> drawTrail(gc, e));
-        map.getAgents().forEach(e -> drawRays(gc, e.getView()));
+
+        if(displayAreas) map.drawIndicatorBoxes(gc);
+        if(displaySound) map.getSoundSources().forEach(e -> e.draw(gc));
+        if(displayTrail) map.getTrails().forEach(e -> drawTrail(gc, e));
+        if(displayRay) map.getAgents().forEach(e -> drawRays(gc, e.getView()));
+
         map.getAgents().forEach(e -> e.draw(gc));
 
-        drawMiniMapGuard(gc);
-        drawMiniMapIntruder(gc);
-    }
-
-    public void addTrail(Trail t)
-    {
-        trails.add(t);
+        if(displayMiniMaps)
+        {
+            drawMiniMapGuard(gc);
+            drawMiniMapIntruder(gc);
+        }
     }
 
     private void drawRays(GraphicsContext gc, ArrayList<Ray> rays)

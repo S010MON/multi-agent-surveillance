@@ -1,6 +1,5 @@
 package experiments;
 
-import app.controller.TestingEngine;
 import app.controller.io.FileManager;
 import app.controller.logging.Logger;
 import app.controller.settings.Settings;
@@ -9,20 +8,26 @@ import app.model.agents.AgentType;
 
 public class Experiments
 {
-    private static final int iterations = 1;
-    private static final int[] no_of_agents = {1, 2, 4, 6 ,5, 10};
-    private static final AgentType[] agents = {AgentType.RANDOM, AgentType.ACO_MOMENTUM, AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE, AgentType.WALL_FOLLOW};
+    private static String map_path = "src/main/resources/";
+
     /**
      * Enter a map name and run the Experiments file to run every agent through the map 100 times
      */
     public static void main(String[] args)
     {
-        run("experiment_map_1");
+        runInfiltration("experiment_map_1");
     }
 
-    private static void run(String map_name)
+    private static void runCoverage(String map_name)
     {
-        String map_path = "src/main/resources/";
+        final int iterations = 1;
+        final int[] no_of_agents = {1, 2, 4, 6 ,5, 10};
+        final AgentType[] agents = {AgentType.RANDOM,
+                                    AgentType.ACO_MOMENTUM,
+                                    AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE,
+                                    AgentType.WALL_FOLLOW,
+                                    AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC,
+                                    AgentType.WALL_FOLLOW_HIGH_DIR_HEURISTIC};
 
         System.out.println("Loading map: " + map_name);
         Settings settings = FileManager.loadSettings(map_path + map_name);
@@ -46,9 +51,69 @@ public class Experiments
 
                     Map map = new Map((settings));
                     TestingEngine gameEngine = new TestingEngine(map, test_name);
-                    int[] data = gameEngine.run();
+                    int[] data = gameEngine.runCoverageTest();
                     logger.log(agent_heading + test_name, data);
                 }
+            }
+        }
+    }
+
+    private static void runCapture(String map_name)
+    {
+        final int iterations = 10;
+        final int[] no_of_guards = {1, 2, 3, 4 ,5, 6};
+
+        System.out.println("Loading map: " + map_name);
+        Settings settings = FileManager.loadSettings(map_path + map_name);
+        settings.setNoOfIntruders(1);
+
+        Logger logger = new Logger(map_name);
+        logger.setOutputCsv();
+
+        for(int guards: no_of_guards)
+        {
+            settings.setNoOfGuards(guards);
+            String agent_heading = "No of guards" + " - " + guards;
+            System.out.println(agent_heading);
+
+            for(int i = 0; i < iterations; i++)
+            {
+                String test_name = "Iteration: " + i + "/" + iterations + " ";
+
+                Map map = new Map((settings));
+                TestingEngine gameEngine = new TestingEngine(map, test_name);
+                int data = (int) gameEngine.runCaptureTest();
+                logger.log(agent_heading + test_name + "," + data);
+            }
+        }
+    }
+
+    private static void runInfiltration(String map_name)
+    {
+        final int iterations = 10;
+        final int[] no_of_intruders = {1, 2, 3, 4 ,5, 6};
+
+        System.out.println("Loading map: " + map_name);
+        Settings settings = FileManager.loadSettings(map_path + map_name);
+        settings.setNoOfGuards(0);
+
+        Logger logger = new Logger(map_name);
+        logger.setOutputCsv();
+
+        for(int intruders: no_of_intruders)
+        {
+            settings.setNoOfIntruders(intruders);
+            String agent_heading = "No of intruders" + ":" + intruders;
+            System.out.println(agent_heading);
+
+            for(int i = 0; i < iterations; i++)
+            {
+                String test_name = "Iteration: " + i + "/" + iterations + " ";
+
+                Map map = new Map((settings));
+                TestingEngine gameEngine = new TestingEngine(map, test_name);
+                int data = (int) gameEngine.runInflitrationTest();
+                logger.log(agent_heading + "," + data);
             }
         }
     }
