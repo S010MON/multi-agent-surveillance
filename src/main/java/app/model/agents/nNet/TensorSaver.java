@@ -19,7 +19,7 @@ public class TensorSaver
 
         for(float entry : tensor.getValues())
         {
-            write(fileName,Float.toString(entry));
+            write(fileName, Float.toString(entry));
         }
     }
 

@@ -5,7 +5,6 @@ import app.model.agents.nNet.NeuralNetwork;
 import deepnetts.net.FeedForwardNetwork;
 import deepnetts.net.layers.activation.ActivationType;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

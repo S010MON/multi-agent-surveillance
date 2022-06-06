@@ -25,7 +25,7 @@ public class TensorLoaderTest
         Tensor exp = new Tensor(10, 10, t);
         Tensor act = null;
         try{
-            act = TensorLoader.load("nNet/testWeights");
+            act = TensorLoader.load("nNet/test/testWeights");
         } catch (IOException e)
         {
             System.out.println("Failed to load tensor");
