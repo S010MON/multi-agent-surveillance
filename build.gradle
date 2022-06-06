@@ -39,7 +39,6 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'app'
     mainClass = 'app.App'
 }
 
