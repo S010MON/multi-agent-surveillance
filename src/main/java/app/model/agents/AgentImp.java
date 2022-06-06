@@ -260,7 +260,7 @@ public class AgentImp implements Agent
     }
 
     /**
-     * Removes all non-solid rays from the input
+     * Removes all non-solid and null rays from the input
      * @param rays an arraylist of rays to be filtered
      * @return an arraylist of rays with non-solid removed
      */
@@ -268,6 +268,18 @@ public class AgentImp implements Agent
     {
         return  (ArrayList<Ray>) rays.stream()
                                      .filter(r -> BoundaryType.isSolid(r.getBoundaryType()))
+                                     .collect(Collectors.toList());
+    }
+
+    /**
+     * Removes all non-solid rays from the input
+     * @param rays an arraylist of rays to be filtered
+     * @return an arraylist of rays with non-solid removed
+     */
+    protected ArrayList<Ray> filterSolidAndNullOnly(ArrayList<Ray> rays)
+    {
+        return  (ArrayList<Ray>) rays.stream()
+                                     .filter(r -> BoundaryType.isSolid(r.getBoundaryType()) || r.getType() == null)
                                      .collect(Collectors.toList());
     }
 

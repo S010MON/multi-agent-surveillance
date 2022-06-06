@@ -17,7 +17,7 @@ public enum BoundaryType
             return null;
         switch(type)
         {
-            case WALL, BORDER, TOWER -> {return BoundaryType.VISIBLE_SOLID;}
+            case WALL, BORDER, TOWER, INTRUDER, GUARD -> {return BoundaryType.VISIBLE_SOLID;}
             case SHADE, GUARD_SPAWN, INTRUDER_SPAWN, SIREN -> {return BoundaryType.TRANSPARENT;}
             case GLASS -> {return BoundaryType.TRANSPARENT_SOLID;}
             case PORTAL, TARGET -> {return BoundaryType.VISIBLE_TRANSPARENT;}
