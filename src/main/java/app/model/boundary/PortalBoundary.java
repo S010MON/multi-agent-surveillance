@@ -2,6 +2,8 @@ package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import app.model.Type;
+import app.model.furniture.FurnitureType;
 import lombok.Getter;
 
 public class PortalBoundary extends BoundaryImp
@@ -10,7 +12,7 @@ public class PortalBoundary extends BoundaryImp
 
     public PortalBoundary(Vector a, Vector b, Vector teleport)
     {
-        super(a, b, BoundaryType.VISIBLE_TRANSPARENT);
+        super(a, b, FurnitureType.PORTAL);
         this.teleport = teleport;
     }
 

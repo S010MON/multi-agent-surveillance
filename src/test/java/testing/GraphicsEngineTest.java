@@ -62,7 +62,7 @@ public class GraphicsEngineTest
     {
         Vector a = new Vector(10,20);
         Vector b = new Vector(20,20);
-        Boundary bdy = new VisibleTransparentNonSolidBoundary(a,b);
+        Boundary bdy = new VisibleTransparentNonSolidBoundary(a,b, FurnitureType.TARGET);
 
         Vector u = new Vector(20,19);
         Vector v = new Vector(0,100);

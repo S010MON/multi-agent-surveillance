@@ -1,5 +1,9 @@
 package app;
 
+import app.controller.graphicsEngine.Ray;
+import app.controller.linAlg.Vector;
+import app.model.boundary.Boundary;
+import app.model.boundary.BoundaryType;
 import app.view.FileMenuBar;
 import app.view.simulation.Simulation;
 import app.view.ScreenSize;
@@ -11,6 +15,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import lombok.Getter;
+
+import java.util.ArrayList;
 
 public class App extends Application
 {
@@ -81,5 +87,55 @@ public class App extends Application
     {
         if(simulation != null)
             simulation.updateRenderer(toggle, display);
+    }
+
+    /**
+     *  @return both the non-transparent intersection, and the transparent (but visible) intersections
+     *  encountered before it
+     */
+    private ArrayList<Ray> getIntersections(Ray r, ArrayList<Boundary> boundaries)
+    {
+        ArrayList<Vector> transparentIntersections = new ArrayList<>();
+        Vector nonTransparentIntersection = null;
+
+        ArrayList<Ray> transparentRays = new ArrayList<>();
+        Ray nonTransparentRay = null;
+
+        double closestDist = Double.MAX_VALUE;
+        for (Boundary obj: boundaries)
+        {
+            if(obj.isHit(r))
+            {
+                Vector currentV = obj.intersection(r);
+                if(!BoundaryType.isTransparent(obj.getBoundaryType()))
+                {
+                    double dist = r.getU().dist(currentV);
+                    if(dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
+                    {
+                        nonTransparentRay = new Ray(r.getU(), currentV, obj.getType());
+                        closestDist = dist;
+                    }
+                }
+                else if(BoundaryType.isVisible(obj.getBoundaryType()) && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
+                {
+                    transparentRays.add(new Ray(r.getU(), currentV, obj.getType()));
+                }
+            }
+        }
+
+        ArrayList<Vector> intersections = new ArrayList<>();
+
+        ArrayList<Ray> rays = new ArrayList<>();
+        if(nonTransparentRay != null)
+            rays.add(nonTransparentRay);
+
+        for(Ray ray: transparentRays)
+        {
+            if(ray.length() < closestDist)
+            {
+                rays.add(ray);
+            }
+        }
+        return rays;
     }
 }

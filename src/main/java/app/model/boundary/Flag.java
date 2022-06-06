@@ -3,6 +3,7 @@ package app.model.boundary;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Vector;
+import app.model.Type;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ public class Flag implements Boundary
     @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_TRANSPARENT;
+    @Getter protected Type type = Type.TARGET;
 
     public Flag(Vector position, double radius)
     {

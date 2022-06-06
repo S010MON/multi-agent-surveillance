@@ -2,6 +2,7 @@ package app.model.boundary;
 
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import app.model.Type;
 import javafx.scene.canvas.GraphicsContext;
 
 public interface Boundary
@@ -19,4 +20,6 @@ public interface Boundary
     Vector getTeleport();
 
     BoundaryType getBoundaryType();
+
+    Type getType();
 }

@@ -4,6 +4,8 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Intersection;
 import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
+import app.model.Type;
+import app.model.furniture.FurnitureType;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
@@ -16,20 +18,29 @@ public class BoundaryImp implements Boundary
     protected Vector a;
     protected Vector b;
     protected Color colour;
-    @Getter protected BoundaryType boundaryType = BoundaryType.VISIBLE_SOLID;
+    protected BoundaryType boundaryType = BoundaryType.VISIBLE_SOLID;
+    @Getter protected Type type;
 
     public BoundaryImp(Vector a, Vector b)
     {
         this.a = a;
         this.b = b;
+        this.type = Type.WALL;
     }
 
-    public BoundaryImp(Vector a, Vector b, BoundaryType boundaryType)
+    public BoundaryImp(Vector a, Vector b, FurnitureType furnitureType)
     {
         this.a = a;
         this.b = b;
-        this.boundaryType = boundaryType;
+        this.type = Type.of(furnitureType);
     }
+
+//    public BoundaryImp(Vector a, Vector b, BoundaryType boundaryType)
+//    {
+//        this.a = a;
+//        this.b = b;
+//        this.boundaryType = boundaryType;
+//    }
 
     @Override
     public void draw(GraphicsContext gc)
@@ -77,5 +88,11 @@ public class BoundaryImp implements Boundary
     public Vector getTeleport()
     {
         return null;
+    }
+
+    @Override
+    public BoundaryType getBoundaryType()
+    {
+        return BoundaryType.of(type);
     }
 }
