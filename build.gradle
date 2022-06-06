@@ -54,6 +54,12 @@ dependencies {
     implementation 'org.jgrapht:jgrapht-core:1.5.1'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // https://mvnrepository.com/artifact/com.deepnetts/deepnetts-core
+    implementation(group: 'com.deepnetts', name: 'deepnetts-core', version: '1.13.0') {
+        // Excludes transitive dependency
+        exclude group: 'org.apache.logging.log4j'
+    }
 }
 
 test {
