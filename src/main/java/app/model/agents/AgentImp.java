@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class AgentImp implements Agent
@@ -300,18 +301,14 @@ public class AgentImp implements Agent
     {
         float[] data = new float[360 + 4];
 
-        // Set all to -1 to suppress unseen angles
-        for(int i = 0; i < 360; i++)
-        {
-            data[i] = -1;
-        }
-
         // Input ray distances for each angle
         for(Ray r: view)
         {
             int index = (int) Math.round(r.angle());
             data[index] = (float) r.length();
         }
+
+        data = normalise(data);
 
         data[360] = (float) move.getEndDir().getX();
         data[361] = (float) move.getEndDir().getY();
@@ -321,5 +318,22 @@ public class AgentImp implements Agent
         Logger logger = new Logger("data.csv");
         logger.setOutputCsv();
         logger.log(data);
+    }
+
+    protected float[] normalise(float[] data)
+    {
+        float max = 0f;
+        for(int i = 0; i < data.length; i++)
+        {
+            if(data[i] > max)
+                max = data[i];
+        }
+
+        for(int i = 0; i < data.length; i++)
+        {
+            data[i] = data[i] / max;
+        }
+
+        return data;
     }
 }
