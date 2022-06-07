@@ -58,8 +58,6 @@ public interface Agent extends Boundary
 
     Vector getTgtDirection();
 
-    Agent nextState();
-
     AgentView getAgentViewWindow();
 
     boolean isTypeSeen(Type type);

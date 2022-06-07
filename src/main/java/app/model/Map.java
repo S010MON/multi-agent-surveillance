@@ -8,6 +8,7 @@ import app.controller.soundEngine.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.AgentType;
 import app.model.agents.Human;
+import app.model.agents.StateTable;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -257,7 +258,7 @@ public class Map
         ArrayList<Agent> new_states = new ArrayList<>();
         for(Agent a: agents)
         {
-            new_states.add(a.nextState());
+            new_states.add(StateTable.lookupState(a));
         }
         agents = new_states;
     }
