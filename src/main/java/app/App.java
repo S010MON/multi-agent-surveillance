@@ -1,5 +1,8 @@
 package app;
 
+import app.controller.io.FileManager;
+import app.controller.settings.RandomSettingsGenerator;
+import app.controller.settings.Settings;
 import app.view.FileMenuBar;
 import app.view.simulation.Simulation;
 import app.view.ScreenSize;
@@ -29,6 +32,10 @@ public class App extends Application
 
         startMenu = new StartMenu(this);
         scene = new Scene(startMenu, ScreenSize.width, ScreenSize.height);
+
+        // Generate random settings TODO DELETE
+        Settings rs = RandomSettingsGenerator.generateRandomSettings();
+        FileManager.saveSettings(rs, rs.getName());
 
         // Shortcuts
         // Undoing
