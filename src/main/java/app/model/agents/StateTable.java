@@ -22,14 +22,14 @@ public class StateTable
         if(currentState.getType() == Type.GUARD)
         {
             if(currentState.isTypeSeen(Type.INTRUDER))
-                return new CaptureAgent(currentState);
+                return captureTableSearch(currentState);
         }
 
         //State INTRUDER
         else if(currentState.getType() == Type.INTRUDER)
         {
             if(currentState.isTypeSeen(Type.GUARD))
-                return new EvasionAgent(currentState);
+                return evasionTableSearch(currentState);
 
             if(currentState.isTypeSeen(Type.TARGET))
                 return new TargetAgent(currentState);
@@ -37,5 +37,26 @@ public class StateTable
             return currentState;
         }
         return currentState;
+    }
+
+    private static Agent captureTableSearch(Agent currentState)
+    {
+        switch(defaultCaptureAgent)
+        {
+            case CAPTURE -> {return new CaptureAgent(currentState);}
+            default -> throw new RuntimeException("Capture agent not specified");
+        }
+    }
+
+    private static Agent evasionTableSearch(Agent currentState)
+    {
+        //TODO Modify table when Evasion Agents are separated.
+        switch(defaultEvasionAgent)
+        {
+            case EVASION_RANDOM -> {return new EvasionAgent(currentState);}
+            case EVASION_DIRECTED -> {return new EvasionAgent(currentState);}
+            case EVASION_RANDOMDIRECTED -> {return new EvasionAgent(currentState);}
+            default -> throw new RuntimeException("Evasion agent not specified");
+        }
     }
 }
