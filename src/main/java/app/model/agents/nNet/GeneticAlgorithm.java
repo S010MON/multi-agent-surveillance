@@ -21,12 +21,17 @@ public class GeneticAlgorithm extends GameEngine
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
+        double bestScore = 0.2;
 
         for(int i = 0; i < 10000; i++)
         {
             generation = select(generation, settings);
             System.out.println("Gen " + i + ": " + generation.get(0).getScore());
-            generation.get(0).save();
+            if(generation.get(0).getScore() > bestScore)
+            {
+                generation.get(0).save();
+                bestScore = generation.get(0).getScore();
+            }
             generation = breed(generation);
             generation.forEach(e -> e.mutate(alpha, epsilon));
         }
