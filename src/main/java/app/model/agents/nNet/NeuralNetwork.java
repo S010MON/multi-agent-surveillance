@@ -69,7 +69,10 @@ public class NeuralNetwork extends AgentImp
 
     private float[] gatherInput()
     {
-        float[] data = new float[360 + 4];
+        float[] data = new float[360];
+
+        for(int i = 0; i < data.length; i++)
+            data[i] = -1;
 
         for(Ray r: view)
         {
@@ -88,10 +91,9 @@ public class NeuralNetwork extends AgentImp
 
     public void train()
     {
-        int inputsNum = 91;
-        int outputsNum = 91;
+        int inputsNum = 360;
+        int outputsNum = 8;
         int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
-        int[] hidden_layers = {hiddenSize, hiddenSize, hiddenSize};
 
         try
         {
@@ -109,8 +111,8 @@ public class NeuralNetwork extends AgentImp
                 NetworkManager.save(this);
             }
 
-            optimizeTrainer(neuralNet,testData);
-            neuralNet.train(trainData);
+            //optimizeTrainer(neuralNet,testData);
+            //neuralNet.train(trainData);
             printMetrics(trainData,testData);
             NetworkManager.save(this);
         }
@@ -143,7 +145,7 @@ public class NeuralNetwork extends AgentImp
                                            .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
                                            .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
                                            .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
-                                           .addOutputLayer(outputs, ActivationType.SOFTMAX)
+                                           .addOutputLayer(outputs, ActivationType.TANH)
                                            .lossFunction(LossType.CROSS_ENTROPY)
                                            .randomSeed(123)
                                            .build();

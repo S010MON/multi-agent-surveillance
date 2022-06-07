@@ -295,10 +295,10 @@ public class AgentImp implements Agent
 
     protected void collectData(Move move)
     {
-        float[] data = new float[360 + 4];
+        float[] data = new float[360 + 8];
         for(int i = 0; i < data.length; i++)
         {
-            data[i] = -1;
+            data[i] = 0;
         }
 
         // Input ray distances for each angle
@@ -310,23 +310,27 @@ public class AgentImp implements Agent
 
         data = normalise(data);
 
-        Vector dir = move.getEndDir().normalise();
-        data[360] = (float) dir.getX();
-        data[361] = (float) dir.getY();
+        // record output as [dir_x_pos, dir_x_neg, dir_y_pos, dir_y_neg, mov_x_pos, mov_x_neg, mov_y_pos, mov_y_neg]
+        if(move.getEndDir().getX() > 0)
+            data[360] = 1;
+        if(move.getEndDir().getX() < 0)
+            data[361] = 1;
+
+        if(move.getEndDir().getY() > 0)
+            data[362] = 1;
+        else if(move.getEndDir().getY() < 0)
+            data[363] = 1;
 
         if(move.getDeltaPos().getX() > 0)
-            data[362] = 1;
+            data[364] = 1;
         else if(move.getDeltaPos().getX() < 0)
-            data[362] = -1;
-        else
-            data[362] = 0;
+            data[365] = 1;
 
         if(move.getDeltaPos().getY() > 0)
-            data[363] = 1;
+            data[366] = 1;
         else if(move.getDeltaPos().getY() < 0)
-            data[363] = -1;
-        else
-            data[363] = 0;
+            data[367] = 1;
+
 
         Logger logger = new Logger("data.csv");
         logger.setOutputCsv();
