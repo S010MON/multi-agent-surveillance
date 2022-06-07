@@ -354,13 +354,17 @@ public class AcoAgent extends AgentImp
     public Ray detectCardinalPoint(double targetCardinalAngle)
     {
         ArrayList<Ray> solidAndNullView = filterSolidAndNullOnly(view);
+        Ray closestSolid = null;
+        double minDist = Double.MAX_VALUE;
         for (Ray ray : solidAndNullView)
         {
-            if(approximateAngleRange(ray.angle(), targetCardinalAngle))
+            if(approximateAngleRange(ray.angle(), targetCardinalAngle) && (closestSolid == null || closestSolid.length()>ray.length()))
             {
-                return ray;
+                closestSolid = ray;
             }
         }
+        if(closestSolid != null)
+            return closestSolid;
         throw new RuntimeException("Cardinal point not found");
     }
 
