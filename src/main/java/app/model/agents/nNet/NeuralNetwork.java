@@ -16,10 +16,7 @@ import deepnetts.net.loss.LossType;
 import deepnetts.net.train.BackpropagationTrainer;
 import deepnetts.net.train.opt.OptimizerType;
 import deepnetts.util.FileIO;
-import jogging.Logger;
 import lombok.Getter;
-import lombok.Setter;
-
 import javax.visrec.ml.data.Column;
 import javax.visrec.ml.data.DataSet;
 import javax.visrec.ml.eval.EvaluationMetrics;
@@ -44,9 +41,8 @@ public class NeuralNetwork extends AgentImp
         }
         catch(IOException exception)
         {
-            exception.printStackTrace();
+            System.out.println(saveName + " not found, generating new network");
             this.train();
-            try{ NetworkManager.fillNN(this); } catch(IOException e){}  // This won't fail after training
         }
     }
 
@@ -92,8 +88,11 @@ public class NeuralNetwork extends AgentImp
 
     public void train()
     {
-        int inputsNum = 360;
-        int outputsNum = 4;
+        int inputsNum = 91;
+        int outputsNum = 91;
+        int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
+        int[] hidden_layers = {hiddenSize, hiddenSize, hiddenSize};
+
         try
         {
             String filePath = FilePath.get("nNet/data.csv");
@@ -102,13 +101,17 @@ public class NeuralNetwork extends AgentImp
             TabularDataSet[] split = trainTestSplit(data,0.3f,inputsNum,outputsNum);
             TabularDataSet trainData = split[0];
             TabularDataSet testData = split[1];
-            int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
+
             if(neuralNet == null)
-                buildNN(inputsNum,hiddenSize,outputsNum);
+            {
+                buildNN(inputsNum, hiddenSize, outputsNum);
+                FileIO.writeToFileAsJson(neuralNet, saveName);
+                NetworkManager.save(this);
+            }
+
             optimizeTrainer(neuralNet,testData);
             neuralNet.train(trainData);
             printMetrics(trainData,testData);
-            FileIO.writeToFileAsJson(neuralNet, saveName);
             NetworkManager.save(this);
         }
         catch (IOException e)

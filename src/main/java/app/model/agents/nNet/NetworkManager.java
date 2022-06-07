@@ -61,4 +61,36 @@ public class NetworkManager
             layerID++;
         }
     }
+
+    public static void generateRandomWeights(int input, int[] hidden_layers, int outputs)
+    {
+
+    }
+
+    private static void saveWeights(int input, int output, float[] data)
+    {
+
+    }
+
+    private static void saveBiases(float[] data)
+    {
+
+    }
+
+    /**
+     * Generate a random array fof floats between [1, -1]
+     */
+    private static float[] random(int size)
+    {
+        float[] array = new float[size];
+
+        for(int i = 0; i < size; i++)
+        {
+            if(Math.random() > 0.5)
+                array[i] = (float) Math.random();
+            else
+                array[i] = (float) -Math.random();
+        }
+        return array;
+    }
 }
