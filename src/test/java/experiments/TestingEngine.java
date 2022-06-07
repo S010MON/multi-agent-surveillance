@@ -69,6 +69,7 @@ public class TestingEngine extends GameEngine
      * intruders on the map (or a limit of n tics)
      * @return the number of tics taken to capture the intruders
      */
+    //TODO Modify capture Test
     public long runCaptureTest()
     {
         long limit = 100;
@@ -81,6 +82,8 @@ public class TestingEngine extends GameEngine
         System.out.println(" - complete");
         return tics;
     }
+
+    //TODO Implement evasion test
 
 
     /**

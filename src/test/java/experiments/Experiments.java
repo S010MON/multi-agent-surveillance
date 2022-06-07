@@ -63,6 +63,7 @@ public class Experiments
         }
     }
 
+    @Deprecated
     private static void runCapture(String map_name)
     {
         final int iterations = 10;
@@ -93,6 +94,25 @@ public class Experiments
         }
     }
 
+    private static void runCapture()
+    {
+        final int iterations = 100;
+        //TODO Specify capture and evasion agent type in StateTable
+
+        Logger logger = new Logger("Capture_Experiment");
+        logger.setOutputCsv();
+
+        for(int i = 0; i < iterations; i++)
+        {
+            System.out.println("Iteration ");
+
+            Map map = generateRandomMap();
+            //TODO Run capture test
+            //TODO Log data
+        }
+
+    }
+
     private static void runInfiltration(String map_name)
     {
         final int iterations = 10;
@@ -121,5 +141,16 @@ public class Experiments
                 logger.log(agent_heading + "," + data);
             }
         }
+    }
+
+    private static Map generateRandomMap()
+    {
+        //TODO Generate random map settings object
+        Settings settings = new Settings();
+        settings.setNoOfGuards(1);
+        settings.setNoOfIntruders(1);
+
+        Map map = new Map(settings);
+        return map;
     }
 }
