@@ -7,6 +7,7 @@ import app.model.agents.Agent;
 import app.model.agents.AgentImp;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.StateTable;
 import app.model.agents.Universe;
 import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
@@ -15,6 +16,7 @@ import lombok.Setter;
 
 import java.util.*;
 
+//TODO Look into possible ACO bug- State transitions don't decrease Aco Count
 public class AcoAgent extends AgentImp
 {
     @Getter private static int acoAgentCount;
@@ -382,14 +384,5 @@ public class AcoAgent extends AgentImp
     {
         Vector direction = new Vector(0, -1);
         return direction.rotate(angle);
-    }
-
-    @Override
-    public Agent nextState()
-    {
-        Agent newAgent = super.nextState();
-        if(this != newAgent)
-            acoAgentCount--;
-        return newAgent;
     }
 }

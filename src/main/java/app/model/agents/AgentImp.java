@@ -261,35 +261,4 @@ public class AgentImp implements Agent
     {
         return noWallDetected(vector.getAngle(), moveLength, 1);
     }
-
-    /**
-     * Encodes state changes for all types of agent, and returns either the current class or
-     * creates a new class of the requisite type for the current state change
-     * @return
-     */
-    @Override
-    public Agent nextState()
-    {
-        // State GUARD
-        if(this.type == Type.GUARD)
-        {
-            if(isTypeSeen(Type.INTRUDER))
-                return new CaptureAgent(this);
-
-        }
-
-        // State INTRUDER
-        else if(this.type == Type.INTRUDER)
-        {
-            if(isTypeSeen(Type.GUARD))
-                return new EvasionAgent(this);
-
-            if(isTypeSeen(Type.TARGET))
-                return new TargetAgent(this);
-
-            return this;
-        }
-
-        return this;
-    }
 }
