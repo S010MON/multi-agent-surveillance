@@ -3,6 +3,7 @@ package app.model.agents;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
+import lombok.Getter;
 import lombok.Setter;
 
 public class StateTable
@@ -58,5 +59,15 @@ public class StateTable
             case EVASION_RANDOMDIRECTED -> {return new EvasionAgent(currentState);}
             default -> throw new RuntimeException("Evasion agent not specified");
         }
+    }
+
+    public static String getDefaultCaptureAgent()
+    {
+        return defaultEvasionAgent.name() + " ";
+    }
+
+    public static String getDefaultEvasionAgent()
+    {
+        return defaultEvasionAgent.name();
     }
 }

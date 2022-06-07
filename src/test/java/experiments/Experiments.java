@@ -4,6 +4,7 @@ import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import app.model.agents.StateTable;
 import jogging.Logger;
 
 import java.util.Arrays;
@@ -96,19 +97,26 @@ public class Experiments
 
     private static void runCapture()
     {
-        final int iterations = 100;
-        //TODO Specify capture and evasion agent type in StateTable
+        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
+        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
 
-        Logger logger = new Logger("Capture_Experiment");
+        final String testName = "Capture_Experiment, " + StateTable.getDefaultCaptureAgent() + ", " + StateTable.getDefaultEvasionAgent();
+        final int iterations = 100;
+
+        Logger logger = new Logger(testName);
         logger.setOutputCsv();
 
         for(int i = 0; i < iterations; i++)
         {
-            System.out.println("Iteration ");
+            String test_heading = "Iteration: " + iterations + ", ";
 
             Map map = generateRandomMap();
-            //TODO Run capture test
-            //TODO Log data
+
+            TestingEngine gameEngine = new TestingEngine(map, testName);
+            //TODO Modify capture test
+            int data = (int) gameEngine.runCaptureTest();
+
+            logger.log(test_heading + data);
         }
 
     }
