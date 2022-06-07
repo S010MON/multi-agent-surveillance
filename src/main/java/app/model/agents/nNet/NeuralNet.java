@@ -29,9 +29,9 @@ public class NeuralNet extends AgentImp implements Comparable
     @Getter private String saveName = FilePath.get("nNet/full/network.json");
     @Getter private NetworkType networkType = NetworkType.FULL;
     @Getter private String resourcePath = "nNet/full/";
-    private int inputsNum = 360;
-    private int outputsNum = 8;
-    private int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
+    private static int inputsNum = 360;
+    private static int outputsNum = 8;
+    private static int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
     @Getter @Setter private double score = 0;
 
     public NeuralNet(Vector position, Vector direction, double radius, Type type)
@@ -45,7 +45,7 @@ public class NeuralNet extends AgentImp implements Comparable
         catch(Exception exception)
         {
             System.out.println(saveName + " not found, generating new network");
-            this.neuralNet = buildNN(inputsNum, hiddenSize, outputsNum);
+            this.neuralNet = buildNN();
         }
     }
 
@@ -163,6 +163,29 @@ public class NeuralNet extends AgentImp implements Comparable
         return f;
     }
 
+    public NeuralNet breed(NeuralNet other)
+    {
+        FeedForwardNetwork copy = buildNN();
+        List<AbstractLayer> layers_copy = copy.getLayers();
+        List<AbstractLayer> layers_this = neuralNet.getLayers();
+        List<AbstractLayer> layers_other = other.getNeuralNet().getLayers();
+
+        for(int i = 1; i < layers_copy.size(); i++)
+        {
+            if(Math.random() > 0.5)
+                layers_copy.get(i).setWeights(layers_this.get(i).getWeights());
+            else
+                layers_copy.get(i).setWeights(layers_other.get(i).getWeights());
+
+            if(Math.random() > 0.5)
+                layers_copy.get(i).setBiases(layers_this.get(i).getBiases());
+            else
+                layers_copy.get(i).setBiases(layers_other.get(i).getBiases());
+        }
+
+        return new NeuralNet(copy);
+    }
+
     public void save()
     {
         try
@@ -176,14 +199,14 @@ public class NeuralNet extends AgentImp implements Comparable
         }
     }
 
-    private FeedForwardNetwork buildNN(int inputs, int hiddenSize, int outputs)
+    public static FeedForwardNetwork buildNN()
     {
         return FeedForwardNetwork.builder()
-                                 .addInputLayer(inputs)
+                                 .addInputLayer(inputsNum)
                                  .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
                                  .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
                                  .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
-                                 .addOutputLayer(outputs, ActivationType.TANH)
+                                 .addOutputLayer(outputsNum, ActivationType.TANH)
                                  .lossFunction(LossType.CROSS_ENTROPY)
                                  .randomSeed(123)
                                  .build();
@@ -191,7 +214,7 @@ public class NeuralNet extends AgentImp implements Comparable
 
     public NeuralNet copy()
     {
-        FeedForwardNetwork copy = buildNN(inputsNum, hiddenSize, outputsNum);
+        FeedForwardNetwork copy = buildNN();
 
         List<AbstractLayer> layers_original = neuralNet.getLayers();
         List<AbstractLayer> layers_copy = copy.getLayers();

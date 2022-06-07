@@ -15,37 +15,40 @@ public class GeneticAlgorithm extends GameEngine
     public static final double alpha = 0.01;
     public static final double epsilon = 0.001;
     public static final double population = 100;
-    public static final boolean VERBOSE = false;
+    public static final boolean VERBOSE = true;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
-        NeuralNet best = new NeuralNet(new Vector(), new Vector(), 10, Type.GUARD);
+        ArrayList<NeuralNet> generation = init();
 
         for(int i = 0; i < 10000; i++)
         {
-            best = run(best, settings);
-            System.out.println("Generation " + i + " best score: " + best.getScore());
-            best.save();
+            generation = select(generation, settings);
+            System.out.println("Gen " + i + ": " + generation.get(0).getScore());
+            generation.get(0).save();
+            generation = breed(generation);
+            generation.forEach(e -> e.mutate(alpha, epsilon));
         }
     }
 
-    public static NeuralNet run(NeuralNet parent, Settings settings)
+    public static ArrayList<NeuralNet> init()
     {
-        // 1) Spawn Babies.
-        ArrayList<NeuralNet> babies = new ArrayList<>();
-        babies.add(parent.copy());
+        ArrayList<NeuralNet> generation = new ArrayList<>();
+        generation.add(new NeuralNet(new Vector(), new Vector(), 10, Type.INTRUDER));
 
-        for(int i = 0; i < population; i++)
+        for(int i = 1; i < population; i++)
         {
-            NeuralNet mutatedBaby = parent.copy();
-            mutatedBaby.mutate(alpha, epsilon);
-            babies.add(mutatedBaby);
+            generation.add(new NeuralNet(NeuralNet.buildNN()));
         }
 
-        // 2) for each Baby:
+        return generation;
+    }
+
+    public static ArrayList<NeuralNet> select(ArrayList<NeuralNet> population, Settings settings)
+    {
         PriorityQueue<NeuralNet> heap = new PriorityQueue<>();
-        for(NeuralNet baby: babies)
+        for(NeuralNet baby: population)
         {
             Map map = new Map(settings);
             map.addAgent(baby);
@@ -54,9 +57,33 @@ public class GeneticAlgorithm extends GameEngine
             heap.add(baby);
         }
 
-        // 3) Select top Baby
-        return heap.poll();
+        ArrayList<NeuralNet> topTen = new ArrayList<>();
+        int cutoff = (int) Math.round(population.size() * (0.1));
+        for(int i = 0; i < cutoff; i++)
+        {
+            topTen.add(heap.poll());
+        }
+        return topTen;
     }
+
+    public static ArrayList<NeuralNet> breed(ArrayList<NeuralNet> parents)
+    {
+        ArrayList<NeuralNet> children = new ArrayList<>();
+
+        for(int i = 0; i < parents.size(); i++)
+        {
+            for(int j = 0; j < parents.size(); j++)
+            {
+                if( i == j)
+                    children.add(parents.get(i));
+                else
+                    children.add(parents.get(i).breed(parents.get(j)));
+            }
+        }
+        return children;
+    }
+
+    //##################################################################################################################
 
     public GeneticAlgorithm(Map map)
     {
@@ -68,7 +95,7 @@ public class GeneticAlgorithm extends GameEngine
         double prevPercentage = 0;
         double currentPercentage = 0;
 
-        while(!complete() && tics < 100 )
+        while(!complete() && tics < 500 )
         {
             tick();
 
@@ -91,7 +118,7 @@ public class GeneticAlgorithm extends GameEngine
 
     protected boolean complete()
     {
-        return  map.percentageComplete(Type.GUARD) > 0.85;
+        return  map.percentageComplete(Type.INTRUDER) > 0.85;
     }
 
     protected void updatePercentageBar(double percent)
