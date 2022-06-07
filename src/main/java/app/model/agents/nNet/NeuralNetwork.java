@@ -75,18 +75,13 @@ public class NeuralNetwork extends AgentImp
     {
         float[] data = new float[360 + 4];
 
-        for(int i = 0; i < 360; i++)
-        {
-            data[i] = -1;
-        }
-
         for(Ray r: view)
         {
             int index = (int) Math.round(r.angle());
             data[index] = (float) r.length();
         }
 
-        return data;
+        return normalise(data);
     }
 
     public static void main(String[] args)
@@ -142,10 +137,10 @@ public class NeuralNetwork extends AgentImp
     {
         this.neuralNet = FeedForwardNetwork.builder()
                                            .addInputLayer(inputs)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
-                                           .addFullyConnectedLayer(hiddensize,ActivationType.TANH)
-                                           .addOutputLayer(outputs, ActivationType.SIGMOID)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
+                                           .addFullyConnectedLayer(hiddensize,ActivationType.RELU)
+                                           .addOutputLayer(outputs, ActivationType.SOFTMAX)
                                            .lossFunction(LossType.CROSS_ENTROPY)
                                            .randomSeed(123)
                                            .build();

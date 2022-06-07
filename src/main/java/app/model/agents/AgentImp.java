@@ -12,16 +12,12 @@ import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import jogging.Logger;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 
 public class AgentImp implements Agent
 {
@@ -300,6 +296,10 @@ public class AgentImp implements Agent
     protected void collectData(Move move)
     {
         float[] data = new float[360 + 4];
+        for(int i = 0; i < data.length; i++)
+        {
+            data[i] = -1;
+        }
 
         // Input ray distances for each angle
         for(Ray r: view)
@@ -310,10 +310,23 @@ public class AgentImp implements Agent
 
         data = normalise(data);
 
-        data[360] = (float) move.getEndDir().getX();
-        data[361] = (float) move.getEndDir().getY();
-        data[362] = (float) move.getDeltaPos().getX();
-        data[363] = (float) move.getDeltaPos().getY();
+        Vector dir = move.getEndDir().normalise();
+        data[360] = (float) dir.getX();
+        data[361] = (float) dir.getY();
+
+        if(move.getDeltaPos().getX() > 0)
+            data[362] = 1;
+        else if(move.getDeltaPos().getX() < 0)
+            data[362] = -1;
+        else
+            data[362] = 0;
+
+        if(move.getDeltaPos().getY() > 0)
+            data[363] = 1;
+        else if(move.getDeltaPos().getY() < 0)
+            data[363] = -1;
+        else
+            data[363] = 0;
 
         Logger logger = new Logger("data.csv");
         logger.setOutputCsv();
@@ -331,7 +344,8 @@ public class AgentImp implements Agent
 
         for(int i = 0; i < data.length; i++)
         {
-            data[i] = data[i] / max;
+            if(data[i] != -1)
+                data[i] = data[i] / max;
         }
 
         return data;
