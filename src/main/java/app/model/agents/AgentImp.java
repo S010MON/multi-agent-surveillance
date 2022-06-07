@@ -261,4 +261,13 @@ public class AgentImp implements Agent
     {
         return noWallDetected(vector.getAngle(), moveLength, 1);
     }
+
+    /**
+     * Method makes reference to the State Table to determine the next state.
+     */
+    @Override
+    public Agent nextState()
+    {
+        return StateTable.lookupState(this);
+    }
 }
