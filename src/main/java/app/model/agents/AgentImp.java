@@ -30,8 +30,8 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector tgtDirection;
     @Getter @Setter protected ArrayList<Ray> view;
     @Getter @Setter protected World world;
+    @Getter @Setter protected Vector position;
     @Getter protected Type type;
-    @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;

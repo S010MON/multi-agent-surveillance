@@ -1,7 +1,8 @@
 package testing;
 
 import app.model.agents.nNet.NetworkManager;
-import app.model.agents.nNet.NeuralNetwork;
+import app.model.agents.nNet.NetworkType;
+import app.model.agents.nNet.NeuralNet;
 import deepnetts.net.FeedForwardNetwork;
 import deepnetts.net.layers.activation.ActivationType;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class NetworkManagerTest
                 .addOutputLayer(1,ActivationType.SIGMOID)
                 .randomSeed(111)
                 .build();
-        NeuralNetwork net1 = new NeuralNetwork(n);
+        NeuralNet net1 = new NeuralNet(n, NetworkType.TEST);
 
         float[] inputs = {3,4,1};
         float prediction = n.predict(inputs)[0];
@@ -32,7 +33,7 @@ public class NetworkManagerTest
                 .addOutputLayer(1,ActivationType.SIGMOID)
                 .randomSeed(999)
                 .build();
-        NeuralNetwork net2 = new NeuralNetwork(n2);
+        NeuralNet net2 = new NeuralNet(n2, NetworkType.TEST);
         NetworkManager.fillNN(net2);
         n2 = net2.getNeuralNet();
         float prediction2 = n2.predict(inputs)[0];

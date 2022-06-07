@@ -20,6 +20,8 @@ public interface Agent extends Boundary
 
     Vector getPosition();
 
+    void setPosition(Vector position);
+
     Vector getDirection();
 
     void setDirection(Vector direction);

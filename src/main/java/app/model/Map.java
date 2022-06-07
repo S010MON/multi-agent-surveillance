@@ -44,7 +44,6 @@ public class Map
 
     public Map(Settings settings)
     {
-        System.out.print("Loading settings ... ");
         this.settings = settings;
         this.width = settings.getWidth();
         this.height = settings.getHeight();
@@ -92,7 +91,6 @@ public class Map
             activateHuman();
 
         this.coverage = new Coverage(this);
-        System.out.print(" done");
     }
 
     public Map(Agent agent, ArrayList<Furniture> obstacles)
@@ -125,6 +123,18 @@ public class Map
             }
             default -> this.furniture.add(FurnitureFactory.make(obj));
         }
+    }
+
+
+    public void addAgent(Agent agent)
+    {
+        if(agent.getType() == Type.INTRUDER)
+                agent.setPosition(randPosition(intruderSpawn));
+        else if(agent.getType() == Type.GUARD)
+            agent.setPosition(randPosition(guardSpawn));
+
+        agent.setDirection(randDirection());
+        agents.add(agent);
     }
 
 
