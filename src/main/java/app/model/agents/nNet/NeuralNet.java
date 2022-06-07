@@ -172,18 +172,42 @@ public class NeuralNet extends AgentImp implements Comparable
 
         for(int i = 1; i < layers_copy.size(); i++)
         {
-            if(Math.random() > 0.5)
-                layers_copy.get(i).setWeights(layers_this.get(i).getWeights());
-            else
-                layers_copy.get(i).setWeights(layers_other.get(i).getWeights());
+            Tensor weights = crossPollinate(layers_this.get(i).getWeights(), layers_other.get(i).getWeights());
+            layers_copy.get(i).setWeights(weights);
 
-            if(Math.random() > 0.5)
-                layers_copy.get(i).setBiases(layers_this.get(i).getBiases());
-            else
-                layers_copy.get(i).setBiases(layers_other.get(i).getBiases());
+            float[] biases = crossPollinate(layers_this.get(i).getBiases(), layers_other.get(i).getBiases());
+            layers_copy.get(i).setBiases(biases);
         }
-
         return new NeuralNet(copy);
+    }
+
+    public Tensor crossPollinate(Tensor t1, Tensor t2)
+    {
+        Tensor out = t1.copy();
+
+        for(int c = 0; c < t1.getCols(); c++)
+        {
+            for(int r = 0; r < t1.getRows(); r++)
+            {
+                if(Math.random() > 0.5)
+                    out.set(r, c, t2.get(r, c));
+            }
+        }
+        return out;
+    }
+
+    public float[] crossPollinate(float[] b1, float[] b2)
+    {
+        float[] out = new float[b1.length];
+
+        for(int i = 0; i < b1.length; i++)
+        {
+            if(Math.random() > 0.5)
+                out[i] = b1[i];
+            else
+                out[i] = b2[i];
+        }
+        return out;
     }
 
     public void save()
