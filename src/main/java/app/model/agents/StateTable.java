@@ -39,7 +39,7 @@ public class StateTable
         return currentState;
     }
 
-    private static Agent captureTableSearch(Agent currentState)
+    public static Agent captureTableSearch(Agent currentState)
     {
         switch(defaultCaptureAgent)
         {
@@ -48,7 +48,7 @@ public class StateTable
         }
     }
 
-    private static Agent evasionTableSearch(Agent currentState)
+    public static Agent evasionTableSearch(Agent currentState)
     {
         //TODO Modify table when Evasion Agents are separated.
         switch(defaultEvasionAgent)

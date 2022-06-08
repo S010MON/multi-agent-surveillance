@@ -25,7 +25,6 @@ public enum AgentType
     CAPTURE,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
-
     RANDOM;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
