@@ -30,7 +30,7 @@ public class NeuralNet extends AgentImp implements Comparable
     @Getter private NetworkType networkType = NetworkType.FULL;
     @Getter private String resourcePath = "nNet/full/";
     private static int inputsNum = 360;
-    private static int outputsNum = 8;
+    private static int outputsNum = 5;
     private static int[] hiddenSize = {600, 600, 360};
     @Getter @Setter private double score = 0;
 
@@ -39,9 +39,10 @@ public class NeuralNet extends AgentImp implements Comparable
         super(position, direction, radius, type);
         try
         {
-            System.out.print("Loading network from file ");
+            System.out.print("Loading network from file ...");
             this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(saveName));
             NetworkManager.fillNN(this);
+            System.out.println(" done.");
         }
         catch(Exception exception)
         {
@@ -70,17 +71,27 @@ public class NeuralNet extends AgentImp implements Comparable
         float[] input = gatherInput();
         float[] pred = neuralNet.predict(input);
 
-        Vector dir = decode(pred[0], pred[1], pred[2], pred[3]);
-        Vector pos = decode(pred[4], pred[5], pred[6], pred[7]).scale(maxSprint);
-        return new Move(dir, pos);
+        Vector dir = direction;
+        if(pred[0] != Double.NaN)
+             dir = direction.rotate(360 * pred[0]);
+
+        double dx = 0;
+        if(pred[1] != Double.NaN && pred[2] != Double.NaN)
+            dx = (pred[1] - pred[2]) * maxSprint;
+
+        double dy = 0;
+        if(pred[3] != Double.NaN && pred[4] != Double.NaN)
+            dy = (pred[3] - pred[4]) * maxSprint;
+
+        return new Move(dir, new Vector(dx, dy));
     }
 
     private float[] gatherInput()
     {
         float[] data = new float[360];
 
-        for(int i = 0; i < data.length; i++)
-            data[i] = -1;
+//        for(int i = 0; i < data.length; i++)
+//            data[i] = -1;
 
         for(Ray r: view)
         {
@@ -91,23 +102,6 @@ public class NeuralNet extends AgentImp implements Comparable
         }
 
         return normalise(data);
-    }
-
-    private Vector decode(float x_pos, float x_neg, float y_pos, float y_neg)
-    {
-        double x = 0;
-        if(x_pos > x_neg)
-            x = 1;
-        else if(x_pos < x_neg)
-            x = -1;
-
-        double y = 0;
-        if(y_pos > y_neg)
-            y = 1;
-        else if(y_pos < y_neg)
-            y = -1;
-
-        return new Vector(x, y);
     }
 
     public void mutate(double alpha, double epsilon)
@@ -232,7 +226,7 @@ public class NeuralNet extends AgentImp implements Comparable
                                  .addFullyConnectedLayer(hiddenSize[0],ActivationType.RELU)
                                  .addFullyConnectedLayer(hiddenSize[1],ActivationType.RELU)
                                  .addFullyConnectedLayer(hiddenSize[2],ActivationType.RELU)
-                                 .addOutputLayer(outputsNum, ActivationType.TANH)
+                                 .addOutputLayer(outputsNum, ActivationType.SIGMOID)
                                  .lossFunction(LossType.CROSS_ENTROPY)
                                  .randomSeed(123)
                                  .build();

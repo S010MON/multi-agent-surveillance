@@ -36,6 +36,7 @@ public class GameEngine
         this.graphicsEngine = new GraphicsEngine();
         this.timeline = new Timeline(new KeyFrame( Duration.millis(100),  ae -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     public GameEngine(Map map)

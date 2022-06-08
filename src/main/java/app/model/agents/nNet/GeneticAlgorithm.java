@@ -48,6 +48,7 @@ public class GeneticAlgorithm extends GameEngine
             {
                 generation = breed(generation);
                 System.out.println("Breed!");
+                stagnation = 0;
             }
             else
                 generation = divide(generation);
@@ -146,7 +147,6 @@ public class GeneticAlgorithm extends GameEngine
         while(!complete() && tics < maxTics )
         {
             tick();
-
             currentPercentage = map.percentageComplete(Type.INTRUDER);
 
             if(VERBOSE)

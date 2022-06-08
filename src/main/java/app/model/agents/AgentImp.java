@@ -15,7 +15,6 @@ import app.view.simulation.Info;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import jogging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
