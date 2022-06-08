@@ -13,22 +13,24 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
-    public static final double epsilon = 0.01;
+    public static final double epsilon = 0.1;
     public static final double population = 100;
-    public static final boolean VERBOSE = true;
+    public static final boolean VERBOSE = false;
     public static int maxTics = 10;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
-        double bestScore = 0.10;
+        double bestScore = 0.17;
+        double prevScore = 0;
+        int stagnation = 0;
 
         for(int i = 0; i < 1000; i++)
         {
-            System.out.print("Gen " + i + ":  selecting");
+            System.out.print("Gen " + i + ":  computing");
             generation = select(generation, settings);
-            System.out.println("\rGen " + i + ": " + generation.get(0).getScore());
+            System.out.println("\rGen " + i + ": " + generation.get(0).getScore() + "% in " + maxTics + " tics");
             if(generation.get(0).getScore() > bestScore)
             {
                 generation.get(0).save();
@@ -36,14 +38,22 @@ public class GeneticAlgorithm extends GameEngine
             }
             generation.get(0).save();
 
-            if(i < 5 || i % 5 == 0)
+            if(prevScore == generation.get(0).getScore())
+                stagnation++;
+            else
+                stagnation = 0;
+            prevScore = generation.get(0).getScore();
+
+            if(stagnation >= 5)
+            {
                 generation = breed(generation);
+                System.out.println("Breed!");
+            }
             else
                 generation = divide(generation);
 
             if(i % 5 == 0)
                 maxTics++;
-
         }
     }
 
