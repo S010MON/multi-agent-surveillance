@@ -12,29 +12,33 @@ import java.util.PriorityQueue;
 
 public class GeneticAlgorithm extends GameEngine
 {
-    public static final double alpha = 0.001;
-    public static final double epsilon = 0.0001;
-    public static final double population = 300;
-    public static final boolean VERBOSE = true;
+    public static final double alpha = 0.01;
+    public static final double epsilon = 0.001;
+    public static final double population = 100;
+    public static final boolean VERBOSE = false;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
-        double bestScore = 0.1;
+        double bestScore = 0.10;
 
-        for(int i = 0; i < 10000; i++)
+        for(int i = 0; i < 1000; i++)
         {
+            System.out.print("Gen " + i + ":  selecting");
             generation = select(generation, settings);
-            System.out.println("Gen " + i + ": " + generation.get(0).getScore());
+            System.out.println("\rGen " + i + ": " + generation.get(0).getScore());
             if(generation.get(0).getScore() > bestScore)
             {
                 generation.get(0).save();
                 bestScore = generation.get(0).getScore();
             }
             generation.get(0).save();
-            generation = breed(generation);
-            generation.forEach(e -> e.mutate(alpha, epsilon));
+
+            if(i % 5 == 0)
+                generation = breed(generation);
+            else
+                generation = divide(generation);
         }
     }
 
@@ -84,6 +88,29 @@ public class GeneticAlgorithm extends GameEngine
                     children.add(parents.get(i));
                 else
                     children.add(parents.get(i).breed(parents.get(j)));
+            }
+        }
+
+        children.forEach(e -> e.mutate(alpha, epsilon));
+        return children;
+    }
+
+    public static ArrayList<NeuralNet> divide(ArrayList<NeuralNet> parents)
+    {
+        ArrayList<NeuralNet> children = new ArrayList<>();
+
+        for(NeuralNet parent: parents)
+        {
+            for(int i = 0; i < 10; i ++)
+            {
+                if(i == 0)
+                    children.add(parent);
+                else
+                {
+                    NeuralNet child = parent.copy();
+                    child.mutate(alpha, epsilon);
+                    children.add(child);
+                }
             }
         }
         return children;
