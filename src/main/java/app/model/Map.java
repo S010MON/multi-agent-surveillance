@@ -192,7 +192,7 @@ public class Map
             if(otherAgent.getType() != currentAgent.getType())
             {
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
-                if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
+                if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 7))
                 {
                     deleteAgent(otherAgent);
                 }
