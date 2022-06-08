@@ -1,6 +1,7 @@
 package experiments;
 
 import app.controller.io.FileManager;
+import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
@@ -18,7 +19,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runInfiltration("experiment_map_1");
+        runCapture();
     }
 
     private static void runCoverage(String map_name)
@@ -185,5 +186,15 @@ public class Experiments
                 logger.log(agent_heading + "," + data);
             }
         }
+    }
+
+    private static Map generateRandomMap()
+    {
+        Settings settings = RandomSettingsGenerator.generateRandomSettings();
+        settings.setNoOfGuards(1);
+        settings.setNoOfIntruders(1);
+
+        Map map = new Map(settings);
+        return map;
     }
 }
