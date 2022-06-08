@@ -15,16 +15,14 @@ public class GeneticAlgorithm extends GameEngine
     public static final double alpha = 0.01;
     public static final double epsilon = 0.01;
     public static final double population = 100;
-    public static final boolean VERBOSE = true;
-    public static int maxTics = 10;
+    public static final boolean VERBOSE = false;
+    public static int maxTics = 5;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
-        double bestScore = 0.17;
-        double prevScore = 0;
-        int stagnation = 0;
+        double bestScore = 0;
 
         for(int i = 0; i < 1000; i++)
         {
@@ -36,24 +34,10 @@ public class GeneticAlgorithm extends GameEngine
                 generation.get(0).save();
                 bestScore = generation.get(0).getScore();
             }
-            generation.get(0).save();
 
-            if(prevScore == generation.get(0).getScore())
-                stagnation++;
-            else
-                stagnation = 0;
-            prevScore = generation.get(0).getScore();
+            generation = breed(generation);
 
-            if(stagnation >= 5)
-            {
-                generation = breed(generation);
-                System.out.println("Breed!");
-                stagnation = 0;
-            }
-            else
-                generation = divide(generation);
-
-            if(i % 5 == 0)
+            if(i % 10 == 0)
                 maxTics++;
         }
     }
