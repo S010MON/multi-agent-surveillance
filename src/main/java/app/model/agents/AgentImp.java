@@ -37,7 +37,6 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
-    protected final boolean COLLECT_DATA = true;
 
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
@@ -291,50 +290,6 @@ public class AgentImp implements Agent
         }
 
         return this;
-    }
-
-    protected void collectData(Move move)
-    {
-        float[] data = new float[360 + 8];
-        for(int i = 0; i < data.length; i++)
-        {
-            data[i] = 0;
-        }
-
-        // Input ray distances for each angle
-        for(Ray r: view)
-        {
-            int index = (int) Math.round(r.angle());
-            data[index] = (float) r.length();
-        }
-
-        data = normalise(data);
-
-        // record output as [dir_x_pos, dir_x_neg, dir_y_pos, dir_y_neg, mov_x_pos, mov_x_neg, mov_y_pos, mov_y_neg]
-        if(move.getEndDir().getX() > 0)
-            data[360] = 1;
-        if(move.getEndDir().getX() < 0)
-            data[361] = 1;
-
-        if(move.getEndDir().getY() > 0)
-            data[362] = 1;
-        else if(move.getEndDir().getY() < 0)
-            data[363] = 1;
-
-        if(move.getDeltaPos().getX() > 0)
-            data[364] = 1;
-        else if(move.getDeltaPos().getX() < 0)
-            data[365] = 1;
-
-        if(move.getDeltaPos().getY() > 0)
-            data[366] = 1;
-        else if(move.getDeltaPos().getY() < 0)
-            data[367] = 1;
-
-
-        Logger logger = new Logger("data.csv");
-        logger.setOutputCsv();
-        logger.log(data);
     }
 
     protected float[] normalise(float[] data)

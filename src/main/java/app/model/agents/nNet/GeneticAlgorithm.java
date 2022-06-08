@@ -12,20 +12,26 @@ import java.util.PriorityQueue;
 
 public class GeneticAlgorithm extends GameEngine
 {
-    public static final double alpha = 0.01;
-    public static final double epsilon = 0.001;
-    public static final double population = 100;
+    public static final double alpha = 0.001;
+    public static final double epsilon = 0.0001;
+    public static final double population = 300;
     public static final boolean VERBOSE = true;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
+        double bestScore = 0.58;
 
         for(int i = 0; i < 10000; i++)
         {
             generation = select(generation, settings);
             System.out.println("Gen " + i + ": " + generation.get(0).getScore());
+            if(generation.get(0).getScore() > bestScore)
+            {
+                generation.get(0).save();
+                bestScore = generation.get(0).getScore();
+            }
             generation.get(0).save();
             generation = breed(generation);
             generation.forEach(e -> e.mutate(alpha, epsilon));
@@ -95,7 +101,7 @@ public class GeneticAlgorithm extends GameEngine
         double prevPercentage = 0;
         double currentPercentage = 0;
 
-        while(!complete() && tics < 500 )
+        while(!complete() && tics < 1000 )
         {
             tick();
 

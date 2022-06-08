@@ -258,9 +258,6 @@ public class WallFollowAgent extends AgentImp
         direction = nextMove.getEndDir();
         noMovesDone = false;
 
-        if(COLLECT_DATA)
-            collectData(nextMove);
-
         return nextMove;
     }
 
