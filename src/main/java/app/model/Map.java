@@ -240,9 +240,10 @@ public class Map
         return false;
     }
 
-    // Method determines if there is an intruder within a Guard's visual field.
-    // Method is generic to determine if this is the case. However, works optimally for 1 vs v pairings
-    // As the guard-intruder combination is then linked
+    /**
+     * Method determines if there is an intruder within a Guard's visual field.
+     * @return True if an intruder is within a Guard's visual field. Else False.
+     */
     public boolean intruderVisual()
     {
         for(Agent a: agents)
