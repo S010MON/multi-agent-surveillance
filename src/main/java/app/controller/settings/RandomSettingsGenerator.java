@@ -37,7 +37,7 @@ public abstract class RandomSettingsGenerator
     private static final int SPAWN_WIDTH = 20;
     private static final int DELTA = 200; // Distance between spawn areas.
     private static final int MIN_OBSTACLES = 5;
-    private static final int MAX_OBSTACLES = 2;
+    private static final int MAX_OBSTACLES = 10;
     private static final int NUM_SHAPES = 5;
     private static final int MIN_SIDE_LENGTH = 30;
     private static final int MAX_SIDE_LENGTH = 70;
@@ -46,6 +46,7 @@ public abstract class RandomSettingsGenerator
     private static final ArrayList<Rectangle2D> tShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> iShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> plusShape = new ArrayList<>();
+    private static final ArrayList<Rectangle2D> obstacles = new ArrayList<>();
 
     public static Settings generateRandomSettings()
     {
@@ -116,11 +117,13 @@ public abstract class RandomSettingsGenerator
         Rectangle2D guardSpawn = new Rectangle2D(percentOfWidth, percentOfHeight,
                                                  SPAWN_WIDTH, SPAWN_HEIGHT);
         basic.addFurniture(guardSpawn, FurnitureType.GUARD_SPAWN);
+        obstacles.add(guardSpawn); // stops obstacles from generating over the spawn area.
 
         Rectangle2D intruderSpawn = new Rectangle2D(WIDTH - (percentOfWidth),
                                                     HEIGHT - (percentOfHeight),
                                                     SPAWN_WIDTH, SPAWN_HEIGHT);
         basic.addFurniture(intruderSpawn, FurnitureType.INTRUDER_SPAWN);
+        obstacles.add(intruderSpawn);
 
         return basic;
     }
@@ -147,23 +150,23 @@ public abstract class RandomSettingsGenerator
             {
                 case 0 -> {
                     ArrayList<Rectangle2D> uWalls = scaleU(ranScalar);
-                    addWalls(s, uWalls);
+                    addWalls(s, uWalls, ranScalar);
                 }
                 case 1 -> {
                     ArrayList<Rectangle2D> lWalls = scaleL(ranScalar);
-                    addWalls(s, lWalls);
+                    addWalls(s, lWalls, ranScalar);
                 }
                 case 2 -> {
                     ArrayList<Rectangle2D> tWalls = scaleT(ranScalar);
-                    addWalls(s, tWalls);
+                    addWalls(s, tWalls, ranScalar);
                 }
                 case 3 -> {
                     ArrayList<Rectangle2D> iWalls = scaleI(ranScalar);
-                    addWalls(s, iWalls);
+                    addWalls(s, iWalls, ranScalar);
                 }
                 case 4 -> {
                     ArrayList<Rectangle2D> plusWalls = scalePlus(ranScalar);
-                    addWalls(s, plusWalls);
+                    addWalls(s, plusWalls, ranScalar);
                 }
             }
         }
@@ -249,14 +252,21 @@ public abstract class RandomSettingsGenerator
         return walls;
     }
 
-    private static void addWalls(Settings s, ArrayList<Rectangle2D> walls)
+    private static void addWalls(Settings s, ArrayList<Rectangle2D> walls, int scalar)
     {
         Random rand = new Random();
-        int ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH)*2) +
-                                (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
-        int ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH)*2) +
-                                (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
+        int ranX;
+        int ranY;
+        do
+        {
+            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
+                    (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
+            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
+                    (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
+        }
+        while(checkOverlaps(new Rectangle2D(ranX, ranY, scalar, scalar)));
 
+        obstacles.add(new Rectangle2D(ranX, ranY, scalar, scalar));
 
         ArrayList<Rectangle2D> newWalls;
         double ran = rand.nextDouble();
@@ -275,6 +285,27 @@ public abstract class RandomSettingsGenerator
                     r.getWidth(), r.getHeight());
             s.addFurniture(wall, FurnitureType.WALL);
         }
+    }
+
+    private static boolean checkOverlaps(Rectangle2D r)
+    {
+        for(Rectangle2D obstacle : obstacles)
+        {
+            if(checkOverlap(r, obstacle))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkOverlap(Rectangle2D r1, Rectangle2D r2)
+    {
+        if(r1.getMaxX() < r2.getMinX() || r1.getMinX() > r2.getMaxX())
+            return false;
+        if(r1.getMaxY() < r2.getMinY() || r1.getMinY() > r2.getMaxY())
+            return false;
+        return true;
     }
 
     private static ArrayList<Rectangle2D> rotateShape(ArrayList<Rectangle2D> walls, int d)
