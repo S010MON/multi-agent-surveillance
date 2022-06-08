@@ -120,6 +120,8 @@ public class Experiments
         for(int i = 0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + iterations + ", ";
+            System.out.println(test_heading);
+
             Map map = generateRandomMap();
 
             TestingEngine gameEngine = new TestingEngine(map, testName);
@@ -149,6 +151,7 @@ public class Experiments
         for(int i =0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + iterations + ", ";
+            System.out.println(test_heading);
 
             Map map = generateRandomMap();
 
