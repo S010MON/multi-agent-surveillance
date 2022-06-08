@@ -239,6 +239,22 @@ public class Map
         return false;
     }
 
+    /**
+     * Method determines if there is an intruder within a Guard's visual field.
+     * @return True if an intruder is within a Guard's visual field. Else False.
+     */
+    public boolean intruderVisual()
+    {
+        for(Agent a: agents)
+        {
+            if(a.getType() == Type.GUARD && a.isTypeSeen(Type.INTRUDER))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public int agentsRemaining(Type type)
     {
