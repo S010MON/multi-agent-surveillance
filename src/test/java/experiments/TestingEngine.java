@@ -82,7 +82,29 @@ public class TestingEngine extends GameEngine
         return tics;
     }
 
-    //TODO Implement evasion test
+    public long runEvasionTest()
+    {
+        long limit = 200;
+        long noVisualDuration = 0;
+        long escapeLimit = 20;
+
+        while(noVisualDuration < escapeLimit && tics < limit)
+        {
+            if(!map.intruderVisual())
+            {
+                noVisualDuration ++;
+            }
+            else
+            {
+                noVisualDuration = 0;
+            }
+
+            tick();
+            updateTicsRemaining(tics, limit);
+        }
+        System.out.println(" - complete");
+        return tics;
+    }
 
 
     /**

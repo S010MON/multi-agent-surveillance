@@ -100,8 +100,10 @@ public class Experiments
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
         StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
 
-        final String testName = "Capture_Experiment, " + StateTable.getDefaultCaptureAgent() + ", " + StateTable.getDefaultEvasionAgent();
-        final int iterations = 1;
+        final String testName = "Capture_Experiment_" +
+                StateTable.getDefaultCaptureAgent() + "_" +
+                StateTable.getDefaultEvasionAgent();
+        final int iterations = 100;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
@@ -114,6 +116,30 @@ public class Experiments
             TestingEngine gameEngine = new TestingEngine(map, testName);
             int data = (int) gameEngine.runCaptureTest();
             logger.log(test_heading + data);
+        }
+    }
+
+    public static void runEvasion()
+    {
+        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
+        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
+
+        final String testName = "Evasion_Experiment_" +
+                StateTable.getDefaultCaptureAgent() + "_" +
+                StateTable.getDefaultEvasionAgent();
+        final int iterations = 100;
+
+        Logger logger = new Logger(testName);
+        logger.setOutputCsv();
+
+        for(int i =0; i < iterations; i++)
+        {
+            String test_heading = "Iteration: " + iterations + ", ";
+            Map map = generateRandomMap();
+
+            TestingEngine gameEngine = new TestingEngine(map, testName);
+            //TODO Create Evasion test
+            //TODO Log the data
         }
     }
 
