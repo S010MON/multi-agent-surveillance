@@ -4,8 +4,6 @@ import app.controller.io.FilePath;
 import deepnetts.net.FeedForwardNetwork;
 import deepnetts.net.layers.AbstractLayer;
 import deepnetts.util.Tensor;
-import jogging.Logger;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

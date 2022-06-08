@@ -90,9 +90,6 @@ public class NeuralNet extends AgentImp implements Comparable
     {
         float[] data = new float[360];
 
-//        for(int i = 0; i < data.length; i++)
-//            data[i] = -1;
-
         for(Ray r: view)
         {
             int index = (int) Math.round(r.angle());
