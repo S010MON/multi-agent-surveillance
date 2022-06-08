@@ -1,9 +1,11 @@
 package experiments;
 
 import app.controller.io.FileManager;
+import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import app.model.agents.StateTable;
 import jogging.Logger;
 
 import java.util.Arrays;
@@ -119,68 +121,6 @@ public class Experiments
         for(int i = 0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + i +  "/" + iterations + " ";
-            System.out.println(test_heading);
-
-            Map map = generateRandomMap();
-
-            TestingEngine gameEngine = new TestingEngine(map, testName);
-            int data = (int) gameEngine.runCaptureTest();
-            logger.log(test_heading + data);
-        }
-    }
-
-    /**
-     * Experiment provides a 1 vs 1 | Capture vs Evasion situation within the thunder-dome.
-     * Specify the default Capture and Evasion agents within the method to alter the pairings.
-     * Experiment output is the number of ticks until the Capture agent has lost visual sighting of the Evading agent.
-     */
-    public static void runEvasion()
-    {
-        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
-        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
-
-        final String testName = "Evasion_Experiment_" +
-                StateTable.getDefaultCaptureAgent() + "_" +
-                StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
-
-        Logger logger = new Logger(testName);
-        logger.setOutputCsv();
-
-        for(int i =0; i < iterations; i++)
-        {
-            String test_heading = "Iteration: " + iterations + ", ";
-            System.out.println(test_heading);
-
-            Map map = generateRandomMap();
-
-            TestingEngine gameEngine = new TestingEngine(map, testName);
-            int data = (int) gameEngine.runEvasionTest();
-            logger.log(test_heading + data);
-        }
-    }
-
-    /**
-     * Experiment provides a 1 vs 1 | Capture vs Evasion situation within the thunder-dome.
-     * Specify the default Capture and Evasion agents within the method to alter the pairings.
-     * Experiment output is the number of ticks until the Evasion agent is captured
-     */
-    private static void runCapture()
-    {
-        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
-        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
-
-        final String testName = "Capture_Experiment_" +
-                StateTable.getDefaultCaptureAgent() + "_" +
-                StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
-
-        Logger logger = new Logger(testName);
-        logger.setOutputCsv();
-
-        for(int i = 0; i < iterations; i++)
-        {
-            String test_heading = "Iteration: " + iterations + ", ";
             System.out.println(test_heading);
 
             Map map = generateRandomMap();
