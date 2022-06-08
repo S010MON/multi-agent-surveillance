@@ -31,7 +31,7 @@ public class NeuralNet extends AgentImp implements Comparable
     @Getter private String resourcePath = "nNet/full/";
     private static int inputsNum = 360;
     private static int outputsNum = 8;
-    private static int hiddenSize = 2 * (int) Math.round(Math.sqrt(inputsNum*outputsNum));
+    private static int hiddenSize = 600;
     @Getter @Setter private double score = 0;
 
     public NeuralNet(Vector position, Vector direction, double radius, Type type)

@@ -21,7 +21,7 @@ public class GeneticAlgorithm extends GameEngine
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
-        double bestScore = 0.58;
+        double bestScore = 0.1;
 
         for(int i = 0; i < 10000; i++)
         {
