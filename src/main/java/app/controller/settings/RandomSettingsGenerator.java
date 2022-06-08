@@ -238,8 +238,8 @@ public abstract class RandomSettingsGenerator
         Rectangle2D rect;
         do
         {
-            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) + 10;
-            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) + 10;
+            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
+            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
             rect = new Rectangle2D(ranX, ranY, scalar, scalar);
             time++;
         }
