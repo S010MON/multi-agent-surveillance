@@ -13,9 +13,10 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
-    public static final double epsilon = 0.001;
+    public static final double epsilon = 0.01;
     public static final double population = 100;
-    public static final boolean VERBOSE = false;
+    public static final boolean VERBOSE = true;
+    public static int maxTics = 10;
 
     public static void main(String[] args)
     {
@@ -35,10 +36,14 @@ public class GeneticAlgorithm extends GameEngine
             }
             generation.get(0).save();
 
-            if(i % 5 == 0)
+            if(i < 5 || i % 5 == 0)
                 generation = breed(generation);
             else
                 generation = divide(generation);
+
+            if(i % 5 == 0)
+                maxTics++;
+
         }
     }
 
@@ -128,7 +133,7 @@ public class GeneticAlgorithm extends GameEngine
         double prevPercentage = 0;
         double currentPercentage = 0;
 
-        while(!complete() && tics < 500 )
+        while(!complete() && tics < maxTics )
         {
             tick();
 
