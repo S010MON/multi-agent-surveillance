@@ -23,7 +23,7 @@ public class GeneticAlgorithm extends GameEngine
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
 
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 1; i++)
         {
             System.out.print("Gen " + i + ":  computing");
             generation = select(generation, settings);
