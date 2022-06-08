@@ -76,7 +76,7 @@ public class TargetAgent extends AgentImp
         if(isTypeSeen(Type.GUARD))
             return StateTable.evasionTableSearch(this);
         if(targetLost || moveFailed)
-            return new WallFollowAgent(this);
+            return StateTable.wfTableSearch(this);
 
         return this;
     }

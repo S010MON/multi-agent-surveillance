@@ -5,6 +5,7 @@ import app.model.Move;
 import app.model.Type;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.StateTable;
 import app.model.agents.WallFollow.WallFollowAgent;
 
 public class EvasionAgent extends AgentImp
@@ -150,7 +151,7 @@ public class EvasionAgent extends AgentImp
     @Override public Agent nextState()
     {
         if(maxTicsReached())
-            return new WallFollowAgent(this);
+            return StateTable.wfTableSearch(this);
 
         return this;
     }

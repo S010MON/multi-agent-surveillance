@@ -1,14 +1,21 @@
 package app.model.agents;
 
 import app.model.Type;
+import app.model.agents.ACO.*;
 import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.WallFollow.WFHighDirHeuristic;
+import app.model.agents.WallFollow.WFMedDirHeuristic;
+import app.model.agents.WallFollow.WallFollowAgent;
+import lombok.Getter;
 import lombok.Setter;
 
 public class StateTable
 {
     @Setter private static AgentType defaultCaptureAgent = AgentType.CAPTURE;
     @Setter private static  AgentType defaultEvasionAgent = AgentType.EVASION_DIRECTED;
+    @Getter private static AgentType defaultAcoAgent = AgentType.ACO_MOMENTUM;
+    @Getter private static AgentType defaultWFAgent = AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC;
 
     /**
      * Encodes state changes for all types of agents, returning either the current class
@@ -57,6 +64,31 @@ public class StateTable
             case EVASION_DIRECTED -> {return new EvasionAgent(currentState);}
             case EVASION_RANDOMDIRECTED -> {return new EvasionAgent(currentState);}
             default -> throw new RuntimeException("Evasion agent not specified");
+        }
+    }
+
+    public static Agent acoTableSearch(Agent currentState)
+    {
+        switch(defaultAcoAgent)
+        {
+            case ACO -> {return new AcoAgent(currentState);}
+            case ACO_COLONY -> {return new AcoColony(currentState);}
+            case ACO_MOMENTUM -> {return new AcoMomentum(currentState);}
+            case ACO_MIDI -> {return new AcoMid(currentState);}
+            case ACO_RANKING -> {return new AcoRanking(currentState);}
+            case ACO_MOMENTUM_SPIRAL_AVOIDANCE -> {return new AcoMomentumSpiralAvoidance(currentState);}
+            default -> throw new RuntimeException("ACO agent not specified");
+        }
+    }
+
+    public static Agent wfTableSearch(Agent currentState)
+    {
+        switch(defaultWFAgent)
+        {
+            case WALL_FOLLOW -> {return new WallFollowAgent(currentState);}
+            case WALL_FOLLOW_HIGH_DIR_HEURISTIC -> {return new WFHighDirHeuristic(currentState);}
+            case WALL_FOLLOW_MED_DIR_HEURISTIC -> {return new WFMedDirHeuristic(currentState);}
+            default -> throw new RuntimeException("WF agent not specified");
         }
     }
 
