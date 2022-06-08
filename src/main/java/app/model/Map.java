@@ -7,7 +7,9 @@ import app.controller.settings.SettingsObject;
 import app.controller.soundEngine.SoundSource;
 import app.model.agents.Agent;
 import app.model.agents.AgentType;
+import app.model.agents.Cells.GraphCell;
 import app.model.agents.Human;
+import app.model.agents.MemoryGraph;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -17,6 +19,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -83,6 +86,7 @@ public class Map
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
             Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
+            intruder.getWorld().map = this;
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -127,6 +131,29 @@ public class Map
         }
     }
 
+    public MemoryGraph createFullGraph()
+    {
+        MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(20);
+        for (int i=10; i<height; i+=20)
+        {
+            for(int j = 10; j < width; j += 20)
+            {
+                GraphCell vertex = fullGraph.addNewVertex(new Vector(i, j));
+                vertex.setOccupied(false);
+                for(Furniture f : furniture)
+                {
+                    if(f.getType().name() == "WALL")
+                    {
+                        if(f.contains(new Vector(i, j)))
+                        {
+                            vertex.setObstacle(true);
+                        }
+                    }
+                }
+            }
+        }
+        return fullGraph;
+    }
 
     public void updateAllSeen(Agent agent)
     {
@@ -135,7 +162,6 @@ public class Map
         else
             intrudersSeen.addAll(agent.getSeen());
     }
-
 
     public ArrayList<Boundary> getBoundaries()
     {

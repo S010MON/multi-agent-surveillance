@@ -1,6 +1,7 @@
 package app.model.agents.WallFollow;
 
 import app.controller.linAlg.Vector;
+import app.model.Map;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.World;
@@ -11,6 +12,8 @@ import java.util.List;
 
 public class WfWorld extends World
 {
+    private Map map;
+
     public WfWorld(MemoryGraph G)
     {
         super(G);
@@ -74,5 +77,23 @@ public class WfWorld extends World
         {
             getVerticalWallsCovered().add(cell.getY());
         }
+    }
+
+    @Override
+    public GraphCell getNonObstacleNeighbour(GraphCell vertex)
+    {
+        if (vertex.getObstacle())
+        {
+            List<GraphCell> neighbours = Graphs.neighborListOf(G,vertex);
+            for (GraphCell n : neighbours)
+            {
+                if (!n.getObstacle())
+                {
+                    return n;
+                }
+            }
+            throw new RuntimeException("Vertex has no non-obstacle neighbours!");
+        }
+        return vertex;
     }
 }

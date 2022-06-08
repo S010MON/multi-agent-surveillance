@@ -42,7 +42,7 @@ public class GraphicsEngine
         return output;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
+    public Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
     {
         Vector intersection = null;
         double closestDist = Double.MAX_VALUE;
@@ -85,7 +85,7 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private ArrayList<Boundary> collectBoundaries(Map map)
+    public ArrayList<Boundary> collectBoundaries(Map map)
     {
         ArrayList<Boundary> boundaries = new ArrayList<>();
         map.getFurniture()

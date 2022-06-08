@@ -37,7 +37,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
 
-    protected GraphCell addNewVertex(Vector position)
+    public GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);

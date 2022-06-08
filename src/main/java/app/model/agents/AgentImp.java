@@ -40,6 +40,7 @@ public class AgentImp implements Agent
 
     @Getter @Setter protected World world;
 
+
     public AgentImp(Vector position, Vector direction, double radius, Type type)
     {
         this.direction = direction;

@@ -11,8 +11,8 @@ public class EvasionAgent extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 100;
     private int counter = 0;
-    private Vector closestGuard;
-    private Vector guardDirection;
+    protected Vector closestGuard;
+    protected Vector guardDirection;
 
     private final int MAX_MOVES = 20;
     private int moveCounter;
@@ -59,7 +59,7 @@ public class EvasionAgent extends AgentImp
         return null;
     }
 
-    private void updateKnowledge()
+    protected void updateKnowledge()
     {
         moveCounter = 0;
         Vector closestSeenGuard = closestTypePos(Type.GUARD);
