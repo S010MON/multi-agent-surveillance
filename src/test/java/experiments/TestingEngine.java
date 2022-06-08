@@ -82,6 +82,11 @@ public class TestingEngine extends GameEngine
         return tics;
     }
 
+    /**
+     * Determines the quantity of ticks required for a capture agent to lose visual sight of an evading agent
+     * for more that an escape limit (Ticks equal or above this indicate an escape)
+     * @return The number of ticks until the evading agent has lost the capture agent
+     */
     public long runEvasionTest()
     {
         long limit = 200;

@@ -14,13 +14,17 @@ public class Experiments
     private static String map_path = "src/main/resources/";
 
     /**
-     * Enter a map name and run the Experiments file to run every agent through the map 100 times
+     * Execute required experiment. Alter experiment parameters within each experiment method
      */
     public static void main(String[] args)
     {
         //runEvasion();
     }
 
+    /**
+     * Determine the amount of discrete time ticks for a set of agents to explore 85% of the specified map
+     * @param map_name The map to be explored
+     */
     private static void runCoverage(String map_name)
     {
         final int iterations = 1;
@@ -95,6 +99,11 @@ public class Experiments
         }
     }
 
+    /**
+     * Experiment provides a 1 vs 1 | Capture vs Evasion situation within the thunder-dome.
+     * Specify the default Capture and Evasion agents within the method to alter the pairings.
+     * Experiment output is the number of ticks until the Evasion agent is captured
+     */
     private static void runCapture()
     {
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
@@ -119,6 +128,11 @@ public class Experiments
         }
     }
 
+    /**
+     * Experiment provides a 1 vs 1 | Capture vs Evasion situation within the thunder-dome.
+     * Specify the default Capture and Evasion agents within the method to alter the pairings.
+     * Experiment output is the number of ticks until the Capture agent has lost visual sighting of the Evading agent.
+     */
     public static void runEvasion()
     {
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
@@ -136,11 +150,7 @@ public class Experiments
         {
             String test_heading = "Iteration: " + iterations + ", ";
 
-            Settings settings = FileManager.loadSettings(map_path + "experiment_map_1");
-            settings.setNoOfGuards(1);
-            settings.setNoOfIntruders(1);
-            Map map = new Map(settings);
-            //Map map = generateRandomMap();
+            Map map = generateRandomMap();
 
             TestingEngine gameEngine = new TestingEngine(map, testName);
             int data = (int) gameEngine.runEvasionTest();
