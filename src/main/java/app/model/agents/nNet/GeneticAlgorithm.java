@@ -16,14 +16,14 @@ public class GeneticAlgorithm extends GameEngine
     public static final double epsilon = 0.01;
     public static final double population = 100;
     public static final boolean VERBOSE = false;
-    public static int maxTics = 5;
+    public static int maxTics = 50;
 
     public static void main(String[] args)
     {
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_1");
         ArrayList<NeuralNet> generation = init();
 
-        for(int i = 0; i < 1; i++)
+        for(int i = 0; i < 20; i++)
         {
             System.out.print("Gen " + i + ":  computing");
             generation = select(generation, settings);
