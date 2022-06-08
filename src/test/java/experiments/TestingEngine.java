@@ -69,10 +69,9 @@ public class TestingEngine extends GameEngine
      * intruders on the map (or a limit of n tics)
      * @return the number of tics taken to capture the intruders
      */
-    //TODO Modify capture Test
     public long runCaptureTest()
     {
-        long limit = 100;
+        long limit = 200;
 
         while(!(map.agentsRemaining(Type.INTRUDER) == 0) && tics < limit)
         {

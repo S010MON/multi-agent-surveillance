@@ -18,7 +18,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runInfiltration("experiment_map_1");
+        runCapture();
     }
 
     private static void runCoverage(String map_name)
@@ -101,7 +101,7 @@ public class Experiments
         StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
 
         final String testName = "Capture_Experiment, " + StateTable.getDefaultCaptureAgent() + ", " + StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
+        final int iterations = 1;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
@@ -109,16 +109,12 @@ public class Experiments
         for(int i = 0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + iterations + ", ";
-
             Map map = generateRandomMap();
 
             TestingEngine gameEngine = new TestingEngine(map, testName);
-            //TODO Modify capture test
             int data = (int) gameEngine.runCaptureTest();
-
             logger.log(test_heading + data);
         }
-
     }
 
     private static void runInfiltration(String map_name)
