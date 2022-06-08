@@ -1,5 +1,7 @@
 package app.controller.settings;
 
+import app.controller.linAlg.Intersection;
+import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
@@ -37,16 +39,22 @@ public abstract class RandomSettingsGenerator
     private static final int SPAWN_WIDTH = 20;
     private static final int DELTA = 200; // Distance between spawn areas.
     private static final int MIN_OBSTACLES = 5;
-    private static final int MAX_OBSTACLES = 10;
+    private static final int MAX_OBSTACLES = 35;
     private static final int NUM_SHAPES = 5;
     private static final int MIN_SIDE_LENGTH = 30;
     private static final int MAX_SIDE_LENGTH = 70;
+    private static final int MAX_TIME = 10;
     private static final ArrayList<Rectangle2D> uShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> lShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> tShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> iShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> plusShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> obstacles = new ArrayList<>();
+    private static Vector lineOfClarity1Start;
+    private static Vector lineOfClarity1End;
+    private static Vector lineOfClarity2Start;
+    private static Vector lineOfClarity2End;
+    private static int time = 0;
 
     public static Settings generateRandomSettings()
     {
@@ -125,6 +133,11 @@ public abstract class RandomSettingsGenerator
         basic.addFurniture(intruderSpawn, FurnitureType.INTRUDER_SPAWN);
         obstacles.add(intruderSpawn);
 
+        lineOfClarity1Start = new Vector(guardSpawn.getMaxX(), guardSpawn.getMinY());
+        lineOfClarity1End = new Vector(intruderSpawn.getMinX(), intruderSpawn.getMaxY());
+        lineOfClarity2Start = new Vector(guardSpawn.getMinX(), guardSpawn.getMaxY());
+        lineOfClarity2End = new Vector(intruderSpawn.getMaxX(), intruderSpawn.getMinY());
+
         return basic;
     }
 
@@ -141,7 +154,7 @@ public abstract class RandomSettingsGenerator
         Random rand = new Random();
         int numOfObstacles = rand.nextInt(MAX_OBSTACLES) + MIN_OBSTACLES;
 
-        for(int i = 0; i < numOfObstacles; i++)
+        for(int i = 0; i < 25; i++)
         {
             int shapeType = rand.nextInt(NUM_SHAPES);
             int ranScalar = rand.nextInt(MAX_SIDE_LENGTH) + MIN_SIDE_LENGTH;
@@ -257,16 +270,20 @@ public abstract class RandomSettingsGenerator
         Random rand = new Random();
         int ranX;
         int ranY;
+        Rectangle2D rect;
         do
         {
             ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
                     (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
             ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
                     (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
+            rect = new Rectangle2D(ranX, ranY, scalar, scalar);
+            time++;
         }
-        while(checkOverlaps(new Rectangle2D(ranX, ranY, scalar, scalar)));
+        while(checkOverlaps(rect) || timeout() || checkBlocking(rect));
 
-        obstacles.add(new Rectangle2D(ranX, ranY, scalar, scalar));
+        time = 0;
+        obstacles.add(rect);
 
         ArrayList<Rectangle2D> newWalls;
         double ran = rand.nextDouble();
@@ -308,6 +325,26 @@ public abstract class RandomSettingsGenerator
         return true;
     }
 
+    private static boolean checkBlocking(Rectangle2D r)
+    {
+        Vector northLineStart = new Vector(r.getMinX(), r.getMinY());
+        Vector northLineEnd = new Vector(r.getMaxX(), r.getMinY());
+        Vector eastLineStart = new Vector(r.getMaxX(), r.getMinY());
+        Vector eastLineEnd = new Vector(r.getMaxX(), r.getMaxY());
+        Vector southLineStart = new Vector(r.getMinX(), r.getMaxY());
+        Vector southLineEnd = new Vector(r.getMaxX(), r.getMaxY());
+        Vector westLineStart = new Vector(r.getMinX(), r.getMinY());
+        Vector westLineEnd = new Vector(r.getMinX(), r.getMaxY());
+        return (Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, northLineStart, northLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, eastLineStart, eastLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, southLineStart, southLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, westLineStart, westLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, northLineStart, northLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, eastLineStart, eastLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, southLineStart, southLineEnd) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, westLineStart, westLineEnd));
+    }
+
     private static ArrayList<Rectangle2D> rotateShape(ArrayList<Rectangle2D> walls, int d)
     {
         ArrayList<Rectangle2D> rotatedWalls = new ArrayList<>();
@@ -327,5 +364,10 @@ public abstract class RandomSettingsGenerator
             rotatedWalls.add(rect);
         }
         return rotatedWalls;
+    }
+
+    private static boolean timeout()
+    {
+        return time < MAX_TIME;
     }
 }
