@@ -35,4 +35,13 @@ public class Universe
             instance.hashMap.clear();
         }
     }
+
+    public static void createPerfectUniverse(MemoryGraph perfectWorld)
+    {
+        if(instance == null)
+            instance = new Universe();
+
+        instance.hashMap.put(Type.GUARD, perfectWorld);
+        instance.hashMap.put(Type.INTRUDER, perfectWorld);
+    }
 }

@@ -4,6 +4,7 @@ import app.controller.io.FileManager;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
+import app.model.agents.Universe;
 import jogging.Logger;
 
 import java.util.Arrays;
@@ -121,5 +122,10 @@ public class Experiments
                 logger.log(agent_heading + "," + data);
             }
         }
+    }
+    
+    public static void generatePerfectKnowledge(Map map)
+    {
+        Universe.createPerfectUniverse(map.createFullGraph());
     }
 }
