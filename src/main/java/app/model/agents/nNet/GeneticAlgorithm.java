@@ -40,10 +40,8 @@ public class GeneticAlgorithm extends GameEngine
     public static ArrayList<NeuralNet> init()
     {
         ArrayList<NeuralNet> generation = new ArrayList<>();
-        generation.add(new NeuralNet(new Vector(), new Vector(), 10, Type.INTRUDER));
-        generation.get(0).save();
 
-        for(int i = 1; i < population; i++)
+        for(int i = 0; i < population; i++)
         {
             generation.add(new NeuralNet(NeuralNet.buildNN()));
         }
