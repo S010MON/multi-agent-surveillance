@@ -3,7 +3,6 @@ package app.model.agents;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
-import lombok.Getter;
 import lombok.Setter;
 
 public class StateTable
@@ -63,7 +62,7 @@ public class StateTable
 
     public static String getDefaultCaptureAgent()
     {
-        return defaultEvasionAgent.name() + " ";
+        return defaultCaptureAgent.name() + " ";
     }
 
     public static String getDefaultEvasionAgent()

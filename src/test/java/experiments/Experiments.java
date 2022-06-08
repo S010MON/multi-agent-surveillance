@@ -18,7 +18,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runCapture();
+        //runEvasion();
     }
 
     private static void runCoverage(String map_name)
@@ -135,11 +135,16 @@ public class Experiments
         for(int i =0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + iterations + ", ";
-            Map map = generateRandomMap();
+
+            Settings settings = FileManager.loadSettings(map_path + "experiment_map_1");
+            settings.setNoOfGuards(1);
+            settings.setNoOfIntruders(1);
+            Map map = new Map(settings);
+            //Map map = generateRandomMap();
 
             TestingEngine gameEngine = new TestingEngine(map, testName);
-            //TODO Create Evasion test
-            //TODO Log the data
+            int data = (int) gameEngine.runEvasionTest();
+            logger.log(test_heading + data);
         }
     }
 
