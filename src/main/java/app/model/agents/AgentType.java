@@ -3,6 +3,7 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
+import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
 import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
@@ -21,6 +22,7 @@ public enum AgentType
     EVASION_RANDOM,
     EVASION_DIRECTED,
     EVASION_RANDOMDIRECTED,
+    CAPTURE,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
     RANDOM;
@@ -58,6 +60,9 @@ public enum AgentType
             }
             case EVASION_RANDOMDIRECTED -> {
                 return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
+            }
+            case CAPTURE -> {
+                return new CaptureAgent(position, direction, radius, type);
             }
             case WALL_FOLLOW_MED_DIR_HEURISTIC ->
             {
