@@ -101,7 +101,7 @@ public class GeneticAlgorithm extends GameEngine
         double prevPercentage = 0;
         double currentPercentage = 0;
 
-        while(!complete() && tics < 1000 )
+        while(!complete() && tics < 500 )
         {
             tick();
 
