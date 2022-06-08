@@ -13,9 +13,9 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
-    public static final double epsilon = 0.1;
+    public static final double epsilon = 0.01;
     public static final double population = 100;
-    public static final boolean VERBOSE = false;
+    public static final boolean VERBOSE = true;
     public static int maxTics = 10;
 
     public static void main(String[] args)

@@ -31,7 +31,7 @@ public class NeuralNet extends AgentImp implements Comparable
     @Getter private String resourcePath = "nNet/full/";
     private static int inputsNum = 360;
     private static int outputsNum = 8;
-    private static int hiddenSize = 600;
+    private static int[] hiddenSize = {600, 600, 360};
     @Getter @Setter private double score = 0;
 
     public NeuralNet(Vector position, Vector direction, double radius, Type type)
@@ -39,11 +39,13 @@ public class NeuralNet extends AgentImp implements Comparable
         super(position, direction, radius, type);
         try
         {
+            System.out.print("Loading network from file ");
             this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(saveName));
             NetworkManager.fillNN(this);
         }
         catch(Exception exception)
         {
+            exception.printStackTrace();
             System.out.println(saveName + " not found, generating new network");
             this.neuralNet = buildNN();
         }
@@ -227,9 +229,9 @@ public class NeuralNet extends AgentImp implements Comparable
     {
         return FeedForwardNetwork.builder()
                                  .addInputLayer(inputsNum)
-                                 .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
-                                 .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
-                                 .addFullyConnectedLayer(hiddenSize,ActivationType.RELU)
+                                 .addFullyConnectedLayer(hiddenSize[0],ActivationType.RELU)
+                                 .addFullyConnectedLayer(hiddenSize[1],ActivationType.RELU)
+                                 .addFullyConnectedLayer(hiddenSize[2],ActivationType.RELU)
                                  .addOutputLayer(outputsNum, ActivationType.TANH)
                                  .lossFunction(LossType.CROSS_ENTROPY)
                                  .randomSeed(123)
