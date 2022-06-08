@@ -71,10 +71,39 @@ public class TestingEngine extends GameEngine
      */
     public long runCaptureTest()
     {
-        long limit = 100;
+        long limit = 200;
 
         while(!(map.agentsRemaining(Type.INTRUDER) == 0) && tics < limit)
         {
+            tick();
+            updateTicsRemaining(tics, limit);
+        }
+        System.out.println(" - complete");
+        return tics;
+    }
+
+    /**
+     * Determines the quantity of ticks required for a capture agent to lose visual sight of an evading agent
+     * for more that an escape limit (Ticks equal or above this indicate an escape)
+     * @return The number of ticks until the evading agent has lost the capture agent
+     */
+    public long runEvasionTest()
+    {
+        long limit = 200;
+        long noVisualDuration = 0;
+        long escapeLimit = 20;
+
+        while(noVisualDuration < escapeLimit && tics < limit)
+        {
+            if(!map.intruderVisual())
+            {
+                noVisualDuration ++;
+            }
+            else
+            {
+                noVisualDuration = 0;
+            }
+
             tick();
             updateTicsRemaining(tics, limit);
         }
