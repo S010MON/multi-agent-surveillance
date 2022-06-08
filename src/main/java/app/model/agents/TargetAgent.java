@@ -74,7 +74,7 @@ public class TargetAgent extends AgentImp
     public Agent nextState()
     {
         if(isTypeSeen(Type.GUARD))
-            return new EvasionAgent(this);
+            return StateTable.captureTableSearch(this);
         if(targetLost || moveFailed)
             return new WallFollowAgent(this);
 
