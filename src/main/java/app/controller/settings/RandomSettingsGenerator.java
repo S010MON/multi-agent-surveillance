@@ -1,7 +1,6 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Intersection;
-import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
@@ -11,35 +10,13 @@ import java.util.Random;
 
 public abstract class RandomSettingsGenerator
 {
-    /**
-     * Method for base settings always required.
-     *  - 1 guard, 1 intruder.
-     *  - Height + Width. (600 x 800) default.
-     *  - Spawn area locations. 20 x 20 with a distance 'delta' between them.
-     *  - Target area behind outer boundaries.
-     *
-     * Calculate the area where obstacles cannot be placed.
-     *
-     * Template shapes: U, L, T, I, + etc.
-     *
-     * Generate the random points on the map where these objects can be placed. Create the random boxes from the point
-     * as top left with random height + width.
-     *
-     * Check for overlaps between objects.
-     */
-
-    // TODO 1: Random with and height of boxes. CHECK
-    //      2: Random orientation of shapes within the boxes. CHECK
-    //      3: Check no overlapping shapes with the specified margin.
-    //      4: Check no shape in the corridor of clarity.
-
     private static final int HEIGHT = 600;
     private static final int WIDTH = 800;
     private static final int SPAWN_HEIGHT = 20;
     private static final int SPAWN_WIDTH = 20;
     private static final int DELTA = 200; // Distance between spawn areas.
     private static final int MIN_OBSTACLES = 5;
-    private static final int MAX_OBSTACLES = 35;
+    private static final int MAX_OBSTACLES = 20;
     private static final int NUM_SHAPES = 5;
     private static final int MIN_SIDE_LENGTH = 30;
     private static final int MAX_SIDE_LENGTH = 70;
@@ -62,20 +39,8 @@ public abstract class RandomSettingsGenerator
 
         Settings randomSettings = createBaseSettings();
         createRandomObstacles(randomSettings);
-        //testRandom(randomSettings);
 
         return randomSettings;
-    }
-
-    private static void testRandom(Settings s)
-    {
-        ArrayList<Rectangle2D> uWalls = scaleU(70);
-        ArrayList<Rectangle2D> rotated = rotateShape(uWalls, 90);
-        for(Rectangle2D wall : rotated)
-        {
-            s.addFurniture(new Rectangle2D(wall.getMinX() + 600, wall.getMinY() + 450,
-                    wall.getWidth(), wall.getHeight()), FurnitureType.WALL);
-        }
     }
 
     private static void initialiseTemplates()
@@ -154,7 +119,7 @@ public abstract class RandomSettingsGenerator
         Random rand = new Random();
         int numOfObstacles = rand.nextInt(MAX_OBSTACLES) + MIN_OBSTACLES;
 
-        for(int i = 0; i < 25; i++)
+        for(int i = 0; i < numOfObstacles; i++)
         {
             int shapeType = rand.nextInt(NUM_SHAPES);
             int ranScalar = rand.nextInt(MAX_SIDE_LENGTH) + MIN_SIDE_LENGTH;
@@ -273,10 +238,8 @@ public abstract class RandomSettingsGenerator
         Rectangle2D rect;
         do
         {
-            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
-                    (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
-            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) +
-                    (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH);
+            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) + 10;
+            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH) * 2) + 10;
             rect = new Rectangle2D(ranX, ranY, scalar, scalar);
             time++;
         }

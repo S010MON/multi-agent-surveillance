@@ -8,16 +8,16 @@ public abstract class SettingsGenerator
     public static Settings mockSettings()
     {
         Settings settings = new Settings();
-        settings.setName("RandomlyGenerated");
+        settings.setName("best_Map");
         settings.setGameMode(1);
         settings.setWidth(800);
         settings.setHeight(600);
-        settings.setNoOfGuards(1);
-        settings.setNoOfIntruders(1);
-        settings.setWalkSpeedGuard(14);
-        settings.setWalkSpeedIntruder(14);
-        settings.setSprintSpeedGuard(21);
-        settings.setSprintSpeedIntruder(21);
+        settings.setNoOfGuards(3);
+        settings.setNoOfIntruders(5);
+        settings.setWalkSpeedGuard(13.5);
+        settings.setWalkSpeedIntruder(15.0);
+        settings.setSprintSpeedGuard(21.5);
+        settings.setSprintSpeedIntruder(23);
         return settings;
     }
 
