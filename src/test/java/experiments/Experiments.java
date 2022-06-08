@@ -19,7 +19,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runCapture();
+        runEvasion();
     }
 
     private static void runCoverage(String map_name)
@@ -68,7 +68,7 @@ public class Experiments
     @Deprecated
     private static void runCapture(String map_name)
     {
-        final int iterations = 10;
+        final int iterations = 100;
         final int[] no_of_guards = {1, 2, 3, 4 ,5, 6};
 
         System.out.println("Loading map: " + map_name);
@@ -109,7 +109,7 @@ public class Experiments
         final String testName = "Capture_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
-        final int iterations = 10;
+        final int iterations = 100;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
@@ -117,13 +117,12 @@ public class Experiments
         for(int i = 0; i < iterations; i++)
         {
             String test_heading = "Iteration: " + i +  "/" + iterations + " ";
-            System.out.println(test_heading);
 
             Map map = generateRandomMap();
 
-            TestingEngine gameEngine = new TestingEngine(map, testName);
+            TestingEngine gameEngine = new TestingEngine(map, test_heading);
             int data = (int) gameEngine.runCaptureTest();
-            logger.log(test_heading + data);
+            logger.log(test_heading + ", " + data);
         }
     }
 
@@ -140,21 +139,20 @@ public class Experiments
         final String testName = "Evasion_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
+        final int iterations = 10;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
 
         for(int i =0; i < iterations; i++)
         {
-            String test_heading = "Iteration: " + iterations + ", ";
-            System.out.println(test_heading);
+            String test_heading = "Iteration: " + i +  "/" + iterations + " ";
 
             Map map = generateRandomMap();
 
-            TestingEngine gameEngine = new TestingEngine(map, testName);
+            TestingEngine gameEngine = new TestingEngine(map, test_heading);
             int data = (int) gameEngine.runEvasionTest();
-            logger.log(test_heading + data);
+            logger.log(test_heading + "," + data);
         }
     }
 
