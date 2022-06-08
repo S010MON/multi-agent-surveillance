@@ -281,31 +281,57 @@ public abstract class RandomSettingsGenerator
 
     private static boolean checkOverlap(Rectangle2D r1, Rectangle2D r2)
     {
-        if(r1.getMaxX() < r2.getMinX() || r1.getMinX() > r2.getMaxX())
-            return false;
-        if(r1.getMaxY() < r2.getMinY() || r1.getMinY() > r2.getMaxY())
-            return false;
-        return true;
+        Vector topLeft1 = new Vector(r1.getMinX(), r1.getMinY());
+        Vector topRight1 = new Vector(r1.getMaxX(), r1.getMinY());
+        Vector bottomRight1 = new Vector(r1.getMaxX(), r1.getMaxY());
+        Vector bottomLeft1 = new Vector(r1.getMinX(), r1.getMaxY());
+
+        Vector topLeft2 = new Vector(r2.getMinX(), r2.getMinY());
+        Vector topRight2 = new Vector(r2.getMaxX(), r2.getMinY());
+        Vector bottomRight2 = new Vector(r2.getMaxX(), r2.getMaxY());
+        Vector bottomLeft2 = new Vector(r2.getMinX(), r2.getMaxY());
+
+        return (Intersection.hasIntersection(topLeft1, topRight1, topLeft2, topRight2) ||
+                Intersection.hasIntersection(topLeft1, topRight1, topRight2, bottomRight2) ||
+                Intersection.hasIntersection(topLeft1, topRight1, bottomLeft2, bottomRight2) ||
+                Intersection.hasIntersection(topLeft1, topRight1, topLeft2, bottomLeft2) ||
+                Intersection.hasIntersection(topRight1, bottomRight1, topLeft2, topRight2) ||
+                Intersection.hasIntersection(topRight1, bottomRight1, topRight2, bottomRight2) ||
+                Intersection.hasIntersection(topRight1, bottomRight1, bottomLeft2, bottomRight2) ||
+                Intersection.hasIntersection(topRight1, bottomRight1, topLeft2, bottomLeft2) ||
+                Intersection.hasIntersection(bottomLeft1, bottomRight1, topLeft2, topRight2) ||
+                Intersection.hasIntersection(bottomLeft1, bottomRight1, topRight2, bottomRight2) ||
+                Intersection.hasIntersection(bottomLeft1, bottomRight1, bottomLeft2,
+                        bottomRight2) ||
+                Intersection.hasIntersection(bottomLeft1, bottomRight1, topLeft2, bottomLeft2) ||
+                Intersection.hasIntersection(topLeft1, bottomLeft1, topLeft2, topRight2) ||
+                Intersection.hasIntersection(topLeft1, bottomLeft1, topRight2, bottomRight2) ||
+                Intersection.hasIntersection(topLeft1, bottomLeft1, bottomLeft2, bottomRight2) ||
+                Intersection.hasIntersection(topLeft1, bottomLeft1, topLeft2, bottomLeft2));
     }
 
     private static boolean checkBlocking(Rectangle2D r)
     {
-        Vector northLineStart = new Vector(r.getMinX(), r.getMinY());
-        Vector northLineEnd = new Vector(r.getMaxX(), r.getMinY());
-        Vector eastLineStart = new Vector(r.getMaxX(), r.getMinY());
-        Vector eastLineEnd = new Vector(r.getMaxX(), r.getMaxY());
-        Vector southLineStart = new Vector(r.getMinX(), r.getMaxY());
-        Vector southLineEnd = new Vector(r.getMaxX(), r.getMaxY());
-        Vector westLineStart = new Vector(r.getMinX(), r.getMinY());
-        Vector westLineEnd = new Vector(r.getMinX(), r.getMaxY());
-        return (Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, northLineStart, northLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, eastLineStart, eastLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, southLineStart, southLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, westLineStart, westLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, northLineStart, northLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, eastLineStart, eastLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, southLineStart, southLineEnd) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, westLineStart, westLineEnd));
+        Vector topLeft = new Vector(r.getMinX(), r.getMinY());
+        Vector topRight = new Vector(r.getMaxX(), r.getMinY());
+        Vector bottomRight = new Vector(r.getMaxX(), r.getMaxY());
+        Vector bottomLeft = new Vector(r.getMinX(), r.getMaxY());
+        return (Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topLeft,
+                        topRight) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topRight,
+                        bottomRight) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, bottomLeft,
+                        bottomRight) ||
+                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topLeft,
+                        bottomLeft) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topLeft,
+                        topRight) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topRight,
+                        bottomRight) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, bottomLeft,
+                        bottomRight) ||
+                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topLeft,
+                        bottomLeft));
     }
 
     private static ArrayList<Rectangle2D> rotateShape(ArrayList<Rectangle2D> walls, int d)
