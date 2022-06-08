@@ -1,6 +1,7 @@
 package experiments;
 
 import app.controller.io.FileManager;
+import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
@@ -18,7 +19,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        //runEvasion();
+        runCapture();
     }
 
     /**
@@ -107,19 +108,19 @@ public class Experiments
     private static void runCapture()
     {
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
-        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
+        StateTable.setDefaultEvasionAgent(AgentType.EVASION_RANDOM);
 
         final String testName = "Capture_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
+        final int iterations = 10;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
 
         for(int i = 0; i < iterations; i++)
         {
-            String test_heading = "Iteration: " + iterations + ", ";
+            String test_heading = "Iteration: " + i +  "/" + iterations + " ";
             System.out.println(test_heading);
 
             Map map = generateRandomMap();
@@ -193,8 +194,7 @@ public class Experiments
 
     private static Map generateRandomMap()
     {
-        //TODO Generate random map settings object
-        Settings settings = new Settings();
+        Settings settings = RandomSettingsGenerator.generateRandomSettings();
         settings.setNoOfGuards(1);
         settings.setNoOfIntruders(1);
 
