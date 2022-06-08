@@ -4,6 +4,7 @@ import app.controller.linAlg.Vector;
 import app.model.Map;
 import app.model.agents.Cells.GraphCell;
 import lombok.Getter;
+import lombok.Setter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public abstract class World
     @Getter private ArrayList<Integer> verticalWallsCovered = new ArrayList<>();
 
     @Getter public MemoryGraph<GraphCell, DefaultWeightedEdge> G;
-    @Getter public Map map = null;
+    @Getter @Setter public Map map = null;
 
     public World(MemoryGraph G)
     {

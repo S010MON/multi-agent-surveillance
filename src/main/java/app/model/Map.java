@@ -5,11 +5,8 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.controller.soundEngine.SoundSource;
-import app.model.agents.Agent;
-import app.model.agents.AgentType;
+import app.model.agents.*;
 import app.model.agents.Cells.GraphCell;
-import app.model.agents.Human;
-import app.model.agents.MemoryGraph;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -85,8 +82,8 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
+            Universe.setMap(this);
             Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
-            intruder.getWorld().map = this;
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
             agents.add(intruder);
@@ -133,6 +130,7 @@ public class Map
 
     public MemoryGraph createFullGraph()
     {
+        System.out.println("created full graph");
         MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(20);
         for (int i=10; i<height; i+=20)
         {
@@ -286,6 +284,7 @@ public class Map
             new_states.add(a.nextState());
         }
         agents = new_states;
+        System.out.println("Agent states: " + new_states);
     }
 
 

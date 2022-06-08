@@ -55,6 +55,9 @@ public class EvasionAgent extends AgentImp
             case RANDOM -> {
                 return moveRandom();
             }
+            case INTELLIGENT -> {
+                return moveIntelligent();
+            }
         }
         return null;
     }
@@ -140,6 +143,11 @@ public class EvasionAgent extends AgentImp
             moveCounter++;
             return moveRandomDirected(0.1);
         }
+    }
+
+    protected Move moveIntelligent()
+    {
+        return new Move(direction, new Vector());
     }
 
     private boolean maxTicsReached()

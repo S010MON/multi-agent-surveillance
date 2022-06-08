@@ -3,36 +3,68 @@ package app.model.agents.Evasion;
 import app.controller.graphicsEngine.GraphicsEngine;
 import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
+import app.model.Map;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.Agent;
 import app.model.agents.Cells.GraphCell;
+import app.model.agents.Universe;
+import app.model.agents.WallFollow.WfWorld;
+import app.model.agents.World;
 import app.model.boundary.Boundary;
+import lombok.Getter;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class IntelligentEvasionAgent extends EvasionAgent
 {
     private GraphicsEngine grEng = new GraphicsEngine();
+    private List<GraphCell> pathToNextVertex = new ArrayList<>();
+    private GraphCell nextPathVertex = null;
+    private GraphCell targetVertex = null;
+    @Getter private World world;
+    private Map map;
+    private final List<Vector> directions = Arrays.asList(new Vector(0,1),
+            new Vector(1,0),
+            new Vector(0,-1),
+            new Vector(-1,0));
 
     public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
         super(position, direction, radius, type, strategy);
+        if (!Universe.isIsPerfectUniverse())
+        {
+            Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
+        }
+        world = new WfWorld(Universe.getMemoryGraph(type));
+        map = Universe.getMap();
     }
 
-    private IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type)
+    public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type, EvasionStrategy.INTELLIGENT);
+        if (!Universe.isIsPerfectUniverse())
+        {
+            Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
+        }
+        world = new WfWorld(Universe.getMemoryGraph(type));
+        map = Universe.getMap();
     }
 
-    private IntelligentEvasionAgent(Agent other)
+    public IntelligentEvasionAgent(Agent other)
     {
         this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         copyOver(other);
+        if (!Universe.isIsPerfectUniverse())
+        {
+            Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
+        }
+        world = new WfWorld(Universe.getMemoryGraph(type));
         updateKnowledge();
     }
 
@@ -60,25 +92,25 @@ public class IntelligentEvasionAgent extends EvasionAgent
     Problems / questions:
         - lines of sight calculation to shortest path?
         - how to check closed corner vs open space?
-        - how to select direction for wall following (direction agent?)
      */
 
-    private Move moveIntelligent()
+    @Override protected Move moveIntelligent()
     {
         /*
-        1. update knowledge
-        2. get predicted guard path
-        3. get possible vertices
-        4. calculate scores and pick best score vertex
-        5. calculate shortest path to that vertex
-        6. move there
-        7. WHAT HAPPENS NEXT? switch between wall following?
+        1. if no current path to follow
+            2. get predicted guard path
+            3. get possible vertices
+            4. calculate scores and pick best score vertex
+            5. calculate shortest path to that vertex and save the path
+        6. make move based on path
          */
-        updateKnowledge();
-        List<GraphCell> predictedGuardPath = getPredictedGuardPath();
-        HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
-
-        return new Move(direction, new Vector(0,0));
+        if (pathToNextVertex.isEmpty())
+        {
+            List<GraphCell> predictedGuardPath = getPredictedGuardPath();
+            HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
+            setBestScoreVertexPath(possibleVertices);
+        }
+        return getMoveBasedOnPath();
     }
 
     /**
@@ -86,12 +118,15 @@ public class IntelligentEvasionAgent extends EvasionAgent
      */
     private List getPredictedGuardPath()
     {
+        // TODO actually use the predicted path
+        //  currently using only guard's initial position
+
         GraphCell guardVertex = world.getVertexAt(new Vector(closestGuard.getX(),closestGuard.getY()));
-        GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
-        if (predictedPath != null)
-        {
-            return predictedPath.getVertexList();
-        }
+//        GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
+//        if (predictedPath != null)
+//        {
+//            return predictedPath.getVertexList();
+//        }
         ArrayList<GraphCell> guardVertexList = new ArrayList();
         guardVertexList.add(guardVertex);
         return guardVertexList;
@@ -134,9 +169,9 @@ public class IntelligentEvasionAgent extends EvasionAgent
     {
         ArrayList<GraphCell> hiddenPositions = new ArrayList<>();
         ArrayList<Boundary> boundaries = new ArrayList<>();
-        if (world.map != null)
+        if (map != null)
         {
-            boundaries = grEng.collectBoundaries(getWorld().map);
+            boundaries = grEng.collectBoundaries(map);
         }
         else
         {
@@ -160,6 +195,115 @@ public class IntelligentEvasionAgent extends EvasionAgent
             }
         }
         return hiddenPositions;
+    }
+
+    /**
+     * Set the path to the best (minimum) scored vertex
+     * @param vertexMap possible vertices HashMap
+     */
+    private void setBestScoreVertexPath(HashMap<GraphCell,Integer> vertexMap)
+    {
+        double minScore = 0;
+        for (GraphCell vertex : vertexMap.keySet())
+        {
+            GraphPath shortestPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
+            double score = calculateVertexScore(vertexMap.get(vertex),shortestPath);
+            if (score < minScore)
+            {
+                pathToNextVertex = shortestPath.getVertexList();
+                targetVertex = pathToNextVertex.get(pathToNextVertex.size()-1);
+            }
+        }
+    }
+
+    /**
+     * Calculate score based on
+     * 1. shortest path length,
+     * 2. how many hidden lines of sight it has,
+     * 3. direction TODO maybe later
+     * score = shortest path length / hidden lines of sight TODO maybe add direction score later
+     * @return score
+     */
+    private double calculateVertexScore(int nrHiddenLines, GraphPath pathToVertex)
+    {
+        double score = Double.MAX_VALUE;
+        if (pathToVertex != null)
+        {
+            score = pathToVertex.getLength();
+        }
+        score = score / nrHiddenLines;
+        return score;
+    }
+
+    public Move getMoveBasedOnPath()
+    {
+        GraphCell nextVertex = pathToNextVertex.get(0);
+        if (nextVertex.equals(world.getVertexAt(position)))
+        {
+            pathToNextVertex.remove(nextVertex);
+            nextVertex = pathToNextVertex.get(0);
+        }
+        Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
+        if (nextDir.equals(direction))
+        {
+            double deltaX = nextVertex.getX() - world.getVertexAt(position).getX();
+            double deltaY = nextVertex.getY() - world.getVertexAt(position).getY();
+            pathToNextVertex.remove(nextVertex);
+            return new Move(direction, new Vector(deltaX,deltaY));
+        }
+        else
+        {
+            if (rotateAgentLeft().equals(nextDir))
+            {
+                return new Move(rotateAgentLeft(),new Vector(0,0));
+            }
+            else if (rotateAgentRight().equals(nextDir))
+            {
+                return new Move(rotateAgentRight(),new Vector(0,0));
+            }
+            else
+            {
+                return new Move(rotateAgentLeft(),new Vector(0,0));
+            }
+        }
+    }
+
+    public Vector rotateAgentLeft()
+    {
+        for (int i = 0; i <= directions.size(); i++)
+        {
+            if (direction.equals(directions.get(i)))
+            {
+                if (i == directions.size()-1)
+                {
+                    return directions.get(0);
+                }
+                else
+                {
+                    return directions.get(i+1);
+                }
+            }
+        }
+        throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
+    }
+
+    public Vector rotateAgentRight()
+    {
+        for (int i = 0; i <= directions.size(); i++)
+        {
+            if (direction.equals(directions.get(i)))
+            {
+                if (i == 0)
+                {
+                    return directions.get(3);
+                }
+                else
+                {
+                    return directions.get(i-1);
+                }
+            }
+        }
+        throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
     }
 
 }
