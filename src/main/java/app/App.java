@@ -1,5 +1,6 @@
 package app;
 
+import app.controller.settings.Settings;
 import app.view.FileMenuBar;
 import app.view.simulation.Simulation;
 import app.view.ScreenSize;
@@ -63,6 +64,13 @@ public class App extends Application
     public void gotoSimulation(String fileName)
     {
         simulation = new Simulation(this, fileName);
+        scene.setOnKeyTyped(e -> simulation.handleKey(e));
+        scene.setRoot(simulation);
+    }
+
+    public void gotoSimulation(Settings settings)
+    {
+        simulation = new Simulation(this, settings);
         scene.setOnKeyTyped(e -> simulation.handleKey(e));
         scene.setRoot(simulation);
     }
