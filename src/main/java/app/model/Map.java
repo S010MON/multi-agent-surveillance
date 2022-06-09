@@ -284,7 +284,6 @@ public class Map
             new_states.add(a.nextState());
         }
         agents = new_states;
-        System.out.println("Agent states: " + new_states);
     }
 
 

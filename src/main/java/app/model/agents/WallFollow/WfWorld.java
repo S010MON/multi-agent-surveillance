@@ -1,7 +1,6 @@
 package app.model.agents.WallFollow;
 
 import app.controller.linAlg.Vector;
-import app.model.Map;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.MemoryGraph;
 import app.model.agents.World;
@@ -12,8 +11,6 @@ import java.util.List;
 
 public class WfWorld extends World
 {
-    private Map map;
-
     public WfWorld(MemoryGraph G)
     {
         super(G);
@@ -82,6 +79,8 @@ public class WfWorld extends World
     @Override
     public GraphCell getNonObstacleNeighbour(GraphCell vertex)
     {
+        // TODO "Cannot invoke "app.model.agents.Cells.GraphCell.getObstacle()" because "vertex" is null"
+        //  probably the issue of being on the border of the map
         if (vertex.getObstacle())
         {
             List<GraphCell> neighbours = Graphs.neighborListOf(G,vertex);
@@ -92,7 +91,8 @@ public class WfWorld extends World
                     return n;
                 }
             }
-            throw new RuntimeException("Vertex has no non-obstacle neighbours!");
+            //throw new RuntimeException("Vertex has no non-obstacle neighbours!");
+            System.out.println("Moving to a vertex that is an obstacle.");
         }
         return vertex;
     }

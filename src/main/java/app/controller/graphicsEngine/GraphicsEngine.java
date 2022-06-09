@@ -5,6 +5,8 @@ import app.model.agents.Agent;
 import app.model.Map;
 import app.model.Type;
 import app.model.boundary.Boundary;
+import app.model.furniture.Furniture;
+
 import java.util.ArrayList;
 
 public class GraphicsEngine
@@ -90,6 +92,19 @@ public class GraphicsEngine
         ArrayList<Boundary> boundaries = new ArrayList<>();
         map.getFurniture()
                 .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
+        return boundaries;
+    }
+
+    public ArrayList<Boundary> collectWallBoundaries(Map map)
+    {
+        ArrayList<Boundary> boundaries = new ArrayList<>();
+        for (Furniture f : map.getFurniture())
+        {
+            if (f.getType().name() == "WALL")
+            {
+                boundaries.addAll(f.getBoundaries());
+            }
+        }
         return boundaries;
     }
 

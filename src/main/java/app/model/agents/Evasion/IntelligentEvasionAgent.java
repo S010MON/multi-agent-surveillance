@@ -24,11 +24,12 @@ import java.util.List;
 public class IntelligentEvasionAgent extends EvasionAgent
 {
     private GraphicsEngine grEng = new GraphicsEngine();
-    private List<GraphCell> pathToNextVertex = new ArrayList<>();
+    private ArrayList<GraphCell> pathToNextVertex = new ArrayList<>();
     private GraphCell nextPathVertex = null;
     private GraphCell targetVertex = null;
     @Getter private World world;
     private Map map;
+    private ArrayList<Boundary> wallBoundaries = new ArrayList<>();
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
@@ -43,6 +44,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
         world = new WfWorld(Universe.getMemoryGraph(type));
         map = Universe.getMap();
+        wallBoundaries = grEng.collectWallBoundaries(map);
     }
 
     public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type)
@@ -54,6 +56,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
         world = new WfWorld(Universe.getMemoryGraph(type));
         map = Universe.getMap();
+        wallBoundaries = grEng.collectWallBoundaries(map);
     }
 
     public IntelligentEvasionAgent(Agent other)
@@ -71,21 +74,6 @@ public class IntelligentEvasionAgent extends EvasionAgent
     /*
     Idea based on: http://lisc.mae.cornell.edu/LISCpresentations/SE_07_25_18.pdf
         main idea is to minimize observability of the evasion agent to the guard based on guard's predicted path/strategy
-    The evasion strategy / algorithm:
-        if guard / capture agent detected:
-            calculate shortest path between me and guard
-        get currently explored points within a range
-            for each of the points calculate if there is direct line of sight between that point and guard agent
-                (do that for points on the shortest path as well)
-            use heuristics to pick the best point to move to
-                score consist of dijkstra's shortest path length, lines of sight to the predicted guard path,
-                direction of the agent, if point is close to a closed corner
-        move to the picked point
-        if wall encountered
-            if nr of ticks passed since last seeing guard
-                do wall following based on target direction
-            else
-                do wall following away from guard's path
      */
 
     /*
@@ -97,12 +85,17 @@ public class IntelligentEvasionAgent extends EvasionAgent
     @Override protected Move moveIntelligent()
     {
         /*
+        // TODO before each move (or every 5 moves?) check if target vertex is still a valid point to move to
+        // TODO if agent goes to a hidden place,
+            either try moving away from last known agent position (based on direction?)
+            or move towards target
+            (currently just stays put)
         1. if no current path to follow
             2. get predicted guard path
             3. get possible vertices
             4. calculate scores and pick best score vertex
             5. calculate shortest path to that vertex and save the path
-        6. make move based on path
+        6. make move based on path if path exists, rotate otherwise
          */
         if (pathToNextVertex.isEmpty())
         {
@@ -110,7 +103,11 @@ public class IntelligentEvasionAgent extends EvasionAgent
             HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
             setBestScoreVertexPath(possibleVertices);
         }
-        return getMoveBasedOnPath();
+        if (!pathToNextVertex.isEmpty())
+        {
+            return getMoveBasedOnPath();
+        }
+        return new Move(rotateAgentRight(),new Vector(0,0));
     }
 
     /**
@@ -122,11 +119,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         //  currently using only guard's initial position
 
         GraphCell guardVertex = world.getVertexAt(new Vector(closestGuard.getX(),closestGuard.getY()));
-//        GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
-//        if (predictedPath != null)
-//        {
-//            return predictedPath.getVertexList();
-//        }
+        // System.out.println("Guard position: " + guardVertex);
+        GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
+        if (predictedPath != null)
+        {
+            return predictedPath.getVertexList();
+        }
         ArrayList<GraphCell> guardVertexList = new ArrayList();
         guardVertexList.add(guardVertex);
         return guardVertexList;
@@ -144,6 +142,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
         for (GraphCell vertex : predictedPath)
         {
             Vector guardPos = new Vector(vertex.getX(), vertex.getY());
+            //System.out.println("Guard pos vector: " + guardPos.getX() + " " + guardPos.getY() + " angle " + guardPos.getAngle());
             ArrayList<GraphCell> hiddenPositions = getHiddenPositions(guardPos);
             for (GraphCell pos : hiddenPositions)
             {
@@ -157,6 +156,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
                 }
             }
         }
+        //System.out.println("Hashmap of possible vertices: " + possibleVertices.keySet());
         return possibleVertices;
     }
 
@@ -168,21 +168,16 @@ public class IntelligentEvasionAgent extends EvasionAgent
     private ArrayList<GraphCell> getHiddenPositions(Vector guardPos)
     {
         ArrayList<GraphCell> hiddenPositions = new ArrayList<>();
-        ArrayList<Boundary> boundaries = new ArrayList<>();
-        if (map != null)
-        {
-            boundaries = grEng.collectBoundaries(map);
-        }
-        else
-        {
-            throw new RuntimeException("Evasion agent does not have access to the map!");
-        }
+        //System.out.println("GETTING HIDDEN POSITIONS");
+        //System.out.println("Agent pos. " + world.getVertexAt(position));
         for (Ray r : view)
         {
             Vector wallPoint = r.getV();
+            //System.out.println("Wall point: " + wallPoint);
             Ray lineOfSight = new Ray(wallPoint,guardPos);
             double lineLength = lineOfSight.length();
-            Vector intersection = grEng.getIntersection(lineOfSight, boundaries);
+            //System.out.println("Actual line length to guard: " + lineLength);
+            Vector intersection = grEng.getIntersection(lineOfSight, wallBoundaries);
             double actualSightLength = lineLength;
             if (intersection != null)
             {
@@ -190,8 +185,16 @@ public class IntelligentEvasionAgent extends EvasionAgent
             }
             if (actualSightLength < lineLength)
             {
-                GraphCell vertex = world.getNonObstacleNeighbour(world.getVertexAt(wallPoint));
-                hiddenPositions.add(vertex);
+                //System.out.println("FOUND HIDDEN LINE OF SIGHT");
+                GraphCell wallPointVertex = world.getVertexAt(wallPoint);
+                if (wallPointVertex != null)
+                {
+                    GraphCell vertex = world.getNonObstacleNeighbour(wallPointVertex);
+                    if (!hiddenPositions.contains(vertex))
+                    {
+                        hiddenPositions.add(vertex);
+                    }
+                }
             }
         }
         return hiddenPositions;
@@ -203,16 +206,21 @@ public class IntelligentEvasionAgent extends EvasionAgent
      */
     private void setBestScoreVertexPath(HashMap<GraphCell,Integer> vertexMap)
     {
-        double minScore = 0;
+        double minScore = Double.MAX_VALUE;
+        List<GraphCell> pathList = new ArrayList<>();
         for (GraphCell vertex : vertexMap.keySet())
         {
             GraphPath shortestPath = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(position), vertex);
             double score = calculateVertexScore(vertexMap.get(vertex),shortestPath);
             if (score < minScore)
             {
-                pathToNextVertex = shortestPath.getVertexList();
-                targetVertex = pathToNextVertex.get(pathToNextVertex.size()-1);
+                pathList = shortestPath.getVertexList();
             }
+        }
+        if (!pathList.isEmpty())
+        {
+            pathToNextVertex.addAll(pathList);
+            targetVertex = pathToNextVertex.get(pathToNextVertex.size()-1);
         }
     }
 
@@ -240,8 +248,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         GraphCell nextVertex = pathToNextVertex.get(0);
         if (nextVertex.equals(world.getVertexAt(position)))
         {
-            pathToNextVertex.remove(nextVertex);
-            nextVertex = pathToNextVertex.get(0);
+            pathToNextVertex.remove(0);
+            if (!pathToNextVertex.isEmpty())
+            {
+                nextVertex = pathToNextVertex.get(0);
+            }
+
         }
         Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
         if (nextDir.equals(direction))
