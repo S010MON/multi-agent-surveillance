@@ -85,18 +85,23 @@ public class IntelligentEvasionAgent extends EvasionAgent
     @Override protected Move moveIntelligent()
     {
         /*
-        // TODO before each move (or every 5 moves?) check if target vertex is still a valid point to move to
         // TODO if agent goes to a hidden place,
             either try moving away from last known agent position (based on direction?)
             or move towards target
             (currently just stays put)
+        0. check if current target hiding place is still hidden from guard (if not clear path)
         1. if no current path to follow
             2. get predicted guard path
             3. get possible vertices
-            4. calculate scores and pick best score vertex
+            4. calculate scores and pick best score vertex  TODO adjust weights or score calculation
             5. calculate shortest path to that vertex and save the path
         6. make move based on path if path exists, rotate otherwise
          */
+        if (targetVertex != null && !isHiddenPosition(targetVertex.getPosition(),closestGuard))
+        {
+            targetVertex = null;
+            pathToNextVertex.clear();
+        }
         if (pathToNextVertex.isEmpty())
         {
             List<GraphCell> predictedGuardPath = getPredictedGuardPath();
@@ -115,9 +120,6 @@ public class IntelligentEvasionAgent extends EvasionAgent
      */
     private List getPredictedGuardPath()
     {
-        // TODO actually use the predicted path
-        //  currently using only guard's initial position
-
         GraphCell guardVertex = world.getVertexAt(new Vector(closestGuard.getX(),closestGuard.getY()));
         // System.out.println("Guard position: " + guardVertex);
         GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
@@ -168,24 +170,11 @@ public class IntelligentEvasionAgent extends EvasionAgent
     private ArrayList<GraphCell> getHiddenPositions(Vector guardPos)
     {
         ArrayList<GraphCell> hiddenPositions = new ArrayList<>();
-        //System.out.println("GETTING HIDDEN POSITIONS");
-        //System.out.println("Agent pos. " + world.getVertexAt(position));
         for (Ray r : view)
         {
             Vector wallPoint = r.getV();
-            //System.out.println("Wall point: " + wallPoint);
-            Ray lineOfSight = new Ray(wallPoint,guardPos);
-            double lineLength = lineOfSight.length();
-            //System.out.println("Actual line length to guard: " + lineLength);
-            Vector intersection = grEng.getIntersection(lineOfSight, wallBoundaries);
-            double actualSightLength = lineLength;
-            if (intersection != null)
+            if (isHiddenPosition(wallPoint, guardPos))
             {
-                actualSightLength = new Ray(wallPoint, intersection).length();
-            }
-            if (actualSightLength < lineLength)
-            {
-                //System.out.println("FOUND HIDDEN LINE OF SIGHT");
                 GraphCell wallPointVertex = world.getVertexAt(wallPoint);
                 if (wallPointVertex != null)
                 {
@@ -198,6 +187,25 @@ public class IntelligentEvasionAgent extends EvasionAgent
             }
         }
         return hiddenPositions;
+    }
+
+    /**
+     * Checks if a possible position has no direct line of sight between guard's (predicted) position.
+     * @param posToCheck
+     * @param guardPos
+     * @return
+     */
+    public boolean isHiddenPosition(Vector posToCheck, Vector guardPos)
+    {
+        Ray lineOfSight = new Ray(posToCheck,guardPos);
+        double lineLength = lineOfSight.length();
+        Vector intersection = grEng.getIntersection(lineOfSight, wallBoundaries);
+        double actualSightLength = lineLength;
+        if (intersection != null)
+        {
+            actualSightLength = new Ray(posToCheck, intersection).length();
+        }
+        return actualSightLength < lineLength;
     }
 
     /**
@@ -234,6 +242,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
      */
     private double calculateVertexScore(int nrHiddenLines, GraphPath pathToVertex)
     {
+        // TODO need a better score calculation because currently does not give optimal position
         double score = Double.MAX_VALUE;
         if (pathToVertex != null)
         {
@@ -241,6 +250,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
         score = score / nrHiddenLines;
         return score;
+    }
+
+    public boolean isTargetVertexValid()
+    {
+        Vector targetVector = new Vector(targetVertex.getX(), targetVertex.getY());
+        return isHiddenPosition(targetVector,closestGuard);
     }
 
     public Move getMoveBasedOnPath()

@@ -130,7 +130,6 @@ public class Map
 
     public MemoryGraph createFullGraph()
     {
-        System.out.println("created full graph");
         MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(20);
         for (int i=10; i<height; i+=20)
         {

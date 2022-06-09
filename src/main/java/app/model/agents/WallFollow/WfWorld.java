@@ -83,16 +83,14 @@ public class WfWorld extends World
         //  probably the issue of being on the border of the map
         if (vertex.getObstacle())
         {
-            List<GraphCell> neighbours = Graphs.neighborListOf(G,vertex);
-            for (GraphCell n : neighbours)
+            List<GraphCell> neighbours = Graphs.neighborListOf(G, vertex);
+            for(GraphCell n : neighbours)
             {
-                if (!n.getObstacle())
+                if(!n.getObstacle())
                 {
                     return n;
                 }
             }
-            //throw new RuntimeException("Vertex has no non-obstacle neighbours!");
-            System.out.println("Moving to a vertex that is an obstacle.");
         }
         return vertex;
     }
