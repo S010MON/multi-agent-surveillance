@@ -8,6 +8,7 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Capture.BaselineCaptureAgent;
 import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Capture.DijkstraCaptureAgent;
 import app.model.agents.Evasion.EvasionAgent;
