@@ -11,12 +11,15 @@ import app.model.agents.ACO.AcoAgent;
 import app.model.agents.ACO.AcoWorld;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class DijkstraCaptureAgent extends AgentImp
@@ -88,9 +91,6 @@ public class DijkstraCaptureAgent extends AgentImp
             }else {
                 shortTermMemory.clear();
             }
-        } else
-        {
-            // TODO state change back to ACO...
         }
         setShortTermMemory();
         return nextMove(findTarget());
@@ -152,9 +152,9 @@ public class DijkstraCaptureAgent extends AgentImp
         {
             newLocations.addAll(findAllPossiblePositions(location));
         }
-
-        checkLocationsVisible(newLocations);
+        checkLocationsNotInObstacle(newLocations);
         beliefSet.addAll(newLocations);
+        checkLocationsVisible(beliefSet);
     }
 
     /**
@@ -185,6 +185,15 @@ public class DijkstraCaptureAgent extends AgentImp
         for(Ray r : view)
         {
             locations.removeIf(location -> Intersection.hasLimitedIntersection(r, location, 1));
+        }
+    }
+
+    public void checkLocationsNotInObstacle(VectorSet locations)
+    {
+        for(Vector v: locations)
+        {
+            if(world.getVertexAt(v).getObstacle())
+                locations.remove(v);
         }
     }
 
@@ -304,27 +313,29 @@ public class DijkstraCaptureAgent extends AgentImp
     }
 
     /**
-     * Chooses the cardinal movement which gets the agent closer to the target.
+     * Chooses the cardinal movement which gets the agent closer to the target according to Dijkstras Algorithm.
      *
      * @param target the vector location to move towards.
      * @return The next Move.
      */
     private Move nextMove(Vector target)
     {
-        //TODO: use Dijkstras algorithm instead
+        //get GraphCell containing target
+        GraphCell targetCell = world.getVertexAt(target);
 
-        // Populate with possible moves.
-        VectorSet possibleMoves = findAllPossiblePositions(position);
+        // Calculate Dijkstra path
+        List<GraphCell> currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
+                world.getVertexAt(position), targetCell).getVertexList();
 
-        // Remove possible moves that we have been in recently when we do not see the intruder.
-        if(beliefSet.size() != 1)
-            checkPrevPositions(possibleMoves);
-
-        Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
-        Vector changeInPos = wantedMove.sub(position);
-        direction = changeInPos.normalise();
-        previousMove = new Move(direction, changeInPos);
-        return new Move(direction, changeInPos);
+        // get direction of right move
+        GraphCell nextVertex = currentPathToNextVertex.get(0);
+        if (nextVertex.equals(world.getVertexAt(position)))
+        {
+            currentPathToNextVertex.remove(nextVertex);
+            nextVertex = currentPathToNextVertex.get(0);
+        }
+        Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
+        return new Move(nextDir, nextDir.normalise().scale(moveLength));
     }
 
     private boolean maxTicsReached()
