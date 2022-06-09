@@ -192,7 +192,8 @@ public class DijkstraCaptureAgent extends AgentImp
     {
         for(Vector v: locations)
         {
-            if(world.getVertexAt(v).getObstacle())
+            GraphCell cell = world.getVertexAt(v);
+            if(cell != null && cell.getObstacle())
                 locations.remove(v);
         }
     }
@@ -322,20 +323,40 @@ public class DijkstraCaptureAgent extends AgentImp
     {
         //get GraphCell containing target
         GraphCell targetCell = world.getVertexAt(target);
+        GraphCell currentCell = world.getVertexAt(position);
 
-        // Calculate Dijkstra path
-        List<GraphCell> currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
-                world.getVertexAt(position), targetCell).getVertexList();
-
-        // get direction of right move
-        GraphCell nextVertex = currentPathToNextVertex.get(0);
-        if (nextVertex.equals(world.getVertexAt(position)))
+        if(targetCell != null && currentCell != null)
         {
-            currentPathToNextVertex.remove(nextVertex);
-            nextVertex = currentPathToNextVertex.get(0);
+
+            // Calculate Dijkstra path
+            List<GraphCell> currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
+                    currentCell, targetCell).getVertexList();
+
+            // get direction of right move
+            GraphCell nextVertex = currentPathToNextVertex.get(0);
+            if(nextVertex.equals(world.getVertexAt(position)))
+            {
+                currentPathToNextVertex.remove(nextVertex);
+                nextVertex = currentPathToNextVertex.get(0);
+            }
+            direction = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
+            previousMove = new Move(direction, direction.normalise().scale(moveLength));
+            return previousMove;
         }
-        Vector nextDir = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
-        return new Move(nextDir, nextDir.normalise().scale(moveLength));
+        else
+        {
+            VectorSet possibleMoves = findAllPossiblePositions(position);
+
+            // Remove possible moves that we have been in recently when we do not see the intruder.
+            if(beliefSet.size() != 1)
+                checkPrevPositions(possibleMoves);
+
+            Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
+            Vector changeInPos = wantedMove.sub(position);
+            direction = changeInPos.normalise();
+            previousMove = new Move(direction, changeInPos);
+            return previousMove;
+        }
     }
 
     private boolean maxTicsReached()
