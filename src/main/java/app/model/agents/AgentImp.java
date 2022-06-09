@@ -9,6 +9,7 @@ import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Evasion.EvasionDirected;
 import app.model.agents.Evasion.EvasionRandom;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
@@ -282,7 +283,7 @@ public class AgentImp implements Agent
         else if(this.type == Type.INTRUDER)
         {
             if(isTypeSeen(Type.GUARD))
-                return new EvasionRandom(this);
+                return new EvasionDirected(this);
 
             if(isTypeSeen(Type.TARGET))
                 return new TargetAgent(this);

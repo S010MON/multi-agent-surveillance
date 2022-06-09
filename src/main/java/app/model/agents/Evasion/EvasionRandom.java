@@ -56,7 +56,7 @@ public class EvasionRandom extends AgentImp
     {
         int upperBound = (int) direction.getAngle() + 90;
         int lowerBound = (int) direction.getAngle() - 90;
-        int theta = (int) random.nextInt(upperBound - lowerBound) + lowerBound;
+        int theta = random.nextInt(upperBound - lowerBound) + lowerBound;
 
         Vector randomMove = new Vector(0, moveLength).rotate(theta);
 
