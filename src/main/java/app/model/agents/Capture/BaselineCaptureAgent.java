@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 public class BaselineCaptureAgent extends AgentImp
 {
+    private final int MAX_TICS_WITHOUT_SIGHT = 1;
+    private int counter = 0;
+
     public BaselineCaptureAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
@@ -25,12 +28,15 @@ public class BaselineCaptureAgent extends AgentImp
     @Override
     public Move move()
     {
+        System.out.println("Base Moving");
         ArrayList<Vector> availableMoves = findAvailableMoves();
         Vector move = new Vector();
+
         if(isTypeSeen(Type.INTRUDER))
-        {
             move = bestMove(availableMoves);
-        }
+        else
+            counter++;
+
         Vector change = move.sub(position);
         direction = change.normalise();
         return new Move(direction, change);
@@ -45,11 +51,9 @@ public class BaselineCaptureAgent extends AgentImp
     @Override
     public Agent nextState()
     {
-        if(isTypeSeen(Type.INTRUDER))
-        {
-            return this;
-        }
-        return new AcoAgent(this);
+        if(maxTicsReached())
+            return new AcoAgent(this);
+        return this;
     }
 
     private ArrayList<Vector> findAvailableMoves()
@@ -75,5 +79,10 @@ public class BaselineCaptureAgent extends AgentImp
             }
         }
         return closestPoint;
+    }
+
+    private boolean maxTicsReached()
+    {
+        return counter >= MAX_TICS_WITHOUT_SIGHT;
     }
 }
