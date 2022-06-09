@@ -28,7 +28,6 @@ public class BaselineCaptureAgent extends AgentImp
     @Override
     public Move move()
     {
-        System.out.println("Base Moving");
         ArrayList<Vector> availableMoves = findAvailableMoves();
         Vector move = new Vector();
 
