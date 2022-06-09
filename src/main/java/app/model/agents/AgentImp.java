@@ -9,8 +9,7 @@ import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.Capture.CaptureAgent;
-import app.model.agents.Evasion.EvasionDirected;
-import app.model.agents.Evasion.EvasionRandom;
+import app.model.agents.Evasion.*;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -283,7 +282,7 @@ public class AgentImp implements Agent
         else if(this.type == Type.INTRUDER)
         {
             if(isTypeSeen(Type.GUARD))
-                return new EvasionDirected(this);
+                return new RunAwayAgent(this);
 
             if(isTypeSeen(Type.TARGET))
                 return new TargetAgent(this);
