@@ -71,9 +71,9 @@ public class BaselineCaptureAgent extends AgentImp
         Vector closestPoint = new Vector();
         for(Vector location : moves)
         {
-            if(location.dist(typePosition) < shortestDist)
+            if(location.dist(closestTypePos(Type.INTRUDER)) < shortestDist)
             {
-                shortestDist = location.dist(typePosition);
+                shortestDist = location.dist(closestTypePos(Type.INTRUDER));
                 closestPoint = location;
             }
         }
