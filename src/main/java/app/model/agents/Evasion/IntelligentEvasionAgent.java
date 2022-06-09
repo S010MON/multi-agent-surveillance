@@ -74,28 +74,21 @@ public class IntelligentEvasionAgent extends EvasionAgent
     /*
     Idea based on: http://lisc.mae.cornell.edu/LISCpresentations/SE_07_25_18.pdf
         main idea is to minimize observability of the evasion agent to the guard based on guard's predicted path/strategy
-     */
 
-    /*
     Problems / questions:
-        - lines of sight calculation to shortest path?
         - how to check closed corner vs open space?
      */
 
     @Override protected Move moveIntelligent()
     {
         /*
-        // TODO if agent goes to a hidden place,
-            either try moving away from last known agent position (based on direction?)
-            or move towards target
-            (currently just stays put)
         0. check if current target hiding place is still hidden from guard (if not clear path)
         1. if no current path to follow
             2. get predicted guard path
             3. get possible vertices
-            4. calculate scores and pick best score vertex  TODO adjust weights or score calculation
+            4. calculate scores and pick best score vertex
             5. calculate shortest path to that vertex and save the path
-        6. make move based on path if path exists, rotate otherwise
+        6. make move based on path if path exists, rotate otherwise (stay put)
          */
         if (targetVertex != null && !isHiddenPosition(targetVertex.getPosition(),closestGuard))
         {
@@ -121,8 +114,10 @@ public class IntelligentEvasionAgent extends EvasionAgent
     private List getPredictedGuardPath()
     {
         GraphCell guardVertex = world.getVertexAt(new Vector(closestGuard.getX(),closestGuard.getY()));
-        // System.out.println("Guard position: " + guardVertex);
-        GraphPath predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
+        GraphPath predictedPath = null;
+        if (guardVertex != null && world.getVertexAt(position) != null){
+            predictedPath = DijkstraShortestPath.findPathBetween(world.G, guardVertex, world.getVertexAt(position));
+        }
         if (predictedPath != null)
         {
             return predictedPath.getVertexList();
@@ -144,7 +139,6 @@ public class IntelligentEvasionAgent extends EvasionAgent
         for (GraphCell vertex : predictedPath)
         {
             Vector guardPos = new Vector(vertex.getX(), vertex.getY());
-            //System.out.println("Guard pos vector: " + guardPos.getX() + " " + guardPos.getY() + " angle " + guardPos.getAngle());
             ArrayList<GraphCell> hiddenPositions = getHiddenPositions(guardPos);
             for (GraphCell pos : hiddenPositions)
             {
@@ -158,7 +152,6 @@ public class IntelligentEvasionAgent extends EvasionAgent
                 }
             }
         }
-        //System.out.println("Hashmap of possible vertices: " + possibleVertices.keySet());
         return possibleVertices;
     }
 
@@ -235,14 +228,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
     /**
      * Calculate score based on
      * 1. shortest path length,
-     * 2. how many hidden lines of sight it has,
-     * 3. direction TODO maybe later
-     * score = shortest path length / hidden lines of sight TODO maybe add direction score later
+     * 2. how many hidden lines of sight target vertex has,
+     * score = shortest path length / hidden lines of sight
      * @return score
      */
     private double calculateVertexScore(int nrHiddenLines, GraphPath pathToVertex)
     {
-        // TODO need a better score calculation because currently does not give optimal position
         double score = Double.MAX_VALUE;
         if (pathToVertex != null)
         {
@@ -250,12 +241,6 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
         score = score / nrHiddenLines;
         return score;
-    }
-
-    public boolean isTargetVertexValid()
-    {
-        Vector targetVector = new Vector(targetVertex.getX(), targetVertex.getY());
-        return isHiddenPosition(targetVector,closestGuard);
     }
 
     public Move getMoveBasedOnPath()
