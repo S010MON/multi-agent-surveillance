@@ -135,7 +135,7 @@ public class Map
         {
             for(int j = 10; j < width; j += 20)
             {
-                GraphCell vertex = fullGraph.addNewVertex(new Vector(i, j));
+                GraphCell vertex = fullGraph.addNewVertex(new Vector(j, i));
                 vertex.setOccupied(false);
                 for(Furniture f : furniture)
                 {
