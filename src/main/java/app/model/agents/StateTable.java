@@ -2,8 +2,10 @@ package app.model.agents;
 
 import app.model.Type;
 import app.model.agents.ACO.*;
+import app.model.agents.Capture.BaselineCaptureAgent;
 import app.model.agents.Capture.CaptureAgent;
-import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.Capture.DijkstraCaptureAgent;
+import app.model.agents.Evasion.*;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -13,7 +15,7 @@ import lombok.Setter;
 public class StateTable
 {
     @Setter private static AgentType defaultCaptureAgent = AgentType.CAPTURE;
-    @Setter private static  AgentType defaultEvasionAgent = AgentType.EVASION_DIRECTED;
+    @Setter private static  AgentType defaultEvasionAgent = AgentType.EVASION_RUNAWAY;
     @Getter private static AgentType defaultAcoAgent = AgentType.ACO_MOMENTUM;
     @Getter private static AgentType defaultWFAgent = AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC;
 
@@ -50,19 +52,22 @@ public class StateTable
     {
         switch(defaultCaptureAgent)
         {
+            case CAPTURE_BASELINE -> {return new BaselineCaptureAgent(currentState);}
             case CAPTURE -> {return new CaptureAgent(currentState);}
+            case CAPTURE_DIJKSTRA -> {return new DijkstraCaptureAgent(currentState);}
             default -> throw new RuntimeException("Capture agent not specified");
         }
     }
 
     public static Agent evasionTableSearch(Agent currentState)
     {
-        //TODO Modify table when Evasion Agents are separated.
         switch(defaultEvasionAgent)
         {
-            case EVASION_RANDOM -> {return new EvasionAgent(currentState);}
-            case EVASION_DIRECTED -> {return new EvasionAgent(currentState);}
-            case EVASION_RANDOMDIRECTED -> {return new EvasionAgent(currentState);}
+            case EVASION_RANDOM -> {return new EvasionRandom(currentState);}
+            case EVASION_DIRECTED -> {return new EvasionDirected(currentState);}
+            case EVASION_DISTANCE_MAX -> {return new EvasionDistanceMax(currentState);}
+            case EVASION_HIDEY -> {return new HideyAgent(currentState);}
+            case EVASION_RUNAWAY -> {return new RunAwayAgent(currentState);}
             default -> throw new RuntimeException("Evasion agent not specified");
         }
     }

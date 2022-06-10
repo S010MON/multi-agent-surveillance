@@ -19,15 +19,16 @@ public enum AgentType
     ACO_RANKING,
     ACO_COLONY,
     WALL_FOLLOW,
-    EVASION_RANDOM,
-    EVASION_DIRECTED,
-    CAPTURE,
-    EVASION_DISTANCE_MAX,
-    EVASION_HIDEY,
-    EVASION_RUNAWAY,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
+    EVASION_RANDOM,
+    EVASION_DIRECTED,
+    EVASION_DISTANCE_MAX,
+    EVASION_HIDEY,
+    CAPTURE_BASELINE,
+    EVASION_RUNAWAY,
     CAPTURE_DIJKSTRA,
+    CAPTURE,
     RANDOM;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
@@ -55,6 +56,12 @@ public enum AgentType
             case WALL_FOLLOW -> {
                 return new WallFollowAgent(position, direction, radius, type, 20);
             }
+            case WALL_FOLLOW_MED_DIR_HEURISTIC -> {
+                return new WFMedDirHeuristic(position, direction, radius, type, 20);
+            }
+            case WALL_FOLLOW_HIGH_DIR_HEURISTIC -> {
+                return new WFHighDirHeuristic(position, direction, radius, type, 20);
+            }
             case EVASION_RANDOM -> {
                 return new EvasionRandom(position, direction, radius, type);
             }
@@ -70,17 +77,14 @@ public enum AgentType
             case EVASION_RUNAWAY -> {
                 return new RunAwayAgent(position, direction, radius, type);
             }
+            case CAPTURE_BASELINE -> {
+                return new BaselineCaptureAgent(position, direction, radius, type);
+            }
             case CAPTURE -> {
                 return new CaptureAgent(position, direction, radius, type);
             }
-            case WALL_FOLLOW_MED_DIR_HEURISTIC -> {
-                return new WFMedDirHeuristic(position, direction, radius, type, 20);
-            }
-            case WALL_FOLLOW_HIGH_DIR_HEURISTIC -> {
-                return new WFHighDirHeuristic(position, direction, radius, type, 20);
-            }
             case CAPTURE_DIJKSTRA -> {
-                 return new DijkstraCaptureAgent(position, direction, radius, type, 20);
+                return new DijkstraCaptureAgent(position, direction, radius, type, 20);
             }
             case RANDOM -> {
                 return new AgentImp(position, direction, radius, type);
