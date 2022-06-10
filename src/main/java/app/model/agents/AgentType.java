@@ -68,10 +68,8 @@ public enum AgentType
                 return new HideyAgent(position, direction, radius, type);
             }
             case EVASION_INTELLIGENT -> {
-                return new IntelligentEvasionAgent(position, direction, radius, type, EvasionStrategy.INTELLIGENT);
+                return new IntelligentEvasionAgent(position, direction, radius, type);
             }
-            case WALL_FOLLOW_MED_DIR_HEURISTIC ->
-            {
             case EVASION_RUNAWAY -> {
                 return new RunAwayAgent(position, direction, radius, type);
             }

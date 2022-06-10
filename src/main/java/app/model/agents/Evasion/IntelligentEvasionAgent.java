@@ -7,8 +7,10 @@ import app.model.Map;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.Agent;
+import app.model.agents.AgentImp;
 import app.model.agents.Cells.GraphCell;
 import app.model.agents.Universe;
+import app.model.agents.WallFollow.WallFollowAgent;
 import app.model.agents.WallFollow.WfWorld;
 import app.model.agents.World;
 import app.model.boundary.Boundary;
@@ -21,8 +23,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class IntelligentEvasionAgent extends EvasionAgent
+public class IntelligentEvasionAgent extends AgentImp
 {
+    private final int MAX_TICS_WITHOUT_SIGHT = 100;
+    private int counter = 0;
+    protected Vector closestGuard;
+    protected Vector guardDirection;
+
     private GraphicsEngine grEng = new GraphicsEngine();
     private ArrayList<GraphCell> pathToNextVertex = new ArrayList<>();
     private GraphCell targetVertex = null;
@@ -30,20 +37,15 @@ public class IntelligentEvasionAgent extends EvasionAgent
     private Map map;
     private ArrayList<Boundary> wallBoundaries;
     private Vector prevGuardPos;
+    private boolean guardPosChanged;
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
             new Vector(-1,0));
 
-    public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
-    {
-        super(position, direction, radius, type, strategy);
-        initializeWorldGraph();
-    }
-
     public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type)
     {
-        super(position, direction, radius, type, EvasionStrategy.INTELLIGENT);
+        super(position, direction, radius, type);
         initializeWorldGraph();
     }
 
@@ -53,6 +55,39 @@ public class IntelligentEvasionAgent extends EvasionAgent
         copyOver(other);
         initializeWorldGraph();
         updateKnowledge();
+    }
+
+    protected void updateKnowledge()
+    {
+        Vector closestSeenGuard = closestTypePos(Type.GUARD);
+        if(closestSeenGuard != null)
+        {
+            counter = 0;
+            if(closestGuard == null)
+            {
+                closestGuard = closestSeenGuard;
+                guardDirection = closestGuard.sub(position).normalise();
+                guardPosChanged = true;
+            }
+            else if(closestSeenGuard.dist(position) < closestGuard.dist(position))
+            {
+                closestGuard = closestSeenGuard;
+                guardDirection = closestGuard.sub(position).normalise();
+
+                if(prevGuardPos == null || world.getVertexAt(prevGuardPos) == world.getVertexAt(closestGuard))
+                    guardPosChanged = false;
+                else
+                    guardPosChanged = true;
+            }
+            else
+                guardPosChanged = false;
+        }
+        else
+        {
+            counter++;
+            guardPosChanged = false;
+        }
+        prevGuardPos = closestGuard;
     }
 
     private void initializeWorldGraph()
@@ -80,10 +115,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         - how to check closed corner vs open space?
      */
 
-    @Override protected Move moveIntelligent()
+    @Override
+    public Move move()
     {
+        updateKnowledge();
         /*
-        0. check if see guard currently (adjust path if so)
+        0. check if guard changed position (adjust path if so)
         1. check if current target hiding place is still hidden from guard (if not clear path)
         2. if no current path to follow
             3. get predicted guard path
@@ -92,12 +129,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
             6. calculate shortest path to that vertex and save the path
         7. make move based on path if path exists, rotate otherwise (stay put)
          */
-        if (prevGuardPos != closestGuard)
+        if (guardPosChanged)
         {
+            System.out.println("guardPos changed");
             List<GraphCell> predictedGuardPath = getPredictedGuardPath();
             HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
             setBestScoreVertexPath(possibleVertices);
-            prevGuardPos = closestGuard;
         }
         if (targetVertex != null && !isHiddenPosition(targetVertex.getPosition(),closestGuard))
         {
@@ -236,9 +273,10 @@ public class IntelligentEvasionAgent extends EvasionAgent
 
     /**
      * Calculate score based on
-     * 1. shortest path length,
+     * 1. shortest path length from agent to target vertex,
      * 2. how many hidden lines of sight target vertex has,
      * 3. how many steps on path till target vertex is visible to guard,
+     * 4. shortest path length from guard to target vertex
      * score = (shortest path length*2 - steps till visible to guard) / hidden lines of sight
      * @return score
      */
@@ -249,7 +287,9 @@ public class IntelligentEvasionAgent extends EvasionAgent
         {
             //double stepsTillVisible = calculateStepsGuardTillVisible((GraphCell) pathToVertex.getEndVertex());
             double stepsOnPathVisible = stepsOnPathVisibleToGuard(pathToVertex);
-            score = pathToVertex.getLength()*2 + stepsOnPathVisible;
+            double pathLengthGuard = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(closestGuard), (GraphCell) pathToVertex.getEndVertex()).getLength();
+            score = pathToVertex.getLength()*2 + stepsOnPathVisible - pathLengthGuard;
+            //score = pathToVertex.getLength();
         }
         score = score / (double) nrHiddenLines;
         return score;
@@ -281,16 +321,15 @@ public class IntelligentEvasionAgent extends EvasionAgent
     private double stepsOnPathVisibleToGuard(GraphPath path)
     {
         List<GraphCell> pathList = path.getVertexList();
-        Vector vertexPos = pathList.get(pathList.size()-1).getPosition();
-        int counter = 0;
+        int count = 0;
         for(int i=0; i<pathList.size(); i++)
         {
             if(!isHiddenPosition(closestGuard, pathList.get(i).getPosition()))
             {
-                counter++;
+                count++;
             }
         }
-        return counter;
+        return count;
     }
 
     public Move getMoveBasedOnPath()
@@ -366,6 +405,19 @@ public class IntelligentEvasionAgent extends EvasionAgent
             }
         }
         throw new RuntimeException("None of the 4 cardinal directions were reached when rotating agent.");
+    }
+
+    private boolean maxTicsReached()
+    {
+        return (counter > MAX_TICS_WITHOUT_SIGHT);
+    }
+
+    @Override public Agent nextState()
+    {
+        if(maxTicsReached())
+            return new WallFollowAgent(this);
+
+        return this;
     }
 
 }
