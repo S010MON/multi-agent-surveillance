@@ -155,6 +155,16 @@ public abstract class Intersection
         return findIntersection(p_1, p_2, p_3, p_4) != null;
     }
 
+    public static boolean hasIntersection(Line l1, Line l2)
+    {
+        return findIntersection(l1.a, l1.b, l2.a, l2.b) != null;
+    }
+
+    public static Vector findIntersection(Line l1, Line l2)
+    {
+        return findIntersection(l1.a, l1.b, l2.a, l2.b);
+    }
+
     public static boolean hasIntersection(Vector a, Vector b, Ray r)
     {
         return findIntersection(a, b, r) != null;
