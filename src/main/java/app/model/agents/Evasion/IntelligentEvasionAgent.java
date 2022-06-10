@@ -61,11 +61,11 @@ public class IntelligentEvasionAgent extends EvasionAgent
             Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
         }
         world = new WfWorld(Universe.getMemoryGraph(type));
-        if (map != null)
+        if (map == null)
         {
             map = Universe.getMap();
         }
-        if (wallBoundaries != null)
+        if (wallBoundaries == null)
         {
             wallBoundaries = grEng.collectWallBoundaries(map);
         }
@@ -225,6 +225,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
     }
 
+    private double calculateStepsGuardTillVisible(GraphPath pathToVertex)
+    {
+        return 0;
+    }
+
+
     /**
      * Calculate score based on
      * 1. shortest path length,
@@ -238,6 +244,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
         if (pathToVertex != null)
         {
             score = pathToVertex.getLength();
+            double stepsTillVisible = calculateStepsGuardTillVisible(pathToVertex);
         }
         score = score / nrHiddenLines;
         return score;
