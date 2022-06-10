@@ -4,7 +4,7 @@ import app.controller.graphicsEngine.Ray;
 import app.controller.linAlg.Vector;
 import app.model.Move;
 import app.model.Type;
-import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.Evasion.RunAwayAgent;
 import app.model.agents.WallFollow.WallFollowAgent;
 
 public class TargetAgent extends AgentImp
@@ -74,7 +74,7 @@ public class TargetAgent extends AgentImp
     public Agent nextState()
     {
         if(isTypeSeen(Type.GUARD))
-            return new EvasionAgent(this);
+            return new RunAwayAgent(this);
         if(targetLost || moveFailed)
             return new WallFollowAgent(this);
 
