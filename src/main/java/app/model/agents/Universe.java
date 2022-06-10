@@ -1,5 +1,6 @@
 package app.model.agents;
 
+import app.model.Map;
 import app.model.Type;
 
 import java.util.HashMap;
@@ -8,6 +9,8 @@ public class Universe
 {
     private static Universe instance;
     private HashMap<Type, MemoryGraph> hashMap;
+    private static Map map;
+    private static boolean isPerfectUniverse = false;
 
     private Universe()
     {
@@ -34,5 +37,30 @@ public class Universe
         {
             instance.hashMap.clear();
         }
+    }
+
+    public static void createPerfectUniverse(MemoryGraph perfectWorld)
+    {
+        if(instance == null)
+            instance = new Universe();
+
+        instance.hashMap.put(Type.GUARD, perfectWorld);
+        instance.hashMap.put(Type.INTRUDER, perfectWorld);
+        isPerfectUniverse = true;
+    }
+
+    public static void setMap(Map worldMap)
+    {
+        map = worldMap;
+    }
+
+    public static Map getMap()
+    {
+        return map;
+    }
+
+    public static boolean isIsPerfectUniverse()
+    {
+        return isPerfectUniverse;
     }
 }

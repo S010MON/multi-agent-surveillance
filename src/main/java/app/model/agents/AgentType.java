@@ -5,7 +5,6 @@ import app.model.Type;
 import app.model.agents.ACO.*;
 import app.model.agents.Evasion.*;
 import app.model.agents.Capture.*;
-
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
@@ -21,6 +20,8 @@ public enum AgentType
     WALL_FOLLOW,
     EVASION_RANDOM,
     EVASION_DIRECTED,
+    EVASION_RANDOMDIRECTED,
+    EVASION_INTELLIGENT,
     EVASION_DISTANCE_MAX,
     EVASION_HIDEY,
     EVASION_RUNAWAY,
@@ -65,6 +66,9 @@ public enum AgentType
             }
             case EVASION_HIDEY -> {
                 return new HideyAgent(position, direction, radius, type);
+            }
+            case EVASION_INTELLIGENT -> {
+                return new IntelligentEvasionAgent(position, direction, radius, type);
             }
             case EVASION_RUNAWAY -> {
                 return new RunAwayAgent(position, direction, radius, type);

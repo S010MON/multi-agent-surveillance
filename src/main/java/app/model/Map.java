@@ -5,9 +5,8 @@ import app.controller.linAlg.VectorSet;
 import app.controller.settings.Settings;
 import app.controller.settings.SettingsObject;
 import app.controller.soundEngine.SoundSource;
-import app.model.agents.Agent;
-import app.model.agents.AgentType;
-import app.model.agents.Human;
+import app.model.agents.*;
+import app.model.agents.Cells.GraphCell;
 import app.model.boundary.Boundary;
 import app.model.furniture.Furniture;
 import app.model.furniture.FurnitureFactory;
@@ -17,6 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -82,6 +82,7 @@ public class Map
         {
             Vector srt = randPosition(intruderSpawn);
             Vector dir = randDirection();
+            Universe.setMap(this);
             Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
             intruder.setMaxSprint(settings.getSprintSpeedIntruder());
@@ -127,6 +128,34 @@ public class Map
         }
     }
 
+    public MemoryGraph createFullGraph()
+    {
+        int moveLength = 20;
+        if (!agents.isEmpty())
+        {
+            moveLength = (int) agents.get(0).getMoveLength();
+        }
+        MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(moveLength);
+        for (int i=10; i<height; i+=moveLength)
+        {
+            for(int j = 10; j < width; j += moveLength)
+            {
+                GraphCell vertex = fullGraph.addNewVertex(new Vector(j, i));
+                vertex.setOccupied(false);
+                for(Furniture f : furniture)
+                {
+                    if(f.getType().name() == "WALL")
+                    {
+                        if(f.contains(new Vector(i, j)))
+                        {
+                            vertex.setObstacle(true);
+                        }
+                    }
+                }
+            }
+        }
+        return fullGraph;
+    }
 
     public void updateAllSeen(Agent agent)
     {
@@ -135,7 +164,6 @@ public class Map
         else
             intrudersSeen.addAll(agent.getSeen());
     }
-
 
     public ArrayList<Boundary> getBoundaries()
     {
