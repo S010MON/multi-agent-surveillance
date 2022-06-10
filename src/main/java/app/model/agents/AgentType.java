@@ -3,7 +3,7 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
-import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Capture.*;
 import app.model.agents.Evasion.EvasionAgent;
 import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
@@ -25,6 +25,7 @@ public enum AgentType
     CAPTURE,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
+    CAPTURE_DIJKSTRA,
     RANDOM;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
@@ -71,6 +72,10 @@ public enum AgentType
             case WALL_FOLLOW_HIGH_DIR_HEURISTIC ->
             {
                 return new WFHighDirHeuristic(position, direction, radius, type, 20);
+            }
+            case CAPTURE_DIJKSTRA ->
+            {
+                 return new DijkstraCaptureAgent(position, direction, radius, type, 20);
             }
             case RANDOM ->
             {
