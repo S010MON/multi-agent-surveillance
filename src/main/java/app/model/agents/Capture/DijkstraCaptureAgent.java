@@ -337,18 +337,25 @@ public class DijkstraCaptureAgent extends AgentImp
         if(targetCell != null && currentCell != null)
         {
             // Calculate Dijkstra path
-            currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
-                    currentCell, targetCell).getVertexList();
+            currentPathToNextVertex = new ArrayList<>(DijkstraShortestPath.findPathBetween(world.G,
+                    currentCell, targetCell).getVertexList());
         }
 
-        if(currentPathToNextVertex != null)
+        if(currentPathToNextVertex != null && currentPathToNextVertex.size() != 0)
         {
             // get direction of right move
             GraphCell nextVertex = currentPathToNextVertex.get(0);
-            if(nextVertex.equals(world.getVertexAt(position)))
+            if(nextVertex.equals(world.getVertexAt(position)) && currentPathToNextVertex.size() > 1)
             {
                 currentPathToNextVertex.remove(0);
-                nextVertex = currentPathToNextVertex.get(0);
+                if(currentPathToNextVertex.size() != 0)
+                    nextVertex = currentPathToNextVertex.get(0);
+                else
+                {
+                    // already reached target vertex and intruder not there, so go out of evasion state
+                    counter = MAX_MOVES_BEFORE_RETURN;
+                    return new Move(direction, new Vector(0,0));
+                }
             }
             direction = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
             previousMove = new Move(direction, direction.normalise().scale(moveLength));
