@@ -131,7 +131,6 @@ public class IntelligentEvasionAgent extends AgentImp
          */
         if (guardPosChanged)
         {
-            System.out.println("guardPos changed");
             List<GraphCell> predictedGuardPath = getPredictedGuardPath();
             HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
             setBestScoreVertexPath(possibleVertices);

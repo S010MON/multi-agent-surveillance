@@ -333,13 +333,16 @@ public class DijkstraCaptureAgent extends AgentImp
         GraphCell targetCell = world.getVertexAt(target);
         GraphCell currentCell = world.getVertexAt(position);
 
+        List<GraphCell> currentPathToNextVertex = null;
         if(targetCell != null && currentCell != null)
         {
-
             // Calculate Dijkstra path
-            List<GraphCell> currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
+            currentPathToNextVertex = DijkstraShortestPath.findPathBetween(world.G,
                     currentCell, targetCell).getVertexList();
+        }
 
+        if(currentPathToNextVertex != null)
+        {
             // get direction of right move
             GraphCell nextVertex = currentPathToNextVertex.get(0);
             if(nextVertex.equals(world.getVertexAt(position)))
