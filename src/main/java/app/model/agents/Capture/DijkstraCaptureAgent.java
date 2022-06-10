@@ -197,7 +197,8 @@ public class DijkstraCaptureAgent extends AgentImp
 
     public void checkLocationsNotInObstacle(VectorSet locations)
     {
-        for(Vector v: locations)
+        List<Vector> locationsList = locations.stream().toList();
+        for(Vector v: locationsList)
         {
             GraphCell cell = world.getVertexAt(v);
             if(cell != null && cell.getObstacle())
@@ -343,7 +344,7 @@ public class DijkstraCaptureAgent extends AgentImp
             GraphCell nextVertex = currentPathToNextVertex.get(0);
             if(nextVertex.equals(world.getVertexAt(position)))
             {
-                currentPathToNextVertex.remove(nextVertex);
+                currentPathToNextVertex.remove(0);
                 nextVertex = currentPathToNextVertex.get(0);
             }
             direction = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);

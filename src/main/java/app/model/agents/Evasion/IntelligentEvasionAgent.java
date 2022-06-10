@@ -29,6 +29,7 @@ public class IntelligentEvasionAgent extends EvasionAgent
     @Getter private World world;
     private Map map;
     private ArrayList<Boundary> wallBoundaries;
+    private Vector prevGuardPos;
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
@@ -82,14 +83,22 @@ public class IntelligentEvasionAgent extends EvasionAgent
     @Override protected Move moveIntelligent()
     {
         /*
-        0. check if current target hiding place is still hidden from guard (if not clear path)
-        1. if no current path to follow
-            2. get predicted guard path
-            3. get possible vertices
-            4. calculate scores and pick best score vertex
-            5. calculate shortest path to that vertex and save the path
-        6. make move based on path if path exists, rotate otherwise (stay put)
+        0. check if see guard currently (adjust path if so)
+        1. check if current target hiding place is still hidden from guard (if not clear path)
+        2. if no current path to follow
+            3. get predicted guard path
+            4. get possible vertices
+            5. calculate scores and pick best score vertex
+            6. calculate shortest path to that vertex and save the path
+        7. make move based on path if path exists, rotate otherwise (stay put)
          */
+        if (prevGuardPos != closestGuard)
+        {
+            List<GraphCell> predictedGuardPath = getPredictedGuardPath();
+            HashMap<GraphCell,Integer> possibleVertices = getPossibleVertices(predictedGuardPath);
+            setBestScoreVertexPath(possibleVertices);
+            prevGuardPos = closestGuard;
+        }
         if (targetVertex != null && !isHiddenPosition(targetVertex.getPosition(),closestGuard))
         {
             targetVertex = null;
@@ -225,17 +234,12 @@ public class IntelligentEvasionAgent extends EvasionAgent
         }
     }
 
-    private double calculateStepsGuardTillVisible(GraphPath pathToVertex)
-    {
-        return 0;
-    }
-
-
     /**
      * Calculate score based on
      * 1. shortest path length,
      * 2. how many hidden lines of sight target vertex has,
-     * score = shortest path length / hidden lines of sight
+     * 3. how many steps on path till target vertex is visible to guard,
+     * score = (shortest path length*2 - steps till visible to guard) / hidden lines of sight
      * @return score
      */
     private double calculateVertexScore(int nrHiddenLines, GraphPath pathToVertex)
@@ -243,11 +247,50 @@ public class IntelligentEvasionAgent extends EvasionAgent
         double score = Double.MAX_VALUE;
         if (pathToVertex != null)
         {
-            score = pathToVertex.getLength();
-            double stepsTillVisible = calculateStepsGuardTillVisible(pathToVertex);
+            //double stepsTillVisible = calculateStepsGuardTillVisible((GraphCell) pathToVertex.getEndVertex());
+            double stepsOnPathVisible = stepsOnPathVisibleToGuard(pathToVertex);
+            score = pathToVertex.getLength()*2 + stepsOnPathVisible;
         }
-        score = score / nrHiddenLines;
+        score = score / (double) nrHiddenLines;
         return score;
+    }
+
+
+    /**
+     * Calculates how many steps on path till endVertex is visible
+     *
+     * @param vertex the vertex the guard has to see
+     * @return number of steps till endVertex is visible to guard
+     */
+    private double calculateStepsGuardTillVisible(GraphCell vertex)
+    {
+        GraphPath shortestPathGuard = DijkstraShortestPath.findPathBetween(world.G, world.getVertexAt(closestGuard), vertex);
+        List<GraphCell> pathList = shortestPathGuard.getVertexList();
+        Vector vertexPos = pathList.get(pathList.size()-1).getPosition();
+        for(int i=0; i<pathList.size(); i++)
+        {
+            if(!isHiddenPosition(vertexPos, pathList.get(i).getPosition()))
+            {
+                return i;
+            }
+        }
+        new RuntimeException("position not visible from position itself");
+        return pathList.size();
+    }
+
+    private double stepsOnPathVisibleToGuard(GraphPath path)
+    {
+        List<GraphCell> pathList = path.getVertexList();
+        Vector vertexPos = pathList.get(pathList.size()-1).getPosition();
+        int counter = 0;
+        for(int i=0; i<pathList.size(); i++)
+        {
+            if(!isHiddenPosition(closestGuard, pathList.get(i).getPosition()))
+            {
+                counter++;
+            }
+        }
+        return counter;
     }
 
     public Move getMoveBasedOnPath()
