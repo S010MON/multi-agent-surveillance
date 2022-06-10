@@ -130,7 +130,11 @@ public class Map
 
     public MemoryGraph createFullGraph()
     {
-        int moveLength = (int) agents.get(0).getMoveLength();
+        int moveLength = 20;
+        if (!agents.isEmpty())
+        {
+            moveLength = (int) agents.get(0).getMoveLength();
+        }
         MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(moveLength);
         for (int i=10; i<height; i+=moveLength)
         {
