@@ -275,9 +275,9 @@ public class IntelligentEvasionAgent extends AgentImp
      * Calculate score based on
      * 1. shortest path length from agent to target vertex,
      * 2. how many hidden lines of sight target vertex has,
-     * 3. how many steps on path till target vertex is visible to guard,
+     * 3. how many steps on path from agent to target vertex are visible to the guard
      * 4. shortest path length from guard to target vertex
-     * score = (shortest path length*2 - steps till visible to guard) / hidden lines of sight
+     * score = (shortest path length*2 + steps visible to guard - distance from guard) / hidden lines of sight
      * @return score
      */
     private double calculateVertexScore(int nrHiddenLines, GraphPath pathToVertex)
