@@ -130,10 +130,11 @@ public class Map
 
     public MemoryGraph createFullGraph()
     {
-        MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(20);
-        for (int i=10; i<height; i+=20)
+        int moveLength = (int) agents.get(0).getMoveLength();
+        MemoryGraph<GraphCell, DefaultWeightedEdge> fullGraph = new MemoryGraph<>(moveLength);
+        for (int i=10; i<height; i+=moveLength)
         {
-            for(int j = 10; j < width; j += 20)
+            for(int j = 10; j < width; j += moveLength)
             {
                 GraphCell vertex = fullGraph.addNewVertex(new Vector(j, i));
                 vertex.setOccupied(false);

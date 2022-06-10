@@ -79,9 +79,7 @@ public class WfWorld extends World
     @Override
     public GraphCell getNonObstacleNeighbour(GraphCell vertex)
     {
-        // TODO "Cannot invoke "app.model.agents.Cells.GraphCell.getObstacle()" because "vertex" is null"
-        //  probably the issue of being on the border of the map
-        if (vertex.getObstacle())
+        if (vertex != null && vertex.getObstacle())
         {
             List<GraphCell> neighbours = Graphs.neighborListOf(G, vertex);
             for(GraphCell n : neighbours)

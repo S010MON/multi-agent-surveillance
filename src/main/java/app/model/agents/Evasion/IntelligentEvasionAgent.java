@@ -25,11 +25,10 @@ public class IntelligentEvasionAgent extends EvasionAgent
 {
     private GraphicsEngine grEng = new GraphicsEngine();
     private ArrayList<GraphCell> pathToNextVertex = new ArrayList<>();
-    private GraphCell nextPathVertex = null;
     private GraphCell targetVertex = null;
     @Getter private World world;
     private Map map;
-    private ArrayList<Boundary> wallBoundaries = new ArrayList<>();
+    private ArrayList<Boundary> wallBoundaries;
     private final List<Vector> directions = Arrays.asList(new Vector(0,1),
             new Vector(1,0),
             new Vector(0,-1),
@@ -38,37 +37,38 @@ public class IntelligentEvasionAgent extends EvasionAgent
     public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type, EvasionStrategy strategy)
     {
         super(position, direction, radius, type, strategy);
-        if (!Universe.isIsPerfectUniverse())
-        {
-            Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
-        }
-        world = new WfWorld(Universe.getMemoryGraph(type));
-        map = Universe.getMap();
-        wallBoundaries = grEng.collectWallBoundaries(map);
+        initializeWorldGraph();
     }
 
     public IntelligentEvasionAgent(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type, EvasionStrategy.INTELLIGENT);
-        if (!Universe.isIsPerfectUniverse())
-        {
-            Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
-        }
-        world = new WfWorld(Universe.getMemoryGraph(type));
-        map = Universe.getMap();
-        wallBoundaries = grEng.collectWallBoundaries(map);
+        initializeWorldGraph();
     }
 
     public IntelligentEvasionAgent(Agent other)
     {
         this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         copyOver(other);
+        initializeWorldGraph();
+        updateKnowledge();
+    }
+
+    private void initializeWorldGraph()
+    {
         if (!Universe.isIsPerfectUniverse())
         {
             Universe.createPerfectUniverse(Universe.getMap().createFullGraph());
         }
         world = new WfWorld(Universe.getMemoryGraph(type));
-        updateKnowledge();
+        if (map != null)
+        {
+            map = Universe.getMap();
+        }
+        if (wallBoundaries != null)
+        {
+            wallBoundaries = grEng.collectWallBoundaries(map);
+        }
     }
 
     /*
