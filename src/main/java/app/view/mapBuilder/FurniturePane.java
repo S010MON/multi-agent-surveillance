@@ -85,7 +85,11 @@ public class FurniturePane extends StackPane
         crOpen.setOnAction(e -> startMenu.saveSettingsAndOpen());
         crOpen.setPrefWidth(BUTTON_WIDTH);
 
-        vbox.getChildren().addAll(func, create, crOpen);
+        Button randOpen = new Button("Generate Random Map");
+        randOpen.setOnAction(e -> startMenu.openRandom());
+        randOpen.setPrefWidth(BUTTON_WIDTH);
+
+        vbox.getChildren().addAll(func, create, crOpen, randOpen);
     }
 
     private void handleActionEvent(ActionEvent e, FurnitureType type)

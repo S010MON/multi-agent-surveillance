@@ -8,8 +8,11 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Capture.BaselineCaptureAgent;
 import app.model.agents.Capture.CaptureAgent;
 import app.model.agents.Evasion.IntelligentEvasionAgent;
+import app.model.agents.Capture.DijkstraCaptureAgent;
+import app.model.agents.Evasion.EvasionAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
@@ -275,8 +278,7 @@ public class AgentImp implements Agent
         if(this.type == Type.GUARD)
         {
             if(isTypeSeen(Type.INTRUDER))
-                return new CaptureAgent(this);
-
+                return new DijkstraCaptureAgent(this);
         }
 
         // State INTRUDER
