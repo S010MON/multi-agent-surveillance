@@ -33,7 +33,7 @@ public class DijkstraCaptureAgent extends AgentImp
     private Queue<Vector> intruderPreviousPos = new LinkedList<>();
     private Queue<Vector> previousPositions =  new LinkedList<>();
     private Move previousMove;
-    private int counter;
+    private int counter = 0;
 
     /**
      * Constructor for capture agent.
@@ -49,6 +49,13 @@ public class DijkstraCaptureAgent extends AgentImp
         super(position, direction, radius, type);
         beliefSet.add(intruderPos);
         intruderPreviousPos.add(intruderPos);
+        initializeWorld();
+    }
+
+    public DijkstraCaptureAgent(Vector position, Vector direction, double radius, Type type, double moveLength)
+    {
+        super(position, direction, radius, type);
+        this.moveLength = moveLength;
         initializeWorld();
     }
 
