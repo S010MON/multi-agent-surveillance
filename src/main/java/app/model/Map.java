@@ -220,7 +220,7 @@ public class Map
             if(otherAgent.getType() != currentAgent.getType())
             {
                 double dist = currentAgent.getPosition().dist(otherAgent.getPosition());
-                if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 3))
+                if(dist <= (currentAgent.getRadius() + otherAgent.getRadius() + 7))
                 {
                     deleteAgent(otherAgent);
                 }
@@ -260,6 +260,22 @@ public class Map
         for(Agent a: agents)
         {
             if(a.getType() == Type.INTRUDER && target.contains(a.getPosition().getX(), a.getPosition().getY()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method determines if there is an intruder within a Guard's visual field.
+     * @return True if an intruder is within a Guard's visual field. Else False.
+     */
+    public boolean intruderVisual()
+    {
+        for(Agent a: agents)
+        {
+            if(a.getType() == Type.GUARD && a.isTypeSeen(Type.INTRUDER))
             {
                 return true;
             }

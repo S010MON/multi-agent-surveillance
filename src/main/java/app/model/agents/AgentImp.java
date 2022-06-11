@@ -274,25 +274,6 @@ public class AgentImp implements Agent
     @Override
     public Agent nextState()
     {
-        // State GUARD
-        if(this.type == Type.GUARD)
-        {
-            if(isTypeSeen(Type.INTRUDER))
-                return new DijkstraCaptureAgent(this);
-        }
-
-        // State INTRUDER
-        else if(this.type == Type.INTRUDER)
-        {
-            if(isTypeSeen(Type.GUARD))
-                return new IntelligentEvasionAgent(this);
-
-            if(isTypeSeen(Type.TARGET))
-                return new TargetAgent(this);
-
-            return this;
-        }
-
-        return this;
+        return StateTable.lookupState(this);
     }
 }

@@ -10,6 +10,8 @@ import app.model.Type;
 import app.model.agents.ACO.AcoAgent;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
+import app.model.agents.AgentType;
+import app.model.agents.StateTable;
 import app.model.agents.WallFollow.WallFollowAgent;
 import lombok.Getter;
 import lombok.Setter;
@@ -224,7 +226,7 @@ public class CaptureAgent extends AgentImp
     public Agent nextState()
     {
         if(maxTicsReached())
-            return new AcoAgent(this);
+            return StateTable.acoTableSearch(this);
 
         return this;
     }
