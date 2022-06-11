@@ -75,4 +75,21 @@ public class WfWorld extends World
             getVerticalWallsCovered().add(cell.getY());
         }
     }
+
+    @Override
+    public GraphCell getNonObstacleNeighbour(GraphCell vertex)
+    {
+        if (vertex != null && vertex.getObstacle())
+        {
+            List<GraphCell> neighbours = Graphs.neighborListOf(G, vertex);
+            for(GraphCell n : neighbours)
+            {
+                if(!n.getObstacle())
+                {
+                    return n;
+                }
+            }
+        }
+        return vertex;
+    }
 }

@@ -10,6 +10,7 @@ import app.model.Move;
 import app.model.Type;
 import app.model.agents.Capture.BaselineCaptureAgent;
 import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Evasion.IntelligentEvasionAgent;
 import app.model.agents.Evasion.*;
 import app.model.agents.Capture.DijkstraCaptureAgent;
 import app.view.agentView.AgentView;
@@ -41,6 +42,7 @@ public class AgentImp implements Agent
     protected final boolean DRAW_HEARD = false;
 
     @Getter @Setter protected World world;
+
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
     {

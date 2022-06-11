@@ -6,6 +6,7 @@ import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.agents.AgentType;
 import app.model.agents.StateTable;
+import app.model.agents.Universe;
 import jogging.Logger;
 
 import java.util.Arrays;
@@ -194,5 +195,9 @@ public class Experiments
 
         Map map = new Map(settings);
         return map;
+    
+    public static void generatePerfectKnowledge(Map map)
+    {
+        Universe.createPerfectUniverse(map.createFullGraph());
     }
 }

@@ -7,13 +7,12 @@ import app.controller.linAlg.Vector;
 import app.view.simulation.Info;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.awt.geom.Line2D;
+import lombok.Getter;
 
 public class BoundaryImp implements Boundary
 {
-    protected Vector a;
-    protected Vector b;
+    @Getter protected Vector a;
+    @Getter protected Vector b;
     protected Color colour;
 
     public BoundaryImp(Vector a, Vector b)

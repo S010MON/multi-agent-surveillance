@@ -37,7 +37,7 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
     }
 
 
-    protected GraphCell addNewVertex(Vector position)
+    public GraphCell addNewVertex(Vector position)
     {
         Vector vertexCentre = determineVertexCentre(position);
         GraphCell cell = new GraphCell(vertexCentre);
@@ -198,8 +198,6 @@ public class MemoryGraph<Object, DefaultWeightedEdge> extends SimpleWeightedGrap
 
     public ArrayList<GraphCell> getVerticesWithUnexploredNeighbours()
     {
-        // TODO currently checking if vertex has less than 4 neighbours
-        //  but should also check if they're direct neighbours or neighbours through portals?
         ArrayList<GraphCell> unexploredFrontier = new ArrayList<>();
         for (String v : vertices.keySet())
         {
