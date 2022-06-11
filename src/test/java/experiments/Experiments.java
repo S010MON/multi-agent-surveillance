@@ -20,7 +20,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runEvasion();
+        runCapture();
     }
 
     private static void runCoverage(String map_name)
@@ -110,7 +110,7 @@ public class Experiments
         final String testName = "Capture_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
-        final int iterations = 100;
+        final int iterations = 200;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
@@ -140,7 +140,7 @@ public class Experiments
         final String testName = "Evasion_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
-        final int iterations = 10;
+        final int iterations = 200;
 
         Logger logger = new Logger(testName);
         logger.setOutputCsv();
@@ -194,7 +194,9 @@ public class Experiments
         settings.setNoOfIntruders(1);
 
         Map map = new Map(settings);
+        generatePerfectKnowledge(map);
         return map;
+    }
     
     public static void generatePerfectKnowledge(Map map)
     {

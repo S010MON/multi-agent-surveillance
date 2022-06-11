@@ -44,6 +44,7 @@ public class Universe
         if(instance == null)
             instance = new Universe();
 
+        instance.hashMap.clear();
         instance.hashMap.put(Type.GUARD, perfectWorld);
         instance.hashMap.put(Type.INTRUDER, perfectWorld);
         isPerfectUniverse = true;
