@@ -20,7 +20,7 @@ public class Experiments
      */
     public static void main(String[] args)
     {
-        runCapture();
+        runEvasion();
     }
 
     private static void runCoverage(String map_name)
@@ -135,7 +135,7 @@ public class Experiments
     public static void runEvasion()
     {
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
-        StateTable.setDefaultEvasionAgent(AgentType.EVASION_DIRECTED);
+        StateTable.setDefaultEvasionAgent(AgentType.EVASION_RANDOM);
 
         final String testName = "Evasion_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
@@ -189,6 +189,7 @@ public class Experiments
 
     private static Map generateRandomMap()
     {
+        RandomSettingsGenerator.clearRandomGenerator();
         Settings settings = RandomSettingsGenerator.generateRandomSettings();
         settings.setNoOfGuards(1);
         settings.setNoOfIntruders(1);
