@@ -76,12 +76,21 @@ public class NeuralNet extends AgentImp implements Comparable
              dir = direction.rotate(360 * pred[0]);
 
         double dx = 0;
-        if(pred[1] != Double.NaN && pred[2] != Double.NaN)
-            dx = (pred[1] - pred[2]) * maxSprint;
-
+        if(pred[1] != Double.NaN && pred[2] != Double.NaN && Math.abs(pred[1] - pred[2]) > 0.1)
+        {
+            if(pred[1] > pred[2])
+                dx =  maxSprint;
+            else
+                dx = -maxSprint;
+        }
         double dy = 0;
-        if(pred[3] != Double.NaN && pred[4] != Double.NaN)
-            dy = (pred[3] - pred[4]) * maxSprint;
+        if(pred[3] != Double.NaN && pred[4] != Double.NaN && Math.abs(pred[3] - pred[4]) > 0.1)
+        {
+            if(pred[3] > pred[4])
+                dx =  maxSprint;
+            else
+                dx = -maxSprint;
+        }
 
         return new Move(dir, new Vector(dx, dy));
     }

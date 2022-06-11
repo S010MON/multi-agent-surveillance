@@ -303,7 +303,7 @@ public class AgentImp implements Agent
         for(int i = 0; i < data.length; i++)
         {
             if(data[i] != -1)
-                data[i] = data[i] / max;
+                data[i] = data[i] / 1000;
         }
 
         return data;
