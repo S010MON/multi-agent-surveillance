@@ -1,0 +1,16 @@
+name = evasion_test_map
+gameFile = /home/travis/Desktop/Maastricht/Studies/Year 2/Project 2-2/Code/multi-agent-surveillance/src/main/resources/evasion_test_map
+gameMode = 1
+height = 600
+width = 800
+scaling = 0.0
+numGuards = 1
+numIntruders = 1
+baseSpeedIntruder = 15.0
+sprintSpeedIntruder = 23.0
+baseSpeedGuard = 13.5
+sprintSpeedGuard = 21.5
+timeStep = 0.0
+spawnAreaGuards = 181 208 284 300
+spawnAreaIntruders = 284 209 447 298
+targetArea = 542 227 653 269

@@ -8,7 +8,6 @@ import app.model.agents.Evasion.EvasionStrategy;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
-import app.model.agents.nNet.NeuralNet;
 
 public enum AgentType
 {
@@ -24,6 +23,15 @@ public enum AgentType
     EVASION_RANDOMDIRECTED,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
+    EVASION_RANDOM,
+    EVASION_DIRECTED,
+    EVASION_INTELLIGENT,
+    EVASION_DISTANCE_MAX,
+    EVASION_HIDEY,
+    CAPTURE_BASELINE,
+    EVASION_RUNAWAY,
+    CAPTURE_DIJKSTRA,
+    CAPTURE,
     RANDOM,
     NEURAL_NET;
 
@@ -52,25 +60,40 @@ public enum AgentType
             case WALL_FOLLOW -> {
                 return new WallFollowAgent(position, direction, radius, type, 20);
             }
-            case EVASION_RANDOM -> {
-                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOM);
-            }
-            case EVASION_DIRECTED -> {
-                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.DIRECTED);
-            }
-            case EVASION_RANDOMDIRECTED -> {
-                return new EvasionAgent(position, direction, radius, type, EvasionStrategy.RANDOMDIRECTED);
-            }
-            case WALL_FOLLOW_MED_DIR_HEURISTIC ->
-            {
+            case WALL_FOLLOW_MED_DIR_HEURISTIC -> {
                 return new WFMedDirHeuristic(position, direction, radius, type, 20);
             }
-            case WALL_FOLLOW_HIGH_DIR_HEURISTIC ->
-            {
+            case WALL_FOLLOW_HIGH_DIR_HEURISTIC -> {
                 return new WFHighDirHeuristic(position, direction, radius, type, 20);
             }
-            case RANDOM ->
-            {
+            case EVASION_RANDOM -> {
+                return new EvasionRandom(position, direction, radius, type);
+            }
+            case EVASION_DIRECTED -> {
+                return new EvasionDirected(position, direction, radius, type);
+            }
+            case EVASION_DISTANCE_MAX -> {
+                return new EvasionDistanceMax(position, direction, radius, type);
+            }
+            case EVASION_HIDEY -> {
+                return new HideyAgent(position, direction, radius, type);
+            }
+            case EVASION_INTELLIGENT -> {
+                return new IntelligentEvasionAgent(position, direction, radius, type);
+            }
+            case EVASION_RUNAWAY -> {
+                return new RunAwayAgent(position, direction, radius, type);
+            }
+            case CAPTURE_BASELINE -> {
+                return new BaselineCaptureAgent(position, direction, radius, type);
+            }
+            case CAPTURE -> {
+                return new CaptureAgent(position, direction, radius, type);
+            }
+            case CAPTURE_DIJKSTRA -> {
+                return new DijkstraCaptureAgent(position, direction, radius, type, 20);
+            }
+            case RANDOM -> {
                 return new AgentImp(position, direction, radius, type);
             }
             case NEURAL_NET ->

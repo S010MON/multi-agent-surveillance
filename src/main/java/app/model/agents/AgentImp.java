@@ -8,8 +8,11 @@ import app.controller.linAlg.VectorSet;
 import app.controller.soundEngine.SoundVector;
 import app.model.Move;
 import app.model.Type;
+import app.model.agents.Capture.BaselineCaptureAgent;
 import app.model.agents.Capture.CaptureAgent;
-import app.model.agents.Evasion.EvasionAgent;
+import app.model.agents.Evasion.IntelligentEvasionAgent;
+import app.model.agents.Evasion.*;
+import app.model.agents.Capture.DijkstraCaptureAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class AgentImp implements Agent
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
+
 
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
@@ -268,27 +272,7 @@ public class AgentImp implements Agent
     @Override
     public Agent nextState()
     {
-        // State GUARD
-        if(this.type == Type.GUARD)
-        {
-            if(isTypeSeen(Type.INTRUDER))
-                return new CaptureAgent(this);
-
-        }
-
-        // State INTRUDER
-        else if(this.type == Type.INTRUDER)
-        {
-            if(isTypeSeen(Type.GUARD))
-                return new EvasionAgent(this);
-
-            if(isTypeSeen(Type.TARGET))
-                return new TargetAgent(this);
-
-            return this;
-        }
-
-        return this;
+        return StateTable.lookupState(this);
     }
 
     protected float[] normalise(float[] data)

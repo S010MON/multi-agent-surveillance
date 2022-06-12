@@ -359,4 +359,13 @@ public abstract class RandomSettingsGenerator
     {
         return time < MAX_TIME;
     }
+
+    public static void clearRandomGenerator()
+    {
+        obstacles.clear();
+        lShape.clear();
+        uShape.clear();
+        iShape.clear();
+        tShape.clear();
+    }
 }

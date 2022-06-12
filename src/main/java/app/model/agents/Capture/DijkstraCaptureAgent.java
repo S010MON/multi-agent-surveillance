@@ -8,19 +8,21 @@ import app.controller.linAlg.VectorSet;
 import app.model.Move;
 import app.model.Type;
 import app.model.agents.ACO.AcoAgent;
+import app.model.agents.ACO.AcoWorld;
 import app.model.agents.Agent;
 import app.model.agents.AgentImp;
-import app.model.agents.AgentType;
-import app.model.agents.StateTable;
-import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.Cells.GraphCell;
+import app.model.agents.Universe;
 import lombok.Getter;
 import lombok.Setter;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
-public class CaptureAgent extends AgentImp
+public class DijkstraCaptureAgent extends AgentImp
 {
     private final int MAX_TICS_WITHOUT_SIGHT = 10;
     private final int MAX_MOVES_BEFORE_RETURN = 5;
@@ -28,10 +30,10 @@ public class CaptureAgent extends AgentImp
     private final double SCALE_TARGET = 1.5;
     @Getter @Setter private VectorSet beliefSet = new VectorSet();
     @Getter private VectorSet shortTermMemory = new VectorSet();
-    private Queue<Vector> positionHistory = new LinkedList<>();
-    private Queue<Vector> prevPositions =  new LinkedList<>();
-    private Move prevMove;
-    private int counter;
+    private Queue<Vector> intruderPreviousPos = new LinkedList<>();
+    private Queue<Vector> previousPositions =  new LinkedList<>();
+    private Move previousMove;
+    private int counter = 0;
 
     /**
      * Constructor for capture agent.
@@ -42,22 +44,47 @@ public class CaptureAgent extends AgentImp
      * @param type        Our type. (Guard).
      * @param intruderPos The position of the intruder to capture.
      */
-    public CaptureAgent(Vector position, Vector direction, double radius, Type type, Vector intruderPos)
+    public DijkstraCaptureAgent(Vector position, Vector direction, double radius, Type type, Vector intruderPos)
     {
         super(position, direction, radius, type);
         beliefSet.add(intruderPos);
-        positionHistory.add(intruderPos);
+        intruderPreviousPos.add(intruderPos);
+        initializeWorld();
     }
 
-    public CaptureAgent(Vector position, Vector direction, double radius, Type type)
+    public DijkstraCaptureAgent(Vector position, Vector direction, double radius, Type type, double moveLength)
     {
         super(position, direction, radius, type);
+        this.moveLength = moveLength;
+        initializeWorld();
     }
 
-    public CaptureAgent(Agent other)
+    public DijkstraCaptureAgent(Vector position, Vector direction, double radius, Type type)
+    {
+        super(position, direction, radius, type);
+        initializeWorld();
+    }
+
+    public DijkstraCaptureAgent(Agent other)
     {
         this(other.getPosition(), other.getDirection(), other.getRadius(), other.getType());
         copyOver(other);
+    }
+
+    protected void copyOver(Agent other)
+    {
+        super.copyOver(other);
+
+        if(other.getWorld() != null)
+        {
+            this.world = new AcoWorld(other.getWorld().getG());
+            world.add_or_adjust_Vertex(position);
+
+            previousMove = new Move(direction, new Vector());
+            previousPositions.add(position);
+        }
+        else
+            initializeWorld();
     }
 
     @Override
@@ -71,9 +98,6 @@ public class CaptureAgent extends AgentImp
             }else {
                 shortTermMemory.clear();
             }
-        } else
-        {
-            // TODO state change back to ACO...
         }
         setShortTermMemory();
         return nextMove(findTarget());
@@ -93,12 +117,12 @@ public class CaptureAgent extends AgentImp
         {
             updatePositionHistory();
             beliefSet.clear();
-            beliefSet.add(typePosition);
+            beliefSet.add(closestTypePos(Type.INTRUDER));
         }
         else
         {
             updateBeliefSet();
-            positionHistory.clear();
+            intruderPreviousPos.clear();
         }
         updatePrevPositions();
         updateCounter();
@@ -106,7 +130,7 @@ public class CaptureAgent extends AgentImp
 
     public Move shortTermMemory()
     {
-        shortTermMemory.remove(position.add(prevMove.getDeltaPos()));
+        shortTermMemory.remove(position.add(previousMove.getDeltaPos()));
 
         // Remove possible moves that we have been in recently when we do not see the intruder.
         if(beliefSet.size() != 1)
@@ -115,7 +139,7 @@ public class CaptureAgent extends AgentImp
         Vector wantedMove = closestLocationInArray(new ArrayList<>(shortTermMemory), findTarget());
         Vector deltaPos = wantedMove.sub(position);
         Vector direction = deltaPos.normalise();
-        prevMove = new Move(direction, deltaPos);
+        previousMove = new Move(direction, deltaPos);
         return new Move(direction, deltaPos);
     }
 
@@ -135,9 +159,9 @@ public class CaptureAgent extends AgentImp
         {
             newLocations.addAll(findAllPossiblePositions(location));
         }
-
-        checkLocationsVisible(newLocations);
+        checkLocationsNotInObstacle(newLocations);
         beliefSet.addAll(newLocations);
+        checkLocationsVisible(beliefSet);
     }
 
     /**
@@ -171,6 +195,17 @@ public class CaptureAgent extends AgentImp
         }
     }
 
+    public void checkLocationsNotInObstacle(VectorSet locations)
+    {
+        List<Vector> locationsList = locations.stream().toList();
+        for(Vector v: locationsList)
+        {
+            GraphCell cell = world.getVertexAt(v);
+            if(cell != null && cell.getObstacle())
+                locations.remove(v);
+        }
+    }
+
     /**
      * Picks a location in the belief set to use as a target for the next move.
      *
@@ -180,8 +215,8 @@ public class CaptureAgent extends AgentImp
     {
         //Using heuristics decides on target for next move.
         // If our belief set is size 1, then we have our target.
-        if(beliefSet.size() == 1 && positionHistory.size() > 0)
-            return checkMomentum(new ArrayList<>(positionHistory));
+        if(beliefSet.size() == 1 && intruderPreviousPos.size() > 0)
+            return checkMomentum(new ArrayList<>(intruderPreviousPos));
 
         // Finds the centre of the belief region.
         Vector centre = findCentreOfRegion(new ArrayList<>(beliefSet));
@@ -214,7 +249,7 @@ public class CaptureAgent extends AgentImp
             }
 
             Vector intruderDirection = findDirection(intruderHistory.get(arrLength-1),
-                                                     intruderHistory.get(0));
+                    intruderHistory.get(0));
             double distBetween = intruderHistory.get(arrLength-1).dist(position) * SCALE_TARGET;
             return intruderHistory.get(arrLength-1).add(intruderDirection.scale(distBetween));
         }
@@ -226,7 +261,7 @@ public class CaptureAgent extends AgentImp
     public Agent nextState()
     {
         if(maxTicsReached())
-            return StateTable.acoTableSearch(this);
+            return new AcoAgent(this);
 
         return this;
     }
@@ -287,25 +322,59 @@ public class CaptureAgent extends AgentImp
     }
 
     /**
-     * Chooses the cardinal movement which gets the agent closer to the target.
+     * Chooses the cardinal movement which gets the agent closer to the target according to Dijkstras Algorithm.
      *
      * @param target the vector location to move towards.
      * @return The next Move.
      */
     private Move nextMove(Vector target)
     {
-        // Populate with possible moves.
-        VectorSet possibleMoves = findAllPossiblePositions(position);
+        //get GraphCell containing target
+        GraphCell targetCell = world.getVertexAt(target);
+        GraphCell currentCell = world.getVertexAt(position);
 
-        // Remove possible moves that we have been in recently when we do not see the intruder.
-        if(beliefSet.size() != 1)
-            checkPrevPositions(possibleMoves);
+        List<GraphCell> currentPathToNextVertex = null;
+        if(targetCell != null && currentCell != null)
+        {
+            // Calculate Dijkstra path
+            currentPathToNextVertex = new ArrayList<>(DijkstraShortestPath.findPathBetween(world.G,
+                    currentCell, targetCell).getVertexList());
+        }
 
-        Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
-        Vector changeInPos = wantedMove.sub(position);
-        direction = changeInPos.normalise();
-        prevMove = new Move(direction, changeInPos);
-        return new Move(direction, changeInPos);
+        if(currentPathToNextVertex != null && currentPathToNextVertex.size() != 0)
+        {
+            // get direction of right move
+            GraphCell nextVertex = currentPathToNextVertex.get(0);
+            if(nextVertex.equals(world.getVertexAt(position)) && currentPathToNextVertex.size() > 1)
+            {
+                currentPathToNextVertex.remove(0);
+                if(currentPathToNextVertex.size() != 0)
+                    nextVertex = currentPathToNextVertex.get(0);
+                else
+                {
+                    // already reached target vertex and intruder not there, so go out of evasion state
+                    counter = MAX_MOVES_BEFORE_RETURN;
+                    return new Move(direction, new Vector(0,0));
+                }
+            }
+            direction = world.G.getNeighbourDir(world.getVertexAt(position), nextVertex);
+            previousMove = new Move(direction, direction.normalise().scale(moveLength));
+            return previousMove;
+        }
+        else
+        {
+            VectorSet possibleMoves = findAllPossiblePositions(position);
+
+            // Remove possible moves that we have been in recently when we do not see the intruder.
+            if(beliefSet.size() != 1)
+                checkPrevPositions(possibleMoves);
+
+            Vector wantedMove = closestLocationInArray(new ArrayList<>(possibleMoves), target);
+            Vector changeInPos = wantedMove.sub(position);
+            direction = changeInPos.normalise();
+            previousMove = new Move(direction, changeInPos);
+            return previousMove;
+        }
     }
 
     private boolean maxTicsReached()
@@ -323,20 +392,31 @@ public class CaptureAgent extends AgentImp
 
     private void checkPrevPositions(VectorSet moves)
     {
-        moves.removeIf(l -> prevPositions.contains(l) && moves.size() > 1);
+        moves.removeIf(l -> previousPositions.contains(l) && moves.size() > 1);
     }
 
     private void updatePrevPositions()
     {
-        prevPositions.add(position);
-        if(prevPositions.size() > MAX_MOVES_BEFORE_RETURN)
-            prevPositions.remove();
+        previousPositions.add(position);
+        if(previousPositions.size() > MAX_MOVES_BEFORE_RETURN)
+            previousPositions.remove();
     }
 
     private void updatePositionHistory()
     {
-        positionHistory.add(typePosition);
-        if(positionHistory.size() > MAX_POSITIONS_HELD)
-            positionHistory.remove();
+        intruderPreviousPos.add(closestTypePos(Type.INTRUDER));
+        if(intruderPreviousPos.size() > MAX_POSITIONS_HELD)
+            intruderPreviousPos.remove();
+    }
+
+    protected void initializeWorld()
+    {
+        Universe.init(type, (int)moveLength);
+        world = new AcoWorld(Universe.getMemoryGraph(type));
+        world.add_or_adjust_Vertex(position);
+
+        previousMove = new Move(direction, new Vector());
+        previousPositions.add(position);
     }
 }
+

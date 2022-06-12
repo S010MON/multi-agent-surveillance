@@ -2,6 +2,7 @@ package app.model.agents.WallFollow;
 
 import app.controller.linAlg.Vector;
 import app.model.Type;
+import app.model.agents.Agent;
 
 public class WFMedDirHeuristic extends WallFollowAgent
 {
@@ -12,4 +13,9 @@ public class WFMedDirHeuristic extends WallFollowAgent
         directionHeuristicWeight = 2;
     }
 
+    public WFMedDirHeuristic(Agent other)
+    {
+        super(other);
+        directionHeuristicWeight = 2;
+    }
 }
