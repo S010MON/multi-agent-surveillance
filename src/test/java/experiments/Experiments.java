@@ -9,6 +9,7 @@ import app.model.agents.StateTable;
 import app.model.agents.Universe;
 import jogging.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Experiments
@@ -104,8 +105,8 @@ public class Experiments
      */
     private static void runCapture()
     {
-        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
-        StateTable.setDefaultEvasionAgent(AgentType.EVASION_RANDOM);
+        StateTable.setDefaultCaptureAgent(AgentType.CAPTURE_BASELINE);
+        StateTable.setDefaultEvasionAgent(AgentType.EVASION_INTELLIGENT);
 
         final String testName = "Capture_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
@@ -137,6 +138,8 @@ public class Experiments
         StateTable.setDefaultCaptureAgent(AgentType.CAPTURE);
         StateTable.setDefaultEvasionAgent(AgentType.EVASION_RANDOM);
 
+        ArrayList<Integer> tickCollection = new ArrayList<>();
+
         final String testName = "Evasion_Experiment_" +
                 StateTable.getDefaultCaptureAgent() + "_" +
                 StateTable.getDefaultEvasionAgent();
@@ -153,8 +156,12 @@ public class Experiments
 
             TestingEngine gameEngine = new TestingEngine(map, test_heading);
             int data = (int) gameEngine.runEvasionTest();
+
+            tickCollection.add(data);
             logger.log(test_heading + "," + data);
         }
+        logger.log("Success rate " + "," + successRate(tickCollection));
+        logger.log("Successful Evasion Time Average, " + successfulTickAverage(tickCollection));
     }
 
     private static void runInfiltration(String map_name)
@@ -198,9 +205,41 @@ public class Experiments
         generatePerfectKnowledge(map);
         return map;
     }
-    
+
     public static void generatePerfectKnowledge(Map map)
     {
         Universe.createPerfectUniverse(map.createFullGraph());
+    }
+
+    private static double successRate(ArrayList<Integer> tics)
+    {
+        int count = 0;
+        for(int value: tics)
+        {
+            if(value != 0)
+                count ++;
+        }
+        return (double) count / tics.size();
+    }
+
+    private static double successfulTickAverage(ArrayList<Integer> tics)
+    {
+        int sum = 0;
+        int count = 0;
+
+        for(int value: tics)
+        {
+            if(value != 0)
+            {
+                sum = sum + value;
+                count++;
+            }
+        }
+        if(count == 0)
+        {
+            return 0;
+        }
+
+        return (double) sum / count;
     }
 }

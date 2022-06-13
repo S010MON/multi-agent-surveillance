@@ -93,8 +93,7 @@ public class TestingEngine extends GameEngine
         long noVisualDuration = 0;
         long escapeLimit = 20;
 
-        while(map.agentsRemaining(Type.INTRUDER) >= 1 &&
-                noVisualDuration < escapeLimit &&
+        while(noVisualDuration < escapeLimit &&
                 tics < limit)
         {
             if(!map.intruderVisual())
@@ -110,6 +109,10 @@ public class TestingEngine extends GameEngine
             updateTicsRemaining(tics, limit);
         }
         System.out.println(" - complete");
+        if(tics >= limit || map.agentsRemaining(Type.INTRUDER) == 0)
+        {
+            return 0;
+        }
         return tics;
     }
 
