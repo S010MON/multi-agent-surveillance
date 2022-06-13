@@ -35,8 +35,8 @@ public abstract class RandomSettingsGenerator
 
     public static Settings generateRandomSettings()
     {
+        clearRandomGenerator();
         initialiseTemplates();
-
         Settings randomSettings = createBaseSettings();
         createRandomObstacles(randomSettings);
 

@@ -18,7 +18,7 @@ public class GeneticAlgorithm extends GameEngine
     public static final double alpha = 0.01;
     public static final double epsilon = 0.01;
     public static final double population = 100;
-    public static final boolean VERBOSE = true;
+    public static final boolean VERBOSE = false;
     public static int maxTics = 100;
     public static long tics_achieved = 0;
 

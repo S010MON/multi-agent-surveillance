@@ -3,11 +3,14 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
-import app.model.agents.Evasion.EvasionAgent;
-import app.model.agents.Evasion.EvasionStrategy;
+import app.model.agents.Capture.BaselineCaptureAgent;
+import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Capture.DijkstraCaptureAgent;
+import app.model.agents.Evasion.*;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.nNet.NeuralNet;
 
 public enum AgentType
 {
@@ -23,8 +26,6 @@ public enum AgentType
     EVASION_RANDOMDIRECTED,
     WALL_FOLLOW_MED_DIR_HEURISTIC,
     WALL_FOLLOW_HIGH_DIR_HEURISTIC,
-    EVASION_RANDOM,
-    EVASION_DIRECTED,
     EVASION_INTELLIGENT,
     EVASION_DISTANCE_MAX,
     EVASION_HIDEY,
