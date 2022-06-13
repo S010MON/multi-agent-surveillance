@@ -68,6 +68,7 @@ public class StateTable
             case EVASION_DISTANCE_MAX -> {return new EvasionDistanceMax(currentState);}
             case EVASION_HIDEY -> {return new HideyAgent(currentState);}
             case EVASION_RUNAWAY -> {return new RunAwayAgent(currentState);}
+            case EVASION_INTELLIGENT -> {return new IntelligentEvasionAgent(currentState);}
             default -> throw new RuntimeException("Evasion agent not specified");
         }
     }
