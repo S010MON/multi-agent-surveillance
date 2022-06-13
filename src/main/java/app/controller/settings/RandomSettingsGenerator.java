@@ -367,5 +367,6 @@ public abstract class RandomSettingsGenerator
         uShape.clear();
         iShape.clear();
         tShape.clear();
+        plusShape.clear();
     }
 }
