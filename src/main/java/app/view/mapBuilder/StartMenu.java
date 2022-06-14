@@ -75,6 +75,7 @@ public class StartMenu extends BorderPane
 
     public void openRandom()
     {
+        RandomSettingsGenerator.clearRandomGenerator();
         Settings randomSettings = RandomSettingsGenerator.generateRandomSettings();
         app.gotoSimulation(randomSettings);
     }

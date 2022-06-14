@@ -1,37 +1,36 @@
 package app.controller.settings;
 
 import app.controller.linAlg.Intersection;
+import app.controller.linAlg.Line;
 import app.controller.linAlg.Vector;
 import app.model.furniture.FurnitureType;
 import javafx.geometry.Rectangle2D;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class RandomSettingsGenerator
 {
+    private static final boolean RANDOM_NUM = true;
     private static final int HEIGHT = 600;
     private static final int WIDTH = 800;
     private static final int SPAWN_HEIGHT = 20;
     private static final int SPAWN_WIDTH = 20;
     private static final int DELTA = 200; // Distance between spawn areas.
     private static final int MIN_OBSTACLES = 5;
-    private static final int MAX_OBSTACLES = 20;
+    private static final int MAX_OBSTACLES = 50;
     private static final int NUM_SHAPES = 5;
     private static final int MIN_SIDE_LENGTH = 30;
     private static final int MAX_SIDE_LENGTH = 70;
-    private static final int MAX_TIME = 10;
     private static final ArrayList<Rectangle2D> uShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> lShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> tShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> iShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> plusShape = new ArrayList<>();
     private static final ArrayList<Rectangle2D> obstacles = new ArrayList<>();
-    private static Vector lineOfClarity1Start;
-    private static Vector lineOfClarity1End;
-    private static Vector lineOfClarity2Start;
-    private static Vector lineOfClarity2End;
-    private static int time = 0;
+    @Setter private static Line lineOfClarity1;
+    @Setter private static Line lineOfClarity2;
 
     public static Settings generateRandomSettings()
     {
@@ -98,10 +97,10 @@ public abstract class RandomSettingsGenerator
         basic.addFurniture(intruderSpawn, FurnitureType.INTRUDER_SPAWN);
         obstacles.add(intruderSpawn);
 
-        lineOfClarity1Start = new Vector(guardSpawn.getMaxX(), guardSpawn.getMinY());
-        lineOfClarity1End = new Vector(intruderSpawn.getMinX(), intruderSpawn.getMaxY());
-        lineOfClarity2Start = new Vector(guardSpawn.getMinX(), guardSpawn.getMaxY());
-        lineOfClarity2End = new Vector(intruderSpawn.getMaxX(), intruderSpawn.getMinY());
+        lineOfClarity1 = new Line(new Vector(guardSpawn.getMaxX(), guardSpawn.getMinY()),
+                                new Vector(intruderSpawn.getMinX(), intruderSpawn.getMaxY()));
+        lineOfClarity2 = new Line(new Vector(guardSpawn.getMinX(), guardSpawn.getMaxY()),
+                                new Vector(intruderSpawn.getMaxX(), intruderSpawn.getMinY()));
 
         return basic;
     }
@@ -116,8 +115,17 @@ public abstract class RandomSettingsGenerator
 
     private static void createRandomObstacles(Settings s)
     {
+
         Random rand = new Random();
-        int numOfObstacles = rand.nextInt(MAX_OBSTACLES) + MIN_OBSTACLES;
+        int numOfObstacles;
+        if(RANDOM_NUM)
+        {
+            numOfObstacles = rand.nextInt(MAX_OBSTACLES) + MIN_OBSTACLES;
+        }
+        else
+        {
+            numOfObstacles = MAX_OBSTACLES;
+        }
 
         for(int i = 0; i < numOfObstacles; i++)
         {
@@ -233,37 +241,31 @@ public abstract class RandomSettingsGenerator
     private static void addWalls(Settings s, ArrayList<Rectangle2D> walls, int scalar)
     {
         Random rand = new Random();
-        int ranX;
-        int ranY;
-        Rectangle2D rect;
-        do
+        int ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
+        int ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
+        Rectangle2D rect = new Rectangle2D(ranX, ranY, scalar, scalar);
+
+        if(!checkOverlaps(rect) && !checkBlocking(rect))
         {
-            ranX = rand.nextInt(WIDTH - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
-            ranY = rand.nextInt(HEIGHT - (MIN_SIDE_LENGTH + MAX_SIDE_LENGTH));
-            rect = new Rectangle2D(ranX, ranY, scalar, scalar);
-            time++;
-        }
-        while(checkOverlaps(rect) || timeout() || checkBlocking(rect));
+            obstacles.add(rect);
 
-        time = 0;
-        obstacles.add(rect);
+            ArrayList<Rectangle2D> newWalls;
+            double ran = rand.nextDouble();
+            if(ran < 0.25)
+                newWalls = rotateShape(walls, 90);
+            else if(ran < 0.5)
+                newWalls = rotateShape(walls, 180);
+            else if(ran < 0.75)
+                newWalls = rotateShape(walls, 270);
+            else
+                newWalls = walls;
 
-        ArrayList<Rectangle2D> newWalls;
-        double ran = rand.nextDouble();
-        if(ran < 0.25)
-            newWalls = rotateShape(walls, 90);
-        else if(ran < 0.5)
-            newWalls = rotateShape(walls, 180);
-        else if(ran < 0.75)
-            newWalls = rotateShape(walls, 270);
-        else
-            newWalls = walls;
-
-        for(Rectangle2D r : newWalls)
-        {
-            Rectangle2D wall = new Rectangle2D(r.getMinX() + ranX, r.getMinY() + ranY,
-                    r.getWidth(), r.getHeight());
-            s.addFurniture(wall, FurnitureType.WALL);
+            for(Rectangle2D r : newWalls)
+            {
+                Rectangle2D wall = new Rectangle2D(r.getMinX() + ranX, r.getMinY() + ranY,
+                        r.getWidth(), r.getHeight());
+                s.addFurniture(wall, FurnitureType.WALL);
+            }
         }
     }
 
@@ -271,7 +273,7 @@ public abstract class RandomSettingsGenerator
     {
         for(Rectangle2D obstacle : obstacles)
         {
-            if(checkOverlap(r, obstacle))
+            if(checkOverlap(obstacle, r) || checkWithin(obstacle, r))
             {
                 return true;
             }
@@ -279,59 +281,81 @@ public abstract class RandomSettingsGenerator
         return false;
     }
 
-    private static boolean checkOverlap(Rectangle2D r1, Rectangle2D r2)
+    public static boolean checkOverlap(Rectangle2D r1, Rectangle2D r2)
     {
-        Vector topLeft1 = new Vector(r1.getMinX(), r1.getMinY());
-        Vector topRight1 = new Vector(r1.getMaxX(), r1.getMinY());
-        Vector bottomRight1 = new Vector(r1.getMaxX(), r1.getMaxY());
-        Vector bottomLeft1 = new Vector(r1.getMinX(), r1.getMaxY());
+        Line north1 = new Line( new Vector(r1.getMinX(), r1.getMinY()),
+                                new Vector(r1.getMaxX(), r1.getMinY()));
+        Line east1 = new Line(  new Vector(r1.getMaxX(), r1.getMinY()),
+                                new Vector(r1.getMaxX(), r1.getMaxY()));
+        Line south1 = new Line( new Vector(r1.getMinX(), r1.getMaxY()),
+                                new Vector(r1.getMaxX(), r1.getMaxY()));
+        Line west1 = new Line(  new Vector(r1.getMinX(), r1.getMinY()),
+                                new Vector(r1.getMinX(), r1.getMaxY()));
 
-        Vector topLeft2 = new Vector(r2.getMinX(), r2.getMinY());
-        Vector topRight2 = new Vector(r2.getMaxX(), r2.getMinY());
-        Vector bottomRight2 = new Vector(r2.getMaxX(), r2.getMaxY());
-        Vector bottomLeft2 = new Vector(r2.getMinX(), r2.getMaxY());
+        Line north2 = new Line( new Vector(r2.getMinX(), r2.getMinY()),
+                                new Vector(r2.getMaxX(), r2.getMinY()));
+        Line east2 = new Line(  new Vector(r2.getMaxX(), r2.getMinY()),
+                                new Vector(r2.getMaxX(), r2.getMaxY()));
+        Line south2 = new Line( new Vector(r2.getMinX(), r2.getMaxY()),
+                                new Vector(r2.getMaxX(), r2.getMaxY()));
+        Line west2 = new Line(  new Vector(r2.getMinX(), r2.getMinY()),
+                                new Vector(r2.getMinX(), r2.getMaxY()));
 
-        return (Intersection.hasIntersection(topLeft1, topRight1, topLeft2, topRight2) ||
-                Intersection.hasIntersection(topLeft1, topRight1, topRight2, bottomRight2) ||
-                Intersection.hasIntersection(topLeft1, topRight1, bottomLeft2, bottomRight2) ||
-                Intersection.hasIntersection(topLeft1, topRight1, topLeft2, bottomLeft2) ||
-                Intersection.hasIntersection(topRight1, bottomRight1, topLeft2, topRight2) ||
-                Intersection.hasIntersection(topRight1, bottomRight1, topRight2, bottomRight2) ||
-                Intersection.hasIntersection(topRight1, bottomRight1, bottomLeft2, bottomRight2) ||
-                Intersection.hasIntersection(topRight1, bottomRight1, topLeft2, bottomLeft2) ||
-                Intersection.hasIntersection(bottomLeft1, bottomRight1, topLeft2, topRight2) ||
-                Intersection.hasIntersection(bottomLeft1, bottomRight1, topRight2, bottomRight2) ||
-                Intersection.hasIntersection(bottomLeft1, bottomRight1, bottomLeft2,
-                        bottomRight2) ||
-                Intersection.hasIntersection(bottomLeft1, bottomRight1, topLeft2, bottomLeft2) ||
-                Intersection.hasIntersection(topLeft1, bottomLeft1, topLeft2, topRight2) ||
-                Intersection.hasIntersection(topLeft1, bottomLeft1, topRight2, bottomRight2) ||
-                Intersection.hasIntersection(topLeft1, bottomLeft1, bottomLeft2, bottomRight2) ||
-                Intersection.hasIntersection(topLeft1, bottomLeft1, topLeft2, bottomLeft2));
+        return (Intersection.hasIntersection(north1, north2) ||
+                Intersection.hasIntersection(north1, east2) ||
+                Intersection.hasIntersection(north1, south2) ||
+                Intersection.hasIntersection(north1, west2) ||
+                Intersection.hasIntersection(east1, north2) ||
+                Intersection.hasIntersection(east1, east2) ||
+                Intersection.hasIntersection(east1, south2) ||
+                Intersection.hasIntersection(east1, west2) ||
+                Intersection.hasIntersection(south1, north2) ||
+                Intersection.hasIntersection(south1, east2) ||
+                Intersection.hasIntersection(south1, south2) ||
+                Intersection.hasIntersection(south1, west2) ||
+                Intersection.hasIntersection(west1, north2) ||
+                Intersection.hasIntersection(west1, east2) ||
+                Intersection.hasIntersection(west1, south2) ||
+                Intersection.hasIntersection(west1, west2));
     }
 
-    private static boolean checkBlocking(Rectangle2D r)
+    public static boolean checkWithin(Rectangle2D r1, Rectangle2D r2)
     {
-        Vector topLeft = new Vector(r.getMinX(), r.getMinY());
-        Vector topRight = new Vector(r.getMaxX(), r.getMinY());
-        Vector bottomRight = new Vector(r.getMaxX(), r.getMaxY());
-        Vector bottomLeft = new Vector(r.getMinX(), r.getMaxY());
-        return (Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topLeft,
-                        topRight) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topRight,
-                        bottomRight) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, bottomLeft,
-                        bottomRight) ||
-                Intersection.hasIntersection(lineOfClarity1Start, lineOfClarity1End, topLeft,
-                        bottomLeft) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topLeft,
-                        topRight) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topRight,
-                        bottomRight) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, bottomLeft,
-                        bottomRight) ||
-                Intersection.hasIntersection(lineOfClarity2Start, lineOfClarity2End, topLeft,
-                        bottomLeft));
+        // Check if rectangle 1 is within 2
+        if( r1.getMinY() > r2.getMinY() && r1.getMinX() > r2.getMinX() &&
+            r1.getMaxY() < r2.getMaxY() && r1.getMaxX() < r2.getMaxX())
+        {
+            return true;
+        }
+        // Check if rectangle 2 is within 1
+        if( r2.getMinY() > r1.getMinY() && r2.getMinX() > r1.getMinX() &&
+            r2.getMaxY() < r1.getMaxY() && r2.getMaxX() < r1.getMaxX())
+        {
+            return true;
+        }
+        // Neither rectangle is within the other.
+        return false;
+    }
+
+    public static boolean checkBlocking(Rectangle2D r)
+    {
+        Line north = new Line( new Vector(r.getMinX(), r.getMinY()),
+                new Vector(r.getMaxX(), r.getMinY()));
+        Line east = new Line(  new Vector(r.getMaxX(), r.getMinY()),
+                new Vector(r.getMaxX(), r.getMaxY()));
+        Line south = new Line( new Vector(r.getMinX(), r.getMaxY()),
+                new Vector(r.getMaxX(), r.getMaxY()));
+        Line west = new Line(  new Vector(r.getMinX(), r.getMinY()),
+                new Vector(r.getMinX(), r.getMaxY()));
+
+        return (Intersection.hasIntersection(lineOfClarity1, north) ||
+                Intersection.hasIntersection(lineOfClarity1, east) ||
+                Intersection.hasIntersection(lineOfClarity1, south) ||
+                Intersection.hasIntersection(lineOfClarity1, west) ||
+                Intersection.hasIntersection(lineOfClarity2, north) ||
+                Intersection.hasIntersection(lineOfClarity2, east) ||
+                Intersection.hasIntersection(lineOfClarity2, south) ||
+                Intersection.hasIntersection(lineOfClarity2, west));
     }
 
     private static ArrayList<Rectangle2D> rotateShape(ArrayList<Rectangle2D> walls, int d)
@@ -353,11 +377,6 @@ public abstract class RandomSettingsGenerator
             rotatedWalls.add(rect);
         }
         return rotatedWalls;
-    }
-
-    private static boolean timeout()
-    {
-        return time < MAX_TIME;
     }
 
     public static void clearRandomGenerator()
