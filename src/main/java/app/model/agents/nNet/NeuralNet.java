@@ -33,6 +33,8 @@ public class NeuralNet extends AgentImp implements Comparable
     public NeuralNet(Vector position, Vector direction, double radius, Type type)
     {
         super(position, direction, radius, type);
+        resourcePath = "nNet/net_0/";
+        saveName = FilePath.get(resourcePath + "network.json");
         try
         {
             System.out.print("Loading network from file ...");

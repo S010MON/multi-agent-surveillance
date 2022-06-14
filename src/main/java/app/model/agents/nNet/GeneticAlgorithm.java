@@ -16,30 +16,37 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
-    public static final double epsilon = 0.01;
+    public static final double epsilon = 0.001;
     public static final double population = 100;
     public static final boolean VERBOSE = false;
-    public static int maxTics = 100;
+    public static int maxTics = 10;
     public static long tics_achieved = 0;
 
     public static void main(String[] args)
     {
         Logger logger = new Logger("GA_training");
         ArrayList<NeuralNet> generation = init();
+        double bestScore = 0;
+        long bestTics = 0;
 
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 1000; i++)
         {
             generation = select(generation, RandomSettingsGenerator.generateRandomSettings());
-            logger.log("Gen " + i + ": " + generation.get(0).getScore() + " in " + tics_achieved + " tics");
+            logger.log("Gen " + i + "," + generation.get(0).getScore() + "," + tics_achieved);
 
-            for(int j = 0; j < 10; j++)
+            if(generation.get(0).getScore() > bestScore && tics_achieved > bestTics)
             {
-                generation.get(j).save("net_" + j);
+                for(int j = 0; j < 10; j++)
+                {
+                    generation.get(j).save("net_" + j);
+                }
+                bestScore = generation.get(0).getScore();
+                bestTics = tics_achieved;
             }
-
             generation = breed(generation);
-            maxTics ++;
+            maxTics++;
         }
+
     }
 
     public static ArrayList<NeuralNet> init()
@@ -156,7 +163,7 @@ public class GeneticAlgorithm extends GameEngine
         while(!dead && tics < maxTics && !complete(map));
 
         double finDist = startPt.dist(map.getAgents().get(0).getPosition());
-        double score = (finDist/1000 + (2*tics/maxTics) + currentPercentage) /4;
+        double score = (3*tics/maxTics + currentPercentage)/4;
 
         if(VERBOSE) System.out.println(" travelled " + finDist + " in " + tics + " tics: " + score);
 
