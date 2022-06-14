@@ -1,15 +1,12 @@
 package app.model.agents.nNet;
 
 import app.controller.GameEngine;
-import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
 import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
-import app.controller.settings.SettingsGenerator;
 import app.model.Map;
 import app.model.Type;
 import jogging.Logger;
-
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -17,9 +14,8 @@ public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
     public static final double epsilon = 0.001;
-    public static final double population = 100;
     public static final boolean VERBOSE = false;
-    public static int maxTics = 10;
+    public static int maxTics = 100;
     public static long tics_achieved = 0;
 
     public static void main(String[] args)
@@ -44,7 +40,6 @@ public class GeneticAlgorithm extends GameEngine
                 bestTics = tics_achieved;
             }
             generation = breed(generation);
-            maxTics++;
         }
 
     }
@@ -163,7 +158,7 @@ public class GeneticAlgorithm extends GameEngine
         while(!dead && tics < maxTics && !complete(map));
 
         double finDist = startPt.dist(map.getAgents().get(0).getPosition());
-        double score = (3*tics/maxTics + currentPercentage)/4;
+        double score = ((double) tics/ (double) maxTics) * map.percentageComplete(Type.INTRUDER);
 
         if(VERBOSE) System.out.println(" travelled " + finDist + " in " + tics + " tics: " + score);
 
