@@ -24,12 +24,6 @@ public class GeneticAlgorithm extends GameEngine
 
     public static void main(String[] args)
     {
-        ArrayList<Settings> settings = new ArrayList<>();
-        settings.add(FileManager.loadSettings("src/main/resources/genetic_algorithm_1"));
-        settings.add(FileManager.loadSettings("src/main/resources/genetic_algorithm_2"));
-        settings.add(FileManager.loadSettings("src/main/resources/genetic_algorithm_3"));
-        settings.add(FileManager.loadSettings("src/main/resources/genetic_algorithm_4"));
-        settings.add(FileManager.loadSettings("src/main/resources/genetic_algorithm_5"));
         Logger logger = new Logger("GA_training");
         ArrayList<NeuralNet> generation = init();
 
@@ -40,10 +34,12 @@ public class GeneticAlgorithm extends GameEngine
             System.out.print("\r");
             logger.log("Gen " + i + ": " + generation.get(0).getScore() + " in " + tics_achieved + " tics");
 
-            generation.get(0).save();
+            for(int j = 0; j < 10; j++)
+            {
+                generation.get(j).save("net_" + j);
+            }
 
             generation = breed(generation);
-
             maxTics ++;
         }
     }
@@ -52,10 +48,12 @@ public class GeneticAlgorithm extends GameEngine
     {
         ArrayList<NeuralNet> generation = new ArrayList<>();
 
-        for(int i = 0; i < population; i++)
+        for(int i = 0; i < 10; i++)
         {
-            generation.add(new NeuralNet(NeuralNet.buildNN()));
+            generation.add(new NeuralNet("net_" + i));
         }
+
+        generation = breed(generation);
 
         return generation;
     }

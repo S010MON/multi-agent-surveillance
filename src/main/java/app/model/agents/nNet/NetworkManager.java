@@ -35,6 +35,8 @@ public class NetworkManager
             TensorSaver.write(fileNameBias, biasString.toString());
             layerID++;
         }
+
+
     }
 
     public static void fillNN(NeuralNet net) throws IOException
@@ -61,4 +63,6 @@ public class NetworkManager
             layerID++;
         }
     }
+
+
 }

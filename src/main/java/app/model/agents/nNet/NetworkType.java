@@ -10,7 +10,7 @@ public enum NetworkType
         return switch (type)
         {
             case TEST -> "nNet/test/";
-            case FULL -> "nNet/full/";
+            case FULL -> "nNet/net_0/";
         };
     }
 }

@@ -7,7 +7,6 @@ import app.model.Move;
 import app.model.Type;
 import app.model.agents.AgentImp;
 import deepnetts.net.FeedForwardNetwork;
-import deepnetts.net.NeuralNetwork;
 import deepnetts.net.layers.AbstractLayer;
 import deepnetts.net.layers.activation.ActivationType;
 import deepnetts.net.loss.LossType;
@@ -16,19 +15,16 @@ import deepnetts.util.Tensor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NeuralNet extends AgentImp implements Comparable
 {
     @Getter private FeedForwardNetwork neuralNet;
-    @Getter private String saveName = FilePath.get("nNet/full/network.json");
+    @Getter private String saveName;
     @Getter private NetworkType networkType = NetworkType.FULL;
-    @Getter private String resourcePath = "nNet/full/";
+    @Getter private String resourcePath;
     private static int inputsNum = 360;
     private static int outputsNum = 5;
     private static int[] hiddenSize = {600, 600, 360};
@@ -40,6 +36,26 @@ public class NeuralNet extends AgentImp implements Comparable
         try
         {
             System.out.print("Loading network from file ...");
+            this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(saveName));
+            NetworkManager.fillNN(this);
+            System.out.println(" done.");
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+            System.out.println(saveName + " not found, generating new network");
+            this.neuralNet = buildNN();
+        }
+    }
+
+    public NeuralNet(String rootFolder)
+    {
+        super(new Vector(), new Vector(), 10, Type.INTRUDER);
+        resourcePath = "nNet/" + rootFolder + "/";
+        saveName = FilePath.get(resourcePath + "network.json");
+        try
+        {
+            System.out.print("Loading network " + rootFolder + " from file ...");
             this.neuralNet = (FeedForwardNetwork) FileIO.createFromJson(new File(saveName));
             NetworkManager.fillNN(this);
             System.out.println(" done.");
@@ -212,8 +228,11 @@ public class NeuralNet extends AgentImp implements Comparable
         return out;
     }
 
-    public void save()
+    public void save(String folder)
     {
+        resourcePath = "nNet/" + folder + "/";
+        saveName = FilePath.get(resourcePath + "network.json");
+
         try
         {
             FileIO.writeToFileAsJson(neuralNet, saveName);
