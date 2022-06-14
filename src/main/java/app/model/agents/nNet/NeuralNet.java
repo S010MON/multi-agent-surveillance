@@ -64,7 +64,6 @@ public class NeuralNet extends AgentImp implements Comparable
         }
         catch(Exception exception)
         {
-            exception.printStackTrace();
             System.out.println(saveName + " not found, generating new network");
             this.neuralNet = buildNN();
         }

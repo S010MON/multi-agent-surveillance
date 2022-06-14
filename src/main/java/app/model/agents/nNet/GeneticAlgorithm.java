@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithm extends GameEngine
 {
     public static final double alpha = 0.01;
-    public static final double epsilon = 0.001;
+    public static final double epsilon = 0.01;
     public static final boolean VERBOSE = false;
     public static int maxTics = 100;
     public static long tics_achieved = 0;
@@ -25,7 +25,7 @@ public class GeneticAlgorithm extends GameEngine
         double bestScore = 0;
         long bestTics = 0;
 
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 3000; i++)
         {
             generation = select(generation, RandomSettingsGenerator.generateRandomSettings());
             logger.log("Gen " + i + "," + generation.get(0).getScore() + "," + tics_achieved);
