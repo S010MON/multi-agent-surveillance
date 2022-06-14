@@ -29,9 +29,7 @@ public class GeneticAlgorithm extends GameEngine
 
         for(int i = 0; i < 100; i++)
         {
-            System.out.print("Gen " + i + ":  computing");
             generation = select(generation, RandomSettingsGenerator.generateRandomSettings());
-            System.out.print("\r");
             logger.log("Gen " + i + ": " + generation.get(0).getScore() + " in " + tics_achieved + " tics");
 
             for(int j = 0; j < 10; j++)
