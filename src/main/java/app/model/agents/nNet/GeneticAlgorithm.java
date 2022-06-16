@@ -1,8 +1,8 @@
 package app.model.agents.nNet;
 
 import app.controller.GameEngine;
+import app.controller.io.FileManager;
 import app.controller.linAlg.Vector;
-import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
 import app.model.Map;
 import app.model.Type;
@@ -12,8 +12,8 @@ import java.util.PriorityQueue;
 
 public class GeneticAlgorithm extends GameEngine
 {
-    public static final double alpha = 0.01;
-    public static final double epsilon = 0.01;
+    public static double alpha = 0.1;
+    public static double epsilon = 0.01;
     public static final boolean VERBOSE = false;
     public static int maxTics = 100;
     public static long tics_achieved = 0;
@@ -22,26 +22,31 @@ public class GeneticAlgorithm extends GameEngine
     {
         Logger logger = new Logger("GA_training");
         ArrayList<NeuralNet> generation = init();
-        double bestScore = 0;
+        Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_3");
+
         long bestTics = 0;
 
-        for(int i = 0; i < 3000; i++)
+        for(int i = 0; i < 100; i++)
         {
-            generation = select(generation, RandomSettingsGenerator.generateRandomSettings());
+            generation = select(generation, settings);
             logger.log("Gen " + i + "," + generation.get(0).getScore() + "," + tics_achieved);
 
-            if(generation.get(0).getScore() > bestScore && tics_achieved > bestTics)
+            if(tics_achieved > bestTics)
             {
-                for(int j = 0; j < 10; j++)
-                {
-                    generation.get(j).save("net_" + j);
-                }
-                bestScore = generation.get(0).getScore();
+                save(generation);
                 bestTics = tics_achieved;
             }
             generation = breed(generation);
-        }
 
+        }
+    }
+
+    private static void save(ArrayList<NeuralNet> generation)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            generation.get(i).save("net_" + i);
+        }
     }
 
     public static ArrayList<NeuralNet> init()
@@ -78,6 +83,7 @@ public class GeneticAlgorithm extends GameEngine
         {
             topTen.add(heap.poll());
         }
+        heap.clear();
         return topTen;
     }
 
@@ -90,13 +96,17 @@ public class GeneticAlgorithm extends GameEngine
             for(int j = 0; j < parents.size(); j++)
             {
                 if( i == j)
+                {
                     children.add(parents.get(i));
+                }
                 else
-                    children.add(parents.get(i).breed(parents.get(j)));
+                {
+                    NeuralNet child = parents.get(i).breed(parents.get(j));
+                    child.mutate(alpha, epsilon);
+                    children.add(child);
+                }
             }
         }
-
-        children.forEach(e -> e.mutate(alpha, epsilon));
         return children;
     }
 
@@ -158,7 +168,7 @@ public class GeneticAlgorithm extends GameEngine
         while(!dead && tics < maxTics && !complete(map));
 
         double finDist = startPt.dist(map.getAgents().get(0).getPosition());
-        double score = ((double) tics/ (double) maxTics) * map.percentageComplete(Type.INTRUDER);
+        double score = ((double)tics/100d) * map.percentageComplete(Type.INTRUDER);
 
         if(VERBOSE) System.out.println(" travelled " + finDist + " in " + tics + " tics: " + score);
 
@@ -173,7 +183,7 @@ public class GeneticAlgorithm extends GameEngine
 
     protected boolean complete(Map map)
     {
-        return map.percentageComplete(Type.INTRUDER) >= 0.85;
+        return map.percentageComplete(Type.INTRUDER) >= 0.95;
     }
 
     protected void updatePercentageBar(double percent)
