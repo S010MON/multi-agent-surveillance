@@ -176,7 +176,7 @@ public class NeuralNet extends AgentImp implements Comparable
             }
             else
             {
-                return f + (float) (Math.random() * epsilon);
+                return f - (float) (Math.random() * epsilon);
             }
         }
         return f;
