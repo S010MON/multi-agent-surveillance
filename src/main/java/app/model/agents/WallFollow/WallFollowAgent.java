@@ -257,6 +257,7 @@ public class WallFollowAgent extends AgentImp
         Move nextMove = new Move(newDirection, deltaPos);
         direction = nextMove.getEndDir();
         noMovesDone = false;
+
         return nextMove;
     }
 

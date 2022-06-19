@@ -15,13 +15,11 @@ import app.model.agents.Evasion.*;
 import app.model.agents.Capture.DijkstraCaptureAgent;
 import app.view.agentView.AgentView;
 import app.view.simulation.Info;
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-
 
 public class AgentImp implements Agent
 {
@@ -33,15 +31,15 @@ public class AgentImp implements Agent
     @Getter @Setter protected Vector typePosition;
     @Getter @Setter protected Vector tgtDirection;
     @Getter @Setter protected ArrayList<Ray> view;
+    @Getter @Setter protected World world;
+    @Getter @Setter protected Vector position;
     @Getter protected Type type;
-    @Getter protected Vector position;
     @Getter protected double radius;
     @Getter protected ArrayList<SoundVector> heard;
     @Getter protected VectorSet seen;
     @Getter protected AgentView agentViewWindow;
     protected final boolean DRAW_HEARD = false;
 
-    @Getter @Setter protected World world;
 
 
     public AgentImp(Vector position, Vector direction, double radius, Type type)
@@ -275,5 +273,23 @@ public class AgentImp implements Agent
     public Agent nextState()
     {
         return StateTable.lookupState(this);
+    }
+
+    protected float[] normalise(float[] data)
+    {
+        float max = 0f;
+        for(int i = 0; i < data.length; i++)
+        {
+            if(data[i] > max)
+                max = data[i];
+        }
+
+        for(int i = 0; i < data.length; i++)
+        {
+            if(data[i] != -1)
+                data[i] = data[i] / 1000;
+        }
+
+        return data;
     }
 }

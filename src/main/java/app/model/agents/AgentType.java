@@ -3,11 +3,14 @@ package app.model.agents;
 import app.controller.linAlg.Vector;
 import app.model.Type;
 import app.model.agents.ACO.*;
+import app.model.agents.Capture.BaselineCaptureAgent;
+import app.model.agents.Capture.CaptureAgent;
+import app.model.agents.Capture.DijkstraCaptureAgent;
 import app.model.agents.Evasion.*;
-import app.model.agents.Capture.*;
 import app.model.agents.WallFollow.WFMedDirHeuristic;
 import app.model.agents.WallFollow.WFHighDirHeuristic;
 import app.model.agents.WallFollow.WallFollowAgent;
+import app.model.agents.nNet.NeuralNet;
 
 public enum AgentType
 {
@@ -18,10 +21,11 @@ public enum AgentType
     ACO_RANKING,
     ACO_COLONY,
     WALL_FOLLOW,
-    WALL_FOLLOW_MED_DIR_HEURISTIC,
-    WALL_FOLLOW_HIGH_DIR_HEURISTIC,
     EVASION_RANDOM,
     EVASION_DIRECTED,
+    EVASION_RANDOMDIRECTED,
+    WALL_FOLLOW_MED_DIR_HEURISTIC,
+    WALL_FOLLOW_HIGH_DIR_HEURISTIC,
     EVASION_INTELLIGENT,
     EVASION_DISTANCE_MAX,
     EVASION_HIDEY,
@@ -29,7 +33,8 @@ public enum AgentType
     EVASION_RUNAWAY,
     CAPTURE_DIJKSTRA,
     CAPTURE,
-    RANDOM;
+    RANDOM,
+    NEURAL_NET;
 
     public static Agent agentOf(AgentType agentType, Vector position, Vector direction, double radius, Type type)
     {
@@ -91,6 +96,10 @@ public enum AgentType
             }
             case RANDOM -> {
                 return new AgentImp(position, direction, radius, type);
+            }
+            case NEURAL_NET ->
+            {
+                return new NeuralNet(position, direction, radius, type);
             }
             default -> throw new RuntimeException("Agent type not recognized");
         }

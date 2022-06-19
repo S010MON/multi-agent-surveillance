@@ -24,7 +24,7 @@ public class TestingEngine extends GameEngine
         {
             tick();
 
-             currentPercentage = map.percentageComplete(Type.GUARD);
+            currentPercentage = map.percentageComplete(Type.GUARD);
             if(currentPercentage != prevPercentage)
             {
                 updatePercentageBar(currentPercentage);

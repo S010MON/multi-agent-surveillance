@@ -28,8 +28,8 @@ public class Settings
     private double sprintSpeedIntruder;
     private double timeStep;
     private double scaling;
-    private AgentType guardType = AgentType.ACO;
-    private AgentType IntruderType = AgentType.WALL_FOLLOW;
+    private AgentType guardType = AgentType.ACO_MOMENTUM_SPIRAL_AVOIDANCE;
+    private AgentType IntruderType = AgentType.NEURAL_NET;
     private ArrayList<SettingsObject> furniture = new ArrayList<>();
     private ArrayList<SettingsObject> soundSources = new ArrayList<>();
     private ArrayList<SettingsObject> soundFurniture = new ArrayList<>();
