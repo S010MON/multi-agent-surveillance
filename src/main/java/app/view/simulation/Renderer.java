@@ -24,7 +24,7 @@ import java.util.PriorityQueue;
 public class Renderer extends Canvas
 {
     @Setter private boolean displayRay = true;
-    @Setter private boolean displaySound = true;
+    @Setter private boolean displaySound = false;
     @Setter private boolean displayTrail = true;
     @Setter private boolean displayMiniMaps = true;
     @Setter private boolean displayAreas = true;

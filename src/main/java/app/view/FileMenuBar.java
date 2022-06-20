@@ -78,7 +78,7 @@ public class FileMenuBar extends MenuBar
         rays.setOnAction(e -> app.updateRenderer(1, rays.isSelected()));
 
         RadioMenuItem sound = new RadioMenuItem("Display Sound");
-        sound.setSelected(true);
+        sound.setSelected(false);
         sound.setOnAction(e -> app.updateRenderer(2, sound.isSelected()));
 
         RadioMenuItem trail = new RadioMenuItem("Display Trail");
