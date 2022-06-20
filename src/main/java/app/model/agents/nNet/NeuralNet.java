@@ -29,6 +29,7 @@ public class NeuralNet extends AgentImp implements Comparable
     private static int outputsNum = 5;
     private static int[] hiddenSize = {600, 600, 360};
     @Getter @Setter private double score = 0;
+    @Getter @Setter private int tics = 0;
 
     public NeuralNet(Vector position, Vector direction, double radius, Type type)
     {
@@ -97,16 +98,16 @@ public class NeuralNet extends AgentImp implements Comparable
         {
             if(pred[1] > pred[2])
                 dx =  maxSprint;
-            else
+            else if(pred[1] < pred[2])
                 dx = -maxSprint;
         }
         double dy = 0;
         if(pred[3] != Double.NaN && pred[4] != Double.NaN && Math.abs(pred[3] - pred[4]) > 0.1)
         {
             if(pred[3] > pred[4])
-                dx =  maxSprint;
-            else
-                dx = -maxSprint;
+                dy =  maxSprint;
+            else if(pred[3] < pred[4])
+                dy = -maxSprint;
         }
 
         return new Move(dir, new Vector(dx, dy));

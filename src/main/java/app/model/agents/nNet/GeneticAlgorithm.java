@@ -12,11 +12,11 @@ import java.util.PriorityQueue;
 
 public class GeneticAlgorithm extends GameEngine
 {
-    public static double alpha = 0.1;
-    public static double epsilon = 0.01;
+    public static double alpha = 0.4;
+    public static double epsilon = 0.3;
     public static final boolean VERBOSE = false;
-    public static int maxTics = 100;
-    public static long tics_achieved = 0;
+    public static int maxTics = 500;
+    public  static int current_tics = 0;
 
     public static void main(String[] args)
     {
@@ -24,18 +24,11 @@ public class GeneticAlgorithm extends GameEngine
         ArrayList<NeuralNet> generation = init();
         Settings settings = FileManager.loadSettings("src/main/resources/genetic_algorithm_3");
 
-        long bestTics = 0;
-
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 10000; i++)
         {
             generation = select(generation, settings);
-            logger.log("Gen " + i + "," + generation.get(0).getScore() + "," + tics_achieved);
-
-            if(tics_achieved > bestTics)
-            {
-                save(generation);
-                bestTics = tics_achieved;
-            }
+            logger.log("Gen " + i + "," + generation.get(0).getScore() + "," + generation.get(0).getTics());
+            save(generation);
             generation = breed(generation);
 
         }
@@ -74,6 +67,7 @@ public class GeneticAlgorithm extends GameEngine
             map.addAgent(baby);
             GeneticAlgorithm ga = new GeneticAlgorithm(map);
             baby.setScore(ga.runMap());
+            baby.setTics(current_tics);
             heap.add(baby);
         }
 
@@ -168,11 +162,14 @@ public class GeneticAlgorithm extends GameEngine
         while(!dead && tics < maxTics && !complete(map));
 
         double finDist = startPt.dist(map.getAgents().get(0).getPosition());
-        double score = ((double)tics/100d) * map.percentageComplete(Type.INTRUDER);
+        double score = Math.pow(((double)tics/(double) maxTics), 2) *
+                Math.pow(map.percentageComplete(Type.INTRUDER), 2) *
+                Math.pow(2 * finDist/1000, 2);
 
         if(VERBOSE) System.out.println(" travelled " + finDist + " in " + tics + " tics: " + score);
 
-        tics_achieved = tics;
+        current_tics = (int) tics;
+
         return score;
     }
 
