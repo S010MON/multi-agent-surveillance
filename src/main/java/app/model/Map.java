@@ -80,7 +80,7 @@ public class Map
         for(int i = 0; i < settings.getNoOfIntruders(); i++)
         {
             Vector srt = randPosition(intruderSpawn);
-            Vector dir = randDirection();
+            Vector dir = new Vector(-1, 1); // TODO Return to random
             Universe.setMap(this);
             Agent intruder = AgentType.agentOf(settings.getIntruderType(), srt, dir, 10, Type.INTRUDER);
             intruder.setMaxWalk(settings.getWalkSpeedIntruder());
@@ -162,7 +162,7 @@ public class Map
         else if(agent.getType() == Type.GUARD)
             agent.setPosition(randPosition(guardSpawn));
 
-        agent.setDirection(randDirection());
+        agent.setDirection(new Vector(-1,1));
         agents.add(agent);
     }
 
