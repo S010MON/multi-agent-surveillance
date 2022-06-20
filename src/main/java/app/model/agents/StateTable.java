@@ -15,7 +15,7 @@ import lombok.Setter;
 public class StateTable
 {
     @Setter private static AgentType defaultCaptureAgent = AgentType.CAPTURE;
-    @Setter private static  AgentType defaultEvasionAgent = AgentType.EVASION_RANDOM;
+    @Setter private static  AgentType defaultEvasionAgent = AgentType.EVASION_HIDEY;
     @Getter private static AgentType defaultAcoAgent = AgentType.ACO_MOMENTUM;
     @Getter private static AgentType defaultWFAgent = AgentType.WALL_FOLLOW_MED_DIR_HEURISTIC;
 

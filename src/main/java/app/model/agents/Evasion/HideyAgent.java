@@ -146,29 +146,4 @@ public class HideyAgent extends AgentImp
         }
         return V;
     }
-
-    @Override
-    public void draw(GraphicsContext gc)
-    {
-        if(DRAW_HEARD)
-            heard.forEach(h -> h.draw(gc, this.position));
-
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(3.0);
-        if(type == Type.GUARD)
-            gc.setFill(Color.BLUE);
-        else
-            gc.setFill(Color.RED);
-
-        double x = (position.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX;
-        double y = (position.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY;
-
-        gc.fillOval(x, y, radius, radius);
-        gc.strokeOval(x , y, radius, radius);
-
-        gc.setStroke(Color.ORANGE);
-            H.forEach(v -> gc.fillOval((v.getX()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetX,
-                                       (v.getY()-(radius/2)) * Info.getInfo().zoom + Info.getInfo().offsetY,
-                                        2, 2));
-    }
 }
