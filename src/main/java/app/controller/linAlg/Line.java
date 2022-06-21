@@ -1,12 +1,14 @@
 package app.controller.linAlg;
 
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
+@ToString
 public class Line
 {
-    private Vector a;
-    private Vector b;
+    public Vector a;
+    public Vector b;
 
     public boolean liesOn(Vector v)
     {

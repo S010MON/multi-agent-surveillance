@@ -95,8 +95,6 @@ public class FileParserTest
         assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
         assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
         assertEquals("teleport", s.getFurniture().get(6).getType().label);
-
-        Map map = new Map(s);
     }
 
     @Disabled
@@ -123,7 +121,5 @@ public class FileParserTest
         assertEquals(new Vector(50, 90), s.getFurniture().get(6).getTeleportTo());
         assertEquals(0.0, s.getFurniture().get(6).getTeleportRotation(), 0.001);
         assertEquals("teleport", s.getFurniture().get(6).getType().label);
-
-        Map map = new Map(s);
     }
 }

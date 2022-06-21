@@ -2,6 +2,7 @@ package app.view.mapBuilder;
 
 import app.App;
 import app.controller.io.FileManager;
+import app.controller.settings.RandomSettingsGenerator;
 import app.controller.settings.Settings;
 import app.view.Alert;
 import app.view.FileMenuBar;
@@ -44,7 +45,9 @@ public class StartMenu extends BorderPane
         {
             Settings settings = settingsPane.getSettings();
             furniturePane.getSettings(settings);
-            FileManager.saveSettings(settings, settings.getName());
+            String fileName = Alert.answerAlert("Name of File", "Enter the Name of the file you wish to create.");
+            settings.setName(fileName);
+            FileManager.saveSettings(settings, fileName);
             Alert.displayAlert("Done!", "The map file was successfully created.");
         }
         else
@@ -59,13 +62,21 @@ public class StartMenu extends BorderPane
         {
             Settings settings = settingsPane.getSettings();
             furniturePane.getSettings(settings);
-            FileManager.saveSettings(settings, settings.getName());
-            String fileName = settings.getName();
+            String fileName = Alert.answerAlert("Name of File", "Enter the Name of the file you wish to create.");
+            settings.setName(fileName);
+            FileManager.saveSettings(settings, fileName);
             app.gotoSimulation(fileName);
         }
         else
         {
             Alert.displayAlert("Error", "Map cannot be created as you are missing guard spawn, intruder spawn, or both!");
         }
+    }
+
+    public void openRandom()
+    {
+        RandomSettingsGenerator.clearRandomGenerator();
+        Settings randomSettings = RandomSettingsGenerator.generateRandomSettings();
+        app.gotoSimulation(randomSettings);
     }
 }

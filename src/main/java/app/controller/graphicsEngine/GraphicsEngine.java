@@ -3,12 +3,15 @@ package app.controller.graphicsEngine;
 import app.controller.linAlg.Vector;
 import app.model.agents.Agent;
 import app.model.Map;
+import app.model.Type;
 import app.model.boundary.Boundary;
+import app.model.furniture.Furniture;
+
 import java.util.ArrayList;
 
 public class GraphicsEngine
 {
-    private double angle = 50; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
+    private double angle = 91; // The +/- for field of view.  180 will look 180 deg lef and 180 degree right
 
     public GraphicsEngine(){};
 
@@ -30,25 +33,18 @@ public class GraphicsEngine
             Vector agentIntersection = getIntersection(r, map.getAgents(), agent);
 
             if(bdyIntersection != null && agentIntersection != null)
-            {
-                if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
-                {
-                    output.add(new Ray(origin, bdyIntersection));
-                }
-                else
-                {
-                    output.add(new Ray(origin, agentIntersection));
-                }
-            }
+                output.add(closestRay(origin, bdyIntersection, agentIntersection, map.objectAt(agentIntersection)));
+
             else if(bdyIntersection != null)
-                output.add(new Ray(origin, bdyIntersection));
+                output.add(new Ray(origin, bdyIntersection, map.objectAt(bdyIntersection)));
+
             else if(agentIntersection != null)
-                output.add(new Ray(origin, agentIntersection));
+                output.add(new Ray( origin, agentIntersection, map.objectAt(agentIntersection) ));
         }
         return output;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
+    public Vector getIntersection(Ray r, ArrayList<Boundary> boundaries)
     {
         Vector intersection = null;
         double closestDist = Double.MAX_VALUE;
@@ -58,7 +54,7 @@ public class GraphicsEngine
             {
                 Vector currentV = obj.intersection(r);
                 double dist = r.getU().dist(currentV);
-                if(dist < closestDist)
+                if(dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                 {
                     intersection = currentV;
                     closestDist = dist;
@@ -68,7 +64,7 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
+    public Vector getIntersection(Ray r, ArrayList<Agent> agents, Agent currentAgent)
     {
         Vector intersection = null;
         double closestDist = Double.MAX_VALUE;
@@ -80,7 +76,7 @@ public class GraphicsEngine
                 {
                     Vector currentV = agent.intersection(r);
                     double dist = r.getU().dist(currentV);
-                    if (dist < closestDist && currentV.getAngle() == r.angle())
+                    if (dist < closestDist && Double.compare(currentV.sub(r.getU()).getAngle(), r.angle()) == 0)
                     {
                         intersection = currentV;
                         closestDist = dist;
@@ -91,11 +87,32 @@ public class GraphicsEngine
         return intersection;
     }
 
-    private ArrayList<Boundary> collectBoundaries(Map map)
+    public ArrayList<Boundary> collectBoundaries(Map map)
     {
         ArrayList<Boundary> boundaries = new ArrayList<>();
         map.getFurniture()
                 .forEach(furniture -> boundaries.addAll(furniture.getBoundaries()));
         return boundaries;
+    }
+
+    public ArrayList<Boundary> collectWallBoundaries(Map map)
+    {
+        ArrayList<Boundary> boundaries = new ArrayList<>();
+        for (Furniture f : map.getFurniture())
+        {
+            if (f.getType().name() == "WALL")
+            {
+                boundaries.addAll(f.getBoundaries());
+            }
+        }
+        return boundaries;
+    }
+
+    private Ray closestRay(Vector origin, Vector bdyIntersection, Vector agentIntersection, Type type)
+    {
+        if(bdyIntersection.dist(origin) <= agentIntersection.dist(origin))
+            return new Ray(origin, bdyIntersection);
+        else
+            return new Ray(origin, agentIntersection, type);
     }
 }

@@ -1,5 +1,6 @@
 package app;
 
+import app.controller.settings.Settings;
 import app.view.FileMenuBar;
 import app.view.simulation.Simulation;
 import app.view.ScreenSize;
@@ -67,6 +68,13 @@ public class App extends Application
         scene.setRoot(simulation);
     }
 
+    public void gotoSimulation(Settings settings)
+    {
+        simulation = new Simulation(this, settings);
+        scene.setOnKeyTyped(e -> simulation.handleKey(e));
+        scene.setRoot(simulation);
+    }
+
     public void gotoStart()
     {
         scene.setRoot(startMenu);
@@ -77,4 +85,9 @@ public class App extends Application
         simulation.pauseOrResume();
     }
 
+    public void updateRenderer(int toggle, boolean display)
+    {
+        if(simulation != null)
+            simulation.updateRenderer(toggle, display);
+    }
 }

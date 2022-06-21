@@ -1,0 +1,17 @@
+name = AcoTestMap
+gameFile = /home/travis/Desktop/Maastricht/Studies/Year 2/Project 2-2/Code/multi-agent-surveillance/src/main/resources/AcoTestMap
+gameMode = 1
+height = 600
+width = 800
+scaling = 0.0
+numGuards = 0
+numIntruders = 0
+baseSpeedIntruder = 15.0
+sprintSpeedIntruder = 23.0
+baseSpeedGuard = 13.5
+sprintSpeedGuard = 21.5
+timeStep = 0.0
+wall = 360 11 444 466
+spawnAreaGuards = 81 124 275 263
+targetArea = 330 494 493 564
+spawnAreaIntruders = 520 136 751 267
