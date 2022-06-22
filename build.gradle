@@ -6,11 +6,17 @@ plugins {
     id 'io.freefair.lombok' version '6.4.0'
 }
 
-version '1.0'
+version '2.1'
 
-jar{
-    manifest{
-        attributes 'Main-Class': 'app.App'
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes( 'Main-Class': 'app.Launcher')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
@@ -34,7 +40,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainClass = 'app.App'
+    mainModule = 'app'
+    mainClass = 'app.Launcher'
 }
 
 javafx {
